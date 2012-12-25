@@ -53,12 +53,12 @@
                     switch (entry.TagType)
                     {
                         case 0x01:
-                            Console.Write("{0})  {1} Byte: ", x, entry.TagId);
+                            Console.Write("{0})  0x{1:x} Byte: ", x, entry.TagId);
                             Console.WriteLine("[0x{0:x}] ({1}): ", entry.ValuePointer, entry.NumberOfValue);
                             break;
 
                         case 0x02:
-                            Console.Write("{0})  {1} Ascii: ", x, entry.TagId);
+                            Console.Write("{0})  0x{1:x} Ascii: ", x, entry.TagId);
 
                             Console.Write("[0x{0:x}] ({1}): ", entry.ValuePointer, entry.NumberOfValue);
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
@@ -76,7 +76,7 @@
                             break;
 
                         case 0x03:
-                            Console.Write("{0})  {1} Short: ", x, entry.TagId);
+                            Console.Write("{0})  0x{1:x} Short: ", x, entry.TagId);
                             if (entry.NumberOfValue == 1)
                             {
                                 Console.Write("{0}", entry.ValuePointer);
@@ -99,7 +99,7 @@
                             break;
 
                         case 0x04:
-                            Console.Write("{0})  {1} Long: ", x, entry.TagId);
+                            Console.Write("{0})  0x{1:x} Long: ", x, entry.TagId);
                             Console.Write("[0x{0:x}] ({1}): ", entry.ValuePointer, entry.NumberOfValue);
                             if (entry.NumberOfValue == 1)
                             {
@@ -119,7 +119,7 @@
                             break;
 
                         case 0x05:
-                            Console.Write("{0})  {1} Rational: ", x, entry.TagId);
+                            Console.Write("{0})  0x{1:x} Rational: ", x, entry.TagId);
                             Console.Write("[0x{0:x}] (2):", entry.ValuePointer);
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
                             {
@@ -132,7 +132,7 @@
                             break;
 
                         case 0x07:
-                            Console.Write("{0})  {1} Byte[]: ", x, entry.TagId);
+                            Console.Write("{0})  0x{1:x} Byte[]: ", x, entry.TagId);
                             if (entry.NumberOfValue <= 4)
                             {
                                 Console.Write("{0}, ", entry.ValuePointer >> 0 & 0xFF);
@@ -147,7 +147,7 @@
                             break;
 
                         case 0x0A:
-                            Console.Write("{0})  {1} SRational: ", x, entry.TagId);
+                            Console.Write("{0})  0x{1:x} SRational: ", x, entry.TagId);
                             Console.Write("[0x{0:x}] ({1}): ", entry.ValuePointer, entry.NumberOfValue);
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
                             {
