@@ -45,7 +45,7 @@
 
                 if (entry.TagId == 0x8769)
                 {
-                    Console.WriteLine("{0}  [0x{1:x}] Image File Directory:", x, entry.ValuePointer);
+                    Console.WriteLine("{0})  [0x{1:x}] Image File Directory ({2}):", x, entry.ValuePointer, entry.NumberOfValue);
                     var tags = new ImageFileDirectory(binaryReader, entry.ValuePointer);
                 }
                 else
@@ -53,12 +53,12 @@
                     switch (entry.TagType)
                     {
                         case 0x01:
-                            Console.Write("{0}  {1} Byte: ", x, entry.TagId);
+                            Console.Write("{0})  {1} Byte: ", x, entry.TagId);
                             Console.WriteLine("[0x{0:x}] ({1}): ", entry.ValuePointer, entry.NumberOfValue);
                             break;
 
                         case 0x02:
-                            Console.Write("{0}  {1} Ascii: ", x, entry.TagId);
+                            Console.Write("{0})  {1} Ascii: ", x, entry.TagId);
 
                             Console.Write("[0x{0:x}] ({1}): ", entry.ValuePointer, entry.NumberOfValue);
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
@@ -76,7 +76,7 @@
                             break;
 
                         case 0x03:
-                            Console.Write("{0}  {1} Short: ", x, entry.TagId);
+                            Console.Write("{0})  {1} Short: ", x, entry.TagId);
                             if (entry.NumberOfValue == 1)
                             {
                                 Console.Write("{0}", entry.ValuePointer);
@@ -99,21 +99,27 @@
                             break;
 
                         case 0x04:
-                            Console.Write("{0}  {1} Long: ", x, entry.TagId);
+                            Console.Write("{0})  {1} Long: ", x, entry.TagId);
                             Console.Write("[0x{0:x}] ({1}): ", entry.ValuePointer, entry.NumberOfValue);
-                            //if (binaryReader.BaseStream.Position != entry.ValuePointer)
-                            //    binaryReader.BaseStream.Seek(entry.ValuePointer, SeekOrigin.Begin);
+                            if (entry.NumberOfValue == 1)
+                            {
+                                Console.WriteLine("{0}", entry.ValuePointer);
+                            }
+                            else
+                            {
+                                if (binaryReader.BaseStream.Position != entry.ValuePointer) binaryReader.BaseStream.Seek(entry.ValuePointer, SeekOrigin.Begin);
 
-                            //for (var j = 0; j < entry.NumberOfValue; j++)
-                            //{
-                            //    var us = binaryReader.ReadUInt16();
-                            //    Console.Write("{0} ", us);
-                            //}
-                            Console.WriteLine();
+                                for (var j = 0; j < entry.NumberOfValue; j++)
+                                {
+                                    var long1 = binaryReader.ReadUInt32();
+                                    Console.Write("{0:x} ", long1);
+                                }
+                                Console.WriteLine();
+                            }
                             break;
 
                         case 0x05:
-                            Console.Write("{0}  {1} Rational: ", x, entry.TagId);
+                            Console.Write("{0})  {1} Rational: ", x, entry.TagId);
                             Console.Write("[0x{0:x}] (2):", entry.ValuePointer);
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
                             {
@@ -126,13 +132,31 @@
                             break;
 
                         case 0x07:
-                            Console.Write("{0}  {1} Byte[]: ", x, entry.TagId);
-                            Console.WriteLine("[0x{0:x}] ({1}): ", entry.ValuePointer, entry.NumberOfValue);
+                            Console.Write("{0})  {1} Byte[]: ", x, entry.TagId);
+                            if (entry.NumberOfValue <= 4)
+                            {
+                                Console.Write("{0}, ", entry.ValuePointer >> 0 & 0xFF);
+                                Console.Write("{0}, ", entry.ValuePointer >> 8 & 0xFF);
+                                Console.Write("{0}, ", entry.ValuePointer >> 16 & 0xFF);
+                                Console.WriteLine("{0}", entry.ValuePointer >> 24 & 0xFF);
+                            }
+                            else
+                            {
+                                Console.WriteLine("[0x{0:x}] ({1}): ", entry.ValuePointer, entry.NumberOfValue);
+                            }
                             break;
 
                         case 0x0A:
-                            Console.Write("{0}  {1} SRational: ", x, entry.TagId);
-                            Console.WriteLine("[0x{0:x}] ({1}): ", entry.ValuePointer, entry.NumberOfValue);
+                            Console.Write("{0})  {1} SRational: ", x, entry.TagId);
+                            Console.Write("[0x{0:x}] ({1}): ", entry.ValuePointer, entry.NumberOfValue);
+                            if (binaryReader.BaseStream.Position != entry.ValuePointer)
+                            {
+                                binaryReader.BaseStream.Seek(entry.ValuePointer, SeekOrigin.Begin);
+                            }
+
+                            var s1 = binaryReader.ReadInt32();
+                            var s2 = binaryReader.ReadUInt32();
+                            Console.WriteLine("{0}/{1} = {2}", s1, s2, s1 / (double)s2);
                             break;
 
                         default:
