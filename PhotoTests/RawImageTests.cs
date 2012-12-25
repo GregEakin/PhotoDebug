@@ -7,7 +7,7 @@
     using PhotoLib;
 
     [TestClass]
-    public class TawImageTests
+    public class RawImageTests
     {
         #region Public Methods and Operators
 
