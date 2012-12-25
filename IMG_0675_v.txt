@@ -1,0 +1,420 @@
+  ExifToolVersion = 9.04
+  FileName = IMG_0675.CR2
+  Directory = .
+  FileSize = 21227015
+  FileModifyDate = 1351007226
+  FileAccessDate = 1351007224
+  FilePermissions = 33206
+  FileType = CR2
+  MIMEType = image/x-canon-cr2
+  ExifByteOrder = II
+  + [IFD0 directory with 18 entries]
+  | 0)  ImageWidth = 5184
+  | 1)  ImageHeight = 3456
+  | 2)  BitsPerSample = 8 8 8
+  | 3)  Compression = 6
+  | 4)  Make = Canon
+  | 5)  Model = Canon EOS 7D
+  | 6)  PreviewImageStart = 67340
+  | 7)  Orientation = 1
+  | 8)  PreviewImageLength = 1069315
+  | 9)  XResolution = 72 (72/1)
+  | 10) YResolution = 72 (72/1)
+  | 11) ResolutionUnit = 2
+  | 12) ModifyDate = 2012:10:23 17:47:02
+  | 13) Artist = Greg Eakin
+  | 14) ApplicationNotes (SubDirectory) -->
+  | + [XMP directory, 8192 bytes]
+  | | Rating = 0
+  | 15) Copyright = Copyright (c) 2012, Greg Eakin. All rights reserved.
+  | 16) ExifOffset (SubDirectory) -->
+  | + [ExifIFD directory with 37 entries]
+  | | 0)  ExposureTime = 0.01 (1/100)
+  | | 1)  FNumber = 0 (0/1)
+  | | 2)  ExposureProgram = 3
+  | | 3)  ISO = 100
+  | | 4)  SensitivityType = 2
+  | | 5)  RecommendedExposureIndex = 100
+  | | 6)  ExifVersion = 0230
+  | | 7)  DateTimeOriginal = 2012:10:23 17:47:02
+  | | 8)  CreateDate = 2012:10:23 17:47:02
+  | | 9)  ComponentsConfiguration = 1 2 3 0
+  | | 10) ShutterSpeedValue = 6.625 (434176/65536)
+  | | 11) ApertureValue = 2147483648 (2147483648/1)
+  | | 12) ExposureCompensation = 0 (0/1)
+  | | 13) MeteringMode = 5
+  | | 14) Flash = 16
+  | | 15) FocalLength = 50 (50/1)
+  | | 16) MakerNoteCanon (SubDirectory) -->
+  | | + [MakerNotes directory with 41 entries]
+  | | | 0)  CanonCameraSettings (SubDirectory) -->
+  | | | + [BinaryData directory, 98 bytes]
+  | | | | MacroMode = 2
+  | | | | SelfTimer = 0
+  | | | | Quality = 4
+  | | | | CanonFlashMode = 0
+  | | | | ContinuousDrive = 0
+  | | | | FocusMode = 3
+  | | | | RecordMode = 6
+  | | | | CanonImageSize = -1
+  | | | | EasyMode = 1
+  | | | | DigitalZoom = 0
+  | | | | Contrast = 0
+  | | | | Saturation = 0
+  | | | | Sharpness = 32767
+  | | | | CameraISO = 15
+  | | | | MeteringMode = 3
+  | | | | FocusRange = 2
+  | | | | AFPoint = 0
+  | | | | CanonExposureMode = 3
+  | | | | LensType = 0
+  | | | | MaxFocalLength = 0
+  | | | | MinFocalLength = 0
+  | | | | FocalUnits = 1
+  | | | | MaxAperture = -32
+  | | | | MinAperture = -32
+  | | | | FlashActivity = 0
+  | | | | FlashBits = 0
+  | | | | FocusContinuous = -1
+  | | | | AESetting = -1
+  | | | | ImageStabilization = -1
+  | | | | DisplayAperture = 0
+  | | | | ZoomSourceWidth = 0
+  | | | | ZoomTargetWidth = 0
+  | | | | SpotMeteringMode = -1
+  | | | | PhotoEffect = -1
+  | | | | ManualFlashOutput = 0
+  | | | | ColorTone = 0
+  | | | | SRAWQuality = 0
+  | | | 1)  CanonFocalLength (SubDirectory) -->
+  | | | + [BinaryData directory, 8 bytes]
+  | | | | FocalType = 0
+  | | | | FocalLength = 50
+  | | | 2)  CanonFlashInfo = 0 0 0 0
+  | | | 3)  CanonShotInfo (SubDirectory) -->
+  | | | + [BinaryData directory, 68 bytes]
+  | | | | AutoISO = 0
+  | | | | BaseISO = 160
+  | | | | MeasuredEV = 108
+  | | | | TargetAperture = -32
+  | | | | TargetExposureTime = 212
+  | | | | ExposureCompensation = 0
+  | | | | WhiteBalance = 0
+  | | | | SlowShutter = 3
+  | | | | SequenceNumber = 0
+  | | | | OpticalZoomCode = 8
+  | | | | CameraTemperature = 159
+  | | | | FlashGuideNumber = 0
+  | | | | AFPointsInFocus = 0
+  | | | | FlashExposureComp = 0
+  | | | | AutoExposureBracketing = 0
+  | | | | AEBBracketValue = 0
+  | | | | ControlMode = 3
+  | | | | FocusDistanceUpper = 0
+  | | | | FNumber = -32
+  | | | | ExposureTime = 212
+  | | | | MeasuredEV2 = 114
+  | | | | BulbDuration = 0
+  | | | | CameraType = 248
+  | | | | AutoRotate = -1
+  | | | | NDFilter = -1
+  | | | | SelfTimer2 = -1
+  | | | | FlashOutput = 0
+  | | | 4)  CanonImageType = Canon EOS 7D
+  | | | 5)  CanonFirmwareVersion = Firmware Version 2.0.3
+  | | | 6)  OwnerName = Greg Eakin
+  | | | 7)  SerialNumber = 3071201378
+  | | | 8)  CanonCameraInfo7D (SubDirectory) -->
+  | | | + [BinaryData directory, 1536 bytes]
+  | | | | FNumber = 0
+  | | | | ExposureTime = 109
+  | | | | ISO = 72
+  | | | | HighlightTonePriority = 0
+  | | | | MeasuredEV2 = 114
+  | | | | MeasuredEV = 115
+  | | | | FlashMeteringMode = 6
+  | | | | CameraTemperature = 159
+  | | | | FocalLength = 50
+  | | | | CameraOrientation = 0
+  | | | | FocusDistanceUpper = 0
+  | | | | FocusDistanceLower = 0
+  | | | | WhiteBalance = 0
+  | | | | ColorTemperature = 5200
+  | | | | HighISONoiseReduction = 0
+  | | | | LensType = 0
+  | | | | MinFocalLength = 0
+  | | | | MaxFocalLength = 0
+  | | | | FirmwareVersion = 2.0.3
+  | | | | FileIndex = 1234
+  | | | | DirectoryIndex = 101
+  | | | | PictureStyleInfo (SubDirectory) -->
+  | | | | + [BinaryData directory, 729 bytes]
+  | | | | | ContrastStandard = 1
+  | | | | | SharpnessStandard = 0
+  | | | | | SaturationStandard = 3
+  | | | | | ColorToneStandard = 0
+  | | | | | ContrastPortrait = 0
+  | | | | | SharpnessPortrait = 0
+  | | | | | SaturationPortrait = 2
+  | | | | | ColorTonePortrait = 0
+  | | | | | ContrastLandscape = 0
+  | | | | | SharpnessLandscape = 0
+  | | | | | SaturationLandscape = 4
+  | | | | | ColorToneLandscape = 0
+  | | | | | ContrastNeutral = 0
+  | | | | | SharpnessNeutral = 0
+  | | | | | SaturationNeutral = 0
+  | | | | | ColorToneNeutral = 0
+  | | | | | ContrastFaithful = 0
+  | | | | | SharpnessFaithful = 0
+  | | | | | SaturationFaithful = 0
+  | | | | | ColorToneFaithful = 0
+  | | | | | ContrastMonochrome = 0
+  | | | | | SharpnessMonochrome = 0
+  | | | | | FilterEffectMonochrome = 0
+  | | | | | ToningEffectMonochrome = 0
+  | | | | | ContrastUserDef1 = 0
+  | | | | | SharpnessUserDef1 = -3
+  | | | | | SaturationUserDef1 = 0
+  | | | | | ColorToneUserDef1 = -2
+  | | | | | FilterEffectUserDef1 = 0
+  | | | | | ToningEffectUserDef1 = 0
+  | | | | | ContrastUserDef2 = 0
+  | | | | | SharpnessUserDef2 = 0
+  | | | | | SaturationUserDef2 = 3
+  | | | | | ColorToneUserDef2 = 0
+  | | | | | FilterEffectUserDef2 = 0
+  | | | | | ToningEffectUserDef2 = 0
+  | | | | | ContrastUserDef3 = 0
+  | | | | | SharpnessUserDef3 = 0
+  | | | | | SaturationUserDef3 = 3
+  | | | | | ColorToneUserDef3 = 0
+  | | | | | FilterEffectUserDef3 = 0
+  | | | | | ToningEffectUserDef3 = 0
+  | | | | | UserDef1PictureStyle = 0
+  | | | | | UserDef2PictureStyle = 0
+  | | | | | UserDef3PictureStyle = 65
+  | | | 9)  CanonModelID = 2147484240
+  | | | 10) ThumbnailImageValidArea = 0 159 7 112
+  | | | 11) Canon_0x0019 = 1
+  | | | 12) CanonAFInfo2 (SubDirectory) -->
+  | | | + [SerialData directory, 182 bytes]
+  | | | | 0)  AFInfoSize = 182
+  | | | | 1)  AFAreaMode = 2
+  | | | | 2)  NumAFPoints = 19
+  | | | | 3)  ValidAFPoints = 1
+  | | | | 4)  CanonImageWidth = 5184
+  | | | | 5)  CanonImageHeight = 3456
+  | | | | 6)  AFImageWidth = 5184
+  | | | | 7)  AFImageHeight = 3456
+  | | | | 8)  AFAreaWidths = 344 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  | | | | 9)  AFAreaHeights = 344 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  | | | | 10) AFAreaXPositions = -340 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  | | | | 11) AFAreaYPositions = 810 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  | | | | 12) AFPointsInFocus = 0 0
+  | | | | 13) AFPointsSelected = 1 0
+  | | | 13) TimeInfo (SubDirectory) -->
+  | | | + [BinaryData directory, 16 bytes]
+  | | | | TimeZone = -420
+  | | | | TimeZoneCity = 30
+  | | | | DaylightSavings = 60
+  | | | 14) OriginalDecisionDataOffset = 0
+  | | | 15) CanonFileInfo (SubDirectory) -->
+  | | | + [BinaryData directory, 60 bytes]
+  | | | | BracketMode = 0
+  | | | | BracketValue = 0
+  | | | | BracketShotNumber = 0
+  | | | | RawJpgQuality = 0
+  | | | | RawJpgSize = 0
+  | | | | LongExposureNoiseReduction2 = -1
+  | | | | WBBracketMode = 0
+  | | | | WBBracketValueAB = 0
+  | | | | WBBracketValueGM = 0
+  | | | | FilterEffect = -1
+  | | | | ToningEffect = -1
+  | | | | LiveViewShooting = 1
+  | | | | FlashExposureLock = 0
+  | | | 16) LensModel = 
+  | | | 17) InternalSerialNumber = S1348777A
+  | | | 18) DustRemovalData = 
+  | | | 19) CropInfo (SubDirectory) -->
+  | | | + [BinaryData directory, 8 bytes]
+  | | | | CropLeftMargin = 0
+  | | | | CropRightMargin = 0
+  | | | | CropTopMargin = 0
+  | | | | CropBottomMargin = 0
+  | | | 20) CustomFunctions2 (SubDirectory) -->
+  | | | + [CanonCustom2 directory with 4 entries]
+  | | | + [CanonCustom2 group 1 directory with 7 entries]
+  | | | | 0)  ExposureLevelIncrements = 0
+  | | | | 1)  ISOSpeedIncrements = 0
+  | | | | 2)  ISOExpansion = 0
+  | | | | 3)  AEBAutoCancel = 0
+  | | | | 4)  AEBSequence = 0
+  | | | | 5)  SafetyShift = 0
+  | | | | 6)  FlashSyncSpeedAv = 0
+  | | | + [CanonCustom2 group 2 directory with 3 entries]
+  | | | | 0)  LongExposureNoiseReduction = 0
+  | | | | 1)  HighISONoiseReduction = 0
+  | | | | 2)  HighlightTonePriority = 0
+  | | | + [CanonCustom2 group 3 directory with 13 entries]
+  | | | | 0)  AIServoTrackingSensitivity = 0
+  | | | | 1)  AIServoTrackingMethod = 0
+  | | | | 2)  AIServoImagePriority = 0
+  | | | | 3)  LensDriveNoAF = 1
+  | | | | 4)  AFMicroadjustment = 2 255 0 255 11
+  | | | | 5)  SelectAFAreaSelectMode = 1 31
+  | | | | 6)  ManualAFPointSelectPattern = 1
+  | | | | 7)  VFDisplayIllumination = 1
+  | | | | 8)  DisplayAllAFPoints = 0
+  | | | | 9)  FocusDisplayAIServoAndMF = 0
+  | | | | 10) AFAssistBeam = 3
+  | | | | 11) OrientationLinkedAFPoint = 1
+  | | | | 12) MirrorLockup = 1
+  | | | + [CanonCustom2 group 4 directory with 4 entries]
+  | | | | 0)  CustomControls = 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 222 222 222 222
+  | | | | 1)  DialDirectionTvAv = 0
+  | | | | 2)  AddOriginalDecisionData = 0
+  | | | | 3)  AddAspectRatioInfo = 0
+  | | | 21) AspectInfo (SubDirectory) -->
+  | | | + [BinaryData directory, 20 bytes]
+  | | | | AspectRatio = 256
+  | | | | CroppedImageWidth = 5184
+  | | | | CroppedImageHeight = 3456
+  | | | | CroppedImageLeft = 0
+  | | | | CroppedImageTop = 0
+  | | | 22) ProcessingInfo (SubDirectory) -->
+  | | | + [BinaryData directory, 28 bytes]
+  | | | | ToneCurve = 0
+  | | | | Sharpness = 0
+  | | | | SharpnessFrequency = 0
+  | | | | SensorRedLevel = 0
+  | | | | SensorBlueLevel = 0
+  | | | | WhiteBalanceRed = 0
+  | | | | WhiteBalanceBlue = 0
+  | | | | WhiteBalance = -1
+  | | | | ColorTemperature = 5200
+  | | | | PictureStyle = 133
+  | | | | DigitalGain = 0
+  | | | | WBShiftAB = 0
+  | | | | WBShiftGM = 0
+  | | | 23) MeasuredColor (SubDirectory) -->
+  | | | + [BinaryData directory, 12 bytes]
+  | | | | MeasuredRGGB = 543 1024 1024 612
+  | | | 24) ColorSpace = 1
+  | | | 25) VRDOffset = 0
+  | | | 26) SensorInfo (SubDirectory) -->
+  | | | + [BinaryData directory, 34 bytes]
+  | | | | SensorWidth = 5360
+  | | | | SensorHeight = 3516
+  | | | | SensorLeftBorder = 168
+  | | | | SensorTopBorder = 56
+  | | | | SensorRightBorder = 5351
+  | | | | SensorBottomBorder = 3511
+  | | | | BlackMaskLeftBorder = 0
+  | | | | BlackMaskTopBorder = 0
+  | | | | BlackMaskRightBorder = 0
+  | | | | BlackMaskBottomBorder = 0
+  | | | 27) ColorData4 (SubDirectory) -->
+  | | | + [BinaryData directory, 2674 bytes]
+  | | | | ColorDataVersion = 7
+  | | | | ColorCoefs (SubDirectory) -->
+  | | | | + [BinaryData directory, 210 bytes]
+  | | | | | WB_RGGBLevelsAsShot = 2305 1024 1024 1494
+  | | | | | ColorTempAsShot = 5212
+  | | | | | WB_RGGBLevelsAuto = 2305 1024 1024 1494
+  | | | | | ColorTempAuto = 5212
+  | | | | | WB_RGGBLevelsMeasured = 2302 1024 1023 1490
+  | | | | | ColorTempMeasured = 5212
+  | | | | | WB_RGGBLevelsDaylight = 2153 1024 1024 1423
+  | | | | | ColorTempDaylight = 5200
+  | | | | | WB_RGGBLevelsShade = 2497 1024 1024 1202
+  | | | | | ColorTempShade = 7000
+  | | | | | WB_RGGBLevelsCloudy = 2315 1024 1024 1304
+  | | | | | ColorTempCloudy = 6000
+  | | | | | WB_RGGBLevelsTungsten = 1520 1024 1024 2158
+  | | | | | ColorTempTungsten = 3200
+  | | | | | WB_RGGBLevelsFluorescent = 1903 1024 1024 2020
+  | | | | | ColorTempFluorescent = 3769
+  | | | | | WB_RGGBLevelsKelvin = 2153 1024 1024 1423
+  | | | | | ColorTempKelvin = 5190
+  | | | | | WB_RGGBLevelsFlash = 2367 1024 1024 1298
+  | | | | | ColorTempFlash = 6152
+  | | | | RawMeasuredRGGB = 2063597569 3549954050 3579052034 3205562369
+  | | | 28) CRWParam = .Q. ...............p....r..f..........@@@.}.x......M..xN.g.1...i[snip]
+  | | | 29) Flavor = @@. ........D.=B.(?....o..k.|..5o...2...cOE..X...-#.-..M.+..~.....[snip]
+  | | | 30) BlackLevel = 65 129 129
+  | | | 31) Canon_0x4009 = 132 0 0
+  | | | 32) CustomPictureStyleFileName = 
+  | | | 33) Canon_0x4011 = 
+  | | | 34) Canon_0x4012 = 
+  | | | 35) AFMicroAdj (SubDirectory) -->
+  | | | + [BinaryData directory, 44 bytes]
+  | | | | AFMicroAdjMode = 0
+  | | | | AFMicroAdjValue = 0
+  | | | 36) VignettingCorr (SubDirectory) -->
+  | | | + [BinaryData directory, 116 bytes]
+  | | | | PeripheralLighting = 0
+  | | | | PeripheralLightingValue = 0
+  | | | | OriginalImageWidth = 5184
+  | | | | OriginalImageHeight = 3456
+  | | | 37) VignettingCorr2 (SubDirectory) -->
+  | | | + [BinaryData directory, 28 bytes]
+  | | | | PeripheralLightingSetting = 0
+  | | | 38) Canon_0x4017 = 460551 2323382272
+  | | | 39) LightingOpt (SubDirectory) -->
+  | | | + [BinaryData directory, 28 bytes]
+  | | | | AutoLightingOptimizer = 3
+  | | | 40) LensInfo (SubDirectory) -->
+  | | | + [BinaryData directory, 30 bytes]
+  | | 17) UserComment = 
+  | | 18) SubSecTime = 94
+  | | 19) SubSecTimeOriginal = 94
+  | | 20) SubSecTimeDigitized = 94
+  | | 21) FlashpixVersion = 0100
+  | | 22) ColorSpace = 1
+  | | 23) ExifImageWidth = 5184
+  | | 24) ExifImageHeight = 3456
+  | | 25) InteropOffset (SubDirectory) -->
+  | | + [InteropIFD directory with 2 entries]
+  | | | 0)  InteropIndex = R98
+  | | | 1)  InteropVersion = 0100
+  | | 26) FocalPlaneXResolution = 5715.545755 (5184000/907)
+  | | 27) FocalPlaneYResolution = 5808.403361 (3456000/595)
+  | | 28) FocalPlaneResolutionUnit = 2
+  | | 29) CustomRendered = 0
+  | | 30) ExposureMode = 0
+  | | 31) WhiteBalance = 0
+  | | 32) SceneCaptureType = 0
+  | | 33) OwnerName = Greg Eakin
+  | | 34) SerialNumber = 3071201378
+  | | 35) LensInfo = 0 0 0 0 (0/1 0/1 0/1 0/1)
+  | | 36) LensModel = 
+  | 17) GPSInfo (SubDirectory) -->
+  | + [GPS directory with 1 entries]
+  | | 0)  GPSVersionID = 2 3 0 0
+  + [IFD1 directory with 2 entries]
+  | 0)  ThumbnailOffset = 57256
+  | 1)  ThumbnailLength = 10081
+  + [IFD2 directory with 13 entries]
+  | 0)  ImageWidth = 670
+  | 1)  ImageHeight = 432
+  | 2)  BitsPerSample = 16 16 16
+  | 3)  Compression = 1
+  | 4)  PhotometricInterpretation = 2
+  | 5)  StripOffsets = 1136656
+  | 6)  SamplesPerPixel = 3
+  | 7)  RowsPerStrip = 432
+  | 8)  StripByteCounts = 1736640
+  | 9)  PlanarConfiguration = 1
+  | 10) Exif_0xc5d9 = 2
+  | 11) Exif_0xc6c5 = 3
+  | 12) Exif_0xc6dc = 648 432 21 0
+  + [IFD3 directory with 7 entries]
+  | 0)  Compression = 6
+  | 1)  StripOffsets = 2873360
+  | 2)  StripByteCounts = 18353655
+  | 3)  Exif_0xc5d8 = 1
+  | 4)  Exif_0xc5e0 = 3
+  | 5)  RawImageSegmentation = 2 1728 1904
+  | 6)  Exif_0xc6c5 = 1
