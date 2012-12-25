@@ -3,6 +3,8 @@
     using System;
     using System.IO;
 
+    using PhotoLib.Utilities;
+
     public class ImageFileDirectory
     {
         #region Fields
@@ -50,8 +52,13 @@
                 {
                     switch (entry.TagType)
                     {
+                        case 0x01:
+                            Console.Write("{0}  {1} Byte: ", x, entry.TagId);
+                            Console.WriteLine("[0x{0:x}] ({1}): ", entry.ValuePointer, entry.NumberOfValue);
+                            break;
+
                         case 0x02:
-                            Console.Write("{0}  {1} String: ", x, entry.TagId);
+                            Console.Write("{0}  {1} Ascii: ", x, entry.TagId);
 
                             Console.Write("[0x{0:x}] ({1}): ", entry.ValuePointer, entry.NumberOfValue);
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
@@ -69,7 +76,7 @@
                             break;
 
                         case 0x03:
-                            Console.Write("{0}  {1} UShort: ", x, entry.TagId);
+                            Console.Write("{0}  {1} Short: ", x, entry.TagId);
                             if (entry.NumberOfValue == 1)
                             {
                                 Console.Write("{0}", entry.ValuePointer);
@@ -92,7 +99,7 @@
                             break;
 
                         case 0x04:
-                            Console.Write("{0}  {1} Pointer: ", x, entry.TagId);
+                            Console.Write("{0}  {1} Long: ", x, entry.TagId);
                             Console.Write("[0x{0:x}] ({1}): ", entry.ValuePointer, entry.NumberOfValue);
                             //if (binaryReader.BaseStream.Position != entry.ValuePointer)
                             //    binaryReader.BaseStream.Seek(entry.ValuePointer, SeekOrigin.Begin);
@@ -117,6 +124,19 @@
                             var us2 = binaryReader.ReadUInt32();
                             Console.WriteLine("{0}/{1} = {2}", us1, us2, us1 / (double)us2);
                             break;
+
+                        case 0x07:
+                            Console.Write("{0}  {1} Byte[]: ", x, entry.TagId);
+                            Console.WriteLine("[0x{0:x}] ({1}): ", entry.ValuePointer, entry.NumberOfValue);
+                            break;
+
+                        case 0x0A:
+                            Console.Write("{0}  {1} SRational: ", x, entry.TagId);
+                            Console.WriteLine("[0x{0:x}] ({1}): ", entry.ValuePointer, entry.NumberOfValue);
+                            break;
+
+                        default:
+                            throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
                     }
                 }
             }
