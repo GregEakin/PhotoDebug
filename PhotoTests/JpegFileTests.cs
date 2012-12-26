@@ -5,8 +5,6 @@
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using PhotoLib;
-
     [TestClass]
     public class JpegFileTests
     {
@@ -30,10 +28,11 @@
         [TestMethod]
         public void DumpMethod1()
         {
-            using (var fileStream = new FileStream(FileName, FileMode.Open, FileAccess.Read))
+            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
             {
-                using (var binaryReader = new BinaryReader(fileStream))
+                try
                 {
+                    var binaryReader = new BinaryReader(fileStream);
                     var address = 0;
                     while (true)
                     {
@@ -46,6 +45,9 @@
                         }
                         Console.WriteLine();
                     }
+                }
+                catch (EndOfStreamException e)
+                {
                 }
             }
         }
