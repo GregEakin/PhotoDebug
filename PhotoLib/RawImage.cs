@@ -19,24 +19,21 @@
         public RawImage(BinaryReader binaryReader)
         {
             this.header = new CR2Header(binaryReader);
+
             var next = this.header.TiffOffset;
             while (next > 0)
             {
-                Console.WriteLine("== Tiff Direcotry {2}: 0x{0:x} == 0x{1:x}", next, binaryReader.BaseStream.Position, this.directoryList.Count);
                 var dir = new ImageFileDirectory(binaryReader, next);
                 this.directoryList.Add(next, dir);
                 next = dir.NextEntry;
-                Console.Write("===");
             }
 
-            next = header.RawIfdOffset;
+            next = this.header.RawIfdOffset;
             while (next > 0 && !this.directoryList.ContainsKey(next))
             {
-                Console.WriteLine("== Raw Direcotry {2}: 0x{0:x} == 0x{1:x}", next, binaryReader.BaseStream.Position, this.directoryList.Count);
                 var dir = new ImageFileDirectory(binaryReader, next);
-                directoryList.Add(next, dir);
+                this.directoryList.Add(next, dir);
                 next = dir.NextEntry;
-                Console.Write("===");
             }
         }
 
@@ -57,6 +54,19 @@
             get
             {
                 return this.header;
+            }
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public void DumpHeader(BinaryReader binaryReader)
+        {
+            foreach (var item in directoryList)
+            {
+                Console.WriteLine("== Tiff Direcotry [0x{0}]:", item.Key.ToString("X8"));
+                item.Value.DumpDirectory(binaryReader);
             }
         }
 
