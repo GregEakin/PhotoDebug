@@ -19,8 +19,8 @@
 
         #region Public Methods and Operators
 
-        [TestInitialize]
-        public void Initialize()
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext context)
         {
             if (!File.Exists(FileName))
             {
