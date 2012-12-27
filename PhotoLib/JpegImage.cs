@@ -16,8 +16,8 @@
                 var rawImage = new RawImage(binaryReader);
 
                 var directory = rawImage.Directories.Last();
-                var address = directory.Entries.First(e => e.TagId == 0x0111).ValuePointer;
-                var length = directory.Entries.First(e => e.TagId == 0x0117).ValuePointer;
+                var address = directory.Entries.First(e => e.TagId == 0x0111).ValuePointer;     // TIF_STRIP_OFFSETS For each strip, the byte offset of that strip.
+                var length = directory.Entries.First(e => e.TagId == 0x0117).ValuePointer;      // TIF_STRIP_BYTE_COUNTS For each strip, the number of bytes in the strip after compression.
 
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
 

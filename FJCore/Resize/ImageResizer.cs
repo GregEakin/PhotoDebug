@@ -8,7 +8,9 @@ using FJCore.Filtering;
 
 namespace FJCore.Resize
 {
+    [Serializable]
     public class ResizeNotNeededException : Exception { }
+
     public class ResizeProgressChangedEventArgs : EventArgs { public double Progress; }
 
     public class ImageResizer

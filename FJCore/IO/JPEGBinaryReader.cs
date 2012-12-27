@@ -6,6 +6,7 @@ namespace FJCore.IO
     using System;
     using System.IO;
 
+    [Serializable]
     internal class JPEGMarkerFoundException : Exception
     {
         public JPEGMarkerFoundException(byte marker) { this.Marker = marker; }

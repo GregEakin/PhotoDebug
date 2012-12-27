@@ -84,7 +84,7 @@
             {
                 count++;
 
-                if (entry.TagId == 0x8769)
+                if (entry.TagType == 0x04 && entry.TagId == 0x8769)  // TIF_EXIF IFD - A pointer to the Exif IFD.
                 {
                     Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Image File Directory");
                     Console.WriteLine(ReferencedItem, entry.ValuePointer.ToString("X8"), entry.NumberOfValue);
@@ -95,12 +95,12 @@
                     switch (entry.TagType)
                     {
                         case 0x01:
-                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Byte");
+                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Byte 8-bit");
                             Console.WriteLine(ReferencedItem, entry.ValuePointer.ToString("X8"), entry.NumberOfValue);
                             break;
 
                         case 0x02:
-                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Ascii");
+                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Ascii 8-bit");
                             Console.Write(ReferencedItem, entry.ValuePointer.ToString("X8"), entry.NumberOfValue);
 
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
@@ -118,7 +118,7 @@
                             break;
 
                         case 0x03:
-                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Short");
+                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "UShort 16-bit");
                             if (entry.NumberOfValue == 1)
                             {
                                 Console.Write("{0}", entry.ValuePointer);
@@ -141,7 +141,7 @@
                             break;
 
                         case 0x04:
-                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Long");
+                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "ULong 32-bit");
                             if (entry.NumberOfValue == 1)
                             {
                                 Console.Write("{0}", entry.ValuePointer);
@@ -164,7 +164,7 @@
                             break;
 
                         case 0x05:
-                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Rational");
+                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Rational 2x32-bit");
                             Console.Write(ReferencedItem, entry.ValuePointer.ToString("X8"), 2);
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
                             {
@@ -176,8 +176,13 @@
                             Console.WriteLine(RationalItem, us1, us2, us1 / (double)us2);
                             break;
 
+                        case 0x06:
+                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "SByte 8-bit");
+                            throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
+                            break;
+
                         case 0x07:
-                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Byte[]");
+                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Undefinded");
                             if (entry.NumberOfValue <= 4)
                             {
                                 Console.Write("{0}, ", entry.ValuePointer >> 0 & 0xFF);
@@ -192,8 +197,18 @@
                             Console.WriteLine();
                             break;
 
+                        case 0x08:
+                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "SShort 16-bit");
+                            throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
+                            break;
+
+                        case 0x09:
+                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "SLong 32-bit");
+                            throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
+                            break;
+                        
                         case 0x0A:
-                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "SRational");
+                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "SRational 2x32-bit");
                             Console.Write(ReferencedItem, entry.ValuePointer.ToString("X8"), entry.NumberOfValue);
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
                             {
@@ -201,10 +216,20 @@
                             }
 
                             var s1 = binaryReader.ReadInt32();
-                            var s2 = binaryReader.ReadUInt32();
+                            var s2 = binaryReader.ReadInt32();
                             Console.WriteLine(RationalItem, s1, s2, s1 / (double)s2);
                             break;
 
+                        case 0x0B:
+                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Float 4-Byte");
+                            throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
+                            break;
+
+                        case 0x0C:
+                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Double 8-Byte");
+                            throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
+                            break;
+                        
                         default:
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Undefined");
                             throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
