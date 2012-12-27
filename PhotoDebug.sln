@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		IMG_0675_v.txt = IMG_0675_v.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FJCore", "FJCore\FJCore.csproj", "{0B22D317-98B2-454B-BD59-5EED90B13EBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{7574E27D-7961-4D09-A2D6-ADA68C87E37F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7574E27D-7961-4D09-A2D6-ADA68C87E37F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7574E27D-7961-4D09-A2D6-ADA68C87E37F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B22D317-98B2-454B-BD59-5EED90B13EBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B22D317-98B2-454B-BD59-5EED90B13EBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B22D317-98B2-454B-BD59-5EED90B13EBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B22D317-98B2-454B-BD59-5EED90B13EBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
