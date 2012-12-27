@@ -208,7 +208,25 @@
                 var address = directory.Entries.First(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
                 var length = directory.Entries.First(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
 
-                StartOfImage(binaryReader, address, length);
+                var startOfImage = new StartOfImage(binaryReader, address, length);
+                Assert.AreEqual(0xFF, startOfImage.Mark);
+                Assert.AreEqual(0xD8, startOfImage.Tag);    // JPG_MARK_SOI
+
+                var huffmanTable = startOfImage.HuffmanTable;
+                Assert.AreEqual(0xFF, huffmanTable.Mark);
+                Assert.AreEqual(0xC4, huffmanTable.Tag);
+
+                var lossless = startOfImage.Lossless;
+                Assert.AreEqual(0xFF, lossless.Mark);
+                Assert.AreEqual(0xC3, lossless.Tag);
+
+                var startOfScan = startOfImage.StartOfScan;
+                Assert.AreEqual(0xFF, startOfScan.Mark);
+                Assert.AreEqual(0xDA, startOfScan.Tag);
+
+                var imageData = startOfImage.ImageData;
+                Assert.AreEqual(0xFE, imageData.Mark);
+                Assert.AreEqual(0xD5, imageData.Tag);
             }
         }
 
@@ -238,32 +256,6 @@
         #endregion
 
         #region Methods
-
-        private static void StartOfImage(BinaryReader binaryReader, uint address, uint length)
-        {
-            binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-
-            // FF D8 Start of Image - w/o data segment
-            var b1 = binaryReader.ReadUInt16();
-            b1 = SwapBytes(b1);
-            Assert.AreEqual(0xFFD8, b1); // JPG_MARK_SOI
-
-            var huffmanTable = new HuffmanTable(binaryReader);
-            Assert.AreEqual(0xFF, huffmanTable.Mark);
-            Assert.AreEqual(0xC4, huffmanTable.Tag);
-
-            var lossless = new Lossless(binaryReader);
-            Assert.AreEqual(0xFF, lossless.Mark);
-            Assert.AreEqual(0xC3, lossless.Tag);
-
-            var startOfScan = new StartOfScan(binaryReader);
-            Assert.AreEqual(0xFF, startOfScan.Mark);
-            Assert.AreEqual(0xDA, startOfScan.Tag);
-
-            var imageData = new ImageData(binaryReader, address, length);
-            Assert.AreEqual(0xFE, imageData.Mark);
-            Assert.AreEqual(0xD5, imageData.Tag);
-        }
 
         private static ushort SwapBytes(ushort data)
         {
