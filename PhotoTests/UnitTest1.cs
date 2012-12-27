@@ -8,7 +8,6 @@
 
     using PhotoLib;
 
-
     [TestClass]
     public class UnitTest1
     {
@@ -313,9 +312,9 @@
 
                     Assert.AreEqual(i + 1, id);
                 }
-                var bB1 = binaryReader.ReadByte();  // startSpectralSelection
-                var bB2 = binaryReader.ReadByte();  // endSpectralSelection
-                var bB3 = binaryReader.ReadByte();  // successiveApproximation
+                var bB1 = binaryReader.ReadByte(); // startSpectralSelection
+                var bB2 = binaryReader.ReadByte(); // endSpectralSelection
+                var bB3 = binaryReader.ReadByte(); // successiveApproximation
 
                 // FE D5 
                 var bC = binaryReader.ReadUInt16();
@@ -385,14 +384,6 @@
 
         #region Methods
 
-        private static
-        ushort SwapBytes(ushort data)
-        {
-            var upper = (data & (ushort)0x00FF) << 8;
-            var lower = (data & (ushort)0xFF00) >> 8;
-            return (ushort)(lower | upper);
-        }
-
         private static void Huffman(BinaryReader jpegReader)
         {
             //var dcTables = new JpegHuffmanTable[4];
@@ -427,11 +418,15 @@
                 var codeLength = new short[16];
 
                 for (var i = 0; i < codeLength.Length; i++)
+                {
                     codeLength[i] = jpegReader.ReadByte();
+                }
 
                 var huffmanValueLen = 0;
                 for (var i = 0; i < 16; i++)
+                {
                     huffmanValueLen += codeLength[i];
+                }
                 index -= (huffmanValueLen + 17);
 
                 var huffmanVal = new short[huffmanValueLen];
@@ -448,6 +443,13 @@
                 //                else if (tableClass == HuffmanTable.JPEG_AC_TABLE)
                 //                    acTables[(int)huffmanIndex] = new JpegHuffmanTable(codeLength, huffmanVal);
             }
+        }
+
+        private static ushort SwapBytes(ushort data)
+        {
+            var upper = (data & (ushort)0x00FF) << 8;
+            var lower = (data & (ushort)0xFF00) >> 8;
+            return (ushort)(lower | upper);
         }
 
         #endregion
