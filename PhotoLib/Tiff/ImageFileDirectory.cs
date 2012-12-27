@@ -1,9 +1,8 @@
-﻿namespace PhotoLib
+﻿namespace PhotoLib.Tiff
 {
     using System;
     using System.IO;
 
-    using PhotoLib.Tiff;
     using PhotoLib.Utilities;
 
     public class ImageFileDirectory
@@ -32,7 +31,7 @@
 
             var length = binaryReader.ReadUInt16();
             this.entries = new ImageFileEntry[length];
-            for (var i = 0; i < this.Length; i++)
+            for (var i = 0; i < length; i++)
             {
                 this.entries[i] = new ImageFileEntry(binaryReader);
             }
@@ -51,14 +50,6 @@
             get
             {
                 return this.entries;
-            }
-        }
-
-        public ushort Length
-        {
-            get
-            {
-                return (ushort)this.Entries.Length;
             }
         }
 

@@ -53,7 +53,7 @@
                 var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
                 var dir = rawImage.Directories.First();
-                var length = dir.Length;
+                var length = dir.Entries.Length;
                 Console.WriteLine("Entries = {0}", length);
                 for (var i = 0; i < length; i++)
                 {
