@@ -15,7 +15,7 @@ namespace FJCore.Decoder
 
         #region Standard JPEG Huffman Tables
 
-        public static JpegHuffmanTable StdACChrominance =
+        public static readonly JpegHuffmanTable StdACChrominance =
             new JpegHuffmanTable(new short[] { 0, 2, 1, 2, 4, 4, 3, 4, 7, 5,
                                            4, 4, 0, 1, 2, 0x77 },
                                  new short[] { 0x00, 0x01, 0x02, 0x03, 0x11,
@@ -52,7 +52,7 @@ namespace FJCore.Decoder
                                             0xf4, 0xf5, 0xf6, 0xf7, 0xf8,
                                             0xf9, 0xfa }, false);
 
-        public static JpegHuffmanTable StdACLuminance =
+        public static readonly JpegHuffmanTable StdACLuminance =
             new JpegHuffmanTable(new short[] { 0, 2, 1, 3, 3, 2, 4, 3, 5, 5,
                                           4, 4, 0, 0, 1, 0x7d },
                                  new short[] { 0x01, 0x02, 0x03, 0x00, 0x04,
@@ -89,20 +89,19 @@ namespace FJCore.Decoder
                                           0xf4, 0xf5, 0xf6, 0xf7, 0xf8,
                                           0xf9, 0xfa }, false);
 
-        public static JpegHuffmanTable StdDCChrominance =
+        public static readonly JpegHuffmanTable StdDCChrominance =
             new JpegHuffmanTable(new short[] { 0, 3, 1, 1, 1, 1, 1, 1, 1, 1,
                                           1, 0, 0, 0, 0, 0 },
                                 new short[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
                                           10, 11 }, false);
 
-        public static JpegHuffmanTable StdDCLuminance =
+        public static readonly JpegHuffmanTable StdDCLuminance =
             new JpegHuffmanTable(new short[] { 0, 1, 5, 1, 1, 1, 1, 1, 1, 0,
                                          0, 0, 0, 0, 0, 0 },
                                  new short[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
                                           10, 11 }, false);
 
         #endregion
-
 
         /// <summary>
         /// Construct and initialize a Huffman table. Copies are created of
@@ -143,7 +142,7 @@ namespace FJCore.Decoder
             if(lengths.Any(x => x < 0))
                 throw new ArgumentException("Negative values cannot appear in the length array.");
 
-            for (int i = 0; i < lengths.Length; i++)
+            for (var i = 0; i < lengths.Length; i++)
             {
                 if (lengths[i] > ((1 << (i + 1)) - 1))
                     throw new ArgumentException(
@@ -174,7 +173,5 @@ namespace FJCore.Decoder
         /// </summary>
         public short[] Lengths { get { return lengths; } }
         public short[] Values { get { return values; } }
-
     }
-
 }

@@ -7,7 +7,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using PhotoLib;
-    
+
 
     [TestClass]
     public class UnitTest1
@@ -227,23 +227,26 @@
                 b3 = SwapBytes(b3);
                 Assert.AreEqual(0x0042, b3);
 
-                var size = (b3 - 2) / 2 - 1;
-                Assert.AreEqual(31, size);
+                var size = (b3 - 2) / 2;
+                Assert.AreEqual(32, size);
 
-                // Read 32 bytes, table 0 -- bits
-                var b4 = binaryReader.ReadByte();
-                Assert.AreEqual(0x00, b4);
-                for (var i = 0; i < size; i++)
+                for (var i = 0; i < 2; i++)
                 {
-                    var b5 = binaryReader.ReadByte();
-                }
+                    // Read 32 bytes, table 0 -- bits
+                    var b4 = binaryReader.ReadByte();
+                    Assert.AreEqual(i, b4);
 
-                // Read 32 bytes, table 1 -- values
-                var b6 = binaryReader.ReadByte();
-                Assert.AreEqual(0x01, b6);
-                for (var i = 0; i < size; i++)
-                {
-                    var b7 = binaryReader.ReadByte();
+                    var sum = 0;
+                    for (var j = 0; j < 16; j++)
+                    {
+                        sum += binaryReader.ReadByte();
+                    }
+                    Assert.AreEqual(15, sum);
+
+                    for (var j = 0; j < sum; j++)
+                    {
+                        binaryReader.ReadByte();
+                    }
                 }
 
                 // FF C3 Lossless (sequential)
@@ -258,26 +261,32 @@
                 var precision = binaryReader.ReadByte();
                 Assert.AreEqual(14, precision);
 
-                var height = binaryReader.ReadUInt16();
-                height = SwapBytes(height);
-                Assert.AreEqual(3516, height);
+                var scanLines = binaryReader.ReadUInt16();
+                scanLines = SwapBytes(scanLines);
+                Assert.AreEqual(3516, scanLines);
 
-                var samples = binaryReader.ReadUInt16();
-                samples = SwapBytes(samples);
-                Assert.AreEqual(1340, samples);
+                var samplesPerLine = binaryReader.ReadUInt16();
+                samplesPerLine = SwapBytes(samplesPerLine);
+                Assert.AreEqual(1340, samplesPerLine);
 
-                var nf = binaryReader.ReadByte();
-                Assert.AreEqual(4, nf);
+                var componentCount = binaryReader.ReadByte();
+                Assert.AreEqual(4, componentCount);
 
-                var width = samples * nf;
+                var width = samplesPerLine * componentCount;
                 Assert.AreEqual(5360, width);
 
-                for (var i = 8; i < b9; i += 3)
+                for (var i = 0; i < componentCount; i++)
                 {
-                    var b1A = binaryReader.ReadByte();
-                    var b1B = binaryReader.ReadByte();
-                    var b1C = binaryReader.ReadByte();
-                    Assert.AreEqual(0x11, b1B);
+                    var compId = binaryReader.ReadByte();
+                    var sampleFactors = binaryReader.ReadByte();
+                    var qTableId = binaryReader.ReadByte();
+
+                    Assert.AreEqual(i, compId);
+                    Assert.AreEqual(0x11, sampleFactors);
+                    Assert.AreEqual(0x00, qTableId);
+                    // var sampleHFactor = (byte)(sampleFactors >> 4);
+                    // var sampleVFactor = (byte)(sampleFactors & 0x0f);
+                    // frame.AddComponent(compId, sampleHFactor, sampleVFactor, qTableId);
                 }
 
                 // FF DA Start of Scan
@@ -290,17 +299,30 @@
                 bB = SwapBytes(bB);
                 Assert.AreEqual(0x000E, bB);
 
-                for (var i = 2; i < bB; i++)
+                var bBnum = binaryReader.ReadByte();
+                Assert.AreEqual(4, bBnum);
+                var components = new byte[bBnum];
+                for (var i = 0; i < bBnum; i++)
                 {
-                    var b1A = binaryReader.ReadByte();
+                    var id = binaryReader.ReadByte();
+                    var info = binaryReader.ReadByte();
+                    var dc = (info >> 4) & 0x0f;
+                    var ac = info & 0x0f;
+                    components[i] = id;
+                    // id, acTables[ac], dcTables[dc]
+
+                    Assert.AreEqual(i, id);
                 }
+                var bB1 = binaryReader.ReadByte();  // startSpectralSelection
+                var bB2 = binaryReader.ReadByte();  // endSpectralSelection
+                var bB3 = binaryReader.ReadByte();  // successiveApproximation
 
                 // FE D5 
                 var bC = binaryReader.ReadUInt16();
                 bC = SwapBytes(bC);
                 Assert.AreEqual(0xFED5, bC);
 
-                var imageSize = width * height;
+                var imageSize = width * scanLines;
                 Assert.AreEqual(18845760, imageSize);
 
                 var pos = binaryReader.BaseStream.Position - 2;
@@ -361,10 +383,10 @@
 
         #endregion
 
-                #region Methods
+        #region Methods
 
-            private static
-            ushort SwapBytes(ushort data)
+        private static
+        ushort SwapBytes(ushort data)
         {
             var upper = (data & (ushort)0x00FF) << 8;
             var lower = (data & (ushort)0xFF00) >> 8;
@@ -418,14 +440,14 @@
                     huffmanVal[i] = jpegReader.ReadByte();
                 }
 
-//                // Assign DC Huffman Table.
-//                if (tableClass == HuffmanTable.JPEG_DC_TABLE)
-//                    dcTables[(int)huffmanIndex] = new JpegHuffmanTable(codeLength, huffmanVal);
-//
-//                // Assign AC Huffman Table.
-//                else if (tableClass == HuffmanTable.JPEG_AC_TABLE)
-//                    acTables[(int)huffmanIndex] = new JpegHuffmanTable(codeLength, huffmanVal);
-            }            
+                //                // Assign DC Huffman Table.
+                //                if (tableClass == HuffmanTable.JPEG_DC_TABLE)
+                //                    dcTables[(int)huffmanIndex] = new JpegHuffmanTable(codeLength, huffmanVal);
+                //
+                //                // Assign AC Huffman Table.
+                //                else if (tableClass == HuffmanTable.JPEG_AC_TABLE)
+                //                    acTables[(int)huffmanIndex] = new JpegHuffmanTable(codeLength, huffmanVal);
+            }
         }
 
         #endregion

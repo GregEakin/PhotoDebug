@@ -95,7 +95,7 @@ namespace FJCore.Decoder
 
             int length = data.Length + 2; // Data & length
 
-            if (!(length >= JFIF_FIXED_LENGTH))
+            if (length < JFIF_FIXED_LENGTH)
                 return false;  // Header's too small.
 
             byte[] identifier = new byte[5];
