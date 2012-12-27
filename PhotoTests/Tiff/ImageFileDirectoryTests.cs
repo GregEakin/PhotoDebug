@@ -24,7 +24,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var imageFileDirectory = new ImageFileDirectory(reader, 0x00000000);
+                var imageFileDirectory = new ImageFileDirectory(reader);
                 Assert.AreEqual(1, imageFileDirectory.Entries.Length);
             }
         }
@@ -35,7 +35,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var imageFileDirectory = new ImageFileDirectory(reader, 0x00000000);
+                var imageFileDirectory = new ImageFileDirectory(reader);
                 var entry = imageFileDirectory.Entries.First();
                 Assert.AreEqual(0x0012, entry.TagId);
             }
@@ -47,7 +47,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var imageFileDirectory = new ImageFileDirectory(reader, 0x00000000);
+                var imageFileDirectory = new ImageFileDirectory(reader);
                 Assert.AreEqual(0x00000000u, imageFileDirectory.NextEntry);
             }
         }

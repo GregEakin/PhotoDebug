@@ -25,7 +25,8 @@
             var next = this.header.TiffOffset;
             while (next > 0)
             {
-                var dir = new ImageFileDirectory(binaryReader, next);
+                binaryReader.BaseStream.Seek(next, SeekOrigin.Begin);
+                var dir = new ImageFileDirectory(binaryReader);
                 this.directoryList.Add(next, dir);
                 next = dir.NextEntry;
             }
@@ -33,7 +34,8 @@
             next = this.header.RawIfdOffset;
             while (next > 0 && !this.directoryList.ContainsKey(next))
             {
-                var dir = new ImageFileDirectory(binaryReader, next);
+                binaryReader.BaseStream.Seek(next, SeekOrigin.Begin);
+                var dir = new ImageFileDirectory(binaryReader);
                 this.directoryList.Add(next, dir);
                 next = dir.NextEntry;
             }

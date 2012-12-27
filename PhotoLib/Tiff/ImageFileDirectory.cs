@@ -22,13 +22,8 @@
             this.entries = new ImageFileEntry[length];
         }
 
-        public ImageFileDirectory(BinaryReader binaryReader, uint start)
+        public ImageFileDirectory(BinaryReader binaryReader)
         {
-            if (binaryReader.BaseStream.Position != start)
-            {
-                binaryReader.BaseStream.Seek(start, SeekOrigin.Begin);
-            }
-
             var length = binaryReader.ReadUInt16();
             this.entries = new ImageFileEntry[length];
             for (var i = 0; i < length; i++)
@@ -38,7 +33,7 @@
             var next = binaryReader.ReadUInt32();
             this.nextEntry = next;
 
-            Console.WriteLine("### Directory [0x{0}], {1}, [0x{2}]", start.ToString("X8"), length, next.ToString("X8"));
+            Console.WriteLine("### Directory {0}, [0x{1}]", length, next.ToString("X8"));
         }
 
         #endregion
@@ -76,11 +71,12 @@
             {
                 count++;
 
-                if (entry.TagType == 0x04 && entry.TagId == 0x8769)  // TIF_EXIF IFD - A pointer to the Exif IFD.
+                if (entry.TagType == 0x04 && entry.TagId == 0x8769) // TIF_EXIF IFD - A pointer to the Exif IFD.
                 {
                     Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Image File Directory");
                     Console.WriteLine(ReferencedItem, entry.ValuePointer.ToString("X8"), entry.NumberOfValue);
-                    var tags = new ImageFileDirectory(binaryReader, entry.ValuePointer);
+                    binaryReader.BaseStream.Seek(entry.ValuePointer, SeekOrigin.Begin);
+                    var tags = new ImageFileDirectory(binaryReader);
                 }
                 else
                 {
@@ -195,7 +191,7 @@
                         case 0x09:
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "SLong 32-bit");
                             throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
-                        
+
                         case 0x0A:
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "SRational 2x32-bit");
                             Console.Write(ReferencedItem, entry.ValuePointer.ToString("X8"), entry.NumberOfValue);
@@ -216,7 +212,7 @@
                         case 0x0C:
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Double 8-Byte");
                             throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
-                        
+
                         default:
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Undefined");
                             throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
