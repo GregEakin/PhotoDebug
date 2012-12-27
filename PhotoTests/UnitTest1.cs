@@ -239,52 +239,6 @@
 
         #region Methods
 
-        private static void Lossless(BinaryReader binaryReader)
-        {
-            // FF C3 Lossless (sequential)
-            var b8 = binaryReader.ReadUInt16();
-            b8 = SwapBytes(b8);
-            Assert.AreEqual(0xFFC3, b8); // JPG_MARK_SOF3
-
-            var b9 = binaryReader.ReadUInt16();
-            b9 = SwapBytes(b9);
-            Assert.AreEqual(0x0014, b9);
-
-            var precision = binaryReader.ReadByte();
-            Assert.AreEqual(14, precision);
-
-            var scanLines = binaryReader.ReadUInt16();
-            scanLines = SwapBytes(scanLines);
-            Assert.AreEqual(3516, scanLines);
-
-            var samplesPerLine = binaryReader.ReadUInt16();
-            samplesPerLine = SwapBytes(samplesPerLine);
-            Assert.AreEqual(1340, samplesPerLine);
-
-            var componentCount = binaryReader.ReadByte();
-            Assert.AreEqual(4, componentCount);
-
-            var width = samplesPerLine * componentCount;
-            Assert.AreEqual(5360, width);
-
-            //var imageSize = width * scanLines;
-            //Assert.AreEqual(18845760, imageSize);
-
-            for (var i = 0; i < componentCount; i++)
-            {
-                var compId = binaryReader.ReadByte();
-                var sampleFactors = binaryReader.ReadByte();
-                var qTableId = binaryReader.ReadByte();
-
-                Assert.AreEqual(i + 1, compId);
-                Assert.AreEqual(0x11, sampleFactors);
-                Assert.AreEqual(0x00, qTableId);
-                // var sampleHFactor = (byte)(sampleFactors >> 4);
-                // var sampleVFactor = (byte)(sampleFactors & 0x0f);
-                // frame.AddComponent(compId, sampleHFactor, sampleVFactor, qTableId);
-            }
-        }
-
         private static void StartOfImage(BinaryReader binaryReader, uint address, uint length)
         {
             binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
@@ -298,7 +252,9 @@
             Assert.AreEqual(0xFF, huffmanTable.Mark);
             Assert.AreEqual(0xC4, huffmanTable.Tag);
 
-            Lossless(binaryReader);
+            var lossless = new Lossless(binaryReader);
+            Assert.AreEqual(0xFF, lossless.Mark);
+            Assert.AreEqual(0xC3, lossless.Tag);
 
             var startOfScan = new StartOfScan(binaryReader);
             Assert.AreEqual(0xFF, startOfScan.Mark);
