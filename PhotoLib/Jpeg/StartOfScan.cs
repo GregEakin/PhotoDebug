@@ -7,7 +7,7 @@
     {
         #region Fields
 
-        private readonly byte[] components;
+        private readonly ScanComponent[] components;
 
         private readonly short length;
 
@@ -32,14 +32,10 @@
             length = (short)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
 
             var count = binaryReader.ReadByte();
-            components = new byte[count];
+            components = new ScanComponent[count];
             for (var i = 0; i < count; i++)
             {
-                var id = binaryReader.ReadByte();
-                var info = binaryReader.ReadByte();
-                var dc = (info >> 4) & 0x0f;
-                var ac = info & 0x0f;
-                components[i] = id;
+                components[i] = new ScanComponent(binaryReader);
                 // id, acTables[ac], dcTables[dc]
             }
             var bB1 = binaryReader.ReadByte(); // startSpectralSelection
@@ -56,7 +52,7 @@
 
         #region Public Properties
 
-        public byte[] Components
+        public ScanComponent[] Components
         {
             get
             {
@@ -89,5 +85,58 @@
         }
 
         #endregion
+
+        public struct ScanComponent
+        {
+            #region Fields
+
+            private readonly byte ac;
+
+            private readonly byte dc;
+
+            private readonly byte id;
+
+            #endregion
+
+            #region Constructors and Destructors
+
+            public ScanComponent(BinaryReader binaryReader)
+            {
+                id = binaryReader.ReadByte();
+                var info = binaryReader.ReadByte();
+                dc = (byte)((info >> 4) & 0x0f);
+                ac = (byte)(info & 0x0f);
+            }
+
+            #endregion
+
+            #region Public Properties
+
+            public byte Ac
+            {
+                get
+                {
+                    return ac;
+                }
+            }
+
+            public byte Dc
+            {
+                get
+                {
+                    return dc;
+                }
+            }
+
+            public byte Id
+            {
+                get
+                {
+                    return id;
+                }
+            }
+
+            #endregion
+        }
     }
 }

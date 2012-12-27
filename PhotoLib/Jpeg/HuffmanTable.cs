@@ -86,7 +86,7 @@
             length = (short)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
 
             var size = 2;
-            for (var i = 0; size + 17 <= length; i++)
+            while (size + 17 <= length)
             {
                 var index = binaryReader.ReadByte();
                 var data1 = binaryReader.ReadBytes(16);
