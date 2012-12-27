@@ -35,13 +35,41 @@
                 throw new ArgumentException();
             }
 
-            huffmanTable = new HuffmanTable(binaryReader);
+            while (binaryReader.BaseStream.Position < binaryReader.BaseStream.Length)
+            {
+                var pos = binaryReader.BaseStream.Position;
+                var nextMark = binaryReader.ReadByte();
+                if (nextMark == 0xFF)
+                {
+                    var nextTag = binaryReader.ReadByte();
+                    binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
+                    switch (nextTag)
+                    {
+                        case 0xC4:
+                            huffmanTable = new HuffmanTable(binaryReader);
+                            break;
 
-            lossless = new Lossless(binaryReader);
+                        case 0xC3:
+                            lossless = new Lossless(binaryReader);
+                            break;
 
-            startOfScan = new StartOfScan(binaryReader);
+                        case 0xDA:
+                            startOfScan = new StartOfScan(binaryReader);
+                            break;
 
-            imageData = new ImageData(binaryReader, address, length);
+                        case 0xD5:
+                            imageData = new ImageData(binaryReader, address, length);
+                            break;
+
+                        default:
+                            throw new NotImplementedException();
+                    }
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
         }
 
         #endregion

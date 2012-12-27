@@ -117,12 +117,12 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(EndOfStreamException))]
         public void ShortLength()
         {
             var badData = new byte[] 
             {
-                0xFF, 0xC3, 0x00, 0x07, 0x0E, 0x0D, 0xBC, 0x05, 0x3C, 0x00
+                0xFF, 0xC3, 0x00, 0x07, 0x0E, 0x0D, 0xBC, 0x05, 0x3C
             };
 
             using (var memory = new MemoryStream(badData))
