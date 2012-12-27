@@ -39,35 +39,50 @@
             {
                 var pos = binaryReader.BaseStream.Position;
                 var nextMark = binaryReader.ReadByte();
-                if (nextMark == 0xFF)
+                switch (nextMark)
                 {
-                    var nextTag = binaryReader.ReadByte();
-                    binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
-                    switch (nextTag)
-                    {
-                        case 0xC4:
-                            huffmanTable = new HuffmanTable(binaryReader);
-                            break;
+                    case 0xFE:
+                        {
+                            var nextTag = binaryReader.ReadByte();
+                            binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
+                            switch (nextTag)
+                            {
+                                case 0xD5:
+                                    this.imageData = new ImageData(binaryReader, address, length);
+                                    break;
 
-                        case 0xC3:
-                            lossless = new Lossless(binaryReader);
-                            break;
+                                default:
+                                    throw new NotImplementedException();
+                            }
+                        }
+                        break;
 
-                        case 0xDA:
-                            startOfScan = new StartOfScan(binaryReader);
-                            break;
+                    case 0xFF:
+                        {
+                            var nextTag = binaryReader.ReadByte();
+                            binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
+                            switch (nextTag)
+                            {
+                                case 0xC4:
+                                    this.huffmanTable = new HuffmanTable(binaryReader);
+                                    break;
 
-                        case 0xD5:
-                            imageData = new ImageData(binaryReader, address, length);
-                            break;
+                                case 0xC3:
+                                    this.lossless = new Lossless(binaryReader);
+                                    break;
 
-                        default:
-                            throw new NotImplementedException();
-                    }
-                }
-                else
-                {
-                    throw new NotImplementedException();
+                                case 0xDA:
+                                    this.startOfScan = new StartOfScan(binaryReader);
+                                    break;
+
+                                default:
+                                    throw new NotImplementedException();
+                            }
+                        }
+                        break;
+
+                    default:
+                        throw new NotImplementedException();
                 }
             }
         }
