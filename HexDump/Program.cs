@@ -81,6 +81,7 @@
             TestMethod5(@"C:\Users\Greg\Pictures\IMG_0503.CR2");
             // TestMethod5(@"C:\Users\Greg\Pictures\IMG_0503.JPG");
             // TestMethod5(@"C:\Users\Greg\Pictures\IMAG0086.jpg");
+            // private const string FileName = @"C:\Users\Greg\Downloads\huff_simple0.jpg";
         }
 
         #endregion

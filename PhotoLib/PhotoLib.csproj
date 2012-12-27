@@ -45,7 +45,7 @@
     <Compile Include="Jpeg\Lossless.cs" />
     <Compile Include="Jpeg\StartOfImage.cs" />
     <Compile Include="Jpeg\StartOfScan.cs" />
-    <Compile Include="RawImage.cs" />
+    <Compile Include="Tiff\RawImage.cs" />
     <Compile Include="Tiff\CR2Header.cs" />
     <Compile Include="Tiff\ImageFileDirectory.cs" />
     <Compile Include="Tiff\ImageFileEntry.cs" />

@@ -1,8 +1,9 @@
-﻿namespace PhotoLib
+﻿namespace PhotoLib.Tiff
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
+
     using PhotoLib.Tiff;
 
     public class RawImage

@@ -56,7 +56,7 @@
     <Compile Include="Jpeg\LosslessTests.cs" />
     <Compile Include="Jpeg\StartOfImageTests.cs" />
     <Compile Include="Jpeg\StartOfScanTests.cs" />
-    <Compile Include="RawImageTests.cs" />
+    <Compile Include="Tiff\RawImageTests.cs" />
     <Compile Include="Tiff\ImageFileDirectoryTests.cs" />
     <Compile Include="Tiff\CR2HeaderTests.cs" />
     <Compile Include="Tiff\ImageFileEntryTests.cs" />

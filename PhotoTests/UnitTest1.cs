@@ -6,8 +6,8 @@
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using PhotoLib;
     using PhotoLib.Jpeg;
+    using PhotoLib.Tiff;
 
     [TestClass]
     public class UnitTest1
@@ -196,7 +196,7 @@
 
                 var startOfImage = new StartOfImage(binaryReader, address, length);
                 Assert.AreEqual(0xFF, startOfImage.Mark);
-                Assert.AreEqual(0xD8, startOfImage.Tag);    // JPG_MARK_SOI
+                Assert.AreEqual(0xD8, startOfImage.Tag); // JPG_MARK_SOI
 
                 var huffmanTable = startOfImage.HuffmanTable;
                 Assert.AreEqual(0xFF, huffmanTable.Mark);
