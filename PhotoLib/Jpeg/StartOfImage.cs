@@ -30,7 +30,7 @@
             mark = binaryReader.ReadByte();
             tag = binaryReader.ReadByte(); // JPG_MARK_SOI
 
-            if (mark != 0xFF && tag != 0xD8)
+            if (mark != 0xFF || tag != 0xD8)
             {
                 throw new ArgumentException();
             }

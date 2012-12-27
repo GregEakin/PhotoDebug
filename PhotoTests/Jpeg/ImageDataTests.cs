@@ -10,7 +10,7 @@
     [TestClass]
     public class ImageDataTests
     {
-        private static readonly byte[] Data = { 0xFF, 0xD5, 0x5F, 0xBD, 0xFF, 0xD9 };
+        private static readonly byte[] Data = { 0xFE, 0xD5, 0x5F, 0xBD, 0xFF, 0xD9 };
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
@@ -31,7 +31,7 @@
             {
                 var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, 0u, (uint)Data.Length);
-                Assert.AreEqual(0xFF, imageData.Mark);
+                Assert.AreEqual(0xFE, imageData.Mark);
             }
         }
 

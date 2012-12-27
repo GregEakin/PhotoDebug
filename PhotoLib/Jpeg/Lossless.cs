@@ -30,7 +30,7 @@
             mark = binaryReader.ReadByte();
             tag = binaryReader.ReadByte(); // JPG_MARK C3
 
-            if (mark != 0xFF && tag != 0xC3)
+            if (mark != 0xFF || tag != 0xC3)
             {
                 throw new ArgumentException();
             }
