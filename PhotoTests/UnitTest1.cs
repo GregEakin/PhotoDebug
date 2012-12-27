@@ -95,10 +95,10 @@
                 var rawImage = new RawImage(binaryReader);
 
                 var directory = rawImage.Directories.Last();
-                var address = directory.Entries.First(e => e.TagId == 0x0111).ValuePointer;     // TIF_STRIP_OFFSETS
-                var length = directory.Entries.First(e => e.TagId == 0x0117).ValuePointer;      // TIF_STRIP_BYTE_COUNTS
+                var address = directory.Entries.First(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
+                var length = directory.Entries.First(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
 
-                var strips = directory.Entries.First(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer;    // TIF_CR2_SLICE
+                var strips = directory.Entries.First(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
                 binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
                 var x = binaryReader.ReadUInt16();
                 var y = binaryReader.ReadUInt16();
@@ -130,7 +130,7 @@
                 var rawImage = new RawImage(binaryReader);
                 var directory = rawImage.Directories.Last();
 
-                var compression = directory.Entries.First(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;   // TIF_COMPRESSION
+                var compression = directory.Entries.First(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer; // TIF_COMPRESSION
                 Assert.AreEqual(6u, compression);
 
                 // 1 Sensor Width                    : 5360
@@ -138,7 +138,7 @@
 
                 // var address = directory.Entries.First(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
                 // var length = directory.Entries.First(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
-                var strips = directory.Entries.First(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer;        // TIF_CR2_SLICE
+                var strips = directory.Entries.First(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
 
                 binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
                 var x = binaryReader.ReadUInt16();
@@ -162,8 +162,8 @@
                 var rawImage = new RawImage(binaryReader);
 
                 var directory = rawImage.Directories.Last();
-                var address = directory.Entries.First(e => e.TagId == 0x0111).ValuePointer;     // TIF_STRIP_OFFSETS
-                var length = directory.Entries.First(e => e.TagId == 0x0117).ValuePointer;      // TIF_STRIP_BYTE_COUNTS
+                var address = directory.Entries.First(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
+                var length = directory.Entries.First(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
 
                 const int Width = 16;
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
@@ -206,175 +206,11 @@
                 var rawImage = new RawImage(binaryReader);
 
                 var directory = rawImage.Directories.Last();
-                var address = directory.Entries.First(e => e.TagId == 0x0111).ValuePointer;     // TIF_STRIP_OFFSETS
-                var length = directory.Entries.First(e => e.TagId == 0x0117).ValuePointer;      // TIF_STRIP_BYTE_COUNTS
+                var address = directory.Entries.First(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
+                var length = directory.Entries.First(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
 
                 StartOfImage(binaryReader, address, length);
             }
-        }
-
-        private static void StartOfImage(BinaryReader binaryReader, uint address, uint length)
-        {
-            binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-
-            // FF D8 Start of Image - w/o data segment
-            var b1 = binaryReader.ReadUInt16();
-            b1 = SwapBytes(b1);
-            Assert.AreEqual(0xFFD8, b1);    // JPG_MARK_SOI
-
-            HuffmanTables(binaryReader);
-
-            Lossless(binaryReader);
-
-            StartOfScan(binaryReader);
-
-            ImageData(binaryReader, address, length);
-        }
-
-        private static void HuffmanTables(BinaryReader binaryReader)
-        {
-            // FF C4 Define Huffman Table(s)
-            var b2 = binaryReader.ReadUInt16();
-            b2 = SwapBytes(b2);
-            Assert.AreEqual(0xFFC4, b2);    // JPG_MARK_DHT
-
-            // 00 42 Length of DHT marker segment (-2)
-            var b3 = binaryReader.ReadUInt16();
-            b3 = SwapBytes(b3);
-            Assert.AreEqual(0x0042, b3);
-
-            var size = (b3 - 2) / 2;
-            Assert.AreEqual(32, size);
-
-            for (var i = 0; i < 2; i++)
-            {
-                // Read 32 bytes, table 0 -- bits
-                var b4 = binaryReader.ReadByte();
-                Assert.AreEqual(i, b4);
-
-                var sum = 0;
-                for (var j = 0; j < 16; j++)
-                {
-                    sum += binaryReader.ReadByte();
-                }
-                Assert.AreEqual(15, sum);
-
-                for (var j = 0; j < sum; j++)
-                {
-                    binaryReader.ReadByte();
-                }
-            }
-        }
-
-        private static void Lossless(BinaryReader binaryReader)
-        {
-            // FF C3 Lossless (sequential)
-            var b8 = binaryReader.ReadUInt16();
-            b8 = SwapBytes(b8);
-            Assert.AreEqual(0xFFC3, b8);    // JPG_MARK_SOF3
-
-            var b9 = binaryReader.ReadUInt16();
-            b9 = SwapBytes(b9);
-            Assert.AreEqual(0x0014, b9);
-
-            var precision = binaryReader.ReadByte();
-            Assert.AreEqual(14, precision);
-
-            var scanLines = binaryReader.ReadUInt16();
-            scanLines = SwapBytes(scanLines);
-            Assert.AreEqual(3516, scanLines);
-
-            var samplesPerLine = binaryReader.ReadUInt16();
-            samplesPerLine = SwapBytes(samplesPerLine);
-            Assert.AreEqual(1340, samplesPerLine);
-
-            var componentCount = binaryReader.ReadByte();
-            Assert.AreEqual(4, componentCount);
-
-            var width = samplesPerLine * componentCount;
-            Assert.AreEqual(5360, width);
-
-            //var imageSize = width * scanLines;
-            //Assert.AreEqual(18845760, imageSize);
-
-            for (var i = 0; i < componentCount; i++)
-            {
-                var compId = binaryReader.ReadByte();
-                var sampleFactors = binaryReader.ReadByte();
-                var qTableId = binaryReader.ReadByte();
-
-                Assert.AreEqual(i + 1, compId);
-                Assert.AreEqual(0x11, sampleFactors);
-                Assert.AreEqual(0x00, qTableId);
-                // var sampleHFactor = (byte)(sampleFactors >> 4);
-                // var sampleVFactor = (byte)(sampleFactors & 0x0f);
-                // frame.AddComponent(compId, sampleHFactor, sampleVFactor, qTableId);
-            }
-        }
-
-        private static void ImageData(BinaryReader binaryReader, uint address, uint length)
-        {
-            // FE D5 
-            var bC = binaryReader.ReadUInt16();
-            bC = SwapBytes(bC);
-            Assert.AreEqual(0xFED5, bC);
-
-            var pos = binaryReader.BaseStream.Position - 2;
-            var rawSize = address + length - pos;
-            Assert.AreEqual(22286030, rawSize);
-            // var imageData = new ushort[rawSize];
-
-            binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
-            var rawData = binaryReader.ReadBytes((int)rawSize);
-            Assert.AreEqual(0xFE, rawData[0]);
-            Assert.AreEqual(0xD5, rawData[1]);
-            Assert.AreEqual(0x5F, rawData[2]);
-            Assert.AreEqual(0xBD, rawData[3]);
-
-            Assert.AreEqual(0xB6, rawData[rawData.Length - 4]);
-            Assert.AreEqual(0xD1, rawData[rawData.Length - 3]);
-            Assert.AreEqual(0xFF, rawData[rawData.Length - 2]);
-            Assert.AreEqual(0xD9, rawData[rawData.Length - 1]);     // JPG_MARK_EOI
-
-            // GetBits(rawData);
-            // GetLosslessJpgRow(null, rawData, TB0, TL0, TB1, TL1, Prop);
-
-            // for (var iRow = 0; iRow < height; iRow++)
-            {
-                // var rowBuf = new ushort[width];
-                // GetLosslessJpgRow(rowBuf, rawData, TL0, TB0, TL1, TB1, Prop);
-                // PutUnscrambleRowSlice(rowBuf, imageData, iRow, Prop);
-            }
-        }
-
-        private static void StartOfScan(BinaryReader binaryReader)
-        {
-            // FF DA Start of Scan
-            var sosTag = binaryReader.ReadUInt16();
-            sosTag = SwapBytes(sosTag);
-            Assert.AreEqual(0xFFDA, sosTag);    // JPG_MARK_SOS
-
-            var sosLength = binaryReader.ReadUInt16();
-            sosLength = SwapBytes(sosLength);
-            Assert.AreEqual(0x000E, sosLength);
-
-            var count = binaryReader.ReadByte();
-            Assert.AreEqual(4, count);
-            var components = new byte[count];
-            for (var i = 0; i < count; i++)
-            {
-                var id = binaryReader.ReadByte();
-                var info = binaryReader.ReadByte();
-                var dc = (info >> 4) & 0x0f;
-                var ac = info & 0x0f;
-                components[i] = id;
-                // id, acTables[ac], dcTables[dc]
-
-                Assert.AreEqual(i + 1, id);
-            }
-            var bB1 = binaryReader.ReadByte(); // startSpectralSelection
-            var bB2 = binaryReader.ReadByte(); // endSpectralSelection
-            var bB3 = binaryReader.ReadByte(); // successiveApproximation
         }
 
         [TestMethod]
@@ -386,19 +222,19 @@
                 var rawImage = new RawImage(binaryReader);
 
                 var directory = rawImage.Directories.Last();
-                var address = directory.Entries.First(e => e.TagId == 0x0111).ValuePointer;     // TIF_STRIP_OFFSETS
+                var address = directory.Entries.First(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
 
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
 
                 // FF D8 Start of Image - w/o data segment
                 var b1 = binaryReader.ReadUInt16();
                 b1 = SwapBytes(b1);
-                Assert.AreEqual(0xFFD8, b1);    // JPG_MARK_SOI
+                Assert.AreEqual(0xFFD8, b1); // JPG_MARK_SOI
 
                 // FF C4 Define Huffman Table(s)
                 var b2 = binaryReader.ReadUInt16();
                 b2 = SwapBytes(b2);
-                Assert.AreEqual(0xFFC4, b2);    // JPG_MARK_DHT
+                Assert.AreEqual(0xFFC4, b2); // JPG_MARK_DHT
 
                 Huffman(binaryReader);
             }
@@ -467,6 +303,170 @@
                 //                else if (tableClass == HuffmanTable.JPEG_AC_TABLE)
                 //                    acTables[(int)huffmanIndex] = new JpegHuffmanTable(codeLength, huffmanVal);
             }
+        }
+
+        private static void HuffmanTables(BinaryReader binaryReader)
+        {
+            // FF C4 Define Huffman Table(s)
+            var b2 = binaryReader.ReadUInt16();
+            b2 = SwapBytes(b2);
+            Assert.AreEqual(0xFFC4, b2); // JPG_MARK_DHT
+
+            // 00 42 Length of DHT marker segment (-2)
+            var b3 = binaryReader.ReadUInt16();
+            b3 = SwapBytes(b3);
+            Assert.AreEqual(0x0042, b3);
+
+            var size = (b3 - 2) / 2;
+            Assert.AreEqual(32, size);
+
+            for (var i = 0; i < 2; i++)
+            {
+                // Read 32 bytes, table 0 -- bits
+                var b4 = binaryReader.ReadByte();
+                Assert.AreEqual(i, b4);
+
+                var sum = 0;
+                for (var j = 0; j < 16; j++)
+                {
+                    sum += binaryReader.ReadByte();
+                }
+                Assert.AreEqual(15, sum);
+
+                for (var j = 0; j < sum; j++)
+                {
+                    binaryReader.ReadByte();
+                }
+            }
+        }
+
+        private static void ImageData(BinaryReader binaryReader, uint address, uint length)
+        {
+            // FE D5 
+            var bC = binaryReader.ReadUInt16();
+            bC = SwapBytes(bC);
+            Assert.AreEqual(0xFED5, bC);
+
+            var pos = binaryReader.BaseStream.Position - 2;
+            var rawSize = address + length - pos;
+            Assert.AreEqual(22286030, rawSize);
+            // var imageData = new ushort[rawSize];
+
+            binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
+            var rawData = binaryReader.ReadBytes((int)rawSize);
+            Assert.AreEqual(0xFE, rawData[0]);
+            Assert.AreEqual(0xD5, rawData[1]);
+            Assert.AreEqual(0x5F, rawData[2]);
+            Assert.AreEqual(0xBD, rawData[3]);
+
+            Assert.AreEqual(0xB6, rawData[rawData.Length - 4]);
+            Assert.AreEqual(0xD1, rawData[rawData.Length - 3]);
+            Assert.AreEqual(0xFF, rawData[rawData.Length - 2]);
+            Assert.AreEqual(0xD9, rawData[rawData.Length - 1]); // JPG_MARK_EOI
+
+            // GetBits(rawData);
+            // GetLosslessJpgRow(null, rawData, TB0, TL0, TB1, TL1, Prop);
+
+            // for (var iRow = 0; iRow < height; iRow++)
+            {
+                // var rowBuf = new ushort[width];
+                // GetLosslessJpgRow(rowBuf, rawData, TL0, TB0, TL1, TB1, Prop);
+                // PutUnscrambleRowSlice(rowBuf, imageData, iRow, Prop);
+            }
+        }
+
+        private static void Lossless(BinaryReader binaryReader)
+        {
+            // FF C3 Lossless (sequential)
+            var b8 = binaryReader.ReadUInt16();
+            b8 = SwapBytes(b8);
+            Assert.AreEqual(0xFFC3, b8); // JPG_MARK_SOF3
+
+            var b9 = binaryReader.ReadUInt16();
+            b9 = SwapBytes(b9);
+            Assert.AreEqual(0x0014, b9);
+
+            var precision = binaryReader.ReadByte();
+            Assert.AreEqual(14, precision);
+
+            var scanLines = binaryReader.ReadUInt16();
+            scanLines = SwapBytes(scanLines);
+            Assert.AreEqual(3516, scanLines);
+
+            var samplesPerLine = binaryReader.ReadUInt16();
+            samplesPerLine = SwapBytes(samplesPerLine);
+            Assert.AreEqual(1340, samplesPerLine);
+
+            var componentCount = binaryReader.ReadByte();
+            Assert.AreEqual(4, componentCount);
+
+            var width = samplesPerLine * componentCount;
+            Assert.AreEqual(5360, width);
+
+            //var imageSize = width * scanLines;
+            //Assert.AreEqual(18845760, imageSize);
+
+            for (var i = 0; i < componentCount; i++)
+            {
+                var compId = binaryReader.ReadByte();
+                var sampleFactors = binaryReader.ReadByte();
+                var qTableId = binaryReader.ReadByte();
+
+                Assert.AreEqual(i + 1, compId);
+                Assert.AreEqual(0x11, sampleFactors);
+                Assert.AreEqual(0x00, qTableId);
+                // var sampleHFactor = (byte)(sampleFactors >> 4);
+                // var sampleVFactor = (byte)(sampleFactors & 0x0f);
+                // frame.AddComponent(compId, sampleHFactor, sampleVFactor, qTableId);
+            }
+        }
+
+        private static void StartOfImage(BinaryReader binaryReader, uint address, uint length)
+        {
+            binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
+
+            // FF D8 Start of Image - w/o data segment
+            var b1 = binaryReader.ReadUInt16();
+            b1 = SwapBytes(b1);
+            Assert.AreEqual(0xFFD8, b1); // JPG_MARK_SOI
+
+            HuffmanTables(binaryReader);
+
+            Lossless(binaryReader);
+
+            StartOfScan(binaryReader);
+
+            ImageData(binaryReader, address, length);
+        }
+
+        private static void StartOfScan(BinaryReader binaryReader)
+        {
+            // FF DA Start of Scan
+            var sosTag = binaryReader.ReadUInt16();
+            sosTag = SwapBytes(sosTag);
+            Assert.AreEqual(0xFFDA, sosTag); // JPG_MARK_SOS
+
+            var sosLength = binaryReader.ReadUInt16();
+            sosLength = SwapBytes(sosLength);
+            Assert.AreEqual(0x000E, sosLength);
+
+            var count = binaryReader.ReadByte();
+            Assert.AreEqual(4, count);
+            var components = new byte[count];
+            for (var i = 0; i < count; i++)
+            {
+                var id = binaryReader.ReadByte();
+                var info = binaryReader.ReadByte();
+                var dc = (info >> 4) & 0x0f;
+                var ac = info & 0x0f;
+                components[i] = id;
+                // id, acTables[ac], dcTables[dc]
+
+                Assert.AreEqual(i + 1, id);
+            }
+            var bB1 = binaryReader.ReadByte(); // startSpectralSelection
+            var bB2 = binaryReader.ReadByte(); // endSpectralSelection
+            var bB3 = binaryReader.ReadByte(); // successiveApproximation
         }
 
         private static ushort SwapBytes(ushort data)
