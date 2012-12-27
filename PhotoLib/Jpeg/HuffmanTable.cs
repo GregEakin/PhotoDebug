@@ -78,7 +78,7 @@
             mark = binaryReader.ReadByte();
             tag = binaryReader.ReadByte(); // JPG_MARK_DHT
 
-            if (mark != 0xFF && tag != 0xC4)
+            if (mark != 0xFF || tag != 0xC4)
             {
                 throw new ArgumentException();
             }
@@ -86,7 +86,7 @@
             length = (short)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
 
             var size = 2;
-            for (var i = 0; size + 17 < length; i++)
+            for (var i = 0; size + 17 <= length; i++)
             {
                 var index = binaryReader.ReadByte();
                 var data1 = binaryReader.ReadBytes(16);
