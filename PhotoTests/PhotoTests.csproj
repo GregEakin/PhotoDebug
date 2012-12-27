@@ -53,6 +53,7 @@
     <Compile Include="JpegFileTests.cs" />
     <Compile Include="Jpeg\HuffmanTableTests.cs" />
     <Compile Include="Jpeg\ImageDataTests.cs" />
+    <Compile Include="Jpeg\LosslessTests.cs" />
     <Compile Include="RawImageTests.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
