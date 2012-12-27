@@ -281,7 +281,7 @@
                     var sampleFactors = binaryReader.ReadByte();
                     var qTableId = binaryReader.ReadByte();
 
-                    Assert.AreEqual(i, compId);
+                    Assert.AreEqual(i + 1, compId);
                     Assert.AreEqual(0x11, sampleFactors);
                     Assert.AreEqual(0x00, qTableId);
                     // var sampleHFactor = (byte)(sampleFactors >> 4);
@@ -311,7 +311,7 @@
                     components[i] = id;
                     // id, acTables[ac], dcTables[dc]
 
-                    Assert.AreEqual(i, id);
+                    Assert.AreEqual(i + 1, id);
                 }
                 var bB1 = binaryReader.ReadByte();  // startSpectralSelection
                 var bB2 = binaryReader.ReadByte();  // endSpectralSelection
