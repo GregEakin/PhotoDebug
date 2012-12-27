@@ -7,6 +7,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using PhotoLib;
+    using PhotoLib.Jpeg;
 
     [TestClass]
     public class UnitTest1
@@ -152,7 +153,6 @@
         [TestMethod]
         public void TestMethod5()
         {
-            const string TestFile = @"C:\Users\Greg\Pictures\Oops.jpg";
             // 1 Sensor Width                    : 5360
             // 2 Sensor Height                   : 3516
 
@@ -199,7 +199,6 @@
         [TestMethod]
         public void TestMethod6()
         {
-            const string TestFile = @"C:\Users\Greg\Pictures\Oops.jpg";
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
             {
                 var binaryReader = new BinaryReader(fileStream);
@@ -231,114 +230,14 @@
                 b1 = SwapBytes(b1);
                 Assert.AreEqual(0xFFD8, b1); // JPG_MARK_SOI
 
-                // FF C4 Define Huffman Table(s)
-                var b2 = binaryReader.ReadUInt16();
-                b2 = SwapBytes(b2);
-                Assert.AreEqual(0xFFC4, b2); // JPG_MARK_DHT
-
-                Huffman(binaryReader);
+                var huffmanTable = new HuffmanTable(binaryReader);
+                Assert.AreEqual(0xFF, huffmanTable.Mark);
             }
         }
 
         #endregion
 
         #region Methods
-
-        private static void Huffman(BinaryReader jpegReader)
-        {
-            //var dcTables = new JpegHuffmanTable[4];
-            //var acTables = new JpegHuffmanTable[4];
-
-            // DHT non-SOF Marker - Huffman Table is required for decoding
-            // the JPEG stream, when we receive a marker we load in first
-            // the table length (16 bits), the table class (4 bits), table
-            // identifier (4 bits), then we load in 16 bytes and each byte
-            // represents the count of bytes to load in for each of the 16
-            // bytes. We load this into an array to use later and move on 4
-            // huffman tables can only be used in an image.
-            var x = jpegReader.ReadUInt16();
-            x = SwapBytes(x);
-            var huffmanLength = (x - 2);
-
-            // Keep looping until we are out of length.
-            var index = huffmanLength;
-
-            // Multiple tables may be defined within a DHT marker. This
-            // will keep reading until there are no tables left, most
-            // of the time there are just one tables.
-            while (index > 0)
-            {
-                // Read the identifier information and class
-                // information about the Huffman table, then read the
-                // 16 byte codelength in and read in the Huffman values
-                // and put it into table info.
-                var huffmanInfo = jpegReader.ReadByte();
-                var tableClass = (byte)(huffmanInfo >> 4);
-                var huffmanIndex = (byte)(huffmanInfo & 0x0f);
-                var codeLength = new short[16];
-
-                for (var i = 0; i < codeLength.Length; i++)
-                {
-                    codeLength[i] = jpegReader.ReadByte();
-                }
-
-                var huffmanValueLen = 0;
-                for (var i = 0; i < 16; i++)
-                {
-                    huffmanValueLen += codeLength[i];
-                }
-                index -= (huffmanValueLen + 17);
-
-                var huffmanVal = new short[huffmanValueLen];
-                for (var i = 0; i < huffmanVal.Length; i++)
-                {
-                    huffmanVal[i] = jpegReader.ReadByte();
-                }
-
-                //                // Assign DC Huffman Table.
-                //                if (tableClass == HuffmanTable.JPEG_DC_TABLE)
-                //                    dcTables[(int)huffmanIndex] = new JpegHuffmanTable(codeLength, huffmanVal);
-                //
-                //                // Assign AC Huffman Table.
-                //                else if (tableClass == HuffmanTable.JPEG_AC_TABLE)
-                //                    acTables[(int)huffmanIndex] = new JpegHuffmanTable(codeLength, huffmanVal);
-            }
-        }
-
-        private static void HuffmanTables(BinaryReader binaryReader)
-        {
-            // FF C4 Define Huffman Table(s)
-            var b2 = binaryReader.ReadUInt16();
-            b2 = SwapBytes(b2);
-            Assert.AreEqual(0xFFC4, b2); // JPG_MARK_DHT
-
-            // 00 42 Length of DHT marker segment (-2)
-            var b3 = binaryReader.ReadUInt16();
-            b3 = SwapBytes(b3);
-            Assert.AreEqual(0x0042, b3);
-
-            var size = (b3 - 2) / 2;
-            Assert.AreEqual(32, size);
-
-            for (var i = 0; i < 2; i++)
-            {
-                // Read 32 bytes, table 0 -- bits
-                var b4 = binaryReader.ReadByte();
-                Assert.AreEqual(i, b4);
-
-                var sum = 0;
-                for (var j = 0; j < 16; j++)
-                {
-                    sum += binaryReader.ReadByte();
-                }
-                Assert.AreEqual(15, sum);
-
-                for (var j = 0; j < sum; j++)
-                {
-                    binaryReader.ReadByte();
-                }
-            }
-        }
 
         private static void ImageData(BinaryReader binaryReader, uint address, uint length)
         {
@@ -430,7 +329,8 @@
             b1 = SwapBytes(b1);
             Assert.AreEqual(0xFFD8, b1); // JPG_MARK_SOI
 
-            HuffmanTables(binaryReader);
+            var huffmanTable = new HuffmanTable(binaryReader);
+            Assert.AreEqual(0xFF, huffmanTable.Mark);
 
             Lossless(binaryReader);
 
