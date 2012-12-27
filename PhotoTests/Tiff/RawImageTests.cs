@@ -1,5 +1,6 @@
 ﻿namespace PhotoTests.Tiff
 {
+    using System;
     using System.IO;
     using System.Linq;
 
@@ -33,6 +34,25 @@
                 {
                     0x49, 0x49, 0x2A, 0x00, 0x10, 0x00, 0x00, 0x00, 0x43, 0x52, 0x02, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00,
                     0x00, 0x00, 0x00, 0x00, 0x00
+                };
+            using (var memory = new MemoryStream(data))
+            {
+                var reader = new BinaryReader(memory);
+                var rawImage = new RawImage(reader);
+                var directory = rawImage.Directories.First();
+                Assert.AreEqual(0, directory.Entries.Length);
+                Assert.AreEqual(0x00000000u, directory.NextEntry);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void DirectoryDuplicate()
+        {
+            var data = new byte[]
+                {
+                    0x49, 0x49, 0x2A, 0x00, 0x10, 0x00, 0x00, 0x00, 0x43, 0x52, 0x02, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00,
+                    0x00, 0x10, 0x00, 0x00, 0x00
                 };
             using (var memory = new MemoryStream(data))
             {
