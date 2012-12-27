@@ -9,7 +9,7 @@
         public static void TestImage()
         {
             const string FileName = @"C:\Users\Greg\Pictures\IMG_0511.CR2";
-            const string TestFile = @"C:\Users\Greg\Pictures\Oops.jpg";
+            // const string TestFile = @"C:\Users\Greg\Pictures\Oops.jpg";
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
             {
                 var binaryReader = new BinaryReader(fileStream);

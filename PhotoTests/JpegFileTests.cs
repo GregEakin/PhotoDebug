@@ -46,7 +46,7 @@
                         Console.WriteLine();
                     }
                 }
-                catch (EndOfStreamException e)
+                catch (EndOfStreamException)
                 {
                 }
             }

@@ -179,7 +179,6 @@
                         case 0x06:
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "SByte 8-bit");
                             throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
-                            break;
 
                         case 0x07:
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Undefinded");
@@ -200,12 +199,10 @@
                         case 0x08:
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "SShort 16-bit");
                             throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
-                            break;
 
                         case 0x09:
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "SLong 32-bit");
                             throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
-                            break;
                         
                         case 0x0A:
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "SRational 2x32-bit");
@@ -223,12 +220,10 @@
                         case 0x0B:
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Float 4-Byte");
                             throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
-                            break;
 
                         case 0x0C:
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Double 8-Byte");
                             throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
-                            break;
                         
                         default:
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Undefined");

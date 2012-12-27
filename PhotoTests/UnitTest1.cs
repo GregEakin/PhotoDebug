@@ -239,41 +239,6 @@
 
         #region Methods
 
-        private static void ImageData(BinaryReader binaryReader, uint address, uint length)
-        {
-            // FE D5 
-            var bC = binaryReader.ReadUInt16();
-            bC = SwapBytes(bC);
-            Assert.AreEqual(0xFED5, bC);
-
-            var pos = binaryReader.BaseStream.Position - 2;
-            var rawSize = address + length - pos;
-            Assert.AreEqual(22286030, rawSize);
-            // var imageData = new ushort[rawSize];
-
-            binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
-            var rawData = binaryReader.ReadBytes((int)rawSize);
-            Assert.AreEqual(0xFE, rawData[0]);
-            Assert.AreEqual(0xD5, rawData[1]);
-            Assert.AreEqual(0x5F, rawData[2]);
-            Assert.AreEqual(0xBD, rawData[3]);
-
-            Assert.AreEqual(0xB6, rawData[rawData.Length - 4]);
-            Assert.AreEqual(0xD1, rawData[rawData.Length - 3]);
-            Assert.AreEqual(0xFF, rawData[rawData.Length - 2]);
-            Assert.AreEqual(0xD9, rawData[rawData.Length - 1]); // JPG_MARK_EOI
-
-            // GetBits(rawData);
-            // GetLosslessJpgRow(null, rawData, TB0, TL0, TB1, TL1, Prop);
-
-            // for (var iRow = 0; iRow < height; iRow++)
-            {
-                // var rowBuf = new ushort[width];
-                // GetLosslessJpgRow(rowBuf, rawData, TL0, TB0, TL1, TB1, Prop);
-                // PutUnscrambleRowSlice(rowBuf, imageData, iRow, Prop);
-            }
-        }
-
         private static void Lossless(BinaryReader binaryReader)
         {
             // FF C3 Lossless (sequential)
@@ -331,12 +296,15 @@
 
             var huffmanTable = new HuffmanTable(binaryReader);
             Assert.AreEqual(0xFF, huffmanTable.Mark);
+            Assert.AreEqual(0xC4, huffmanTable.Tag);
 
             Lossless(binaryReader);
 
             StartOfScan(binaryReader);
 
-            ImageData(binaryReader, address, length);
+            var imageData = new ImageData(binaryReader, address, length);
+            Assert.AreEqual(0xFF, imageData.Mark);
+            Assert.AreEqual(0xD5, imageData.Tag);
         }
 
         private static void StartOfScan(BinaryReader binaryReader)
