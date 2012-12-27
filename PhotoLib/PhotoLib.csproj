@@ -48,7 +48,7 @@
     <Compile Include="RawImage.cs" />
     <Compile Include="Tiff\CR2Header.cs" />
     <Compile Include="ImageFileDirectory.cs" />
-    <Compile Include="ImageFileEntry.cs" />
+    <Compile Include="Tiff\ImageFileEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\StringUtilities.cs" />
   </ItemGroup>

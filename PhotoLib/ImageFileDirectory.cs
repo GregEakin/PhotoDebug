@@ -3,6 +3,7 @@
     using System;
     using System.IO;
 
+    using PhotoLib.Tiff;
     using PhotoLib.Utilities;
 
     public class ImageFileDirectory
