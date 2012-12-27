@@ -42,6 +42,7 @@
     <Compile Include="JpegImage.cs" />
     <Compile Include="Jpeg\HuffmanTable.cs" />
     <Compile Include="Jpeg\ImageData.cs" />
+    <Compile Include="Jpeg\StartOfScan.cs" />
     <Compile Include="RawImage.cs" />
     <Compile Include="CR2Header.cs" />
     <Compile Include="ImageFileDirectory.cs" />

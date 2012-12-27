@@ -300,41 +300,13 @@
 
             Lossless(binaryReader);
 
-            StartOfScan(binaryReader);
+            var startOfScan = new StartOfScan(binaryReader);
+            Assert.AreEqual(0xFF, startOfScan.Mark);
+            Assert.AreEqual(0xDA, startOfScan.Tag);
 
             var imageData = new ImageData(binaryReader, address, length);
-            Assert.AreEqual(0xFF, imageData.Mark);
+            Assert.AreEqual(0xFE, imageData.Mark);
             Assert.AreEqual(0xD5, imageData.Tag);
-        }
-
-        private static void StartOfScan(BinaryReader binaryReader)
-        {
-            // FF DA Start of Scan
-            var sosTag = binaryReader.ReadUInt16();
-            sosTag = SwapBytes(sosTag);
-            Assert.AreEqual(0xFFDA, sosTag); // JPG_MARK_SOS
-
-            var sosLength = binaryReader.ReadUInt16();
-            sosLength = SwapBytes(sosLength);
-            Assert.AreEqual(0x000E, sosLength);
-
-            var count = binaryReader.ReadByte();
-            Assert.AreEqual(4, count);
-            var components = new byte[count];
-            for (var i = 0; i < count; i++)
-            {
-                var id = binaryReader.ReadByte();
-                var info = binaryReader.ReadByte();
-                var dc = (info >> 4) & 0x0f;
-                var ac = info & 0x0f;
-                components[i] = id;
-                // id, acTables[ac], dcTables[dc]
-
-                Assert.AreEqual(i + 1, id);
-            }
-            var bB1 = binaryReader.ReadByte(); // startSpectralSelection
-            var bB2 = binaryReader.ReadByte(); // endSpectralSelection
-            var bB3 = binaryReader.ReadByte(); // successiveApproximation
         }
 
         private static ushort SwapBytes(ushort data)
