@@ -57,6 +57,7 @@
     <Compile Include="Jpeg\StartOfImageTests.cs" />
     <Compile Include="Jpeg\StartOfScanTests.cs" />
     <Compile Include="RawImageTests.cs" />
+    <Compile Include="Tiff\CR2HeaderTests.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

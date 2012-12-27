@@ -46,7 +46,7 @@
     <Compile Include="Jpeg\StartOfImage.cs" />
     <Compile Include="Jpeg\StartOfScan.cs" />
     <Compile Include="RawImage.cs" />
-    <Compile Include="CR2Header.cs" />
+    <Compile Include="Tiff\CR2Header.cs" />
     <Compile Include="ImageFileDirectory.cs" />
     <Compile Include="ImageFileEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -5,6 +5,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using PhotoLib;
+    using PhotoLib.Tiff;
 
     [TestClass]
     public class RawImageTests
