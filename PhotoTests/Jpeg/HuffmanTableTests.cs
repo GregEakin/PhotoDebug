@@ -11,7 +11,7 @@
     [TestClass]
     public class HuffmanTableTests
     {
-        private static readonly byte[] data =
+        private static readonly byte[] Data =
             {
                             0xFF, 0xC4, 0x00, 0x42, 0x00, 0x00, 0x01, 0x04, 0x02, 0x03, 0x01, 0x01, 0x01, 0x01,
                 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x04, 0x08, 0x05, 0x07, 0x03, 0x09, 0x00, 0x0A, 
@@ -37,7 +37,7 @@
         [TestMethod]
         public void Mark()
         {
-            using (var memory = new MemoryStream(data))
+            using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
                 var huffmanTable = new HuffmanTable(reader);
@@ -60,7 +60,7 @@
         [TestMethod]
         public void Tag()
         {
-            using (var memory = new MemoryStream(data))
+            using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
                 var huffmanTable = new HuffmanTable(reader);
@@ -139,7 +139,7 @@
         [TestMethod]
         public void Length()
         {
-            using (var memory = new MemoryStream(data))
+            using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
                 var huffmanTable = new HuffmanTable(reader);
@@ -150,7 +150,7 @@
         [TestMethod]
         public void Count()
         {
-            using (var memory = new MemoryStream(data))
+            using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
                 var huffmanTable = new HuffmanTable(reader);
@@ -161,7 +161,7 @@
         [TestMethod]
         public void DataA1()
         {
-            using (var memory = new MemoryStream(data))
+            using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
                 var huffmanTable = new HuffmanTable(reader);
@@ -173,7 +173,7 @@
         [TestMethod]
         public void DataA2()
         {
-            using (var memory = new MemoryStream(data))
+            using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
                 var huffmanTable = new HuffmanTable(reader);
@@ -185,7 +185,7 @@
         [TestMethod]
         public void DataB1()
         {
-            using (var memory = new MemoryStream(data))
+            using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
                 var huffmanTable = new HuffmanTable(reader);
@@ -197,7 +197,7 @@
         [TestMethod]
         public void DataB2()
         {
-            using (var memory = new MemoryStream(data))
+            using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
                 var huffmanTable = new HuffmanTable(reader);

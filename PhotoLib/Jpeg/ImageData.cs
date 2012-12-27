@@ -22,7 +22,7 @@
             mark = binaryReader.ReadByte();
             tag = binaryReader.ReadByte(); // JPG_MARK_ D5
 
-            if (mark != 0xFF && tag != 0xD5)
+            if (mark != 0xFF || tag != 0xD5)
             {
                 throw new ArgumentException();
             }
