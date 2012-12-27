@@ -30,20 +30,6 @@
         }
 
         [TestMethod]
-        public void SwapTest1()
-        {
-            var y = SwapBytes(0x55AA);
-            Assert.AreEqual((ushort)0xAA55, y);
-        }
-
-        [TestMethod]
-        public void SwapTest2()
-        {
-            var y = SwapBytes(0xAA55);
-            Assert.AreEqual((ushort)0x55AA, y);
-        }
-
-        [TestMethod]
         public void TestMethod1()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
@@ -228,40 +214,6 @@
                 Assert.AreEqual(0xFE, imageData.Mark);
                 Assert.AreEqual(0xD5, imageData.Tag);
             }
-        }
-
-        [TestMethod]
-        public void TestMethod7()
-        {
-            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
-            {
-                var binaryReader = new BinaryReader(fileStream);
-                var rawImage = new RawImage(binaryReader);
-
-                var directory = rawImage.Directories.Last();
-                var address = directory.Entries.First(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
-
-                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-
-                // FF D8 Start of Image - w/o data segment
-                var b1 = binaryReader.ReadUInt16();
-                b1 = SwapBytes(b1);
-                Assert.AreEqual(0xFFD8, b1); // JPG_MARK_SOI
-
-                var huffmanTable = new HuffmanTable(binaryReader);
-                Assert.AreEqual(0xFF, huffmanTable.Mark);
-            }
-        }
-
-        #endregion
-
-        #region Methods
-
-        private static ushort SwapBytes(ushort data)
-        {
-            var upper = (data & (ushort)0x00FF) << 8;
-            var lower = (data & (ushort)0xFF00) >> 8;
-            return (ushort)(lower | upper);
         }
 
         #endregion
