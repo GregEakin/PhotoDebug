@@ -120,19 +120,25 @@
                 var compression = directory.Entries.First(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer; // TIF_COMPRESSION
                 Assert.AreEqual(6u, compression);
 
-                // 1 Sensor Width                    : 5360
-                // 2 Sensor Height                   : 3516
+                const int Width = 5360;
+                const int Height = 3516;
 
-                // var address = directory.Entries.First(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
-                // var length = directory.Entries.First(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
+                var address = directory.Entries.First(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
+                var length = directory.Entries.First(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
                 var strips = directory.Entries.First(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
 
                 binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
                 var x = binaryReader.ReadUInt16();
                 var y = binaryReader.ReadUInt16();
                 var z = binaryReader.ReadUInt16();
-                Assert.AreEqual(5360, x * y + z);
-                // cr2_slices[0]*cr2_slices[1] + cr2_slices[2] = image_width.
+                Assert.AreEqual(Width, x * y + z);
+
+                var startOfImage = new StartOfImage(binaryReader, address, length);
+
+
+                // binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
+                // var rawData = new RawData(binaryReader, Height, x, y, z);
+                // Assert.AreEqual(length, rawData.Data.Length);
             }
         }
 
