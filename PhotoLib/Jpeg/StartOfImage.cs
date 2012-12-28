@@ -11,7 +11,7 @@
 
         private readonly ImageData imageData;
 
-        private readonly Lossless lossless;
+        private readonly StartOfFrame lossless;
 
         private readonly byte mark;
 
@@ -68,7 +68,7 @@
                                     break;
 
                                 case 0xC3:
-                                    this.lossless = new Lossless(binaryReader);
+                                    this.lossless = new StartOfFrame(binaryReader);
                                     break;
 
                                 case 0xDA:
@@ -107,7 +107,7 @@
             }
         }
 
-        public Lossless Lossless
+        public StartOfFrame Lossless
         {
             get
             {

@@ -3,7 +3,7 @@
     using System;
     using System.IO;
 
-    public class Lossless
+    public class StartOfFrame
     {
         #region Fields
 
@@ -25,7 +25,7 @@
 
         #region Constructors and Destructors
 
-        public Lossless(BinaryReader binaryReader)
+        public StartOfFrame(BinaryReader binaryReader)
         {
             mark = binaryReader.ReadByte();
             tag = binaryReader.ReadByte(); // JPG_MARK C3

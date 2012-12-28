@@ -8,7 +8,7 @@
     using PhotoLib.Jpeg;
 
     [TestClass]
-    public class LosslessTests
+    public class StartOfFrameTests
     {
         private static readonly byte[] Data =
             {
@@ -23,7 +23,7 @@
             using (var memory = new MemoryStream(badData))
             {
                 var reader = new BinaryReader(memory);
-                var lossless = new Lossless(reader);
+                var lossless = new StartOfFrame(reader);
             }
         }
 
@@ -33,7 +33,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var lossless = new Lossless(reader);
+                var lossless = new StartOfFrame(reader);
                 Assert.AreEqual(0xFF, lossless.Mark);
             }
         }
@@ -46,7 +46,7 @@
             using (var memory = new MemoryStream(badData))
             {
                 var reader = new BinaryReader(memory);
-                var lossless = new Lossless(reader);
+                var lossless = new StartOfFrame(reader);
             }
         }
 
@@ -56,7 +56,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var lossless = new Lossless(reader);
+                var lossless = new StartOfFrame(reader);
                 Assert.AreEqual(0xC3, lossless.Tag);
             }
         }
@@ -67,7 +67,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var lossless = new Lossless(reader);
+                var lossless = new StartOfFrame(reader);
                 Assert.AreEqual(0x0014, lossless.Length);
             }
         }
@@ -78,7 +78,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var lossless = new Lossless(reader);
+                var lossless = new StartOfFrame(reader);
                 Assert.AreEqual(0x0E, lossless.Precision);
             }
         }
@@ -89,7 +89,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var lossless = new Lossless(reader);
+                var lossless = new StartOfFrame(reader);
                 Assert.AreEqual(0x0DBC, lossless.ScanLines);
             }
         }
@@ -100,7 +100,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var lossless = new Lossless(reader);
+                var lossless = new StartOfFrame(reader);
                 Assert.AreEqual(0x053C, lossless.SamplesPerLine);
             }
         }
@@ -111,7 +111,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var lossless = new Lossless(reader);
+                var lossless = new StartOfFrame(reader);
                 Assert.AreEqual(0x04, lossless.Components.Length);
             }
         }
@@ -128,7 +128,7 @@
             using (var memory = new MemoryStream(badData))
             {
                 var reader = new BinaryReader(memory);
-                var lossless = new Lossless(reader);
+                var lossless = new StartOfFrame(reader);
             }
         }
 
@@ -144,7 +144,7 @@
             using (var memory = new MemoryStream(badData))
             {
                 var reader = new BinaryReader(memory);
-                var lossless = new Lossless(reader);
+                var lossless = new StartOfFrame(reader);
             }
         }
 
@@ -160,7 +160,7 @@
             using (var memory = new MemoryStream(badData))
             {
                 var reader = new BinaryReader(memory);
-                var lossless = new Lossless(reader);
+                var lossless = new StartOfFrame(reader);
             }
         }
 
@@ -176,7 +176,7 @@
             using (var memory = new MemoryStream(badData))
             {
                 var reader = new BinaryReader(memory);
-                var lossless = new Lossless(reader);
+                var lossless = new StartOfFrame(reader);
             }
         }
 
@@ -186,7 +186,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var lossless = new Lossless(reader);
+                var lossless = new StartOfFrame(reader);
                 Assert.AreEqual(0x01, lossless.Components[0].ComponentId);
             }           
         }
@@ -197,7 +197,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var lossless = new Lossless(reader);
+                var lossless = new StartOfFrame(reader);
                 Assert.AreEqual(0x00, lossless.Components[0].TableId);
             }
         }
@@ -208,7 +208,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var lossless = new Lossless(reader);
+                var lossless = new StartOfFrame(reader);
                 Assert.AreEqual(0x01, lossless.Components[0].HFactor);
             }
         }
@@ -219,7 +219,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var lossless = new Lossless(reader);
+                var lossless = new StartOfFrame(reader);
                 Assert.AreEqual(0x01, lossless.Components[0].VFactor);
             }
         }
