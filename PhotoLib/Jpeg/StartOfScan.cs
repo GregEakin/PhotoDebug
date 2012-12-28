@@ -32,6 +32,7 @@
             length = (short)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
 
             var count = binaryReader.ReadByte();
+            // count >= 1 && count <= 4
             components = new ScanComponent[count];
             for (var i = 0; i < count; i++)
             {
@@ -102,6 +103,7 @@
 
             public ScanComponent(BinaryReader binaryReader)
             {
+                // component id (1 = Y, 2 = Cb, 3 = Cr, 4 = I, 5 = Q)
                 id = binaryReader.ReadByte();
                 var info = binaryReader.ReadByte();
                 dc = (byte)((info >> 4) & 0x0f);

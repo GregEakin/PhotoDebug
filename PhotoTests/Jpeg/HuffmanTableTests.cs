@@ -11,14 +11,17 @@
     [TestClass]
     public class HuffmanTableTests
     {
+        #region Static Fields
+
         private static readonly byte[] Data =
             {
-                            0xFF, 0xC4, 0x00, 0x42, 0x00, 0x00, 0x01, 0x04, 0x02, 0x03, 0x01, 0x01, 0x01, 0x01,
-                0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x04, 0x08, 0x05, 0x07, 0x03, 0x09, 0x00, 0x0A, 
-                0x02, 0x01, 0x0C, 0x0B, 0x0D, 0x0E, 0x01, 0x00, 0x01, 0x04, 0x02, 0x03, 0x01, 0x01, 0x01, 0x01,
-                0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x04, 0x08, 0x05, 0x07, 0x03, 0x09, 0x00, 0x0A, 
-                0x02, 0x01, 0x0C, 0x0B, 0x0D, 0x0E 
+                0xFF, 0xC4, 0x00, 0x42, 0x00, 0x00, 0x01, 0x04, 0x02, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x06, 0x04, 0x08, 0x05, 0x07, 0x03, 0x09, 0x00, 0x0A, 0x02, 0x01, 0x0C, 0x0B, 0x0D, 0x0E, 0x01, 0x00, 0x01, 0x04,
+                0x02, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x04, 0x08, 0x05, 0x07, 0x03, 0x09, 0x00, 0x0A, 0x02,
+                0x01, 0x0C, 0x0B, 0x0D, 0x0E
             };
+
+        #endregion
 
         #region Public Methods and Operators
 
@@ -31,17 +34,6 @@
             {
                 var reader = new BinaryReader(memory);
                 var huffmanTable = new HuffmanTable(reader);
-            }            
-        }
-
-        [TestMethod]
-        public void Mark()
-        {
-            using (var memory = new MemoryStream(Data))
-            {
-                var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
-                Assert.AreEqual(0xFF, huffmanTable.Mark);
             }
         }
 
@@ -58,95 +50,24 @@
         }
 
         [TestMethod]
-        public void Tag()
+        public void BuildTree()
         {
-            using (var memory = new MemoryStream(Data))
+            var treeData = new byte[]
+                { 0xFF, 0xC4, 0, 34, 0, 0, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 5, 3, 6, 7, 2, 8, 0, 1, 9, 10, 11, 12, 13, 15, 14 };
+
+            var treeBits = new string[]
+                {
+                    "00", "01", "100", "101", "1100", "1101", "11100", "11101", "11110", "111110", "1111110", "11111110", "111111110", "1111111110", "11111111110"
+                };
+
+            using (var memory = new MemoryStream(treeData))
             {
                 var reader = new BinaryReader(memory);
                 var huffmanTable = new HuffmanTable(reader);
-                Assert.AreEqual(0xC4, huffmanTable.Tag);
+                CollectionAssert.AreEqual(treeBits, huffmanTable.BuildTree());
             }
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void ShortLengthA()
-        {
-            var badData = new byte[] 
-                        {
-                            0xFF, 0xC4, 0x00, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-            };
-
-            using (var memory = new MemoryStream(badData))
-            {
-                var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
-            }
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void ShortLengthB()
-        {
-            var badData = new byte[] 
-                        {
-                            0xFF, 0xC4, 0x00, 0x24, 0x00, 0x12, 0x11, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x03, 0x09, 0x07
-            };
-
-            using (var memory = new MemoryStream(badData))
-            {
-                var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
-            }
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void LongLengthA()
-        {
-            var badData = new byte[] 
-                        {
-                            0xFF, 0xC4, 0x00, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-            };
-
-            using (var memory = new MemoryStream(badData))
-            {
-                var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
-            }
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(EndOfStreamException))]
-        public void LongLengthB()
-        {
-            var badData = new byte[] 
-                        {
-                            0xFF, 0xC4, 0x00, 0x38, 0x00, 0x12, 0x11, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x03, 0x09, 0x07
-            };
-
-            using (var memory = new MemoryStream(badData))
-            {
-                var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
-            }
-        }
-
-        [TestMethod]
-        public void Length()
-        {
-            using (var memory = new MemoryStream(Data))
-            {
-                var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
-                Assert.AreEqual(0x42, huffmanTable.Length);
-            }
-        }
-        
         [TestMethod]
         public void Count()
         {
@@ -157,7 +78,7 @@
                 Assert.AreEqual(2, huffmanTable.Tables.Count());
             }
         }
-        
+
         [TestMethod]
         public void DataA1()
         {
@@ -205,6 +126,116 @@
                 CollectionAssert.AreEqual(expected, huffmanTable.Tables.Skip(1).Single().Data2);
             }
         }
+
+        [TestMethod]
+        public void Length()
+        {
+            using (var memory = new MemoryStream(Data))
+            {
+                var reader = new BinaryReader(memory);
+                var huffmanTable = new HuffmanTable(reader);
+                Assert.AreEqual(0x42, huffmanTable.Length);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void LongLengthA()
+        {
+            var badData = new byte[]
+                { 0xFF, 0xC4, 0x00, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
+            using (var memory = new MemoryStream(badData))
+            {
+                var reader = new BinaryReader(memory);
+                var huffmanTable = new HuffmanTable(reader);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EndOfStreamException))]
+        public void LongLengthB()
+        {
+            var badData = new byte[]
+                {
+                    0xFF, 0xC4, 0x00, 0x38, 0x00, 0x12, 0x11, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06,
+                    0x03, 0x09, 0x07
+                };
+
+            using (var memory = new MemoryStream(badData))
+            {
+                var reader = new BinaryReader(memory);
+                var huffmanTable = new HuffmanTable(reader);
+            }
+        }
+
+        [TestMethod]
+        public void Mark()
+        {
+            using (var memory = new MemoryStream(Data))
+            {
+                var reader = new BinaryReader(memory);
+                var huffmanTable = new HuffmanTable(reader);
+                Assert.AreEqual(0xFF, huffmanTable.Mark);
+            }
+        }
+
+        [TestMethod]
+        public void PrintBits1()
+        {
+            var z = HuffmanTable.PrintBits(0x01, 0x00);
+            Assert.AreEqual("1", z);
+        }
+
+        [TestMethod]
+        public void PrintBits2()
+        {
+            var z = HuffmanTable.PrintBits(0x02, 0x02);
+            Assert.AreEqual("010", z);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ShortLengthA()
+        {
+            var badData = new byte[]
+                { 0xFF, 0xC4, 0x00, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
+            using (var memory = new MemoryStream(badData))
+            {
+                var reader = new BinaryReader(memory);
+                var huffmanTable = new HuffmanTable(reader);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ShortLengthB()
+        {
+            var badData = new byte[]
+                {
+                    0xFF, 0xC4, 0x00, 0x24, 0x00, 0x12, 0x11, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06,
+                    0x03, 0x09, 0x07
+                };
+
+            using (var memory = new MemoryStream(badData))
+            {
+                var reader = new BinaryReader(memory);
+                var huffmanTable = new HuffmanTable(reader);
+            }
+        }
+
+        [TestMethod]
+        public void Tag()
+        {
+            using (var memory = new MemoryStream(Data))
+            {
+                var reader = new BinaryReader(memory);
+                var huffmanTable = new HuffmanTable(reader);
+                Assert.AreEqual(0xC4, huffmanTable.Tag);
+            }
+        }
+
         #endregion
     }
 }
