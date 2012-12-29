@@ -64,7 +64,8 @@
             {
                 var reader = new BinaryReader(memory);
                 var huffmanTable = new HuffmanTable(reader);
-                CollectionAssert.AreEqual(treeBits, huffmanTable.BuildTree());
+                var table = huffmanTable.Tables.First();
+                CollectionAssert.AreEqual(treeBits, HuffmanTable.BuildTree(table));
             }
         }
 

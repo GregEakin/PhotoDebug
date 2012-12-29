@@ -158,10 +158,8 @@
             return retval.ToString();
         }
 
-        public string[] BuildTree()
+        public static string[] BuildTree(Table table)
         {
-            var table = tables.Values.First();
-
             var retval = new string[table.Data2.Length];
             var index = 0;
             var bits = 0;
@@ -180,27 +178,29 @@
 
         public void DumpTable()
         {
-            var table = tables.Values.First();
-            Console.WriteLine("Table {0}", table.Index);
-            var bits = this.BuildTree();
-
-            var index = 0;
-            for (byte i = 0; i < 16; i++)
+            foreach (var table in tables.Values)
             {
-                if (table.Data1[i] <= 0)
-                {
-                    continue;
-                }
+                Console.WriteLine("Table {0}", table.Index);
+                var bits = BuildTree(table);
 
-                Console.Write("{0} : ", i + 1);
-                for (var j = 0; j < table.Data1[i]; j++)
+                var index = 0;
+                for (byte i = 0; i < 16; i++)
                 {
-                    Console.Write("{0} ({1}) ", table.Data2[index], bits[index]);
-                    index++;
+                    if (table.Data1[i] <= 0)
+                    {
+                        continue;
+                    }
+
+                    Console.Write("{0} : ", i + 1);
+                    for (var j = 0; j < table.Data1[i]; j++)
+                    {
+                        Console.Write("{0:x} ({1}) ", table.Data2[index], bits[index]);
+                        index++;
+                    }
+                    Console.WriteLine();
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine();
         }
 
         #endregion

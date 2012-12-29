@@ -3,6 +3,8 @@
     using System;
     using System.IO;
 
+    using PhotoLib.Utilities;
+
     public class StartOfImage
     {
         #region Fields
@@ -16,6 +18,8 @@
         private readonly byte mark;
 
         private readonly StartOfScan startOfScan;
+
+        private readonly JfifMarker jfifMarker;
 
         private readonly byte tag;
 
@@ -52,7 +56,7 @@
                                     break;
 
                                 default:
-                                    throw new NotImplementedException();
+                                    throw new NotImplementedException("Tag 0xFE 0x{0} is not implemented".FormatWith(nextTag.ToString("X2")));
                             }
                         }
                         break;
@@ -75,8 +79,12 @@
                                     this.startOfScan = new StartOfScan(binaryReader);
                                     break;
 
+                                case 0xE0:
+                                    this.jfifMarker = new JfifMarker(binaryReader);
+                                    break;
+
                                 default:
-                                    throw new NotImplementedException();
+                                    throw new NotImplementedException("Tag 0xFF 0x{0} is not implemented".FormatWith(nextTag.ToString("X2")));
                             }
                         }
                         break;
