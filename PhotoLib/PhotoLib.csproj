@@ -41,7 +41,7 @@
   <ItemGroup>
     <Compile Include="JpegImage.cs" />
     <Compile Include="Jpeg\DefineQuantizationTable.cs" />
-    <Compile Include="Jpeg\HuffmanTable.cs" />
+    <Compile Include="Jpeg\DefineHuffmanTable.cs" />
     <Compile Include="Jpeg\ImageData.cs" />
     <Compile Include="Jpeg\JfifMarker.cs" />
     <Compile Include="Jpeg\StartOfFrame.cs" />

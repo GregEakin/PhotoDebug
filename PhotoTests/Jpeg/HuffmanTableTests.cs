@@ -33,7 +33,7 @@
             using (var memory = new MemoryStream(badData))
             {
                 var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
+                var huffmanTable = new DefineHuffmanTable(reader);
             }
         }
 
@@ -45,7 +45,7 @@
             using (var memory = new MemoryStream(badData))
             {
                 var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
+                var huffmanTable = new DefineHuffmanTable(reader);
             }
         }
 
@@ -63,9 +63,9 @@
             using (var memory = new MemoryStream(treeData))
             {
                 var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
+                var huffmanTable = new DefineHuffmanTable(reader);
                 var table = huffmanTable.Tables.First();
-                CollectionAssert.AreEqual(treeBits, HuffmanTable.BuildTree(table));
+                CollectionAssert.AreEqual(treeBits, DefineHuffmanTable.BuildTree(table));
             }
         }
 
@@ -75,7 +75,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
+                var huffmanTable = new DefineHuffmanTable(reader);
                 Assert.AreEqual(2, huffmanTable.Tables.Count());
             }
         }
@@ -86,7 +86,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
+                var huffmanTable = new DefineHuffmanTable(reader);
                 var expected = new byte[] { 0x00, 0x01, 0x04, 0x02, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                 CollectionAssert.AreEqual(expected, huffmanTable.Tables.First().Data1);
             }
@@ -98,7 +98,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
+                var huffmanTable = new DefineHuffmanTable(reader);
                 var expected = new byte[] { 0x06, 0x04, 0x08, 0x05, 0x07, 0x03, 0x09, 0x00, 0x0A, 0x02, 0x01, 0x0C, 0x0B, 0x0D, 0x0E };
                 CollectionAssert.AreEqual(expected, huffmanTable.Tables.First().Data2);
             }
@@ -110,7 +110,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
+                var huffmanTable = new DefineHuffmanTable(reader);
                 var expected = new byte[] { 0x00, 0x01, 0x04, 0x02, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                 CollectionAssert.AreEqual(expected, huffmanTable.Tables.Skip(1).Single().Data1);
             }
@@ -122,7 +122,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
+                var huffmanTable = new DefineHuffmanTable(reader);
                 var expected = new byte[] { 0x06, 0x04, 0x08, 0x05, 0x07, 0x03, 0x09, 0x00, 0x0A, 0x02, 0x01, 0x0C, 0x0B, 0x0D, 0x0E };
                 CollectionAssert.AreEqual(expected, huffmanTable.Tables.Skip(1).Single().Data2);
             }
@@ -134,7 +134,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
+                var huffmanTable = new DefineHuffmanTable(reader);
                 Assert.AreEqual(0x42, huffmanTable.Length);
             }
         }
@@ -149,7 +149,7 @@
             using (var memory = new MemoryStream(badData))
             {
                 var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
+                var huffmanTable = new DefineHuffmanTable(reader);
             }
         }
 
@@ -166,7 +166,7 @@
             using (var memory = new MemoryStream(badData))
             {
                 var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
+                var huffmanTable = new DefineHuffmanTable(reader);
             }
         }
 
@@ -176,7 +176,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
+                var huffmanTable = new DefineHuffmanTable(reader);
                 Assert.AreEqual(0xFF, huffmanTable.Mark);
             }
         }
@@ -184,14 +184,14 @@
         [TestMethod]
         public void PrintBits1()
         {
-            var z = HuffmanTable.PrintBits(0x01, 0x00);
+            var z = DefineHuffmanTable.PrintBits(0x01, 0x00);
             Assert.AreEqual("1", z);
         }
 
         [TestMethod]
         public void PrintBits2()
         {
-            var z = HuffmanTable.PrintBits(0x02, 0x02);
+            var z = DefineHuffmanTable.PrintBits(0x02, 0x02);
             Assert.AreEqual("010", z);
         }
 
@@ -205,7 +205,7 @@
             using (var memory = new MemoryStream(badData))
             {
                 var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
+                var huffmanTable = new DefineHuffmanTable(reader);
             }
         }
 
@@ -222,7 +222,7 @@
             using (var memory = new MemoryStream(badData))
             {
                 var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
+                var huffmanTable = new DefineHuffmanTable(reader);
             }
         }
 
@@ -232,7 +232,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var huffmanTable = new HuffmanTable(reader);
+                var huffmanTable = new DefineHuffmanTable(reader);
                 Assert.AreEqual(0xC4, huffmanTable.Tag);
             }
         }

@@ -58,7 +58,7 @@
         #endregion
     }
 
-    public class HuffmanTable
+    public class DefineHuffmanTable
     {
         #region Fields
 
@@ -76,7 +76,7 @@
 
         #region Constructors and Destructors
 
-        public HuffmanTable(BinaryReader binaryReader)
+        public DefineHuffmanTable(BinaryReader binaryReader)
         {
             mark = binaryReader.ReadByte();
             tag = binaryReader.ReadByte(); // JPG_MARK_DHT

@@ -234,7 +234,7 @@
                 var binaryReader = new BinaryReader(fileStream);
 
                 binaryReader.BaseStream.Seek(0x000000D0u, SeekOrigin.Begin);
-                var huffmanTable = new HuffmanTable(binaryReader);
+                var huffmanTable = new DefineHuffmanTable(binaryReader);
                 Assert.AreEqual(0xFF, huffmanTable.Mark);
                 Assert.AreEqual(0xC4, huffmanTable.Tag);
                 huffmanTable.DumpTable();

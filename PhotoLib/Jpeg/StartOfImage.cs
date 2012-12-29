@@ -9,7 +9,7 @@
     {
         #region Fields
 
-        private readonly HuffmanTable huffmanTable;
+        private readonly DefineHuffmanTable huffmanTable;
 
         private readonly ImageData imageData;
 
@@ -73,7 +73,7 @@
                                     break;
 
                                 case 0xC4:
-                                    this.huffmanTable = new HuffmanTable(binaryReader);
+                                    this.huffmanTable = new DefineHuffmanTable(binaryReader);
                                     break;
 
                                 case 0xD9:
@@ -124,7 +124,7 @@
 
         #region Public Properties
 
-        public HuffmanTable HuffmanTable
+        public DefineHuffmanTable HuffmanTable
         {
             get
             {
