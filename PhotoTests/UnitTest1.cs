@@ -241,7 +241,7 @@
             }
         }
 
-        [TestMethod]
+        // [TestMethod]
         public void TestMethod8()
         {
             const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";

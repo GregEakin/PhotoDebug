@@ -83,7 +83,7 @@
 
                                 case 0xDA:
                                     this.startOfScan = new StartOfScan(binaryReader);
-                                    var image = binaryReader.ReadBytes((int)(binaryReader.BaseStream.Length - 2));
+                                    // var image = binaryReader.ReadBytes((int)(binaryReader.BaseStream.Length - 2));
                                     break;
 
                                 case 0xDB:
@@ -94,17 +94,13 @@
                                     this.jfifMarker = new JfifMarker(binaryReader);
                                     break;
 
-                                case 0xE4:
-                                    var bbb = binaryReader.ReadBytes((int)(binaryReader.BaseStream.Length - 2));
-                                    Console.WriteLine(bbb.Length);
-                                    break;
-
                                 case 0xE1:
+                                case 0xE4:
                                 case 0xEC:
                                 case 0xEE:
                                     var x1 = binaryReader.ReadByte();
                                     var x2 = binaryReader.ReadByte();
-                                    var length1 = (short)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+                                    var length1 = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
                                     var data = binaryReader.ReadBytes(length1 - 2);
                                     break;
 

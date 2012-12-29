@@ -9,15 +9,15 @@
 
         private readonly Component[] components;
 
-        private readonly short length;
+        private readonly ushort length;
 
         private readonly byte mark;
 
         private readonly byte precision;
 
-        private readonly short samplesPerLine;
+        private readonly ushort samplesPerLine;
 
-        private readonly short scanLines;
+        private readonly ushort scanLines;
 
         private readonly byte tag;
 
@@ -35,10 +35,10 @@
                 throw new ArgumentException();
             }
 
-            length = (short)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+            length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
             precision = binaryReader.ReadByte();
-            scanLines = (short)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
-            samplesPerLine = (short)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+            scanLines = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+            samplesPerLine = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
             var componentCount = binaryReader.ReadByte();
             components = new Component[componentCount];
 
@@ -70,7 +70,7 @@
             }
         }
 
-        public short Length
+        public ushort Length
         {
             get
             {
@@ -94,7 +94,7 @@
             }
         }
 
-        public short SamplesPerLine
+        public ushort SamplesPerLine
         {
             get
             {
@@ -102,7 +102,7 @@
             }
         }
 
-        public short ScanLines
+        public ushort ScanLines
         {
             get
             {

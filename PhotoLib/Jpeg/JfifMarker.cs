@@ -7,7 +7,7 @@
     {
         #region Fields
 
-        private readonly short length;
+        private readonly ushort length;
 
         private readonly byte mark;
 
@@ -27,15 +27,15 @@
                 throw new ArgumentException();
             }
 
-            length = (short)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+            length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
 
             var indentifer = binaryReader.ReadBytes(5);
             // TODO see if identifier == "JFIF";
 
-            var version = (short)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+            var version = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
             var units = binaryReader.ReadByte();
-            var xDensity = (short)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
-            var yDensity = (short)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+            var xDensity = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+            var yDensity = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
             var xThumb = binaryReader.ReadByte();
             var yThumb = binaryReader.ReadByte();
 
@@ -54,7 +54,7 @@
 
         #region Public Properties
 
-        public short Length
+        public ushort Length
         {
             get
             {

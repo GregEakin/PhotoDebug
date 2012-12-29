@@ -7,7 +7,7 @@
     {
         #region Fields
 
-        private readonly short length;
+        private readonly ushort length;
 
         private readonly byte mark;
 
@@ -29,7 +29,7 @@
                 throw new ArgumentException();
             }
 
-            length = (short)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+            length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
 
             var size = 2;
             while (size < length)
@@ -54,7 +54,7 @@
 
         #region Public Properties
 
-        public short Length
+        public ushort Length
         {
             get
             {
