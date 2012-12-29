@@ -135,7 +135,6 @@
 
                 var startOfImage = new StartOfImage(binaryReader, address, length);
 
-
                 // binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 // var rawData = new RawData(binaryReader, Height, x, y, z);
                 // Assert.AreEqual(length, rawData.Data.Length);

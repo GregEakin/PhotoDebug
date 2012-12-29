@@ -9,7 +9,7 @@
     using PhotoLib.Jpeg;
 
     [TestClass]
-    public class HuffmanTableTests
+    public class DefineHuffmanTableTests
     {
         #region Static Fields
 
@@ -52,8 +52,7 @@
         [TestMethod]
         public void BuildTree()
         {
-            var treeData = new byte[]
-                { 0xFF, 0xC4, 0, 34, 0, 0, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 5, 3, 6, 7, 2, 8, 0, 1, 9, 10, 11, 12, 13, 15, 14 };
+            var treeData = new byte[] { 0xFF, 0xC4, 0, 34, 0, 0, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 5, 3, 6, 7, 2, 8, 0, 1, 9, 10, 11, 12, 13, 15, 14 };
 
             var treeBits = new string[]
                 {
@@ -143,8 +142,7 @@
         [ExpectedException(typeof(ArgumentException))]
         public void LongLengthA()
         {
-            var badData = new byte[]
-                { 0xFF, 0xC4, 0x00, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            var badData = new byte[] { 0xFF, 0xC4, 0x00, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
             using (var memory = new MemoryStream(badData))
             {
@@ -199,8 +197,7 @@
         [ExpectedException(typeof(ArgumentException))]
         public void ShortLengthA()
         {
-            var badData = new byte[]
-                { 0xFF, 0xC4, 0x00, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            var badData = new byte[] { 0xFF, 0xC4, 0x00, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
             using (var memory = new MemoryStream(badData))
             {
