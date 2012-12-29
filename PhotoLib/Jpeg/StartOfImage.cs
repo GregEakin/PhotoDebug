@@ -67,23 +67,43 @@
                             binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
                             switch (nextTag)
                             {
-                                case 0xC4:
-                                    this.huffmanTable = new HuffmanTable(binaryReader);
-                                    break;
-
+                                case 0xC0:
                                 case 0xC3:
                                     this.lossless = new StartOfFrame(binaryReader);
                                     break;
 
+                                case 0xC4:
+                                    this.huffmanTable = new HuffmanTable(binaryReader);
+                                    break;
+
+                                case 0xD9:
+                                    var x3 = binaryReader.ReadByte();
+                                    var x4 = binaryReader.ReadByte();
+                                    break;
+
                                 case 0xDA:
                                     this.startOfScan = new StartOfScan(binaryReader);
+                                    var image = binaryReader.ReadBytes((int)(binaryReader.BaseStream.Length - 2));
+                                    break;
+
+                                case 0xDB:
+                                    var defineQuantizatonTable = new DefineQuantizationTable(binaryReader);
                                     break;
 
                                 case 0xE0:
                                     this.jfifMarker = new JfifMarker(binaryReader);
                                     break;
 
+                                case 0xE4:
+                                    var bbb = binaryReader.ReadBytes((int)(binaryReader.BaseStream.Length - 2));
+                                    Console.WriteLine(bbb.Length);
+                                    break;
+
+                                case 0xE1:
                                 case 0xEC:
+                                case 0xEE:
+                                    var x1 = binaryReader.ReadByte();
+                                    var x2 = binaryReader.ReadByte();
                                     var length1 = (short)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
                                     var data = binaryReader.ReadBytes(length1 - 2);
                                     break;
@@ -95,7 +115,7 @@
                         break;
 
                     default:
-                        throw new NotImplementedException();
+                        throw new NotImplementedException("Tag 0x{0} is not implemented".FormatWith(nextMark.ToString("X2")));
                 }
             }
         }

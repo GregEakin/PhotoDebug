@@ -37,7 +37,6 @@
             for (var i = 0; i < count; i++)
             {
                 components[i] = new ScanComponent(binaryReader);
-                // id, acTables[ac], dcTables[dc]
             }
             var bB1 = binaryReader.ReadByte(); // startSpectralSelection
             var bB2 = binaryReader.ReadByte(); // endSpectralSelection

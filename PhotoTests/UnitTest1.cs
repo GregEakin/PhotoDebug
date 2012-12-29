@@ -121,7 +121,7 @@
                 Assert.AreEqual(6u, compression);
 
                 const int Width = 5360;
-                const int Height = 3516;
+                // const int Height = 3516;
 
                 var address = directory.Entries.First(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
                 var length = directory.Entries.First(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
@@ -245,7 +245,9 @@
         public void TestMethod8()
         {
             const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
-            const string FileName2 = Directory + "huff_simple0.jpg";
+            // const string FileName2 = Directory + "huff_simple0.jpg";
+            // const string FileName2 = Directory + "IMG_0503.JPG";
+            const string FileName2 = Directory + "IMAG0086.jpg";
 
             using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
             {
