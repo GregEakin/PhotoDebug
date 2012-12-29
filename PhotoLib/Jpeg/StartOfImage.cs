@@ -83,6 +83,11 @@
                                     this.jfifMarker = new JfifMarker(binaryReader);
                                     break;
 
+                                case 0xEC:
+                                    var length1 = (short)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+                                    var data = binaryReader.ReadBytes(length1 - 2);
+                                    break;
+
                                 default:
                                     throw new NotImplementedException("Tag 0xFF 0x{0} is not implemented".FormatWith(nextTag.ToString("X2")));
                             }

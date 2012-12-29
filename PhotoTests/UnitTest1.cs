@@ -233,9 +233,28 @@
             {
                 var binaryReader = new BinaryReader(fileStream);
 
-                var address = 0x000000D0u;
-                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
+                binaryReader.BaseStream.Seek(0x000000D0u, SeekOrigin.Begin);
                 var huffmanTable = new HuffmanTable(binaryReader);
+                Assert.AreEqual(0xFF, huffmanTable.Mark);
+                Assert.AreEqual(0xC4, huffmanTable.Tag);
+                huffmanTable.DumpTable();
+            }
+        }
+
+        [TestMethod]
+        public void TestMethod8()
+        {
+            const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
+            const string FileName2 = Directory + "huff_simple0.jpg";
+
+            using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
+            {
+                var binaryReader = new BinaryReader(fileStream);
+                var startOfImage = new StartOfImage(binaryReader, 0x00u, (uint)fileStream.Length);
+                Assert.AreEqual(0xFF, startOfImage.Mark);
+                Assert.AreEqual(0xD8, startOfImage.Tag); // JPG_MARK_SOI
+
+                var huffmanTable = startOfImage.HuffmanTable;
                 Assert.AreEqual(0xFF, huffmanTable.Mark);
                 Assert.AreEqual(0xC4, huffmanTable.Tag);
                 huffmanTable.DumpTable();

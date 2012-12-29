@@ -14,14 +14,14 @@
         {
             using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
             {
-                var address = 0L;
+                var address = 0x0L;
                 var length = fileStream.Length;
                 const int Width = 16;
 
                 var binaryReader = new BinaryReader(fileStream);
-
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-                for (var i = 0; i < 512; i += Width)
+                var total = (int)Math.Min(1024, length);
+                for (var i = 0; i < total; i += Width)
                 {
                     Console.Write("0x{0}: ", (address + i).ToString("X8"));
                     var nextStep = (int)Math.Min(Width, length - i);
@@ -56,21 +56,21 @@
                 //var table = new HuffmanTable(binaryReader);
                 //Console.WriteLine("Tables {0}", table.Tables.Count());
 
-                Console.WriteLine("...");
+                //Console.WriteLine("...");
 
-                address = length - 64;
-                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-                for (var i = 0; i < 64; i += Width)
-                {
-                    Console.Write("0x{0}: ", (address + i).ToString("X8"));
-                    var nextStep = (int)Math.Min(Width, length - i);
-                    var data = binaryReader.ReadBytes(nextStep);
-                    foreach (var b in data)
-                    {
-                        Console.Write("{0} ", b.ToString("X2"));
-                    }
-                    Console.WriteLine();
-                }
+                //address = length - 64;
+                //binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
+                //for (var i = 0; i < 64; i += Width)
+                //{
+                //    Console.Write("0x{0}: ", (address + i).ToString("X8"));
+                //    var nextStep = (int)Math.Min(Width, length - i);
+                //    var data = binaryReader.ReadBytes(nextStep);
+                //    foreach (var b in data)
+                //    {
+                //        Console.Write("{0} ", b.ToString("X2"));
+                //    }
+                //    Console.WriteLine();
+                //}
             }
         }
 
