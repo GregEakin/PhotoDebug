@@ -20,6 +20,21 @@
 
                 var binaryReader = new BinaryReader(fileStream);
 
+                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
+                for (var i = 0; i < 512; i += Width)
+                {
+                    Console.Write("0x{0}: ", (address + i).ToString("X8"));
+                    var nextStep = (int)Math.Min(Width, length - i);
+                    var data = binaryReader.ReadBytes(nextStep);
+                    foreach (var b in data)
+                    {
+                        Console.Write("{0} ", b.ToString("X2"));
+                    }
+                    Console.WriteLine();
+                }
+
+                //Console.WriteLine("...");
+
                 //binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 //for (var i = 0; i < length; i++)
                 //{
@@ -40,19 +55,6 @@
                 //binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 //var table = new HuffmanTable(binaryReader);
                 //Console.WriteLine("Tables {0}", table.Tables.Count());
-
-                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-                for (var i = 0; i < 256; i += Width)
-                {
-                    Console.Write("0x{0}: ", (address + i).ToString("X8"));
-                    var nextStep = (int)Math.Min(Width, length - i);
-                    var data = binaryReader.ReadBytes(nextStep);
-                    foreach (var b in data)
-                    {
-                        Console.Write("{0} ", b.ToString("X2"));
-                    }
-                    Console.WriteLine();
-                }
 
                 Console.WriteLine("...");
 
@@ -78,10 +80,12 @@
 
         private static void Main(string[] args)
         {
-            TestMethod5(@"C:\Users\Greg\Pictures\IMG_0503.CR2");
-            // TestMethod5(@"C:\Users\Greg\Pictures\IMG_0503.JPG");
-            // TestMethod5(@"C:\Users\Greg\Pictures\IMAG0086.jpg");
-            // private const string FileName = @"C:\Users\Greg\Downloads\huff_simple0.jpg";
+            const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
+            const string FileName = Directory + "huff_simple0.jpg";
+            // const string FileName = Directory + IMG_0503.CR2";
+            // const string FileName = Directory + IMG_0503.JPG";
+            // const string FileName = Directory + IMAG0086.jpg";
+            TestMethod5(FileName);
         }
 
         #endregion
