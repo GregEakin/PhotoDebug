@@ -5,7 +5,7 @@
 
     using PhotoLib.Utilities;
 
-    public class StartOfImage
+    public class StartOfImage : JpegTag
     {
         #region Fields
 
@@ -13,28 +13,20 @@
 
         private readonly ImageData imageData;
 
-        private readonly StartOfFrame lossless;
-
-        private readonly byte mark;
-
-        private readonly StartOfScan startOfScan;
-
         private readonly JfifMarker jfifMarker;
 
-        private readonly byte tag;
+        private readonly StartOfFrame lossless;
+
+        private readonly StartOfScan startOfScan;
 
         #endregion
 
         #region Constructors and Destructors
 
         public StartOfImage(BinaryReader binaryReader, uint address, uint length)
+            : base(binaryReader)
         {
-            binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-
-            mark = binaryReader.ReadByte();
-            tag = binaryReader.ReadByte(); // JPG_MARK_SOI
-
-            if (mark != 0xFF || tag != 0xD8)
+            if (Mark != 0xFF || Tag != 0xD8)
             {
                 throw new ArgumentException();
             }
@@ -144,27 +136,11 @@
             }
         }
 
-        public byte Mark
-        {
-            get
-            {
-                return mark;
-            }
-        }
-
         public StartOfScan StartOfScan
         {
             get
             {
                 return startOfScan;
-            }
-        }
-
-        public byte Tag
-        {
-            get
-            {
-                return tag;
             }
         }
 

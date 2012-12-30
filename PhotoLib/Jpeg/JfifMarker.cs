@@ -3,26 +3,20 @@
     using System;
     using System.IO;
 
-    public class JfifMarker
+    public class JfifMarker : JpegTag
     {
         #region Fields
 
         private readonly ushort length;
-
-        private readonly byte mark;
-
-        private readonly byte tag;
 
         #endregion
 
         #region Constructors and Destructors
 
         public JfifMarker(BinaryReader binaryReader)
+            : base(binaryReader)
         {
-            mark = binaryReader.ReadByte();
-            tag = binaryReader.ReadByte(); // JFIF Marker
-
-            if (mark != 0xFF || tag != 0xE0)
+            if (Mark != 0xFF || Tag != 0xE0)
             {
                 throw new ArgumentException();
             }
@@ -59,22 +53,6 @@
             get
             {
                 return length;
-            }
-        }
-
-        public byte Mark
-        {
-            get
-            {
-                return mark;
-            }
-        }
-
-        public byte Tag
-        {
-            get
-            {
-                return tag;
             }
         }
 

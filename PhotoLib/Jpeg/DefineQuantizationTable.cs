@@ -3,15 +3,11 @@
     using System;
     using System.IO;
 
-    public class DefineQuantizationTable
+    public class DefineQuantizationTable : JpegTag
     {
         #region Fields
 
         private readonly ushort length;
-
-        private readonly byte mark;
-
-        private readonly byte tag;
 
         #endregion
 
@@ -20,11 +16,9 @@
         #region Constructors and Destructors
 
         public DefineQuantizationTable(BinaryReader binaryReader)
+            : base(binaryReader)
         {
-            mark = binaryReader.ReadByte();
-            tag = binaryReader.ReadByte(); // JPG_MARK_DHT
-
-            if (mark != 0xFF || tag != 0xDB)
+            if (Mark != 0xFF || Tag != 0xDB)
             {
                 throw new ArgumentException();
             }
@@ -59,22 +53,6 @@
             get
             {
                 return length;
-            }
-        }
-
-        public byte Mark
-        {
-            get
-            {
-                return mark;
-            }
-        }
-
-        public byte Tag
-        {
-            get
-            {
-                return tag;
             }
         }
 

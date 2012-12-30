@@ -133,6 +133,7 @@
                 var z = binaryReader.ReadUInt16();
                 Assert.AreEqual(Width, x * y + z);
 
+                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
 
                 // binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
@@ -199,6 +200,7 @@
                 var address = directory.Entries.First(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
                 var length = directory.Entries.First(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
 
+                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
                 Assert.AreEqual(0xFF, startOfImage.Mark);
                 Assert.AreEqual(0xD8, startOfImage.Tag); // JPG_MARK_SOI

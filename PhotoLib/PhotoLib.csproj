@@ -44,6 +44,7 @@
     <Compile Include="Jpeg\DefineHuffmanTable.cs" />
     <Compile Include="Jpeg\ImageData.cs" />
     <Compile Include="Jpeg\JfifMarker.cs" />
+    <Compile Include="Jpeg\JpegTag.cs" />
     <Compile Include="Jpeg\StartOfFrame.cs" />
     <Compile Include="Jpeg\StartOfImage.cs" />
     <Compile Include="Jpeg\StartOfScan.cs" />

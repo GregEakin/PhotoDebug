@@ -3,7 +3,7 @@
     using System;
     using System.IO;
 
-    public class StartOfFrame
+    public class StartOfFrame : JpegTag
     {
         #region Fields
 
@@ -11,26 +11,20 @@
 
         private readonly ushort length;
 
-        private readonly byte mark;
-
         private readonly byte precision;
 
         private readonly ushort samplesPerLine;
 
         private readonly ushort scanLines;
 
-        private readonly byte tag;
-
         #endregion
 
         #region Constructors and Destructors
 
         public StartOfFrame(BinaryReader binaryReader)
+            : base(binaryReader)
         {
-            mark = binaryReader.ReadByte();
-            tag = binaryReader.ReadByte(); // JPG_MARK C3
-
-            if (mark != 0xFF || (tag & 0xF0) != 0xC0)
+            if (Mark != 0xFF || (Tag & 0xF0) != 0xC0)
             {
                 throw new ArgumentException();
             }
@@ -78,14 +72,6 @@
             }
         }
 
-        public byte Mark
-        {
-            get
-            {
-                return mark;
-            }
-        }
-
         public byte Precision
         {
             get
@@ -107,14 +93,6 @@
             get
             {
                 return scanLines;
-            }
-        }
-
-        public byte Tag
-        {
-            get
-            {
-                return tag;
             }
         }
 

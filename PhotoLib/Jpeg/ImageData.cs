@@ -3,26 +3,20 @@
     using System;
     using System.IO;
 
-    public class ImageData
+    public class ImageData : JpegTag
     {
         #region Fields
 
-        private readonly byte mark;
-
         private readonly byte[] rawData;
-
-        private readonly byte tag;
 
         #endregion
 
         #region Constructors and Destructors
 
         public ImageData(BinaryReader binaryReader, uint address, uint length)
+            : base(binaryReader)
         {
-            mark = binaryReader.ReadByte();
-            tag = binaryReader.ReadByte(); // JPG_MARK_ D5
-
-            if (mark != 0xFE || tag != 0xD5)
+            if (Mark != 0xFE || Tag != 0xD5)
             {
                 throw new ArgumentException();
             }
@@ -48,27 +42,11 @@
 
         #region Public Properties
 
-        public byte Mark
-        {
-            get
-            {
-                return mark;
-            }
-        }
-
         public byte[] RawData
         {
             get
             {
                 return rawData;
-            }
-        }
-
-        public byte Tag
-        {
-            get
-            {
-                return tag;
             }
         }
 

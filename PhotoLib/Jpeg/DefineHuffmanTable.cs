@@ -58,17 +58,13 @@
         #endregion
     }
 
-    public class DefineHuffmanTable
+    public class DefineHuffmanTable : JpegTag
     {
         #region Fields
 
         private readonly ushort length;
 
-        private readonly byte mark;
-
         private readonly Dictionary<byte, Table> tables = new Dictionary<byte, Table>();
-
-        private readonly byte tag;
 
         #endregion
 
@@ -77,11 +73,9 @@
         #region Constructors and Destructors
 
         public DefineHuffmanTable(BinaryReader binaryReader)
+            : base(binaryReader)
         {
-            mark = binaryReader.ReadByte();
-            tag = binaryReader.ReadByte(); // JPG_MARK_DHT
-
-            if (mark != 0xFF || tag != 0xC4)
+            if (Mark != 0xFF || Tag != 0xC4)
             {
                 throw new ArgumentException();
             }
@@ -119,14 +113,6 @@
             }
         }
 
-        public byte Mark
-        {
-            get
-            {
-                return mark;
-            }
-        }
-
         public IEnumerable<Table> Tables
         {
             get
@@ -135,28 +121,9 @@
             }
         }
 
-        public byte Tag
-        {
-            get
-            {
-                return tag;
-            }
-        }
-
         #endregion
 
         #region Public Methods and Operators
-
-        public static string PrintBits(int value, int number)
-        {
-            var retval = new StringBuilder();
-            for (var i = number; i >= 0; i--)
-            {
-                var mask = 0x01 << i;
-                retval.Append((value & mask) != 0 ? '1' : '0');
-            }
-            return retval.ToString();
-        }
 
         public static string[] BuildTree(Table table)
         {
@@ -174,6 +141,17 @@
                 }
             }
             return retval;
+        }
+
+        public static string PrintBits(int value, int number)
+        {
+            var retval = new StringBuilder();
+            for (var i = number; i >= 0; i--)
+            {
+                var mask = 0x01 << i;
+                retval.Append((value & mask) != 0 ? '1' : '0');
+            }
+            return retval.ToString();
         }
 
         public void DumpTable()
