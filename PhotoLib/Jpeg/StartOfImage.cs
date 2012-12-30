@@ -83,7 +83,7 @@
 
                                 case 0xDA:
                                     this.startOfScan = new StartOfScan(binaryReader);
-                                    // var image = binaryReader.ReadBytes((int)(binaryReader.BaseStream.Length - 2));
+                                    // this.imageData = binaryReader.ReadBytes((int)(binaryReader.BaseStream.Length - 2));
                                     break;
 
                                 case 0xDB:
