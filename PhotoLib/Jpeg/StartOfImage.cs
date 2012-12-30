@@ -34,6 +34,7 @@
             while (binaryReader.BaseStream.Position < binaryReader.BaseStream.Length)
             {
                 var pos = binaryReader.BaseStream.Position;
+                var rawSize = address + length - pos;
                 var nextMark = binaryReader.ReadByte();
                 switch (nextMark)
                 {
@@ -44,7 +45,7 @@
                             switch (nextTag)
                             {
                                 case 0xD5:
-                                    this.imageData = new ImageData(binaryReader, address, length);
+                                    this.imageData = new ImageData(binaryReader, (uint)rawSize);
                                     break;
 
                                 default:

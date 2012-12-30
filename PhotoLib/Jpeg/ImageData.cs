@@ -13,7 +13,7 @@
 
         #region Constructors and Destructors
 
-        public ImageData(BinaryReader binaryReader, uint address, uint length)
+        public ImageData(BinaryReader binaryReader, uint rawSize)
             : base(binaryReader)
         {
             if (Mark != 0xFE || Tag != 0xD5)
@@ -21,10 +21,6 @@
                 throw new ArgumentException();
             }
 
-            var pos = binaryReader.BaseStream.Position - 2;
-            var rawSize = address + length - pos;
-
-            binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
             rawData = binaryReader.ReadBytes((int)rawSize);
 
             // GetBits(rawData);
