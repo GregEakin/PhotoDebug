@@ -31,6 +31,8 @@
                 throw new ArgumentException();
             }
 
+            Console.WriteLine("SOI: 0x{0}", binaryReader.BaseStream.Position.ToString("X8"));
+
             while (binaryReader.BaseStream.Position < binaryReader.BaseStream.Length)
             {
                 var pos = binaryReader.BaseStream.Position;

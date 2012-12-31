@@ -158,7 +158,10 @@
         {
             foreach (var table in tables.Values)
             {
-                Console.WriteLine("Table {0}", table.Index);
+                // HT Info, bits 0..3 is number, bits 4 is 0 = DC, 1 = AC, bits 5..7 must be zero
+                var tableNumber = table.Index & 0x07;
+                var tableType = (table.Index & 0x08) == 0 ? "DC" : "AC";
+                Console.WriteLine("Table {0} {1}", tableType, tableNumber);
                 var bits = BuildTree(table);
 
                 var index = 0;
@@ -179,6 +182,33 @@
                 }
                 Console.WriteLine();
             }
+        }
+
+        public static int DcValueEncoding(byte dcCode, byte bits)
+        {
+            int retval;
+            if (dcCode > 0)
+            {
+                var mask = (1u << dcCode) - 1;
+                var num = bits & mask;
+
+                var sign = bits & (1u << (dcCode - 1));
+                if (sign == 0)
+                {
+                    var i = (int)(num ^ mask);
+                    retval = -1 * i;
+                }
+                else
+                {
+                    retval = (int)num;
+                }
+            }
+            else
+            {
+                retval = 0;
+            }
+
+            return retval;
         }
 
         #endregion

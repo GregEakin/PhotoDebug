@@ -52,11 +52,13 @@
         [TestMethod]
         public void BuildTree()
         {
-            var treeData = new byte[] { 0xFF, 0xC4, 0, 34, 0, 0, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 5, 3, 6, 7, 2, 8, 0, 1, 9, 10, 11, 12, 13, 15, 14 };
+            var treeData = new byte[]
+                { 0xFF, 0xC4, 0, 34, 0, 0, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 5, 3, 6, 7, 2, 8, 0, 1, 9, 10, 11, 12, 13, 15, 14 };
 
             var treeBits = new string[]
                 {
-                    "00", "01", "100", "101", "1100", "1101", "11100", "11101", "11110", "111110", "1111110", "11111110", "111111110", "1111111110", "11111111110"
+                    "00", "01", "100", "101", "1100", "1101", "11100", "11101", "11110", "111110", "1111110", "11111110", "111111110", "1111111110",
+                    "11111111110"
                 };
 
             using (var memory = new MemoryStream(treeData))
@@ -128,6 +130,39 @@
         }
 
         [TestMethod]
+        public void DcCodeTestFour()
+        {
+            for (var i = 8; i < 16; i++)
+            {
+                var expected = i;
+                Assert.AreEqual(expected, DefineHuffmanTable.DcValueEncoding(4, (byte)i));
+            }
+        }
+
+        [TestMethod]
+        public void DcCodeTestFourNegative()
+        {
+            for (var i = 0; i < 8; i++)
+            {
+                var expected = i - 15;
+                Assert.AreEqual(expected, DefineHuffmanTable.DcValueEncoding(4, (byte)i));
+            }
+        }
+
+        [TestMethod]
+        public void DcCodeTestOne()
+        {
+            Assert.AreEqual(1, DefineHuffmanTable.DcValueEncoding(1, 1));
+            Assert.AreEqual(-1, DefineHuffmanTable.DcValueEncoding(1, 0));
+        }
+
+        [TestMethod]
+        public void DcCodeTestZero()
+        {
+            Assert.AreEqual(0, DefineHuffmanTable.DcValueEncoding(0, 0));
+        }
+
+        [TestMethod]
         public void Length()
         {
             using (var memory = new MemoryStream(Data))
@@ -142,7 +177,8 @@
         [ExpectedException(typeof(ArgumentException))]
         public void LongLengthA()
         {
-            var badData = new byte[] { 0xFF, 0xC4, 0x00, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            var badData = new byte[]
+                { 0xFF, 0xC4, 0x00, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
             using (var memory = new MemoryStream(badData))
             {
@@ -197,7 +233,8 @@
         [ExpectedException(typeof(ArgumentException))]
         public void ShortLengthA()
         {
-            var badData = new byte[] { 0xFF, 0xC4, 0x00, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            var badData = new byte[]
+                { 0xFF, 0xC4, 0x00, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
             using (var memory = new MemoryStream(badData))
             {

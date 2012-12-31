@@ -3,7 +3,7 @@
     using System;
     using System.IO;
 
-    public class ImageData : JpegTag
+    public class ImageData
     {
         #region Fields
 
@@ -14,13 +14,7 @@
         #region Constructors and Destructors
 
         public ImageData(BinaryReader binaryReader, uint rawSize)
-            : base(binaryReader)
         {
-            if (Mark != 0xFE || Tag != 0xD5)
-            {
-                throw new ArgumentException();
-            }
-
             rawData = binaryReader.ReadBytes((int)rawSize);
 
             // GetBits(rawData);
@@ -32,6 +26,21 @@
                 // GetLosslessJpgRow(rowBuf, rawData, TL0, TB0, TL1, TB1, Prop);
                 // PutUnscrambleRowSlice(rowBuf, imageData, iRow, Prop);
             }
+
+            for (var i = 0; i < Math.Min(20, rawSize); i++)
+            {
+                var value = rawData[i];
+                if (value == 0xFF)
+                {
+                    var code = rawData[++i];
+                    if (code != 0)
+                    {
+                        value = rawData[++i];
+                    }
+                }
+                Console.Write("{0} ", value.ToString("X2"));
+            }
+            Console.WriteLine();
         }
 
         #endregion

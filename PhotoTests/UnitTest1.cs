@@ -219,8 +219,6 @@
                 Assert.AreEqual(0xDA, startOfScan.Tag);
 
                 var imageData = startOfImage.ImageData;
-                Assert.AreEqual(0xFE, imageData.Mark);
-                Assert.AreEqual(0xD5, imageData.Tag);
             }
         }
 

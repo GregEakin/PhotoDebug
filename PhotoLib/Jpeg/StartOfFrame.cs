@@ -29,6 +29,8 @@
                 throw new ArgumentException();
             }
 
+            Console.WriteLine("SoF {0}: {1}", Tag, (binaryReader.BaseStream.Position - 2).ToString("X8"));
+
             length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
             precision = binaryReader.ReadByte();
             scanLines = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
