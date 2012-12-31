@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Text;
 
-    public struct Table
+    public class Table
     {
         #region Fields
 
@@ -15,6 +15,8 @@
         private readonly byte[] data2;
 
         private readonly byte index;
+
+        // private readonly Dictionary<int, int> dictionary = new Dictionary<int, int>(); 
 
         #endregion
 
@@ -25,6 +27,12 @@
             this.index = index;
             this.data1 = data1;
             this.data2 = data2;
+
+            //for (var i = 0; i < data1.Length; i++)
+            //{
+            //    Console.WriteLine("Add {0}, {1}", data1[i], data2[i]);
+            //    dictionary.Add(data1[i], data2[i]);
+            //}
         }
 
         #endregion
@@ -54,6 +62,14 @@
                 return index;
             }
         }
+
+        //public Dictionary<int, int> Dictionary
+        //{
+        //    get
+        //    {
+        //        return dictionary;
+        //    }
+        //}
 
         #endregion
     }
@@ -125,6 +141,33 @@
 
         #region Public Methods and Operators
 
+        public struct HCode
+        {
+            public byte Length;
+
+            public byte Code;
+        }
+
+        public static Dictionary<int,HCode> BuildTree2(Table table)
+        {
+            var retval = new Dictionary<int, HCode>();
+
+            var index = 0;
+            var bits = 0;
+            for (var i = 0; i < 16; i++)
+            {
+                bits = bits << 1;
+                for (var j = 0; j < table.Data1[i]; j++)
+                {
+                    var value = new HCode{ Length = (byte)(i+1), Code = table.Data2[index]};
+                    retval.Add(bits, value);
+                    bits++;
+                    index++;
+                }
+            }
+            return retval;
+        }
+
         public static string[] BuildTree(Table table)
         {
             var retval = new string[table.Data2.Length];
@@ -159,8 +202,8 @@
             foreach (var table in tables.Values)
             {
                 // HT Info, bits 0..3 is number, bits 4 is 0 = DC, 1 = AC, bits 5..7 must be zero
-                var tableNumber = table.Index & 0x07;
-                var tableType = (table.Index & 0x08) == 0 ? "DC" : "AC";
+                var tableNumber = table.Index & 0x0F;
+                var tableType = (table.Index & 0x10) == 0 ? "DC" : "AC";
                 Console.WriteLine("Table {0} {1}", tableType, tableNumber);
                 var bits = BuildTree(table);
 
@@ -184,31 +227,25 @@
             }
         }
 
-        public static int DcValueEncoding(byte dcCode, byte bits)
+        public static int DcValueEncoding(int dcCode, int bits)
         {
             int retval;
             if (dcCode > 0)
             {
-                var mask = (1u << dcCode) - 1;
-                var num = bits & mask;
-
                 var sign = bits & (1u << (dcCode - 1));
-                if (sign == 0)
-                {
-                    var i = (int)(num ^ mask);
-                    retval = -1 * i;
-                }
-                else
-                {
-                    retval = (int)num;
-                }
+                var num = bits & ((1u << dcCode) - 1);
+                retval = sign == 0 ? (int)num - (int)((1u << dcCode) - 1) : (int)num;
             }
             else
             {
                 retval = 0;
             }
-
             return retval;
+        }
+
+        public static int Luminance()
+        {
+            return 0;
         }
 
         #endregion
