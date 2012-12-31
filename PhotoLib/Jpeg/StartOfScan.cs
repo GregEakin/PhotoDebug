@@ -32,9 +32,11 @@
             {
                 components[i] = new ScanComponent(binaryReader);
             }
-            var bB1 = binaryReader.ReadByte(); // startSpectralSelection
-            var bB2 = binaryReader.ReadByte(); // endSpectralSelection
-            var bB3 = binaryReader.ReadByte(); // successiveApproximation
+            var bB1 = binaryReader.ReadByte(); // startSpectralSelection    // predictor selection value
+            var bB2 = binaryReader.ReadByte(); // endSpectralSelection      // Se : End of spectral selection
+            var bB3 = binaryReader.ReadByte(); // successiveApproximation   // Ah : 4bit, Successive approximation bit position high
+                                                                            // Al : 4bit, Successive approximation bit position low
+                                                                            //            or poin transform
 
             if (2 * count + 6 != length)
             {

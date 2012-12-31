@@ -164,7 +164,7 @@
                         break;
                     }
 
-                    var z = this.imageData.GetNextBits(hCode.Code);
+                    var z = this.imageData.GetSetOfBits(hCode.Code);
                     var value = DefineHuffmanTable.DcValueEncoding(hCode.Code, z);
 
                     // Console.WriteLine("Found {0} {1} {2}", hCode.Code.ToString("X2"), z.ToString("X4"), value);

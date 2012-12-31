@@ -9,6 +9,14 @@
 
         private readonly byte[] rawData;
 
+        private byte currentByte;
+
+        private bool eof;
+
+        private int index = -1;
+
+        private int nextBit = -1;
+
         #endregion
 
         #region Constructors and Destructors
@@ -18,15 +26,23 @@
             rawData = binaryReader.ReadBytes((int)rawSize);
         }
 
-        private int nextBit = -1;
+        #endregion
 
-        private int index = -1;
+        #region Public Properties
 
-        private byte currentByte;
+        public byte[] RawData
+        {
+            get
+            {
+                return rawData;
+            }
+        }
 
-        private bool EOF = false;
+        #endregion
 
-        public bool GetBit()
+        #region Public Methods and Operators
+
+        public bool GetNextBit()
         {
             this.CheckByte();
             var bit = ((this.currentByte >> this.nextBit) & 0x01) != 0;
@@ -36,11 +52,36 @@
 
         public ushort GetNextBit(ushort lastBit)
         {
-            var retval = lastBit << 1 | (this.GetBit() ? 0x01 : 0x00);
+            var retval = lastBit << 1 | (this.GetNextBit() ? 0x01 : 0x00);
             return (ushort)retval;
         }
 
-        public ushort GetNextBits(ushort total)
+        public byte GetNextByte()
+        {
+            var retval = (byte)0x00;
+
+            if (index < rawData.Length)
+            {
+                retval = rawData[index];
+                if (retval == 0xFF)
+                {
+                    var code = rawData[++index];
+                    if (code != 0)
+                    {
+                        retval = rawData[++index];
+                    }
+                }
+            }
+            else
+            {
+                this.eof = true;
+                retval = 0xFF;
+            }
+
+            return retval;
+        }
+
+        public ushort GetSetOfBits(ushort total)
         {
             var retval = (ushort)0u;
             this.CheckByte();
@@ -63,50 +104,17 @@
             return retval;
         }
 
+        #endregion
+
+        #region Methods
+
         private void CheckByte()
         {
             if (this.nextBit < 0)
             {
                 this.nextBit = 7;
                 this.index++;
-                this.currentByte = this.GetByte();
-            }
-        }
-
-        public byte GetByte()
-        {
-            var retval = (byte)0x00;
-            
-            if (index < rawData.Length)
-            {
-                retval = rawData[index];
-                if (retval == 0xFF)
-                {
-                    var code = rawData[++index];
-                    if (code != 0)
-                    {
-                        retval = rawData[++index];
-                    }
-                }
-            }
-            else
-            {
-                EOF = true;
-                retval = 0xFF;
-            }
-
-            return retval;
-        }
-
-        #endregion
-
-        #region Public Properties
-
-        public byte[] RawData
-        {
-            get
-            {
-                return rawData;
+                this.currentByte = this.GetNextByte();
             }
         }
 

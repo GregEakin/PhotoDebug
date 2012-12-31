@@ -32,14 +32,14 @@
             {
                 var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
-                Assert.IsTrue(imageData.GetBit());
-                Assert.IsFalse(imageData.GetBit());
-                Assert.IsTrue(imageData.GetBit());
-                Assert.IsFalse(imageData.GetBit());
-                Assert.IsFalse(imageData.GetBit());
-                Assert.IsTrue(imageData.GetBit());
-                Assert.IsFalse(imageData.GetBit());
-                Assert.IsTrue(imageData.GetBit());
+                Assert.IsTrue(imageData.GetNextBit());
+                Assert.IsFalse(imageData.GetNextBit());
+                Assert.IsTrue(imageData.GetNextBit());
+                Assert.IsFalse(imageData.GetNextBit());
+                Assert.IsFalse(imageData.GetNextBit());
+                Assert.IsTrue(imageData.GetNextBit());
+                Assert.IsFalse(imageData.GetNextBit());
+                Assert.IsTrue(imageData.GetNextBit());
             }
         }
 
@@ -51,9 +51,9 @@
             {
                 var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
-                Assert.IsTrue(imageData.GetBit());
-                Assert.IsFalse(imageData.GetBit());
-                Assert.AreEqual(0x0009, imageData.GetNextBits(4));
+                Assert.IsTrue(imageData.GetNextBit());
+                Assert.IsFalse(imageData.GetNextBit());
+                Assert.AreEqual(0x0009, imageData.GetSetOfBits(4));
             }
         }
 
@@ -65,11 +65,11 @@
             {
                 var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
-                Assert.IsTrue(imageData.GetBit());
-                Assert.IsFalse(imageData.GetBit());
-                Assert.AreEqual(0x0009, imageData.GetNextBits(4));
-                Assert.AreEqual(0x0001, imageData.GetNextBits(2));
-                Assert.AreEqual(0x005A, imageData.GetNextBits(8));
+                Assert.IsTrue(imageData.GetNextBit());
+                Assert.IsFalse(imageData.GetNextBit());
+                Assert.AreEqual(0x0009, imageData.GetSetOfBits(4));
+                Assert.AreEqual(0x0001, imageData.GetSetOfBits(2));
+                Assert.AreEqual(0x005A, imageData.GetSetOfBits(8));
             }
         }
 
@@ -81,9 +81,9 @@
             {
                 var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
-                Assert.AreEqual(0x000A, imageData.GetNextBits(4));
-                Assert.AreEqual(0x0055, imageData.GetNextBits(8));
-                Assert.AreEqual(0x000A, imageData.GetNextBits(4));
+                Assert.AreEqual(0x000A, imageData.GetSetOfBits(4));
+                Assert.AreEqual(0x0055, imageData.GetSetOfBits(8));
+                Assert.AreEqual(0x000A, imageData.GetSetOfBits(4));
             }
         }
     }

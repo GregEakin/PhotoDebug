@@ -197,9 +197,15 @@
                 var rawImage = new RawImage(binaryReader);
 
                 var directory = rawImage.Directories.Last();
+
+                var strips = directory.Entries.First(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
+                binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
+                var x = binaryReader.ReadUInt16();
+                var y = binaryReader.ReadUInt16();
+                var z = binaryReader.ReadUInt16();
+
                 var address = directory.Entries.First(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
                 var length = directory.Entries.First(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
-
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
                 Assert.AreEqual(0xFF, startOfImage.Mark);
@@ -208,17 +214,44 @@
                 var huffmanTable = startOfImage.HuffmanTable;
                 Assert.AreEqual(0xFF, huffmanTable.Mark);
                 Assert.AreEqual(0xC4, huffmanTable.Tag);
-                huffmanTable.DumpTable();
+
+                // This file has two huffman tables: 0x00 and 0x01
+                Assert.IsTrue(huffmanTable.Tables.Any(ht => ht.Index == 0x00));
+                Assert.IsTrue(huffmanTable.Tables.Any(ht => ht.Index == 0x01));
 
                 var lossless = startOfImage.Lossless;
                 Assert.AreEqual(0xFF, lossless.Mark);
                 Assert.AreEqual(0xC3, lossless.Tag);
 
+                Assert.AreEqual(14, lossless.Precision);
+                Assert.AreEqual(4, lossless.Components.Length);
+                Assert.AreEqual(1340, lossless.SamplesPerLine);
+                Assert.AreEqual(3516, lossless.ScanLines);
+
+                Assert.AreEqual(5360, lossless.Width);  // Sensor width (bits)
+                Assert.AreEqual(5360, lossless.SamplesPerLine * lossless.Components.Length);
+                Assert.AreEqual(5360, x * y + z);
+
+                foreach (var component in lossless.Components)
+                {
+                    // Console.WriteLine("== {0}: {1} {2} {3}", component.ComponentId, component.HFactor, component.VFactor, component.TableId);
+                    Assert.AreEqual(0x01, component.HFactor);
+                    Assert.AreEqual(0x01, component.VFactor);
+                    Assert.AreEqual(0x00, component.TableId);
+                }
+
                 var startOfScan = startOfImage.StartOfScan;
                 Assert.AreEqual(0xFF, startOfScan.Mark);
                 Assert.AreEqual(0xDA, startOfScan.Tag);
 
+                foreach (var scanComponent in startOfScan.Components)
+                {
+                    Console.WriteLine("{0}: {1} {2}", scanComponent.Id, scanComponent.Dc, scanComponent.Ac);
+                }
+
                 var imageData = startOfImage.ImageData;
+
+
             }
         }
 
