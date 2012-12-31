@@ -216,8 +216,8 @@
                 Assert.AreEqual(0xC4, huffmanTable.Tag);
 
                 // This file has two huffman tables: 0x00 and 0x01
-                Assert.IsTrue(huffmanTable.Tables.Any(ht => ht.Index == 0x00));
-                Assert.IsTrue(huffmanTable.Tables.Any(ht => ht.Index == 0x01));
+                Assert.IsTrue(huffmanTable.Tables.ContainsKey(0x00));
+                Assert.IsTrue(huffmanTable.Tables.ContainsKey(0x01));
 
                 var lossless = startOfImage.Lossless;
                 Assert.AreEqual(0xFF, lossless.Mark);

@@ -101,51 +101,44 @@
 
         private void DoIt()
         {
-            var dicts = new Dictionary<byte, Dictionary<int, DefineHuffmanTable.HCode>>();
-            foreach (var table in huffmanTable.Tables)
+            for (var i = 0; i < (this.lossless.SamplesPerLine + 7)/8; i++)
             {
-                var dictionary = DefineHuffmanTable.BuildTree2(table);
-                dicts.Add(table.Index, dictionary);
-            }
-
-            for (var i = 0; i < (lossless.SamplesPerLine + 7)/8; i++)
-            {
-                if (dicts.ContainsKey(0x00))
+                if (this.huffmanTable.Tables.ContainsKey(0x00))
                 {
                     // Luminance (Y) - DC
-                    this.ReadComponent(dicts[0x00], 1);
+                    this.ReadComponent(this.huffmanTable.Tables[0x00].Dictionary, 1);
 
-                    if (dicts.ContainsKey(0x10))
+                    if (this.huffmanTable.Tables.ContainsKey(0x10))
                     {
                         // Luminance (Y) - AC
-                        this.ReadComponent(dicts[0x10], 63);
+                        this.ReadComponent(this.huffmanTable.Tables[0x10].Dictionary, 63);
                     }
                 }
 
-                if (dicts.ContainsKey(0x01))
+                if (this.huffmanTable.Tables.ContainsKey(0x01))
                 {
                     // Chrominance (Cb) - DC
-                    this.ReadComponent(dicts[0x01], 1);
+                    this.ReadComponent(this.huffmanTable.Tables[0x01].Dictionary, 1);
 
-                    if (dicts.ContainsKey(0x11))
+                    if (this.huffmanTable.Tables.ContainsKey(0x11))
                     {
                         // Chrominance (Cb) - AC
-                        this.ReadComponent(dicts[0x11], 63);
+                        this.ReadComponent(this.huffmanTable.Tables[0x11].Dictionary, 63);
                     }
                 
                     // Chrominance (Cr) - DC
-                    this.ReadComponent(dicts[0x01], 1);
+                    this.ReadComponent(this.huffmanTable.Tables[0x01].Dictionary, 1);
 
-                    if (dicts.ContainsKey(0x11))
+                    if (this.huffmanTable.Tables.ContainsKey(0x11))
                     {
                         // Chrominance (Cr) - AC
-                        this.ReadComponent(dicts[0x11], 63);
+                        this.ReadComponent(this.huffmanTable.Tables[0x11].Dictionary, 63);
                     }
                 }
             }
         }
 
-        private void ReadComponent(Dictionary<int, DefineHuffmanTable.HCode> dict, int elements)
+        private void ReadComponent(Dictionary<int, HuffmanTable.HCode> dict, int elements)
         {
             var bits = (ushort)0;
             var len = 0;
@@ -155,7 +148,7 @@
             {
                 bits = this.imageData.GetNextBit(bits);
                 len++;
-                DefineHuffmanTable.HCode hCode;
+                HuffmanTable.HCode hCode;
                 if (dict.TryGetValue(bits, out hCode) && hCode.Length == len)
                 {
                     if (hCode.Code == 0x00)

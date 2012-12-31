@@ -64,7 +64,7 @@
             {
                 var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
-                var table = huffmanTable.Tables.First();
+                var table = huffmanTable.Tables.First().Value;
                 CollectionAssert.AreEqual(treeBits, DefineHuffmanTable.BuildTree(table));
             }
         }
@@ -88,7 +88,7 @@
                 var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
                 var expected = new byte[] { 0x00, 0x01, 0x04, 0x02, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-                CollectionAssert.AreEqual(expected, huffmanTable.Tables.First().Data1);
+                CollectionAssert.AreEqual(expected, huffmanTable.Tables.First().Value.Data1);
             }
         }
 
@@ -100,7 +100,7 @@
                 var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
                 var expected = new byte[] { 0x06, 0x04, 0x08, 0x05, 0x07, 0x03, 0x09, 0x00, 0x0A, 0x02, 0x01, 0x0C, 0x0B, 0x0D, 0x0E };
-                CollectionAssert.AreEqual(expected, huffmanTable.Tables.First().Data2);
+                CollectionAssert.AreEqual(expected, huffmanTable.Tables.First().Value.Data2);
             }
         }
 
@@ -112,7 +112,7 @@
                 var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
                 var expected = new byte[] { 0x00, 0x01, 0x04, 0x02, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-                CollectionAssert.AreEqual(expected, huffmanTable.Tables.Skip(1).Single().Data1);
+                CollectionAssert.AreEqual(expected, huffmanTable.Tables.Skip(1).Single().Value.Data1);
             }
         }
 
@@ -124,7 +124,7 @@
                 var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
                 var expected = new byte[] { 0x06, 0x04, 0x08, 0x05, 0x07, 0x03, 0x09, 0x00, 0x0A, 0x02, 0x01, 0x0C, 0x0B, 0x0D, 0x0E };
-                CollectionAssert.AreEqual(expected, huffmanTable.Tables.Skip(1).Single().Data2);
+                CollectionAssert.AreEqual(expected, huffmanTable.Tables.Skip(1).Single().Value.Data2);
             }
         }
 
@@ -193,7 +193,7 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(EndOfStreamException))]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
         public void LongLengthB()
         {
             var badData = new byte[]
@@ -248,7 +248,7 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
         public void ShortLengthB()
         {
             var badData = new byte[]
@@ -315,8 +315,7 @@
                 var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
 
-                var table = huffmanTable.Tables.First();
-                var dictionary = DefineHuffmanTable.BuildTree2(table);
+                var table = huffmanTable.Tables.First().Value;
 
                 var bits = new byte[] { 0xFC, 0xFF, 0xE2, 0xAF, 0xEF, 0xF3, 0x15, 0x7F };
                 var x = (byte)0;
@@ -331,13 +330,13 @@
                         x |= (bit & mask) > 0 ? (byte)1 : (byte)0;
                         len++;
 
-                        DefineHuffmanTable.HCode hCode;
-                        if (dictionary.TryGetValue(x, out hCode) && hCode.Length == len)
+                        HuffmanTable.HCode hCode;
+                        if (table.Dictionary.TryGetValue(x, out hCode) && hCode.Length == len)
                         {
                             var z = 0x1FF;
-                            var value = DefineHuffmanTable.DcValueEncoding(dictionary[x].Code, z);
+                            var value = DefineHuffmanTable.DcValueEncoding(table.Dictionary[x].Code, z);
 
-                            Console.WriteLine("Found {0} {1} {2}", x.ToString("X2"), dictionary[x].Code.ToString("X2"), value);
+                            Console.WriteLine("Found {0} {1} {2}", x.ToString("X2"), table.Dictionary[x].Code.ToString("X2"), value);
                             x = 0;
                             len = 0;
                         }

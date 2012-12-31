@@ -11,7 +11,7 @@
 
         #endregion
 
-        // DHT: Define Huffman Table
+        // DHT: Define Huffman HuffmanTable
 
         #region Constructors and Destructors
 
