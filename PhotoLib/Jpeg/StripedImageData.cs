@@ -11,8 +11,6 @@
 
         private byte currentByte;
 
-        private bool eof;
-
         private int index = -1;
 
         private int nextBit = -1;
@@ -29,6 +27,8 @@
         #endregion
 
         #region Public Properties
+
+        public bool EndOfFile { get; private set; }
 
         public byte[] RawData
         {
@@ -58,8 +58,7 @@
 
         public byte GetNextByte()
         {
-            var retval = (byte)0x00;
-
+            byte retval;
             if (index < rawData.Length)
             {
                 retval = rawData[index];
@@ -74,10 +73,9 @@
             }
             else
             {
-                this.eof = true;
+                this.EndOfFile = true;
                 retval = 0xFF;
             }
-
             return retval;
         }
 

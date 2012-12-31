@@ -269,7 +269,7 @@
                 var huffmanTable = new DefineHuffmanTable(binaryReader);
                 Assert.AreEqual(0xFF, huffmanTable.Mark);
                 Assert.AreEqual(0xC4, huffmanTable.Tag);
-                huffmanTable.DumpTable();
+                huffmanTable.ToString();
             }
         }
 
@@ -291,7 +291,7 @@
                 var huffmanTable = startOfImage.HuffmanTable;
                 Assert.AreEqual(0xFF, huffmanTable.Mark);
                 Assert.AreEqual(0xC4, huffmanTable.Tag);
-                huffmanTable.DumpTable();
+                huffmanTable.ToString();
             }
         }
 

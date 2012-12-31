@@ -6,109 +6,9 @@
     using System.Linq;
     using System.Text;
 
-    public class HuffmanTable
-    {
-        #region Fields
+    using PhotoLib.Utilities;
 
-        private readonly byte[] data1;
-
-        private readonly byte[] data2;
-
-        private readonly Dictionary<int, HCode> dictionary;
-
-        private readonly byte index;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        public HuffmanTable(byte index, byte[] data1, byte[] data2)
-        {
-            this.index = index;
-            this.data1 = data1;
-            this.data2 = data2;
-            this.dictionary = BuildTree();
-            //for (var i = 0; i < data1.Length; i++)
-            //{
-            //    Console.WriteLine("Add {0}, {1}", data1[i], data2[i]);
-            //    dictionary.Add(data1[i], data2[i]);
-            //}
-        }
-
-        #endregion
-
-        #region Public Properties
-
-        public byte[] Data1
-        {
-            get
-            {
-                return data1;
-            }
-        }
-
-        public byte[] Data2
-        {
-            get
-            {
-                return data2;
-            }
-        }
-
-        public Dictionary<int, HCode> Dictionary
-        {
-            get
-            {
-                return dictionary;
-            }
-        }
-
-        public byte Index
-        {
-            get
-            {
-                return index;
-            }
-        }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        public Dictionary<int, HCode> BuildTree()
-        {
-            var retval = new Dictionary<int, HCode>();
-
-            var offset = 0;
-            var bits = 0;
-            for (var i = 0; i < 16; i++)
-            {
-                bits = bits << 1;
-                for (var j = 0; j < Data1[i]; j++)
-                {
-                    var value = new HCode { Length = (byte)(i + 1), Code = Data2[offset] };
-                    retval.Add(bits, value);
-                    bits++;
-                    offset++;
-                }
-            }
-            return retval;
-        }
-
-        #endregion
-
-        public struct HCode
-        {
-            #region Fields
-
-            public byte Code;
-
-            public byte Length;
-
-            #endregion
-        }
-    }
-
+    /// DHT: Define Huffman HuffmanTable
     public class DefineHuffmanTable : JpegTag
     {
         #region Fields
@@ -118,8 +18,6 @@
         private readonly Dictionary<byte, HuffmanTable> tables = new Dictionary<byte, HuffmanTable>();
 
         #endregion
-
-        // DHT: Define Huffman HuffmanTable
 
         #region Constructors and Destructors
 
@@ -176,44 +74,6 @@
 
         #region Public Methods and Operators
 
-        public static string[] BuildTree(HuffmanTable huffmanTable)
-        {
-            var retval = new string[huffmanTable.Data2.Length];
-            var index = 0;
-            var bits = 0;
-            for (var i = 0; i < 16; i++)
-            {
-                bits = bits << 1;
-                for (var j = 0; j < huffmanTable.Data1[i]; j++)
-                {
-                    retval[index] = PrintBits(bits, i);
-                    bits++;
-                    index++;
-                }
-            }
-            return retval;
-        }
-
-        //public static Dictionary<int, HCode> BuildTree2(HuffmanTable huffmanTable)
-        //{
-        //    var retval = new Dictionary<int, HCode>();
-
-        //    var index = 0;
-        //    var bits = 0;
-        //    for (var i = 0; i < 16; i++)
-        //    {
-        //        bits = bits << 1;
-        //        for (var j = 0; j < huffmanTable.Data1[i]; j++)
-        //        {
-        //            var value = new HCode { Length = (byte)(i + 1), Code = huffmanTable.Data2[index] };
-        //            retval.Add(bits, value);
-        //            bits++;
-        //            index++;
-        //        }
-        //    }
-        //    return retval;
-        //}
-
         public static int DcValueEncoding(int dcCode, int bits)
         {
             int retval;
@@ -235,58 +95,17 @@
             return 0;
         }
 
-        public static string PrintBits(int value, int number)
+        public override string ToString()
         {
             var retval = new StringBuilder();
-            for (var i = number; i >= 0; i--)
+            foreach (var table in tables.Values)
             {
-                var mask = 0x01 << i;
-                retval.Append((value & mask) != 0 ? '1' : '0');
+                retval.AppendLine(table.ToString());
+                retval.AppendLine();
             }
             return retval.ToString();
         }
 
-        public void DumpTable()
-        {
-            foreach (var table in tables.Values)
-            {
-                // HT Info, bits 0..3 is number, bits 4 is 0 = DC, 1 = AC, bits 5..7 must be zero
-                var tableNumber = table.Index & 0x0F;
-                var tableType = (table.Index & 0x10) == 0 ? "DC" : "AC";
-                Console.WriteLine("HuffmanTable {0} {1}", tableType, tableNumber);
-                var bits = BuildTree(table);
-
-                var index = 0;
-                for (byte i = 0; i < 16; i++)
-                {
-                    if (table.Data1[i] <= 0)
-                    {
-                        continue;
-                    }
-
-                    Console.Write("{0} : ", i + 1);
-                    for (var j = 0; j < table.Data1[i]; j++)
-                    {
-                        Console.Write("{0:x} ({1}) ", table.Data2[index], bits[index]);
-                        index++;
-                    }
-                    Console.WriteLine();
-                }
-                Console.WriteLine();
-            }
-        }
-
         #endregion
-
-        //public struct HCode
-        //{
-        //    #region Fields
-
-        //    public byte Code;
-
-        //    public byte Length;
-
-        //    #endregion
-        //}
     }
 }

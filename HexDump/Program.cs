@@ -81,7 +81,7 @@
 
         private static void Main(string[] args)
         {
-            const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
+            // const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
             // const string FileName = Directory + "huff_simple0.jpg";
             // const string FileName = Directory + "IMG_0503.CR2";
             // const string FileName = Directory + "IMG_0503.JPG";

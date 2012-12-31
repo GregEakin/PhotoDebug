@@ -9,5 +9,7 @@
         byte GetNextByte();
 
         ushort GetSetOfBits(ushort total);
+
+        bool EndOfFile { get; }
     }
 }

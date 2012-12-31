@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="JpegFileTests.cs" />
     <Compile Include="Jpeg\DefineHuffmanTableTests.cs" />
+    <Compile Include="Jpeg\HuffmanTableTests.cs" />
     <Compile Include="Jpeg\LinearImageDataTests.cs" />
     <Compile Include="Jpeg\StartOfFrameTests.cs" />
     <Compile Include="Jpeg\StartOfImageTests.cs" />
