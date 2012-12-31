@@ -3,7 +3,7 @@
     using System;
     using System.IO;
 
-    public class ImageData
+    public class StripedImageData : IImageData
     {
         #region Fields
 
@@ -21,7 +21,7 @@
 
         #region Constructors and Destructors
 
-        public ImageData(BinaryReader binaryReader, uint rawSize)
+        public StripedImageData(BinaryReader binaryReader, uint rawSize)
         {
             rawData = binaryReader.ReadBytes((int)rawSize);
         }

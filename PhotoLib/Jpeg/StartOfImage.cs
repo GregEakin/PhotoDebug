@@ -13,7 +13,7 @@
 
         private readonly DefineHuffmanTable huffmanTable;
 
-        private readonly ImageData imageData;
+        private readonly IImageData imageData;
 
         private readonly JfifMarker jfifMarker;
 
@@ -64,7 +64,7 @@
 
                             case 0xDA:
                                 this.startOfScan = new StartOfScan(binaryReader);
-                                this.imageData = new ImageData(binaryReader, (uint)rawSize);
+                                this.imageData = new LinearImageData(binaryReader, (uint)rawSize);
                                 // this.imageData = binaryReader.ReadBytes((int)(binaryReader.BaseStream.Length - 2));
                                 DoIt();
                                 break;
@@ -191,11 +191,11 @@
             }
         }
 
-        public ImageData ImageData
+        public IImageData ImageData
         {
             get
             {
-                return imageData;
+                return this.imageData;
             }
         }
 

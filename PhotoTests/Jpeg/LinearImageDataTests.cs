@@ -1,28 +1,21 @@
 ﻿namespace PhotoTests.Jpeg
 {
-    using System;
     using System.IO;
-    using System.Linq;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using PhotoLib.Jpeg;
 
     [TestClass]
-    public class ImageDataTests
+    public class LinearImageDataTests
     {
+        #region Static Fields
+
         private static readonly byte[] Data = { 0xFE, 0xD5, 0x5F, 0xBD };
 
-        [TestMethod]
-        public void RawData()
-        {
-            using (var memory = new MemoryStream(Data))
-            {
-                var reader = new BinaryReader(memory);
-                var imageData = new ImageData(reader, (uint)Data.Length);
-                CollectionAssert.AreEqual(Data, imageData.RawData);
-            }
-        }
+        #endregion
+
+        #region Public Methods and Operators
 
         [TestMethod]
         public void GetBit()
@@ -31,7 +24,7 @@
             using (var memory = new MemoryStream(data))
             {
                 var reader = new BinaryReader(memory);
-                var imageData = new ImageData(reader, (uint)data.Length);
+                var imageData = new LinearImageData(reader, (uint)data.Length);
                 Assert.IsTrue(imageData.GetNextBit());
                 Assert.IsFalse(imageData.GetNextBit());
                 Assert.IsTrue(imageData.GetNextBit());
@@ -50,7 +43,7 @@
             using (var memory = new MemoryStream(data))
             {
                 var reader = new BinaryReader(memory);
-                var imageData = new ImageData(reader, (uint)data.Length);
+                var imageData = new LinearImageData(reader, (uint)data.Length);
                 Assert.IsTrue(imageData.GetNextBit());
                 Assert.IsFalse(imageData.GetNextBit());
                 Assert.AreEqual(0x0009, imageData.GetSetOfBits(4));
@@ -64,7 +57,7 @@
             using (var memory = new MemoryStream(data))
             {
                 var reader = new BinaryReader(memory);
-                var imageData = new ImageData(reader, (uint)data.Length);
+                var imageData = new LinearImageData(reader, (uint)data.Length);
                 Assert.IsTrue(imageData.GetNextBit());
                 Assert.IsFalse(imageData.GetNextBit());
                 Assert.AreEqual(0x0009, imageData.GetSetOfBits(4));
@@ -80,11 +73,24 @@
             using (var memory = new MemoryStream(data))
             {
                 var reader = new BinaryReader(memory);
-                var imageData = new ImageData(reader, (uint)data.Length);
+                var imageData = new LinearImageData(reader, (uint)data.Length);
                 Assert.AreEqual(0x000A, imageData.GetSetOfBits(4));
                 Assert.AreEqual(0x0055, imageData.GetSetOfBits(8));
                 Assert.AreEqual(0x000A, imageData.GetSetOfBits(4));
             }
         }
+
+        [TestMethod]
+        public void RawData()
+        {
+            using (var memory = new MemoryStream(Data))
+            {
+                var reader = new BinaryReader(memory);
+                var imageData = new LinearImageData(reader, (uint)Data.Length);
+                CollectionAssert.AreEqual(Data, imageData.RawData);
+            }
+        }
+
+        #endregion
     }
 }
