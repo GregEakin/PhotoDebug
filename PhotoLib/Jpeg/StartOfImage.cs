@@ -44,7 +44,7 @@
                     {
                         var nextTag = binaryReader.ReadByte();
                         binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
-                        Console.WriteLine("NextMark {0}", nextTag.ToString("X2"));
+                        Console.WriteLine("NextMark {0}: 0x{1}", nextTag.ToString("X2"), binaryReader.BaseStream.Position.ToString("X8"));
                         switch (nextTag)
                         {
                             case 0xC0:  // SOF0, Start of Frame 0, Baseline DCT
@@ -57,15 +57,15 @@
                                 break;
 
                             case 0xD9:  // EOI, End of Image
-                                var x3 = binaryReader.ReadByte();
-                                var x4 = binaryReader.ReadByte();
+                                var x3 = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
                                 break;
 
                             case 0xDA:  // SOS, Start of Scan
                                 this.startOfScan = new StartOfScan(binaryReader);
                                 this.imageData = new LinearImageData(binaryReader, (uint)rawSize);
-                                this.DecodeHuffmanData();
-                                break;
+                                // this.DecodeHuffmanData();
+                                // break;
+                                return;
 
                             case 0xDB:  // DQT, Define Quantization Table
                                 var defineQuantizatonTable = new DefineQuantizationTable(binaryReader);
@@ -79,8 +79,7 @@
                             case 0xE4:  // APP4, Application Segment 4, (Not common)
                             case 0xEC:  // APP12, Application Segment 12, Picture Info (older digicams), Photoshop Save for Web: Ducky
                             case 0xEE:  // APP14, Application Segment 14, (Not common)
-                                var x1 = binaryReader.ReadByte();
-                                var x2 = binaryReader.ReadByte();
+                                var x1 = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
                                 var length1 = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
                                 var data = binaryReader.ReadBytes(length1 - 2);
                                 break;

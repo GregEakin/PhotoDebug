@@ -277,8 +277,6 @@
         public void TestMethod8()
         {
             const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
-            // const string FileName2 = Directory + "huff_simple0.jpg";
-            // const string FileName2 = Directory + "IMG_0503.JPG";
             const string FileName2 = Directory + "IMAG0086.jpg";
 
             using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
@@ -292,6 +290,67 @@
                 Assert.AreEqual(0xFF, huffmanTable.Mark);
                 Assert.AreEqual(0xC4, huffmanTable.Tag);
                 Console.WriteLine(huffmanTable);
+            }
+        }
+
+        [TestMethod]
+        public void TestMethodA()
+        {
+            // it is the width of a
+            // row.	The initial values at the beginning of each row is the RG/GB value of
+            // its nearest previous row beginning.  For the first row, the initial row
+            // values are 1/2 the bit range defined by the precision.  Thus for 12-bit
+            // precision:
+            //     Pix[Row, Col] = Val
+            //     Pix[0,0] = (1 << (Precision - 1)) + Diff
+            //     Pix[0,1] = (1 << (Precision - 1)) + Diff
+            // and for n >= 1
+            //     Pix[n,0] = Pix[n-2,0] + Diff
+            //     Pix[n,1] = Pix[n-2,1] + Diff
+            // while for any other Row/Column
+            //     Pix[R,C] = Pix[R,C-2] + Diff
+        }
+
+        [TestMethod]
+        public void TestMethodB()
+        {
+            const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
+            const string FileName2 = Directory + "IMG_0503.CR2";
+
+            using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
+            {
+                var binaryReader = new BinaryReader(fileStream);
+                var rawImage = new RawImage(binaryReader);
+                var imageFileDirectory = rawImage.Directories.Last();
+
+                var strips = imageFileDirectory.Entries.First(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
+                binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
+                var x = binaryReader.ReadUInt16();
+                var y = binaryReader.ReadUInt16();
+                var z = binaryReader.ReadUInt16();
+
+                var address = imageFileDirectory.Entries.First(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
+                var length = imageFileDirectory.Entries.First(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
+                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
+                var startOfImage = new StartOfImage(binaryReader, address, length);
+
+                var lossless = startOfImage.Lossless;
+
+                Assert.AreEqual(14, lossless.Precision);
+                Assert.AreEqual(4, lossless.Components.Length);
+                Assert.AreEqual(1340, lossless.SamplesPerLine);
+                Assert.AreEqual(3516, lossless.ScanLines);
+
+                Assert.AreEqual(5360, lossless.Width);  // Sensor width (bits)
+                Assert.AreEqual(5360, lossless.SamplesPerLine * lossless.Components.Length);
+                Assert.AreEqual(5360, x * y + z);
+
+                //// set up buffers
+                //tU32  IbSize = Prop->Image.Size.Width * Prop->Image.Size.Height;
+                //tU16* IB = (tU16*)calloc(IbSize, sizeof(tU16));
+                //tU32  RawSize = Prop->Strip.CountList[0] - Prop->Strip.OfstStartOfScan + Prop->Strip.OffsetList[0];
+                //tU8*  RAW = (tU8*)calloc(RawSize, sizeof(tU8));
+                //tU16* RowBuf = (tU16*)calloc(Prop->Image.Size.Width, sizeof(tU16));
             }
         }
 

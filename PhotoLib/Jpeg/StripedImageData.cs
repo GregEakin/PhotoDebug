@@ -7,7 +7,11 @@
     {
         #region Fields
 
+        private readonly int height;
+
         private readonly byte[] rawData;
+
+        private readonly int width;
 
         private byte currentByte;
 
@@ -19,9 +23,11 @@
 
         #region Constructors and Destructors
 
-        public StripedImageData(BinaryReader binaryReader, uint rawSize)
+        public StripedImageData(BinaryReader binaryReader, uint rawSize, int width, int height)
         {
             rawData = binaryReader.ReadBytes((int)rawSize);
+            this.width = width;
+            this.height = height;
         }
 
         #endregion
@@ -61,13 +67,18 @@
             byte retval;
             if (index < rawData.Length)
             {
-                retval = rawData[index];
+                var position = index;
+                var y = index % width;
+
+                retval = rawData[position];
                 if (retval == 0xFF)
                 {
-                    var code = rawData[++index];
+                    position = ++index;
+                    var code = rawData[position];
                     if (code != 0)
                     {
-                        retval = rawData[++index];
+                        position = ++index;
+                        retval = rawData[position];
                     }
                 }
             }
