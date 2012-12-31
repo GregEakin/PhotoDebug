@@ -74,27 +74,6 @@
 
         #region Public Methods and Operators
 
-        public static int DcValueEncoding(int dcCode, int bits)
-        {
-            int retval;
-            if (dcCode > 0)
-            {
-                var sign = bits & (1u << (dcCode - 1));
-                var num = bits & ((1u << dcCode) - 1);
-                retval = sign == 0 ? (int)num - (int)((1u << dcCode) - 1) : (int)num;
-            }
-            else
-            {
-                retval = 0;
-            }
-            return retval;
-        }
-
-        public static int Luminance()
-        {
-            return 0;
-        }
-
         public override string ToString()
         {
             var retval = new StringBuilder();

@@ -46,6 +46,46 @@
             Assert.AreEqual("010", z);
         }
 
+        [TestMethod]
+        public void DcCodeTestFour()
+        {
+            for (var i = 8; i < 16; i++)
+            {
+                var expected = i;
+                Assert.AreEqual(expected, HuffmanTable.DcValueEncoding(4, (byte)i));
+            }
+        }
+
+        [TestMethod]
+        public void DcCodeTestFourNegative()
+        {
+            for (var i = 0; i < 8; i++)
+            {
+                var expected = i - 15;
+                Assert.AreEqual(expected, HuffmanTable.DcValueEncoding(4, (byte)i));
+            }
+        }
+
+        [TestMethod]
+        public void DcCodeTestOne()
+        {
+            Assert.AreEqual(1, HuffmanTable.DcValueEncoding(1, 1));
+            Assert.AreEqual(-1, HuffmanTable.DcValueEncoding(1, 0));
+        }
+
+        [TestMethod]
+        public void DcCodeTestSimple()
+        {
+            // 0 1111 1111 1
+            Assert.AreEqual(-512, HuffmanTable.DcValueEncoding(10, (ushort)0x01FFu));
+        }
+
+        [TestMethod]
+        public void DcCodeTestZero()
+        {
+            Assert.AreEqual(0, HuffmanTable.DcValueEncoding(0, 0));
+        }
+
         #endregion
     }
 }
