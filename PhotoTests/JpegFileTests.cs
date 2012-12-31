@@ -1,5 +1,6 @@
 ﻿namespace PhotoTests
 {
+    using System;
     using System.IO;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -82,7 +83,7 @@
                 var huffmanTable = startOfImage.HuffmanTable;
                 Assert.AreEqual(0xFF, huffmanTable.Mark);
                 Assert.AreEqual(0xC4, huffmanTable.Tag);
-                huffmanTable.ToString();
+                Console.WriteLine(huffmanTable);
 
                 // NextMark DA SOS
                 var startOfScan = startOfImage.StartOfScan;
