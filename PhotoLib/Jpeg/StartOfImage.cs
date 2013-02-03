@@ -12,7 +12,7 @@
 
         private readonly DefineHuffmanTable huffmanTable;
 
-        private readonly IImageData imageData;
+        private IImageData imageData;
 
         private readonly JfifMarker jfifMarker;
 
@@ -37,7 +37,7 @@
             while (binaryReader.BaseStream.Position < binaryReader.BaseStream.Length)
             {
                 var pos = binaryReader.BaseStream.Position;
-                var rawSize = address + length - pos;
+                // var rawSize = address + length - pos;
                 var nextMark = binaryReader.ReadByte();
                 if (nextMark == 0xFF)
                 {
@@ -62,7 +62,7 @@
 
                             case 0xDA:  // SOS, Start of Scan
                                 this.startOfScan = new StartOfScan(binaryReader);
-                                this.imageData = new LinearImageData(binaryReader, (uint)rawSize);
+                                // this.imageData = new LinearImageData(binaryReader, (uint)rawSize);
                                 // this.DecodeHuffmanData();
                                 // break;
                                 return;
@@ -114,6 +114,10 @@
             {
                 return this.imageData;
             }
+            set
+            {
+                this.imageData = value;
+            }
         }
 
         public StartOfFrame Lossless
@@ -136,7 +140,7 @@
 
         #region Methods
 
-        private void DecodeHuffmanData()
+        public void DecodeHuffmanData()
         {
             for (var i = 0; i < (this.lossless.SamplesPerLine + 7) / 8; i++)
             {

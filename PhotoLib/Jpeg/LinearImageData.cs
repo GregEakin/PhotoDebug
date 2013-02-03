@@ -3,6 +3,8 @@
     using System;
     using System.IO;
 
+    using PhotoLib.Utilities;
+
     public class LinearImageData : IImageData
     {
         #region Fields
@@ -30,11 +32,36 @@
 
         public bool EndOfFile { get; private set; }
 
+        public int Index
+        {
+            get
+            {
+                //Console.WriteLine("Lenght = 0x{0}", rawData.Length.ToString("X8"));
+                //Console.WriteLine("Index = 0x{0}, nextBit = {1}, currentByte = 0x{2}", index.ToString("X8"), nextBit, currentByte.ToString("X2"));
+                //Console.WriteLine("Diff = {0}", rawData.Length - index);
+                ////Console.WriteLine("Val = 0x{0}", this.GetNextByte());
+                ////Console.WriteLine("Val = 0x{0}", this.GetNextByte());
+
+                //for (var i = rawData.Length - 16; i < rawData.Length; i++)
+                //    Console.Write("{0} ", rawData[i].ToString("X2"));
+                //Console.WriteLine();
+                return index;
+            }
+        }
+
         public byte[] RawData
         {
             get
             {
                 return rawData;
+            }
+        }
+
+        public int BitsLeft
+        {
+            get
+            {
+                return nextBit;
             }
         }
 
@@ -58,17 +85,19 @@
 
         public byte GetNextByte()
         {
-            var retval = (byte)0x00;
+            byte retval;
 
-            if (index < rawData.Length)
+            var x = index;
+            if (index < rawData.Length - 3)
             {
-                retval = rawData[index];
+                retval = rawData[++index];
                 if (retval == 0xFF)
                 {
                     var code = rawData[++index];
                     if (code != 0)
                     {
-                        retval = rawData[++index];
+                        throw new Exception(
+                            "Not supposed to happen 0xFF 0x{0}: Position: {1}".FormatWith(code.ToString("X2"), (this.rawData.Length - this.index)));
                     }
                 }
             }
@@ -113,7 +142,6 @@
             if (this.nextBit < 0)
             {
                 this.nextBit = 7;
-                this.index++;
                 this.currentByte = this.GetNextByte();
             }
         }

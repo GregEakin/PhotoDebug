@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Linq;
 
     public class StartOfFrame : JpegTag
     {
@@ -24,6 +25,21 @@
         public StartOfFrame(BinaryReader binaryReader)
             : base(binaryReader)
         {
+            // case 0xffc3: // SOF3, Start of Frame 3, Lossless (sequential)
+            //   jh->sraw = ((data[7] >> 4) * (data[7] & 15) - 1) & 3;
+            // case 0xffc0: // SOF0, Start of Frame 0, Baseline DCT
+            //   jh->bits = data[0];
+            //   jh->high = data[1] << 8 | data[2];
+            //   jh->wide = data[3] << 8 | data[4];
+            //   jh->clrs = data[5] + jh->sraw;
+            //   if (len == 9 && !dng_version) getc(ifp);
+            //   break;
+            // case 0xffc4:
+            //   if (info_only) break;
+            //   for (dp = data; dp < data+len && (c = *dp++) < 4; )
+            //     jh->free[c] = jh->huff[c] = make_decoder_ref (&dp);
+            //   break;
+
             if (Mark != 0xFF || (Tag & 0xF0) != 0xC0)
             {
                 throw new ArgumentException();
@@ -32,9 +48,9 @@
             Console.WriteLine("SoF {0}: {1}", Tag.ToString("X2"), (binaryReader.BaseStream.Position - 2).ToString("X8"));
 
             length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
-            precision = binaryReader.ReadByte();
-            scanLines = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
-            samplesPerLine = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+            precision = binaryReader.ReadByte();    // bits
+            scanLines = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());   // high
+            samplesPerLine = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());  // wide
             var componentCount = binaryReader.ReadByte();
             components = new Component[componentCount];
 
@@ -47,6 +63,8 @@
                 var sampleVFactor = (byte)(sampleFactors & 0x0f);
                 components[i] = new Component(compId, qTableId, sampleHFactor, sampleVFactor);
             }
+
+            // var clrs = components.Sum(comp => comp.HFactor * comp.VFactor);
 
             if (3 * componentCount + 8 != length)
             {

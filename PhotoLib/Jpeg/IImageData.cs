@@ -2,6 +2,18 @@
 {
     public interface IImageData
     {
+        #region Public Properties
+
+        bool EndOfFile { get; }
+
+        byte[] RawData { get; }
+
+        int Index { get; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
         bool GetNextBit();
 
         ushort GetNextBit(ushort lastBit);
@@ -10,6 +22,6 @@
 
         ushort GetSetOfBits(ushort total);
 
-        bool EndOfFile { get; }
+        #endregion
     }
 }

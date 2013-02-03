@@ -19,15 +19,24 @@
 
         private int nextBit = -1;
 
+        private int x;
+
+        private int y;
+
+        private int z;
+
         #endregion
 
         #region Constructors and Destructors
 
-        public StripedImageData(BinaryReader binaryReader, uint rawSize, int width, int height)
+        public StripedImageData(BinaryReader binaryReader, uint rawSize, int width, int height, int x, int y, int z)
         {
             rawData = binaryReader.ReadBytes((int)rawSize);
             this.width = width;
             this.height = height;
+            this.x = x;
+            this.y = y;
+            this.z = z;
         }
 
         #endregion
@@ -35,6 +44,14 @@
         #region Public Properties
 
         public bool EndOfFile { get; private set; }
+
+        public int Index
+        {
+            get
+            {
+                return index;
+            }
+        }
 
         public byte[] RawData
         {

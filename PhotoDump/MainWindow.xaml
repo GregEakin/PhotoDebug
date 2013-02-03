@@ -1,0 +1,10 @@
+﻿<Window x:Class="PhotoDump.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        Title="MainWindow" Height="350" Width="525">
+    <DockPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <Image Name="Canvas" />
+        </ScrollViewer>
+    </DockPanel>
+</Window>

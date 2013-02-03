@@ -11,6 +11,12 @@
 
         private readonly ushort length;
 
+        private readonly byte bB1;
+
+        private readonly byte bB2;
+
+        private readonly byte bB3;
+
         #endregion
 
         #region Constructors and Destructors
@@ -32,11 +38,14 @@
             {
                 components[i] = new ScanComponent(binaryReader);
             }
-            var bB1 = binaryReader.ReadByte(); // startSpectralSelection    // predictor selection value
-            var bB2 = binaryReader.ReadByte(); // endSpectralSelection      // Se : End of spectral selection
-            var bB3 = binaryReader.ReadByte(); // successiveApproximation   // Ah : 4bit, Successive approximation bit position high
-                                                                            // Al : 4bit, Successive approximation bit position low
-                                                                            //            or poin transform
+            bB1 = binaryReader.ReadByte(); // startSpectralSelection    // predictor selection value
+            bB2 = binaryReader.ReadByte(); // endSpectralSelection      // Se : End of spectral selection
+            bB3 = binaryReader.ReadByte(); // successiveApproximation   // Ah : 4bit, Successive approximation bit position high
+                                                                        // Al : 4bit, Successive approximation bit position low
+                                                                        //            or point transform
+
+            // var psv = bB1;
+            // var bits -= (bB3 & 0x04);
 
             if (2 * count + 6 != length)
             {
@@ -61,6 +70,22 @@
             get
             {
                 return length;
+            }
+        }
+
+        public byte Bb1
+        {
+            get
+            {
+                return bB1;
+            }
+        }
+
+        public byte Bb3
+        {
+            get
+            {
+                return bB3;
             }
         }
 
