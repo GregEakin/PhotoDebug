@@ -144,7 +144,7 @@
                     var col = j % (i < X ? X : Z) + i * Y;
 
                     buffer[row * Wide + col] = val;
-                    Console.WriteLine("Index = {0}, jidx={1}, i={2}, j={3}, r={4}, c={5}", row*Wide+col, jidx, i, j, row, col);
+                    Console.WriteLine("Index = {0}, jidx={1}, i={2}, j={3}, r={4}, c={5}", row * Wide + col, jidx, i, j, row, col);
                 }
             }
 
@@ -174,6 +174,98 @@
             }
 
             // CollectionAssert.AreEqual(Expected, buffer);
+        }
+
+        [TestMethod]
+        public void Test1()
+        {
+            var i = 0;
+
+            for (var x = 0; x < X; x++)
+            {
+                for (var jrow = 0; jrow < Height; jrow++)
+                {
+                    for (var y = 0; y < Y; y++)
+                    {
+                        var index = x * Y + jrow * Width + y;
+                        Assert.AreEqual(Expected[index], Data[i++]);
+                    }
+                }
+            }
+            for (var jrow = 0; jrow < Height; jrow++)
+            {
+                for (var z = 0; z < Z; z++)
+                {
+                    var index = X * Y + jrow * Width + z;
+                    Assert.AreEqual(Expected[index], Data[i++]);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void Test2()
+        {
+            var i = 0;
+            for (var x = 0; x < X; x++)
+            {
+                for (var jrow = 0; jrow < Height; jrow++)
+                {
+                    for (var y = 0; y < Y; y++)
+                    {
+                        var index = x * Y + jrow * Width + y;
+
+                        var x2 = i / (Height * Y);
+                        var jrow2 = (i - x2 * Height * Y) / Y;
+                        var y2 = (i - x2 * Height * Y) % Y;
+                        Assert.AreEqual(x, x2);
+                        Assert.AreEqual(jrow, jrow2);
+                        Assert.AreEqual(y, y2);
+
+                        Assert.AreEqual(Expected[index], Data[i]);
+                        i++;
+                    }
+                }
+            }
+            for (var jrow = 0; jrow < Height; jrow++)
+            {
+                for (var y = 0; y < Z; y++)
+                {
+                    var index = X * Y + jrow * Width + y;
+
+                    var jrow2 = (i - X * Height * Y) / Z;
+                    var y2 = (i - X * Height * Y) % Z;
+                    Assert.AreEqual(jrow, jrow2);
+                    Assert.AreEqual(y, y2);
+
+                    Assert.AreEqual(Expected[index], Data[i]);
+                    i++;
+                }
+            }
+        }
+
+        [TestMethod]
+        public void Test3()
+        {
+            for (var i = 0; i < Width * Height; i++)
+            {
+                var x2 = i / (Height * Y);
+                if (x2 < X)
+                {
+                    var jrow2 = (i - x2 * Height * Y) / Y;
+                    var y2 = (i - x2 * Height * Y) % Y;
+
+                    var index = x2 * Y + jrow2 * Width + y2;
+                    Assert.AreEqual(Expected[index], Data[i]);
+                }
+                else
+                {
+                    var jrow2 = (i - x2 * Height * Y) / Z;
+                    var y2 = (i - x2 * Height * Y) % Z;
+
+                    var index = x2 * Y + jrow2 * Width + y2;
+                    Assert.AreEqual(Expected[index], Data[i]);
+                }
+            }
         }
         #endregion
     }
