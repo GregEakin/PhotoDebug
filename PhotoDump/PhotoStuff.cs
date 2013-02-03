@@ -39,17 +39,17 @@
 
                 var table0 = startOfImage.HuffmanTable.Tables[0x00];
 
-                Array = new ushort[lossless.ScanLines * lossless.SamplesPerLine * colors];
                 Width = lossless.SamplesPerLine * colors;
                 Height = lossless.ScanLines;
+                Array = new ushort[Width * Height];
 
                 for (var x = 0; x < x1; x++)
                 {
-                    for (var jrow = 0; jrow < lossless.ScanLines; jrow++)
+                    for (var jrow = 0; jrow < Height; jrow++)
                     {
                         for (var y = 0; y < y1; y++)
                         {
-                            var index = x * y1 + jrow * lossless.SamplesPerLine * colors + y;
+                            var index = x * y1 + jrow * Width + y;
                             
                             var val = GetValue(startOfImage.ImageData, table0);
                             var bits = startOfImage.ImageData.GetSetOfBits(val);
@@ -58,11 +58,11 @@
                         }
                     }
                 }
-                for (var jrow = 0; jrow < lossless.ScanLines; jrow++)
+                for (var jrow = 0; jrow < Height; jrow++)
                 {
                     for (var z = 0; z < z1; z++)
                     {
-                        var index = x1 * y1 + jrow * lossless.SamplesPerLine * colors + z;
+                        var index = x1 * y1 + jrow * Width + z;
 
                         var val = GetValue(startOfImage.ImageData, table0);
                         var bits = startOfImage.ImageData.GetSetOfBits(val);
