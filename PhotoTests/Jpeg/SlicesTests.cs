@@ -9,11 +9,11 @@ namespace PhotoTests.Jpeg
         [TestMethod]
         public void TestBoth()
         {
-            const int Height = 3516;
-            const int Width = 5360; // = 1340 * 4
+            const int Height = 35;
+            const int Width = 53; // = 1340 * 4
             const int X1 = 2;
-            const int Y1 = 1728;
-            const int Z1 = 1904;
+            const int Y1 = 17;
+            const int Z1 = 19;
 
             Assert.AreEqual(Width, X1 * Y1 + Z1);
             Assert.IsTrue(Y1 < Z1);

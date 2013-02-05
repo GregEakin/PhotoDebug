@@ -91,6 +91,9 @@
                 var x = binaryReader.ReadUInt16();
                 var y = binaryReader.ReadUInt16();
                 var z = binaryReader.ReadUInt16();
+                Assert.AreEqual(2, x);
+                Assert.AreEqual(1728, y);
+                Assert.AreEqual(1904, z);
 
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
@@ -279,8 +282,6 @@
                 }
 
                 var imageData = startOfImage.ImageData;
-
-
             }
         }
 
@@ -400,44 +401,6 @@
             ProcessFile(FileName2);
         }
 
-        private static void LittleMakeBitMap(string fileName)
-        {
-            const int X = 160;
-            const int Y = 160;
-            const int Colors = 4;
-
-            var bitmap = new Bitmap(X * Colors, Y, PixelFormat.Format48bppRgb);
-            var dimension = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-            var picData = bitmap.LockBits(dimension, ImageLockMode.ReadWrite, bitmap.PixelFormat);
-            var pixelStartAddress = picData.Scan0;
-            var bpp = picData.Stride / bitmap.Width;
-
-            for (var jrow = 0; jrow < Y; jrow++)
-            {
-                var rowBuf = new byte[picData.Stride];
-
-                for (var jcol = 0; jcol < X; jcol++)
-                {
-                    for (var jcolor = 0; jcolor < Colors; jcolor++)
-                    {
-                        var index = (jcol * Colors + jcolor) * bpp;
-
-                        rowBuf[index + 0] = 0x00;
-                        rowBuf[index + 1] = 0x00;
-                        rowBuf[index + 2] = 0xff;
-                        rowBuf[index + 3] = 0x7f;
-                        rowBuf[index + 4] = 0xff;
-                        rowBuf[index + 5] = 0xff;
-                    }
-                }
-
-                var offset = jrow * picData.Stride;
-                System.Runtime.InteropServices.Marshal.Copy(rowBuf, 0, pixelStartAddress + offset, rowBuf.Length);
-            }
-            bitmap.UnlockBits(picData);
-            bitmap.Save(fileName + ".bmp");
-        }
-
         private static void ProcessFile(string fileName)
         {
             using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
@@ -536,6 +499,7 @@
                 var table1 = startOfImage.HuffmanTable.Tables[0x01];
 
                 for (var j = 0; j < lossless.ScanLines; j++)
+                {
                     for (var i = 0; i < lossless.SamplesPerLine; i += 2)
                     {
                         var hufCode0 = GetValue(startOfImage.ImageData, table0);
@@ -556,16 +520,17 @@
                             rowBuf[i + 0] = (short)(rowBuf[i - 2] + dif0);
                             rowBuf[i + 1] = (short)(rowBuf[i - 1] + dif1);
                         }
-
-                        var cr2Cols = lossless.SamplesPerLine;
-                        var cr2Slice = cr2Cols / 2;
-                        var cr2QuadRows = lossless.ScanLines / 2;
-                        var ibStart = j < cr2QuadRows
-                            ? 2 * j * cr2Cols
-                            : 2 * (j - cr2QuadRows) * cr2Cols + cr2Slice;
-                        Array.Copy(rowBuf, 0, ib, ibStart, cr2Slice);
-                        Array.Copy(rowBuf, cr2Slice, ib, ibStart + cr2Slice, cr2Slice);
                     }
+
+                    var cr2Cols = lossless.SamplesPerLine;
+                    var cr2Slice = cr2Cols / 2;
+                    var cr2QuadRows = lossless.ScanLines / 2;
+                    var ibStart = j < cr2QuadRows
+                        ? 2 * j * cr2Cols
+                        : 2 * (j - cr2QuadRows) * cr2Cols + cr2Slice;
+                    Array.Copy(rowBuf, 0, ib, ibStart, cr2Slice);
+                    Array.Copy(rowBuf, cr2Slice, ib, ibStart + cr2Slice, cr2Slice);
+                }
             }
         }
 
