@@ -339,7 +339,7 @@
             //     Pix[R,C] = Pix[R,C-2] + Diff
         }
 
-        [TestMethod]
+        // [TestMethod]
         public void TestMethodB()
         {
             const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
@@ -392,20 +392,12 @@
             }
         }
 
-        [TestMethod]
+        // [TestMethod]
         public void TestMethodB6()
         {
             const string Folder = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
             const string FileName2 = Folder + "IMG_0503.CR2";
             ProcessFile(FileName2);
-        }
-
-        [TestMethod]
-        public void TestMethodBitmap()
-        {
-            const string Folder = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
-            const string FileName2 = Folder + "IMG_0503.CR2";
-            MakeBitMap(FileName2);
         }
 
         private static void LittleMakeBitMap(string fileName)
@@ -444,69 +436,6 @@
             }
             bitmap.UnlockBits(picData);
             bitmap.Save(fileName + ".bmp");
-        }
-
-        private static void MakeBitMap(string fileName)
-        {
-            using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
-            {
-                var binaryReader = new BinaryReader(fileStream);
-                var rawImage = new RawImage(binaryReader);
-                var imageFileDirectory = rawImage.Directories.Last();
-
-                var strips = imageFileDirectory.Entries.First(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
-                binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
-                var x1 = binaryReader.ReadUInt16();
-                var y1 = binaryReader.ReadUInt16();
-                var z1 = binaryReader.ReadUInt16();
-
-                var address = imageFileDirectory.Entries.First(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
-                var length = imageFileDirectory.Entries.First(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
-                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-                var startOfImage = new StartOfImage(binaryReader, address, length);
-                var lossless = startOfImage.Lossless;
-
-                var rawSize = address + length - binaryReader.BaseStream.Position - 2;
-                startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
-
-                var colors = lossless.Components.Sum(comp => comp.HFactor * comp.VFactor);
-
-                var table0 = startOfImage.HuffmanTable.Tables[0x00];
-
-                var bitmap = new Bitmap(lossless.SamplesPerLine * colors, lossless.ScanLines, PixelFormat.Format48bppRgb);
-
-                var dimension = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-                var picData = bitmap.LockBits(dimension, ImageLockMode.ReadWrite, bitmap.PixelFormat);
-                var pixelStartAddress = picData.Scan0;
-                var bpp = picData.Stride / bitmap.Width;
-
-                for (var jrow = 0; jrow < lossless.ScanLines; jrow++)
-                {
-                    var rowBuf = new byte[picData.Stride];
-                    for (var jcol = 0; jcol < lossless.SamplesPerLine; jcol++)
-                    {
-                        for (var jcolor = 0; jcolor < colors; jcolor++)
-                        {
-                            var val = GetValue(startOfImage.ImageData, table0);
-                            var bits = startOfImage.ImageData.GetSetOfBits(val);
-                            var index = (jcol * colors + jcolor) * bpp;
-
-                            rowBuf[index + 0] = (byte)(bits & 0xFF);    // Blue
-                            rowBuf[index + 1] = (byte)((bits >> 8) & 0xFF);
-                            rowBuf[index + 2] = 0x00; // (byte)(bits >> 8);      // Green
-                            rowBuf[index + 3] = 0x00; // (byte)(bits & 0xFF);
-                            rowBuf[index + 4] = 0x00;                   // Red
-                            rowBuf[index + 5] = 0x00;  //High byte
-                        }
-                    }
-
-                    var offset = jrow * rowBuf.Length;
-                    System.Runtime.InteropServices.Marshal.Copy(rowBuf, 0, pixelStartAddress + offset, rowBuf.Length);
-                }
-
-                bitmap.UnlockBits(picData);
-                bitmap.Save(fileName + ".bmp");
-            }
         }
 
         private static void ProcessFile(string fileName)
@@ -565,38 +494,6 @@
                 {
                     Console.WriteLine("{0} ", startOfImage.ImageData.RawData[i].ToString("X2"));
                 }
-
-                //for (var j = 0; j < lossless.ScanLines; j++)
-                //    for (var i = 0; i < lossless.SamplesPerLine; i += 2)
-                //    {
-                //        var hufCode0 = GetValue(startOfImage, table0);
-                //        var difCode0 = startOfImage.ImageData.GetSetOfBits(hufCode0);
-                //        var dif0 = DecodeDifBits(difCode0, hufCode0);
-
-                //        var hufCode1 = GetValue(startOfImage, table1);
-                //        var difCode1 = startOfImage.ImageData.GetSetOfBits(hufCode1);
-                //        var dif1 = DecodeDifBits(difCode1, hufCode1);
-
-                //        if (i == 0)
-                //        {
-                //            rowBuf[0] = predictor[0] += dif0;
-                //            rowBuf[1] = predictor[1] += dif1;
-                //        }
-                //        else
-                //        {
-                //            rowBuf[i + 0] = (short)(rowBuf[i - 2] + dif0);
-                //            rowBuf[i + 1] = (short)(rowBuf[i - 1] + dif1);
-                //        }
-
-                //        var cr2Cols = lossless.SamplesPerLine;
-                //        var cr2Slice = cr2Cols / 2;
-                //        var cr2QuadRows = lossless.ScanLines / 2;
-                //        var ibStart = j < cr2QuadRows
-                //            ? 2 * j * cr2Cols
-                //            : 2 * (j - cr2QuadRows) * cr2Cols + cr2Slice;
-                //        Array.Copy(rowBuf, 0, ib, ibStart, cr2Slice);
-                //        Array.Copy(rowBuf, cr2Slice, ib, ibStart + cr2Slice, cr2Slice);
-                //    }
             }
         }
 
