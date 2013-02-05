@@ -5,7 +5,7 @@
 
     using PhotoLib.Utilities;
 
-    public class LinearImageData : IImageData
+    public class ImageData
     {
         #region Fields
 
@@ -21,7 +21,7 @@
 
         #region Constructors and Destructors
 
-        public LinearImageData(BinaryReader binaryReader, uint rawSize)
+        public ImageData(BinaryReader binaryReader, uint rawSize)
         {
             rawData = binaryReader.ReadBytes((int)rawSize);
         }
@@ -29,6 +29,14 @@
         #endregion
 
         #region Public Properties
+
+        public int BitsLeft
+        {
+            get
+            {
+                return nextBit;
+            }
+        }
 
         public bool EndOfFile { get; private set; }
 
@@ -54,14 +62,6 @@
             get
             {
                 return rawData;
-            }
-        }
-
-        public int BitsLeft
-        {
-            get
-            {
-                return nextBit;
             }
         }
 

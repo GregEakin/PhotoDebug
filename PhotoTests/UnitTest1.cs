@@ -366,7 +366,7 @@
 
                 var rawSize = address + length - binaryReader.BaseStream.Position;
                 Assert.AreEqual(23852858, rawSize); // RawSize (Raw = new byte[RawSize]
-                startOfImage.ImageData = new LinearImageData(binaryReader, (uint)rawSize);
+                startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
                 var table0 = startOfImage.HuffmanTable.Tables[0x00];
 
                 var buffer = new byte[rawSize];
@@ -467,7 +467,7 @@
                 var lossless = startOfImage.Lossless;
 
                 var rawSize = address + length - binaryReader.BaseStream.Position;
-                startOfImage.ImageData = new LinearImageData(binaryReader, (uint)rawSize);
+                startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
 
                 var colors = lossless.Components.Sum(comp => comp.HFactor * comp.VFactor);
 
@@ -531,7 +531,7 @@
 
                 var rawSize = address + length - binaryReader.BaseStream.Position;
                 // Assert.AreEqual(23852858, rawSize); // RawSize (Raw = new byte[RawSize]
-                startOfImage.ImageData = new LinearImageData(binaryReader, (uint)rawSize);
+                startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
 
                 var colors = lossless.Components.Sum(comp => comp.HFactor * comp.VFactor);
                 var rowBuf = new ushort[lossless.SamplesPerLine * colors];
@@ -560,7 +560,7 @@
                 }
 
                 // Assert.AreEqual(23852855, startOfImage.ImageData.Index);
-                Console.WriteLine("{0}: ", ((LinearImageData)startOfImage.ImageData).BitsLeft);
+                Console.WriteLine("{0}: ", startOfImage.ImageData.BitsLeft);
                 for (var i = startOfImage.ImageData.Index; i < rawSize - 2; i++)
                 {
                     Console.WriteLine("{0} ", startOfImage.ImageData.RawData[i].ToString("X2"));
@@ -622,7 +622,7 @@
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
                 var rawSize = address + length - binaryReader.BaseStream.Position;
-                startOfImage.ImageData = new LinearImageData(binaryReader, (uint)rawSize);
+                startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
 
                 var lossless = startOfImage.Lossless;
 
@@ -690,7 +690,7 @@
             return dif0;
         }
 
-        private static ushort GetValue(IImageData imageData, HuffmanTable table)
+        private static ushort GetValue(ImageData imageData, HuffmanTable table)
         {
             var hufIndex = (ushort)0;
             var hufBits = (ushort)0;

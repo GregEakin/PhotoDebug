@@ -43,14 +43,12 @@
     <Compile Include="Jpeg\DefineQuantizationTable.cs" />
     <Compile Include="Jpeg\DefineHuffmanTable.cs" />
     <Compile Include="Jpeg\HuffmanTable.cs" />
-    <Compile Include="Jpeg\IImageData.cs" />
-    <Compile Include="Jpeg\LinearImageData.cs" />
+    <Compile Include="Jpeg\ImageData.cs" />
     <Compile Include="Jpeg\JfifMarker.cs" />
     <Compile Include="Jpeg\JpegTag.cs" />
     <Compile Include="Jpeg\StartOfFrame.cs" />
     <Compile Include="Jpeg\StartOfImage.cs" />
     <Compile Include="Jpeg\StartOfScan.cs" />
-    <Compile Include="Jpeg\StripedImageData.cs" />
     <Compile Include="Tiff\RawData.cs" />
     <Compile Include="Tiff\RawImage.cs" />
     <Compile Include="Tiff\CR2Header.cs" />

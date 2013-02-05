@@ -12,7 +12,7 @@
 
         private readonly DefineHuffmanTable huffmanTable;
 
-        private IImageData imageData;
+        private ImageData imageData;
 
         private readonly JfifMarker jfifMarker;
 
@@ -108,7 +108,7 @@
             }
         }
 
-        public IImageData ImageData
+        public ImageData ImageData
         {
             get
             {

@@ -16,6 +16,9 @@ namespace PhotoTests.Jpeg
             const int Z1 = 1904;
 
             Assert.AreEqual(Width, X1 * Y1 + Z1);
+            Assert.IsTrue(Y1 < Z1);
+
+            // 5184 x 3456
 
             //dim = w:2592 x h:1728
             //72 dpi
@@ -32,10 +35,6 @@ namespace PhotoTests.Jpeg
                     var y = (i - x * Height * Y1) % Y1;
                     var index = jrow * Width + x * Y1 + y;
                     array1[index] = i;
-                    if (index == 5184)
-                    {
-                        Console.WriteLine("i:{0} ", i);
-                    }
                 }
                 else
                 {
@@ -43,10 +42,6 @@ namespace PhotoTests.Jpeg
                     var z = (i - X1 * Height * Y1) % Z1;
                     var index = jrow * Width + X1 * Y1 + z;
                     array1[index] = i;
-                    if (index == 5184)
-                    {
-                        Console.WriteLine("i:{0} ", i);
-                    }
                 }
             }
 
@@ -60,10 +55,6 @@ namespace PhotoTests.Jpeg
                     {
                         var index = jrow * Width + x * Y1 + y;
                         array2[index] = j++;
-                        if (index == 5184)
-                        {
-                            Console.WriteLine("j:{0} ", j-1);
-                        }
                     }
                 }
             }
@@ -73,10 +64,6 @@ namespace PhotoTests.Jpeg
                 {
                     var index = jrow * Width + X1 * Y1 + z;
                     array2[index] = j++;
-                    if (index == 5184)
-                    {
-                        Console.WriteLine("j:{0} ", j-1);
-                    }
                 }
             }
 

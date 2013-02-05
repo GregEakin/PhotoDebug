@@ -33,7 +33,7 @@
                 var lossless = startOfImage.Lossless;
 
                 var rawSize = address + length - binaryReader.BaseStream.Position;
-                startOfImage.ImageData = new LinearImageData(binaryReader, (uint)rawSize);
+                startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
 
                 var colors = lossless.Components.Sum(comp => comp.HFactor * comp.VFactor);
                 var table0 = startOfImage.HuffmanTable.Tables[0x00];
@@ -44,58 +44,28 @@
 
                 for (var i = 0; i < Width * Height; i++)
                 {
+                    int index;
                     var x = i / (Height * y1);
                     if (x < x1)
                     {
                         var jrow = (i - x * Height * y1) / y1;
                         var y = (i - x * Height * y1) % y1;
-                        var index = x * y1 + jrow * Width + y;
-                        var val = GetValue(startOfImage.ImageData, table0);
-                        var bits = startOfImage.ImageData.GetSetOfBits(val) * 128;
-                        Array[index] = (ushort)bits;
+                        index = x * y1 + jrow * Width + y;
                     }
                     else
                     {
                         var jrow = (i - x1 * Height * y1) / z1;
                         var y = (i - x1 * Height * y1) % z1;
-                        var index = x1 * y1 + jrow * Width + y;
-                        var val = GetValue(startOfImage.ImageData, table0);
-                        var bits = startOfImage.ImageData.GetSetOfBits(val) * 128;
-                        Array[index] = (ushort)bits;
+                        index = x1 * y1 + jrow * Width + y;
                     }
+                    var val = GetValue(startOfImage.ImageData, table0);
+                    var bits = startOfImage.ImageData.GetSetOfBits(val) * 64;
+                    Array[index] = (ushort)bits;
                 }
-
-                //for (var x = 0; x < x1; x++)
-                //{
-                //    for (var jrow = 0; jrow < Height; jrow++)
-                //    {
-                //        for (var y = 0; y < y1; y++)
-                //        {
-                //            var index = x * y1 + jrow * Width + y;
-
-                //            var val = GetValue(startOfImage.ImageData, table0);
-                //            var bits = startOfImage.ImageData.GetSetOfBits(val) * 128;
-
-                //            Array[index] = (ushort)bits;
-                //        }
-                //    }
-                //}
-                //for (var jrow = 0; jrow < Height; jrow++)
-                //{
-                //    for (var z = 0; z < z1; z++)
-                //    {
-                //        var index = x1 * y1 + jrow * Width + z;
-
-                //        var val = GetValue(startOfImage.ImageData, table0);
-                //        var bits = startOfImage.ImageData.GetSetOfBits(val) * 128;
-
-                //        Array[index] = (ushort)bits;
-                //    }
-                //}
             }
         }
 
-        public static ushort GetValue(IImageData imageData, HuffmanTable table)
+        public static ushort GetValue(ImageData imageData, HuffmanTable table)
         {
             var hufIndex = (ushort)0;
             var hufBits = (ushort)0;

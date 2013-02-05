@@ -52,7 +52,7 @@
             using (var memory = new MemoryStream(data))
             {
                 var reader = new BinaryReader(memory);
-                var imageData = new StripedImageData(reader, (uint)data.Length, Width, Height, 0, 0, 0);
+                var imageData = new ImageData(reader, (uint)data.Length);
                 Assert.IsTrue(imageData.GetNextBit());
                 Assert.IsFalse(imageData.GetNextBit());
                 Assert.IsTrue(imageData.GetNextBit());
@@ -71,7 +71,7 @@
             using (var memory = new MemoryStream(data))
             {
                 var reader = new BinaryReader(memory);
-                var imageData = new StripedImageData(reader, (uint)data.Length, Width, Height, 0, 0, 0);
+                var imageData = new ImageData(reader, (uint)data.Length);
                 Assert.IsTrue(imageData.GetNextBit());
                 Assert.IsFalse(imageData.GetNextBit());
                 Assert.AreEqual(0x0009, imageData.GetSetOfBits(4));
@@ -85,7 +85,7 @@
             using (var memory = new MemoryStream(data))
             {
                 var reader = new BinaryReader(memory);
-                var imageData = new StripedImageData(reader, (uint)data.Length, Width, Height, 0, 0, 0);
+                var imageData = new ImageData(reader, (uint)data.Length);
                 Assert.IsTrue(imageData.GetNextBit());
                 Assert.IsFalse(imageData.GetNextBit());
                 Assert.AreEqual(0x0009, imageData.GetSetOfBits(4));
@@ -101,7 +101,7 @@
             using (var memory = new MemoryStream(data))
             {
                 var reader = new BinaryReader(memory);
-                var imageData = new StripedImageData(reader, (uint)data.Length, Width, Height, 0, 0, 0);
+                var imageData = new ImageData(reader, (uint)data.Length);
                 Assert.AreEqual(0x000A, imageData.GetSetOfBits(4));
                 Assert.AreEqual(0x0055, imageData.GetSetOfBits(8));
                 Assert.AreEqual(0x000A, imageData.GetSetOfBits(4));
@@ -114,7 +114,7 @@
             using (var memory = new MemoryStream(Data))
             {
                 var reader = new BinaryReader(memory);
-                var imageData = new StripedImageData(reader, (uint)Data.Length, Width, Height, 0, 0, 0);
+                var imageData = new ImageData(reader, (uint)Data.Length);
                 for (var i = 0; i < Data.Length; i++)
                 {
                     var bits = imageData.GetNextByte();
