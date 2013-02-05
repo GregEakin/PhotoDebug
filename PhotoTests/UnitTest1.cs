@@ -364,8 +364,8 @@
                 var lossless = startOfImage.Lossless;
                 Assert.AreEqual(4711440, lossless.SamplesPerLine * lossless.ScanLines); // IbSize (IB = new ushort[IbSize])
 
-                var rawSize = address + length - binaryReader.BaseStream.Position;
-                Assert.AreEqual(23852858, rawSize); // RawSize (Raw = new byte[RawSize]
+                var rawSize = address + length - binaryReader.BaseStream.Position - 2;
+                Assert.AreEqual(23852856, rawSize); // RawSize (Raw = new byte[RawSize]
                 startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
                 var table0 = startOfImage.HuffmanTable.Tables[0x00];
 
@@ -466,7 +466,7 @@
                 var startOfImage = new StartOfImage(binaryReader, address, length);
                 var lossless = startOfImage.Lossless;
 
-                var rawSize = address + length - binaryReader.BaseStream.Position;
+                var rawSize = address + length - binaryReader.BaseStream.Position - 2;
                 startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
 
                 var colors = lossless.Components.Sum(comp => comp.HFactor * comp.VFactor);
@@ -529,7 +529,7 @@
                 var startOfImage = new StartOfImage(binaryReader, address, length);
                 var lossless = startOfImage.Lossless;
 
-                var rawSize = address + length - binaryReader.BaseStream.Position;
+                var rawSize = address + length - binaryReader.BaseStream.Position - 2;
                 // Assert.AreEqual(23852858, rawSize); // RawSize (Raw = new byte[RawSize]
                 startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
 
@@ -621,7 +621,7 @@
                 var length = imageFileDirectory.Entries.First(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
-                var rawSize = address + length - binaryReader.BaseStream.Position;
+                var rawSize = address + length - binaryReader.BaseStream.Position - 2;
                 startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
 
                 var lossless = startOfImage.Lossless;

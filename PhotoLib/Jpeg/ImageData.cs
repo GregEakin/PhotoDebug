@@ -88,7 +88,7 @@
             byte retval;
 
             var x = index;
-            if (index < rawData.Length - 3)
+            if (index < rawData.Length - 1)
             {
                 retval = rawData[++index];
                 if (retval == 0xFF)

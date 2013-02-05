@@ -32,7 +32,7 @@
                 var startOfImage = new StartOfImage(binaryReader, address, length);
                 var lossless = startOfImage.Lossless;
 
-                var rawSize = address + length - binaryReader.BaseStream.Position;
+                var rawSize = address + length - binaryReader.BaseStream.Position - 2;
                 startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
 
                 var colors = lossless.Components.Sum(comp => comp.HFactor * comp.VFactor);
