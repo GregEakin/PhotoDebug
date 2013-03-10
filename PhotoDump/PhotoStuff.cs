@@ -1,5 +1,6 @@
 ﻿namespace PhotoDump
 {
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
 
@@ -36,8 +37,7 @@
                 startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
 
                 var colors = lossless.Components.Sum(comp => comp.HFactor * comp.VFactor);
-                var table0 = startOfImage.HuffmanTable.Tables[0x00];
-                var table1 = startOfImage.HuffmanTable.Tables[0x01];
+                var tables = startOfImage.HuffmanTable.Tables.Values.ToList();
                 var predictor = new[] { (short)(1 << (lossless.Precision - 1)), (short)(1 << (lossless.Precision - 1)) };
 
                 Width = lossless.SamplesPerLine * colors;
@@ -62,18 +62,18 @@
                         index = x1 * y1 + jrow * Width + y;
                     }
                     
-                    PokeValues(startOfImage, table0, table1, y, index, predictor);
+                    PokeValues(startOfImage, tables, y, index, predictor);
                 }
             }
         }
 
-        private void PokeValues(StartOfImage startOfImage, HuffmanTable table0, HuffmanTable table1, int y, int index, short[] predictor)
+        private void PokeValues(StartOfImage startOfImage, IList<HuffmanTable> tables, int y, int index, IList<short> predictor)
         {
-            var hufCode0 = GetValue(startOfImage.ImageData, table0);
+            var hufCode0 = GetValue(startOfImage.ImageData, tables[0]);
             var difCode0 = startOfImage.ImageData.GetSetOfBits(hufCode0);
             var dif0 = DecodeDifBits(difCode0, hufCode0);
 
-            var hufCode1 = GetValue(startOfImage.ImageData, table1);
+            var hufCode1 = GetValue(startOfImage.ImageData, tables[1]);
             var difCode1 = startOfImage.ImageData.GetSetOfBits(hufCode1);
             var dif1 = DecodeDifBits(difCode1, hufCode1);
             
