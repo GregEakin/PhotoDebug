@@ -24,6 +24,7 @@
         public ImageData(BinaryReader binaryReader, uint rawSize)
         {
             rawData = binaryReader.ReadBytes((int)rawSize);
+            this.CheckByte();
         }
 
         #endregion
@@ -71,15 +72,15 @@
 
         public bool GetNextBit()
         {
-            this.CheckByte();
-            var bit = ((this.currentByte >> this.nextBit) & 0x01) != 0;
+            var bit = (this.currentByte & (0x01 << this.nextBit)) != 0;
             nextBit--;
+            this.CheckByte();
             return bit;
         }
 
-        public ushort GetNextBit(ushort lastBit)
+        public ushort GetNextShort(ushort lastShort)
         {
-            var retval = lastBit << 1 | (this.GetNextBit() ? 0x01 : 0x00);
+            var retval = lastShort << 1 | (this.GetNextBit() ? 0x01 : 0x00);
             return (ushort)retval;
         }
 
@@ -87,7 +88,6 @@
         {
             byte retval;
 
-            var x = index;
             if (index < rawData.Length - 1)
             {
                 retval = rawData[++index];
@@ -103,6 +103,7 @@
             }
             else
             {
+                index++;
                 this.EndOfFile = true;
                 retval = 0xFF;
             }
@@ -113,7 +114,6 @@
         public ushort GetSetOfBits(ushort total)
         {
             var retval = (ushort)0u;
-            this.CheckByte();
 
             var length = (ushort)Math.Min(total, nextBit + 1);
             while (length > 0)

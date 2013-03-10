@@ -187,7 +187,7 @@
 
             while (true)
             {
-                bits = this.imageData.GetNextBit(bits);
+                bits = this.imageData.GetNextShort(bits);
                 len++;
                 HuffmanTable.HCode hCode;
                 if (dict.TryGetValue(bits, out hCode) && hCode.Length == len)

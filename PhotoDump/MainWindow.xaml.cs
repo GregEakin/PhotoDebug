@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
+﻿using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PhotoDump
 {
@@ -24,8 +13,11 @@ namespace PhotoDump
         {
             InitializeComponent();
 
-            const string Folder = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
-            const string FileName2 = Folder + "IMG_0503.CR2";
+            const string Folder = // @"C:\Users\Greg\Downloads\"; 
+                                  @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
+            const string FileName2 = Folder + // "canon_eos_6d_20.CR2";
+                                     // "IMG_0503.CR2";
+                                     @"EOS 350D\IMG_3037.CR2";
             var stuff = new PhotoStuff(FileName2);
             var bitmap = BitmapSource.Create(stuff.Width, stuff.Height, 72, 72, PixelFormats.Gray16, null, stuff.Array, stuff.Width * 2);
             Canvas.Source = bitmap;

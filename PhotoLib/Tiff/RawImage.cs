@@ -4,8 +4,6 @@
     using System.Collections.Generic;
     using System.IO;
 
-    using PhotoLib.Tiff;
-
     public class RawImage
     {
         #region Fields

@@ -1,8 +1,6 @@
 ﻿namespace PhotoTests
 {
     using System;
-    using System.Drawing;
-    using System.Drawing.Imaging;
     using System.IO;
     using System.Linq;
 
@@ -190,6 +188,7 @@
                 var length = directory.Entries.First(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
 
                 const int Width = 16;
+                address = 540;
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 for (var i = 0; i < 256; i += Width)
                 {
@@ -559,7 +558,7 @@
             HuffmanTable.HCode hCode;
             do
             {
-                hufIndex = imageData.GetNextBit(hufIndex);
+                hufIndex = imageData.GetNextShort(hufIndex);
                 hufBits++;
             }
             while (!table.Dictionary.TryGetValue(hufIndex, out hCode) || hCode.Length != hufBits);
