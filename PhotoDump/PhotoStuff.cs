@@ -1,5 +1,6 @@
 ﻿namespace PhotoDump
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -11,7 +12,7 @@
     {
         public int Width { get; private set; }
         public int Height { get; private set; }
-        public short[] Array { get; private set; }
+        public ushort[] Array { get; private set; }
 
         public PhotoStuff(string fileName)
         {
@@ -23,9 +24,9 @@
 
                 var strips = imageFileDirectory.Entries.First(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
                 binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
-                var x1 = binaryReader.ReadUInt16();
-                var y1 = binaryReader.ReadUInt16();
-                var z1 = binaryReader.ReadUInt16();
+                var blockCount = binaryReader.ReadUInt16();
+                var blockWidth = binaryReader.ReadUInt16();
+                var blockRest = binaryReader.ReadUInt16();
 
                 var address = imageFileDirectory.Entries.First(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
                 var length = imageFileDirectory.Entries.First(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
@@ -38,59 +39,62 @@
 
                 var colors = lossless.Components.Sum(comp => comp.HFactor * comp.VFactor);
                 var tables = startOfImage.HuffmanTable.Tables.Values.ToList();
-                var predictor = new[] { (short)(1 << (lossless.Precision - 1)), (short)(1 << (lossless.Precision - 1)) };
 
                 Width = lossless.SamplesPerLine * colors;
                 Height = lossless.ScanLines;
-                Array = new short[Width * Height];
+                Array = new ushort[Width * Height];
+                var pred = (ushort)(1 << (lossless.Precision - 1));
+                var predictor = Enumerable.Repeat(pred, Height * colors).ToArray();
 
-                for (var i = 0; i < Width * Height; i += 2)
+                for (var i = 0; i < Width * Height; i += 4)
                 {
-                    int y;
-                    int index;
-                    var x = i / (Height * y1);
-                    if (x < x1)
+                    int jcol;
+                    int jrow;
+                    var block = i / (Height * blockWidth);
+                    if (block < blockCount)
                     {
-                        var jrow = (i - x * Height * y1) / y1;
-                        y = (i - x * Height * y1) % y1;
-                        index = x * y1 + jrow * Width + y;
+                        jrow = (i - block * Height * blockWidth) / blockWidth;
+                        var x1 = (i - block * Height * blockWidth) % blockWidth;
+                        jcol = block * blockWidth + x1;
                     }
                     else
                     {
-                        var jrow = (i - x1 * Height * y1) / z1;
-                        y = (i - x1 * Height * y1) % z1;
-                        index = x1 * y1 + jrow * Width + y;
+                        jrow = (i - blockCount * Height * blockWidth) / blockRest;
+                        var x1 = (i - blockCount * Height * blockWidth) % blockRest;
+                        jcol = blockCount * blockWidth + x1;
                     }
-                    
-                    PokeValues(startOfImage, tables, y, index, predictor);
+
+                    var index = jrow * Width + jcol;
+                    PokeValues(startOfImage, tables, jcol, jrow, index, predictor);
                 }
             }
         }
 
-        private void PokeValues(StartOfImage startOfImage, IList<HuffmanTable> tables, int y, int index, IList<short> predictor)
+        private void PokeValues(StartOfImage startOfImage, IList<HuffmanTable> tables, int x, int y, int index, IList<ushort> predictor)
         {
-            var hufCode0 = GetValue(startOfImage.ImageData, tables[0]);
-            var difCode0 = startOfImage.ImageData.GetSetOfBits(hufCode0);
-            var dif0 = DecodeDifBits(difCode0, hufCode0);
+            const int Colors = 4;
+            const int BlockWidth = 0x06c0;
+            for (var i = 0; i < Colors; i++)
+            {
+                var hufCode = GetValue(startOfImage.ImageData, tables[0]);
+                var difCode = startOfImage.ImageData.GetSetOfBits(hufCode);
+                var dif = (ushort)DecodeDifBits(difCode, hufCode);
 
-            var hufCode1 = GetValue(startOfImage.ImageData, tables[1]);
-            var difCode1 = startOfImage.ImageData.GetSetOfBits(hufCode1);
-            var dif1 = DecodeDifBits(difCode1, hufCode1);
-            
-            if (y == 0)
-            {
-                this.Array[index + 0] = (short)(predictor[0] + dif0);
-                this.Array[index + 1] = (short)(predictor[1] + dif1);
-            }
-            else
-            {
-                this.Array[index + 0] = (short)(this.Array[index - 2] + dif0);
-                this.Array[index + 1] = (short)(this.Array[index - 1] + dif1);
-            }
-
-            if (Array[index + 0] > 0x2FFF || Array[index + 1] > 0x2FFF)
-            {
-                var x = Array[index];
+                int value;
+                if (x < Colors)
+                {
+                    value = predictor[Colors * y + i] += dif;
+                }
+                else if (x % (BlockWidth * Height) == 0)
+                {
+                    var j = index + i - (Height - 1) * BlockWidth - 1;
+                    value = this.Array[j] + dif;
+                }
+                else
+                {
+                    value = this.Array[index - Colors + i] + dif;
+                }
+                this.Array[index + i] = (ushort)(0x3fff & value);
             }
         }
 
