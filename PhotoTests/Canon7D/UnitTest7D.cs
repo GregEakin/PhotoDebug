@@ -3,6 +3,7 @@
     using System;
     using System.IO;
     using System.Linq;
+    using System.Text;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -46,7 +47,7 @@
         }
 
         [TestMethod]
-        public void MakerCanon()
+        public void Maker()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
             {
@@ -59,11 +60,26 @@
                 Assert.AreEqual(2, imageFileEntry.TagType);
                 Assert.AreEqual(0x000000F4u, imageFileEntry.ValuePointer);
                 Assert.AreEqual(6u, imageFileEntry.NumberOfValue);
+
+                ReadChars(binaryReader, imageFileEntry);
+                Assert.AreEqual("Canon", ReadChars(binaryReader, imageFileEntry));
             }
         }
 
+        private static string ReadChars(BinaryReader binaryReader, ImageFileEntry imageFileEntry)
+        {
+            var retval = new StringBuilder();
+            binaryReader.BaseStream.Seek(imageFileEntry.ValuePointer, SeekOrigin.Begin);
+            for (var j = 0; j < imageFileEntry.NumberOfValue - 1; j++)
+            {
+                var us = binaryReader.ReadByte();
+                retval.Append((char)us);
+            }
+            return retval.ToString();
+        }
+
         [TestMethod]
-        public void ModelEos7D()
+        public void Model()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
             {
@@ -76,6 +92,9 @@
                 Assert.AreEqual(2, imageFileEntry.TagType);
                 Assert.AreEqual(0x000000FAu, imageFileEntry.ValuePointer);
                 Assert.AreEqual(13u, imageFileEntry.NumberOfValue);
+
+                ReadChars(binaryReader, imageFileEntry);
+                Assert.AreEqual("Canon EOS 7D", ReadChars(binaryReader, imageFileEntry));
             }
         }
 
