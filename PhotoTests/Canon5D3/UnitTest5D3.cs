@@ -46,6 +46,40 @@
         }
 
         [TestMethod]
+        public void MakerCanon()
+        {
+            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            {
+                var binaryReader = new BinaryReader(fileStream);
+                var rawImage = new RawImage(binaryReader);
+
+                // 0x010F Ascii 8-bit: [0x000000F4] (6): Canon
+                var imageFileDirectory = rawImage[0x00000010];
+                var imageFileEntry = imageFileDirectory[0x010F];
+                Assert.AreEqual(2, imageFileEntry.TagType);
+                Assert.AreEqual(0x000000F4u, imageFileEntry.ValuePointer);
+                Assert.AreEqual(6u, imageFileEntry.NumberOfValue);
+            }
+        }
+
+        [TestMethod]
+        public void ModelEos5D3()
+        {
+            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            {
+                var binaryReader = new BinaryReader(fileStream);
+                var rawImage = new RawImage(binaryReader);
+
+                // 0x0110 Ascii 8-bit: [0x000000FA] (22): Canon EOS 5D Mark III
+                var imageFileDirectory = rawImage[0x00000010];
+                var imageFileEntry = imageFileDirectory[0x0110];
+                Assert.AreEqual(2, imageFileEntry.TagType);
+                Assert.AreEqual(0x000000FAu, imageFileEntry.ValuePointer);
+                Assert.AreEqual(22u, imageFileEntry.NumberOfValue);
+            }
+        }
+
+        [TestMethod]
         public void TestMethod2()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))

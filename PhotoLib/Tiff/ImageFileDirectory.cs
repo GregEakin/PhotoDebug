@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Linq;
 
     using PhotoLib.Utilities;
 
@@ -53,6 +54,14 @@
             get
             {
                 return this.nextEntry;
+            }
+        }
+
+        public ImageFileEntry this[ushort key]
+        {
+            get
+            {
+                return this.entries.FirstOrDefault(imageFileEntry => imageFileEntry.TagId == key);
             }
         }
 

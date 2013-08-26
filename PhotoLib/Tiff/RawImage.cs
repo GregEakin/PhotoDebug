@@ -59,6 +59,18 @@
             }
         }
 
+        public ImageFileDirectory this[uint key]
+        {
+            get
+            {
+                return directoryList[key];
+            }
+            set
+            {
+                directoryList[key] = value;
+            }
+        }
+
         #endregion
 
         #region Public Methods and Operators
