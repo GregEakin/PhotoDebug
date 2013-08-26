@@ -10,7 +10,7 @@
     using PhotoLib.Tiff;
 
     [TestClass]
-    public class UnitTest5DIII
+    public class UnitTest5D3
     {
         #region Constants
 
