@@ -1,4 +1,4 @@
-﻿namespace PhotoTests
+﻿namespace PhotoTests.Canon7D
 {
     using System;
     using System.IO;
@@ -10,11 +10,11 @@
     using PhotoLib.Tiff;
 
     [TestClass]
-    public class UnitTest5DIII
+    public class UnitTest7D
     {
         #region Constants
 
-        private const string FileName = @"C:\Users\Greg\Pictures\IMG_0516.CR2";
+        private const string FileName = @"C:\Users\Greg\Pictures\IMG_0511.CR2";
 
         #endregion
 
@@ -89,17 +89,17 @@
                 var x = binaryReader.ReadUInt16();
                 var y = binaryReader.ReadUInt16();
                 var z = binaryReader.ReadUInt16();
-                Assert.AreEqual(1, x);
-                Assert.AreEqual(2960, y);
-                Assert.AreEqual(2960, z);
+                Assert.AreEqual(2, x);
+                Assert.AreEqual(1728, y);
+                Assert.AreEqual(1904, z);
 
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
                 var lossless = startOfImage.Lossless;
                 Assert.AreEqual(14, lossless.Precision);
-                Assert.AreEqual(2, lossless.Components.Length);
-                Assert.AreEqual(2960, lossless.SamplesPerLine);
-                Assert.AreEqual(3950, lossless.ScanLines);
+                Assert.AreEqual(4, lossless.Components.Length);
+                Assert.AreEqual(1340, lossless.SamplesPerLine);
+                Assert.AreEqual(3516, lossless.ScanLines);
             }
         }
 
@@ -143,14 +143,14 @@
                 var startOfImage = new StartOfImage(binaryReader, address, length);
                 var lossless = startOfImage.Lossless;
 
-                Assert.AreEqual(2, lossless.Components.Length); // clrs
+                Assert.AreEqual(4, lossless.Components.Length); // clrs
                 foreach (var component in lossless.Components)
                 {
                     Assert.AreEqual(1, component.HFactor);  // sraw
                     Assert.AreEqual(1, component.VFactor);  // sraw
                 }
 
-                Assert.AreEqual(2, lossless.Components.Sum(comp => comp.HFactor * comp.VFactor));
+                Assert.AreEqual(4, lossless.Components.Sum(comp => comp.HFactor * comp.VFactor));
             }
         }
 
@@ -256,13 +256,13 @@
                 Assert.AreEqual(0xC3, lossless.Tag);
 
                 Assert.AreEqual(14, lossless.Precision);
-                Assert.AreEqual(2, lossless.Components.Length);
-                Assert.AreEqual(2960, lossless.SamplesPerLine);
-                Assert.AreEqual(3950, lossless.ScanLines);
+                Assert.AreEqual(4, lossless.Components.Length);
+                Assert.AreEqual(1340, lossless.SamplesPerLine);
+                Assert.AreEqual(3516, lossless.ScanLines);
 
-                Assert.AreEqual(5920, lossless.Width);  // Sensor width (bits)
-                Assert.AreEqual(5920, lossless.SamplesPerLine * lossless.Components.Length);
-                Assert.AreEqual(5920, x * y + z);
+                Assert.AreEqual(5360, lossless.Width);  // Sensor width (bits)
+                Assert.AreEqual(5360, lossless.SamplesPerLine * lossless.Components.Length);
+                Assert.AreEqual(5360, x * y + z);
 
                 foreach (var component in lossless.Components)
                 {
