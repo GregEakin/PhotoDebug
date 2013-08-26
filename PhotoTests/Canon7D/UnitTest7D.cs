@@ -31,7 +31,7 @@
         }
 
         [TestMethod]
-        public void TestMethod1()
+        public void RawImageDumpData()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
             {
@@ -43,58 +43,6 @@
                 CollectionAssert.AreEqual(new byte[] { 0x02, 0x00 }, rawImage.Header.CR2Version);
 
                 rawImage.DumpHeader(binaryReader);
-            }
-        }
-
-        [TestMethod]
-        public void Maker()
-        {
-            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
-            {
-                var binaryReader = new BinaryReader(fileStream);
-                var rawImage = new RawImage(binaryReader);
-
-                // 0x010F Ascii 8-bit: [0x000000F4] (6): Canon
-                var imageFileDirectory = rawImage[0x00000010];
-                var imageFileEntry = imageFileDirectory[0x010F];
-                Assert.AreEqual(2, imageFileEntry.TagType);
-                Assert.AreEqual(0x000000F4u, imageFileEntry.ValuePointer);
-                Assert.AreEqual(6u, imageFileEntry.NumberOfValue);
-
-                ReadChars(binaryReader, imageFileEntry);
-                Assert.AreEqual("Canon", ReadChars(binaryReader, imageFileEntry));
-            }
-        }
-
-        private static string ReadChars(BinaryReader binaryReader, ImageFileEntry imageFileEntry)
-        {
-            var retval = new StringBuilder();
-            binaryReader.BaseStream.Seek(imageFileEntry.ValuePointer, SeekOrigin.Begin);
-            for (var j = 0; j < imageFileEntry.NumberOfValue - 1; j++)
-            {
-                var us = binaryReader.ReadByte();
-                retval.Append((char)us);
-            }
-            return retval.ToString();
-        }
-
-        [TestMethod]
-        public void Model()
-        {
-            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
-            {
-                var binaryReader = new BinaryReader(fileStream);
-                var rawImage = new RawImage(binaryReader);
-
-                // 0x0110 Ascii 8-bit: [0x000000FA] (13): Canon EOS 7D
-                var imageFileDirectory = rawImage[0x00000010];
-                var imageFileEntry = imageFileDirectory[0x0110];
-                Assert.AreEqual(2, imageFileEntry.TagType);
-                Assert.AreEqual(0x000000FAu, imageFileEntry.ValuePointer);
-                Assert.AreEqual(13u, imageFileEntry.NumberOfValue);
-
-                ReadChars(binaryReader, imageFileEntry);
-                Assert.AreEqual("Canon EOS 7D", ReadChars(binaryReader, imageFileEntry));
             }
         }
 

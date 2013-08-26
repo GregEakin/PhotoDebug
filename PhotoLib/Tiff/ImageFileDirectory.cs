@@ -86,6 +86,15 @@
                     Console.WriteLine(ReferencedItem, entry.ValuePointer.ToString("X8"), entry.NumberOfValue);
                     binaryReader.BaseStream.Seek(entry.ValuePointer, SeekOrigin.Begin);
                     var tags = new ImageFileDirectory(binaryReader);
+                    tags.DumpDirectory(binaryReader);
+                }
+                if (entry.TagType == 0x07 && entry.TagId == 0x927c) // Makernote.
+                {
+                    Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Maker note");
+                    Console.WriteLine(ReferencedItem, entry.ValuePointer.ToString("X8"), entry.NumberOfValue);
+                    binaryReader.BaseStream.Seek(entry.ValuePointer, SeekOrigin.Begin);
+                    var tags = new ImageFileDirectory(binaryReader);
+                    tags.DumpDirectory(binaryReader);
                 }
                 else
                 {
