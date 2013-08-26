@@ -44,9 +44,9 @@
                 Height = lossless.ScanLines;
                 Array = new ushort[Width * Height];
                 var pred = (ushort)(1 << (lossless.Precision - 1));
-                var predictor = Enumerable.Repeat(pred, Height * colors).ToArray();
+                var predictor = Enumerable.Repeat(pred, colors).ToArray();
 
-                for (var i = 0; i < Width * Height; i += 4)
+                for (var i = 0; i < Width * Height; i += colors)
                 {
                     int jcol;
                     int jrow;
@@ -73,28 +73,24 @@
         private void PokeValues(StartOfImage startOfImage, IList<HuffmanTable> tables, int x, int y, int index, IList<ushort> predictor)
         {
             const int Colors = 4;
-            const int BlockWidth = 0x06c0;
-            for (var i = 0; i < Colors; i++)
+            for (var c = 0; c < Colors; c++)
             {
                 var hufCode = GetValue(startOfImage.ImageData, tables[0]);
                 var difCode = startOfImage.ImageData.GetSetOfBits(hufCode);
                 var dif = (ushort)DecodeDifBits(difCode, hufCode);
 
                 int value;
-                if (x < Colors)
+                if (x == 0)
                 {
-                    value = predictor[Colors * y + i] += dif;
-                }
-                else if (x % (BlockWidth * Height) == 0)
-                {
-                    var j = index + i - (Height - 1) * BlockWidth - 1;
-                    value = this.Array[j] + dif;
+                    // value = predictor[c] += dif;
+                    value = 0x2000 + dif;
                 }
                 else
                 {
-                    value = this.Array[index - Colors + i] + dif;
+                    value = this.Array[index + c - Colors] + dif;
                 }
-                this.Array[index + i] = (ushort)(0x3fff & value);
+
+                this.Array[index + c] = (ushort)(value);
             }
         }
 
@@ -109,9 +105,7 @@
             else
             {
                 // msb is 0, thus DifCode is negative
-                var mask = (1 << difBits) - 1;
-                var m1 = difCode ^ mask;
-                dif0 = (short)(0 - m1);
+                dif0 = (short)(difCode - (1 << difBits) + 1);
             }
             return dif0;
         }

@@ -10,7 +10,8 @@
     {
         public static void TestImage()
         {
-            const string FileName = @"C:\Users\Greg\Pictures\IMG_0511.CR2";
+            // const string FileName = @"C:\Users\Greg\Pictures\IMG_0511.CR2";
+            const string FileName = @"C:\Users\Greg\Pictures\IMG_0516.CR2";
             // const string TestFile = @"C:\Users\Greg\Pictures\Oops.jpg";
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
             {

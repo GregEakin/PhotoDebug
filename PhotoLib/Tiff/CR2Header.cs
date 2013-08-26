@@ -2,6 +2,9 @@
 {
     using System.IO;
 
+    /// <summary>
+    /// TIFF and CR2 file header
+    /// </summary>
     public class CR2Header
     {
         #region Fields
@@ -36,6 +39,10 @@
 
         #region Public Properties
 
+        /// <summary>
+        /// "II" or 0x4949 means Intel byte order (little endian)
+        /// "MM" or 0x4d4d means Motorola byte order (big endian)
+        /// </summary>
         public byte[] ByteOrder
         {
             get
@@ -44,6 +51,9 @@
             }
         }
 
+        /// <summary>
+        /// "CR" or 0x4352
+        /// </summary>
         public ushort CR2Magic
         {
             get
@@ -68,6 +78,9 @@
             }
         }
 
+        /// <summary>
+        /// 0x002a
+        /// </summary>
         public ushort TiffMagic
         {
             get

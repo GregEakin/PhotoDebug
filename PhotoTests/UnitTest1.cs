@@ -14,7 +14,8 @@
     {
         #region Constants
 
-        private const string FileName = @"C:\Users\Greg\Pictures\IMG_0511.CR2";
+        // private const string FileName = @"C:\Users\Greg\Pictures\IMG_0511.CR2";
+        private const string FileName = @"C:\Users\Greg\Pictures\IMG_0516.CR2";
 
         #endregion
 
@@ -247,6 +248,7 @@
                 Assert.AreEqual(0xC4, huffmanTable.Tag);
 
                 // This file has two huffman tables: 0x00 and 0x01
+                Assert.AreEqual(2, huffmanTable.Tables.Count);
                 Assert.IsTrue(huffmanTable.Tables.ContainsKey(0x00));
                 Assert.IsTrue(huffmanTable.Tables.ContainsKey(0x01));
 

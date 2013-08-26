@@ -41,52 +41,50 @@
                 var nextMark = binaryReader.ReadByte();
                 if (nextMark == 0xFF)
                 {
+                    var nextTag = binaryReader.ReadByte();
+                    binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
+                    Console.WriteLine("NextMark {0}: 0x{1}", nextTag.ToString("X2"), binaryReader.BaseStream.Position.ToString("X8"));
+                    switch (nextTag)
                     {
-                        var nextTag = binaryReader.ReadByte();
-                        binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
-                        Console.WriteLine("NextMark {0}: 0x{1}", nextTag.ToString("X2"), binaryReader.BaseStream.Position.ToString("X8"));
-                        switch (nextTag)
-                        {
-                            case 0xC0:  // SOF0, Start of Frame 0, Baseline DCT
-                            case 0xC3:  // SOF3, Start of Frame 3, Lossless (sequential)
-                                this.lossless = new StartOfFrame(binaryReader);
-                                break;
+                        case 0xC0: // SOF0, Start of Frame 0, Baseline DCT
+                        case 0xC3: // SOF3, Start of Frame 3, Lossless (sequential)
+                            this.lossless = new StartOfFrame(binaryReader);
+                            break;
 
-                            case 0xC4:  // DHT, Define Huffman Table
-                                this.huffmanTable = new DefineHuffmanTable(binaryReader);
-                                break;
+                        case 0xC4: // DHT, Define Huffman Table
+                            this.huffmanTable = new DefineHuffmanTable(binaryReader);
+                            break;
 
-                            case 0xD9:  // EOI, End of Image
-                                var x3 = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
-                                break;
+                        case 0xD9: // EOI, End of Image
+                            var x3 = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+                            break;
 
-                            case 0xDA:  // SOS, Start of Scan
-                                this.startOfScan = new StartOfScan(binaryReader);
-                                // this.imageData = new LinearImageData(binaryReader, (uint)rawSize);
-                                // this.DecodeHuffmanData();
-                                // break;
-                                return;
+                        case 0xDA: // SOS, Start of Scan
+                            this.startOfScan = new StartOfScan(binaryReader);
+                            // this.imageData = new LinearImageData(binaryReader, (uint)rawSize);
+                            // this.DecodeHuffmanData();
+                            // break;
+                            return;
 
-                            case 0xDB:  // DQT, Define Quantization Table
-                                var defineQuantizatonTable = new DefineQuantizationTable(binaryReader);
-                                break;
+                        case 0xDB: // DQT, Define Quantization Table
+                            var defineQuantizatonTable = new DefineQuantizationTable(binaryReader);
+                            break;
 
-                            case 0xE0:  // APP0, Application Segment 0, JFIF - JFIF JPEG image, AVI1 - Motion JPEG (MJPG)
-                                this.jfifMarker = new JfifMarker(binaryReader);
-                                break;
+                        case 0xE0: // APP0, Application Segment 0, JFIF - JFIF JPEG image, AVI1 - Motion JPEG (MJPG)
+                            this.jfifMarker = new JfifMarker(binaryReader);
+                            break;
 
-                            case 0xE1:  // APP1, Application Segment 1, EXIF Metadata, TIFF IFD format,JPEG Thumbnail (160x120), Adobe XMP
-                            case 0xE4:  // APP4, Application Segment 4, (Not common)
-                            case 0xEC:  // APP12, Application Segment 12, Picture Info (older digicams), Photoshop Save for Web: Ducky
-                            case 0xEE:  // APP14, Application Segment 14, (Not common)
-                                var x1 = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
-                                var length1 = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
-                                var data = binaryReader.ReadBytes(length1 - 2);
-                                break;
+                        case 0xE1: // APP1, Application Segment 1, EXIF Metadata, TIFF IFD format,JPEG Thumbnail (160x120), Adobe XMP
+                        case 0xE4: // APP4, Application Segment 4, (Not common)
+                        case 0xEC: // APP12, Application Segment 12, Picture Info (older digicams), Photoshop Save for Web: Ducky
+                        case 0xEE: // APP14, Application Segment 14, (Not common)
+                            var x1 = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+                            var length1 = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+                            var data = binaryReader.ReadBytes(length1 - 2);
+                            break;
 
-                            default:
-                                throw new NotImplementedException("Tag 0xFF 0x{0} is not implemented".FormatWith(nextTag.ToString("X2")));
-                        }
+                        default:
+                            throw new NotImplementedException("Tag 0xFF 0x{0} is not implemented".FormatWith(nextTag.ToString("X2")));
                     }
                 }
                 else
