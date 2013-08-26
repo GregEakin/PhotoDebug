@@ -10,12 +10,11 @@
     using PhotoLib.Tiff;
 
     [TestClass]
-    public class UnitTest1
+    public class UnitTest7D
     {
         #region Constants
 
-        // private const string FileName = @"C:\Users\Greg\Pictures\IMG_0511.CR2";
-        private const string FileName = @"C:\Users\Greg\Pictures\IMG_0516.CR2";
+        private const string FileName = @"C:\Users\Greg\Pictures\IMG_0511.CR2";
 
         #endregion
 
