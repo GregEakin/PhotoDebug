@@ -14,7 +14,8 @@
     {
         #region Public Methods and Operators
 
-        public void TestMethod7()
+        // [TestMethod]
+        public void DumpHuffmanTable()
         {
             const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
             const string FileName2 = Directory + "huff_simple0.jpg";
