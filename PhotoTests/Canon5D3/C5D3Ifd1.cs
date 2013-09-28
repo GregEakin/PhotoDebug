@@ -195,7 +195,8 @@
                 Assert.AreEqual(0x000001BEu, imageFileEntry.ValuePointer);
                 Assert.AreEqual(1u, imageFileEntry.NumberOfValue);
 
-                CollectionAssert.AreEqual(null, RawImage.ReadULongs(binaryReader, imageFileEntry));
+                var readULongs = RawImage.ReadULongs(binaryReader, imageFileEntry);
+                CollectionAssert.AreEqual(new[] { 0x829a0026 }, readULongs);
             }
         }
 

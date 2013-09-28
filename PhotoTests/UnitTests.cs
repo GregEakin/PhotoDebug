@@ -122,7 +122,7 @@
             }
         }
 
-        // [TestMethod]
+        [TestMethod]
         public void TestMethodB6()
         {
             const string Folder = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
@@ -211,6 +211,7 @@
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
                 var rawSize = address + length - binaryReader.BaseStream.Position - 2;
+                Assert.AreEqual(23852856, rawSize);                                        // RawSize (Raw = new byte[RawSize]
                 startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
 
                 var lossless = startOfImage.Lossless;
@@ -219,7 +220,6 @@
                 var ibSize = lossless.SamplesPerLine * lossless.ScanLines;
                 var ib = new ushort[ibSize];
 
-                Assert.AreEqual(23852858, rawSize);                                        // RawSize (Raw = new byte[RawSize]
                 var rowBuf = new short[lossless.SamplesPerLine];
                 Console.WriteLine("Image: 0x{0}", binaryReader.BaseStream.Position.ToString("X8"));
 

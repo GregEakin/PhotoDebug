@@ -187,26 +187,29 @@
             {
                 bits = this.imageData.GetNextShort(bits);
                 len++;
+                
                 HuffmanTable.HCode hCode;
-                if (dict.TryGetValue(bits, out hCode) && hCode.Length == len)
+                if (!dict.TryGetValue(bits, out hCode) || hCode.Length != len)
                 {
-                    if (hCode.Code == 0x00)
-                    {
-                        // Console.WriteLine("Found {0} {1} EOB", hCode.Code.ToString("X2"), bits.ToString("X4"));
-                        break;
-                    }
+                    continue;
+                }
+                
+                if (hCode.Code == 0x00)
+                {
+                    // Console.WriteLine("Found {0} {1} EOB", hCode.Code.ToString("X2"), bits.ToString("X4"));
+                    break;
+                }
 
-                    var z = this.imageData.GetSetOfBits(hCode.Code);
-                    var value = Jpeg.HuffmanTable.DcValueEncoding(hCode.Code, z);
+                var z = this.imageData.GetSetOfBits(hCode.Code);
+                var value = Jpeg.HuffmanTable.DcValueEncoding(hCode.Code, z);
 
-                    // Console.WriteLine("Found {0} {1} {2}", hCode.Code.ToString("X2"), z.ToString("X4"), value);
-                    bits = 0;
-                    len = 0;
+                // Console.WriteLine("Found {0} {1} {2}", hCode.Code.ToString("X2"), z.ToString("X4"), value);
+                bits = 0;
+                len = 0;
 
-                    if (++count >= elements)
-                    {
-                        break;
-                    }
+                if (++count >= elements)
+                {
+                    break;
                 }
             }
         }
