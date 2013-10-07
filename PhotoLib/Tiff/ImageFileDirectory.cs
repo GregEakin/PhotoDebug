@@ -14,6 +14,8 @@
 
         private readonly uint nextEntry;
 
+        // private readonly byte[] heap;
+
         #endregion
 
         #region Constructors and Destructors
@@ -25,6 +27,8 @@
 
         public ImageFileDirectory(BinaryReader binaryReader)
         {
+            var dirStart = binaryReader.BaseStream.Position;
+
             var length = binaryReader.ReadUInt16();
             this.entries = new ImageFileEntry[length];
             for (var i = 0; i < length; i++)
@@ -34,7 +38,10 @@
             var next = binaryReader.ReadUInt32();
             this.nextEntry = next;
 
-            Console.WriteLine("### Directory {0}, [0x{1}]", length, next.ToString("X8"));
+            if (next == 0) next = (uint)(binaryReader.BaseStream.Length + 1);
+            Console.WriteLine("### Directory {0}, [0x{1} - 0x{2}]", length, dirStart.ToString("X8"), (next - 1).ToString("X8"));
+            var heapStart = binaryReader.BaseStream.Position;
+            Console.WriteLine("    Heap [0x{0} - 0x{1}]", heapStart.ToString("X8"), (next - 1).ToString("X8"));
         }
 
         #endregion

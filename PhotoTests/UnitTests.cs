@@ -1,6 +1,7 @@
 ﻿namespace PhotoTests
 {
     using System;
+    using System.Drawing;
     using System.IO;
     using System.Linq;
 
@@ -8,6 +9,8 @@
 
     using PhotoLib.Jpeg;
     using PhotoLib.Tiff;
+
+    using PhotoLib.Utilities;
 
     [TestClass]
     public class UnitTests
@@ -69,11 +72,13 @@
             //     Pix[R,C] = Pix[R,C-2] + Diff
         }
 
-        // [TestMethod]
+        [TestMethod]
         public void TestMethodB()
         {
-            const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
-            const string FileName2 = Directory + "IMG_0503.CR2";
+            // const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
+            // const string FileName2 = Directory + "IMG_0503.CR2";
+            const string Directory = @"C:\Users\Greg\Pictures\2013-10-06 001\";
+            const string FileName2 = Directory + "0L2A8892.CR2";
 
             using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
             {
@@ -92,10 +97,10 @@
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
                 var lossless = startOfImage.Lossless;
-                Assert.AreEqual(4711440, lossless.SamplesPerLine * lossless.ScanLines); // IbSize (IB = new ushort[IbSize])
+                // Assert.AreEqual(4711440, lossless.SamplesPerLine * lossless.ScanLines); // IbSize (IB = new ushort[IbSize])
 
                 var rawSize = address + length - binaryReader.BaseStream.Position - 2;
-                Assert.AreEqual(23852856, rawSize); // RawSize (Raw = new byte[RawSize]
+                // Assert.AreEqual(23852856, rawSize); // RawSize (Raw = new byte[RawSize]
                 startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
                 var table0 = startOfImage.HuffmanTable.Tables[0x00];
 
@@ -107,6 +112,19 @@
                     for (var jcol = 0; jcol < lossless.SamplesPerLine; jcol++)
                     {
                         var val = startOfImage.ImageData.RawData[rp++];
+                        if (val == 0xFF)
+                        {
+                            var code = startOfImage.ImageData.RawData[rp];
+                            if (code == 0)
+                            {
+                                rp++;
+                            }
+                            else
+                            {
+                                Assert.Fail("Invalid code found {0}, {1}", rp, startOfImage.ImageData.RawData[rp]);
+                            }
+                        }
+
                         var jidx = jrow * lossless.SamplesPerLine + jcol;
                         var i = jidx / (y * lossless.ScanLines);
                         var j = i >= x;
@@ -122,15 +140,24 @@
             }
         }
 
-        [TestMethod]
+        // [TestMethod]
         public void TestMethodB6()
         {
-            const string Folder = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
-            const string FileName2 = Folder + "IMG_0503.CR2";
-            ProcessFile(FileName2);
+            // const string Folder = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
+            // const string FileName2 = Folder + "IMG_0503.CR2";
+
+            const string Folder = @"C:\Users\Greg\Pictures\2013-10-06 001\";
+            const string FileName2 = Folder + "0L2A8889.CR2";
+            const string Bitmap = Folder + "0L2A8889.BMP";
+
+            //const string Folder = @"C:\Users\Greg\Pictures\2013_06_02\";
+            //const string FileName2 = Folder + "IMG_3559.CR2";
+            //const string Bitmap = Folder + "IMG_3559.BMP";
+
+            ProcessFile(FileName2, Bitmap);
         }
 
-        private static void ProcessFile(string fileName)
+        private static void ProcessFile(string fileName, string bitmap)
         {
             using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
             {
@@ -155,44 +182,87 @@
                 startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
 
                 var colors = lossless.Components.Sum(comp => comp.HFactor * comp.VFactor);
-                var rowBuf = new ushort[lossless.SamplesPerLine * colors];
-
                 var table0 = startOfImage.HuffmanTable.Tables[0x00];
 
                 // var buffer = new byte[rawSize];
-
-                for (var jrow = 0; jrow < lossless.ScanLines; jrow++)
+                using (var image1 = new Bitmap(500, 500))
                 {
-                    for (var jcol = 0; jcol < lossless.SamplesPerLine; jcol++)
+                    for (var jrow = 0; jrow < lossless.ScanLines; jrow++)
                     {
-                        for (var jcolor = 0; jcolor < colors; jcolor++)
+                        var rowBuf = new ushort[lossless.SamplesPerLine * colors];
+                        for (var jcol = 0; jcol < lossless.SamplesPerLine; jcol++)
                         {
-                            //var pred = (ushort)0;
-                            //var len = gethuff();
-                            //var diff = getbits(len);
-                            //var row = pred + diff;
+                            for (var jcolor = 0; jcolor < colors; jcolor++)
+                            {
+                                //var pred = (ushort)0;
+                                //var len = gethuff();
+                                //var diff = getbits(len);
+                                //var row = pred + diff;
 
-                            var val = GetValue(startOfImage.ImageData, table0);
-                            var bits = startOfImage.ImageData.GetSetOfBits(val);
-                            rowBuf[jcol * colors + jcolor] = bits;
+                                var val = GetValue(startOfImage.ImageData, table0);
+                                var bits = startOfImage.ImageData.GetSetOfBits(val);
+                                rowBuf[jcol * colors + jcolor] = bits;
+                            }
+
+                            DumpPixel(jcol, jrow, rowBuf, colors, image1);
                         }
+                        // var pp = startOfImage.ImageData.Index;
                     }
-                    // var pp = startOfImage.ImageData.Index;
+
+                    image1.Save(bitmap);
                 }
 
                 // Assert.AreEqual(23852855, startOfImage.ImageData.Index);
-                Console.WriteLine("{0}: ", startOfImage.ImageData.BitsLeft);
-                for (var i = startOfImage.ImageData.Index; i < rawSize - 2; i++)
+                //Console.WriteLine("{0}: ", startOfImage.ImageData.BitsLeft);
+                //for (var i = startOfImage.ImageData.Index; i < rawSize - 2; i++)
+                //{
+                //    Console.WriteLine("{0} ", startOfImage.ImageData.RawData[i].ToString("X2"));
+                //}
+            }
+        }
+
+        private static void DumpPixel(int jcol, int jrow, ushort[] rowBuf, int colors, Bitmap image1)
+        {
+            var p = jcol - 50;
+            var q = jrow - 30;
+            if (p >= 0 && p < 500 && q >= 0 && q < 500)
+            {
+                var bits1 = rowBuf[jcol * colors + 0] >> 2;
+                if (bits1 > 0xFF)
                 {
-                    Console.WriteLine("{0} ", startOfImage.ImageData.RawData[i].ToString("X2"));
+                    bits1 = 0xFF;
+                }
+                var bits2 = rowBuf[jcol * colors + 1] >> 2;
+                if (bits2 > 0xFF)
+                {
+                    bits2 = 0xFF;
+                }
+                if (jcol % 2 == 0)
+                {
+                    var red = bits1;
+                    var green = bits2 >> 1;
+                    var color = Color.FromArgb(red, green, 0);
+                    image1.SetPixel(p, q, color);
+                }
+                else
+                {
+                    var green = bits1 >> 1;
+                    var blue = bits2;
+                    var color = Color.FromArgb(0, green, blue);
+                    image1.SetPixel(p, q, color);
                 }
             }
         }
 
+        [TestMethod]
         public void TestMethodC()
         {
-            const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
-            const string FileName2 = Directory + "IMG_0503.CR2";
+            // const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
+            // const string FileName2 = Directory + "IMG_0503.CR2";
+
+            const string Folder = @"C:\Users\Greg\Pictures\2013-10-06 001\";
+            const string FileName2 = Folder + "0L2A8889.CR2";
+            const string Bitmap = Folder + "0L2A8889.BMP";
 
             using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
             {
@@ -211,12 +281,12 @@
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
                 var rawSize = address + length - binaryReader.BaseStream.Position - 2;
-                Assert.AreEqual(23852856, rawSize);                                        // RawSize (Raw = new byte[RawSize]
+                // Assert.AreEqual(23852856, rawSize);                                        // RawSize (Raw = new byte[RawSize]
                 startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
 
                 var lossless = startOfImage.Lossless;
 
-                Assert.AreEqual(4711440, lossless.SamplesPerLine * lossless.ScanLines);    // IbSize (IB = new ushort[IbSize])
+                // Assert.AreEqual(4711440, lossless.SamplesPerLine * lossless.ScanLines);    // IbSize (IB = new ushort[IbSize])
                 var ibSize = lossless.SamplesPerLine * lossless.ScanLines;
                 var ib = new ushort[ibSize];
 
@@ -260,6 +330,69 @@
                     Array.Copy(rowBuf, 0, ib, ibStart, cr2Slice);
                     Array.Copy(rowBuf, cr2Slice, ib, ibStart + cr2Slice, cr2Slice);
                 }
+            }
+        }
+
+        [TestMethod]
+        public void SerialNums()
+        {
+            const uint Cam1 = 3071201378;
+            const uint Cam1H = Cam1 & 0xFFFF0000 >> 8;
+            const uint Cam1L = Cam1 & 0x0000FFFF;
+            Assert.AreEqual("ED00053346", "{0}{1}".FormatWith(Cam1H.ToString("X4"), Cam1L.ToString("D5")));
+            var cam2 = "%04X%05d";
+        }
+
+        [TestMethod]
+        public void TestMethodD()
+        {
+            //const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
+            //const string FileName2 = Directory + "IMG_0503.CR2";
+            const string Directory = @"C:\Users\Greg\Pictures\";
+            const string FileName2 = Directory + "IMG_0516.CR2";
+
+            using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
+            {
+                var binaryReader = new BinaryReader(fileStream);
+                var rawImage = new RawImage(binaryReader);
+
+                var ifd0 = rawImage.Directories.First();
+                var make = ifd0[0x010f];
+                Assert.AreEqual("Canon", RawImage.ReadChars(binaryReader, make));
+                var model = ifd0[0x0110];
+                // Assert.AreEqual("Canon EOS 7D", RawImage.ReadChars(binaryReader, model));
+                Assert.AreEqual("Canon EOS 5D Mark III", RawImage.ReadChars(binaryReader, model));
+
+                var exif = ifd0[0x8769];
+                binaryReader.BaseStream.Seek(exif.ValuePointer, SeekOrigin.Begin);
+                var tags = new ImageFileDirectory(binaryReader);
+                tags.DumpDirectory(binaryReader);
+
+                var makerNotes = tags[0x927C];
+                binaryReader.BaseStream.Seek(makerNotes.ValuePointer, SeekOrigin.Begin);
+                var notes = new ImageFileDirectory(binaryReader);
+
+                var modelId = notes[0x0010];
+                // Assert.AreEqual(2147484240, modelId.ValuePointer);
+                Assert.AreEqual(2147484293, modelId.ValuePointer);
+                var white = notes[0x4001];
+                //var whiteData = RawImage.ReadUInts16(binaryReader, white);
+                //Assert.AreEqual(1840, whiteData[0x003F]);
+                //Assert.AreEqual(1024, whiteData[0x0040]);
+                //Assert.AreEqual(1024, whiteData[0x0041]);
+                //Assert.AreEqual(1956, whiteData[0x0042]);
+                Console.WriteLine("Size {0}", white.NumberOfValue);
+                var wb = new WhiteBalance(binaryReader, white);
+
+                // rawImage.DumpHeader(binaryReader);
+                //model ID from Makernotes, Tag #0x10
+                //white balance information is taken from tag #0x4001
+
+                var ifd3 = rawImage.Directories.Skip(2).First();
+                //StripOffset, offset to RAW data : tag #0x111
+                //StripByteCount, length of RAW data : tag #0x117
+                //image slice layout (cr2_slice[]) : tag #0xc640
+                //the RAW image dimensions is taken from lossless jpeg (0xffc3 section)            
             }
         }
 

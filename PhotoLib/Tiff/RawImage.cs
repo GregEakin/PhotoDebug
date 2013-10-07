@@ -46,7 +46,7 @@
 
         #region Public Properties
 
-        public ICollection<ImageFileDirectory> Directories
+        public IEnumerable<ImageFileDirectory> Directories
         {
             get
             {
