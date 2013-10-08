@@ -221,9 +221,9 @@
             }
         }
 
-        private static void DumpPixel(int row, short[] rowBuf, Bitmap image1)
+        private static void DumpPixel(int row, short[] rowBuf0, short[] rowBuf1, Bitmap image1)
         {
-            var q = row - 30;
+            var q = row - 15;
             if (q < 0 || q >= 500)
             {
                 return;
@@ -231,7 +231,7 @@
 
             for (var p = 0; p < 500; p++)
             {
-                var bits1 = rowBuf[2 * p + 0] >> 4;
+                var bits1 = rowBuf0[2 * p + 0] >> 5;
                 if (bits1 < 0)
                 {
                     bits1 = 0;
@@ -241,30 +241,41 @@
                     bits1 = 0xFF;
                 }
 
-                var bits2 = rowBuf[2 * p + 1] >> 4;
+                var bits2 = rowBuf0[2 * p + 1] >> 6;
                 if (bits2 < 0)
                 {
                     bits2 = 0;
                 }
-                else if (bits2 > 0xFF)
+                else if (bits2 > 0x7F)
                 {
-                    bits2 = 0xFF;
+                    bits2 = 0x7F;
                 }
 
-                if (q % 2 == 0)
+                var bits3 = rowBuf1[2 * p + 0] >> 6;
+                if (bits3 < 0)
                 {
-                    var red = bits1;
-                    var green = bits2;
-                    var color = Color.FromArgb(red, green, 0);
-                    image1.SetPixel(p, q, color);
+                    bits3 = 0;
                 }
-                else
+                else if (bits3 > 0x7F)
                 {
-                    var green = bits1;
-                    var blue = bits2;
-                    var color = Color.FromArgb(0, green, blue);
-                    image1.SetPixel(p, q, color);
+                    bits3 = 0x7F;
                 }
+
+                var bits4 = rowBuf1[2 * p + 1] >> 5;
+                if (bits4 < 0)
+                {
+                    bits4 = 0;
+                }
+                else if (bits4 > 0xFF)
+                {
+                    bits4 = 0xFF;
+                }
+
+                var red = bits1;
+                var green = bits2 + bits3;
+                var blue = bits4;
+                var color = Color.FromArgb(red, green, blue);
+                image1.SetPixel(p, q, color);
             }
         }
 
@@ -312,8 +323,8 @@
             // const string FileName2 = Directory + "IMG_0503.CR2";
 
             const string Folder = @"C:\Users\Greg\Pictures\2013-10-06 001\";
-            const string FileName2 = Folder + "0L2A8881.CR2";
-            const string Bitmap = Folder + "0L2A8881 C.BMP";
+            const string FileName2 = Folder + "0L2A8889.CR2";
+            const string Bitmap = Folder + "0L2A8889 C.BMP";
 
             using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
             {
@@ -382,7 +393,6 @@
                                 rowBuf0[2 * i + 1] = (short)(rowBuf0[2 * i - 1] + dif1);
                             }
                         }
-                        DumpPixel(j, rowBuf0, image1);
 
                         for (var i = 0; i < lossless.SamplesPerLine; i++)
                         {
@@ -392,11 +402,11 @@
 
                             if (i == 0)
                             {
-                                rowBuf0[2 * i] = predictor1[0] += dif0;
+                                rowBuf1[2 * i] = predictor0[0] += dif0;
                             }
                             else
                             {
-                                rowBuf0[2 * i] = (short)(rowBuf0[2 * i - 2] + dif0);
+                                rowBuf1[2 * i] = (short)(rowBuf1[2 * i - 2] + dif0);
                             }
 
                             var hufCode1 = GetValue(startOfImage.ImageData, table1);
@@ -405,14 +415,14 @@
 
                             if (i == 0)
                             {
-                                rowBuf0[2 * i + 1] = predictor1[1] += dif1;
+                                rowBuf1[2 * i + 1] = predictor0[1] += dif1;
                             }
                             else
                             {
-                                rowBuf0[2 * i + 1] = (short)(rowBuf0[2 * i - 1] + dif1);
+                                rowBuf1[2 * i + 1] = (short)(rowBuf1[2 * i - 1] + dif1);
                             }
                         }
-                        DumpPixel(j + 1, rowBuf0, image1);
+                        DumpPixel(j / 2, rowBuf0, rowBuf1, image1);
 
                         //var cr2Cols = lossless.SamplesPerLine;
                         //var cr2Slice = cr2Cols / 2;
