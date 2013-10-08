@@ -231,49 +231,36 @@
 
             for (var p = 0; p < 500; p++)
             {
-                var bits1 = rowBuf0[2 * p + 0] >> 5;
-                if (bits1 < 0)
+                var red = rowBuf0[2 * p + 0] >> 5;
+                if (red < 0)
                 {
-                    bits1 = 0;
+                    red = 0;
                 }
-                else if (bits1 > 0xFF)
+                else if (red > 0xFF)
                 {
-                    bits1 = 0xFF;
-                }
-
-                var bits2 = rowBuf0[2 * p + 1] >> 6;
-                if (bits2 < 0)
-                {
-                    bits2 = 0;
-                }
-                else if (bits2 > 0x7F)
-                {
-                    bits2 = 0x7F;
+                    red = 0xFF;
                 }
 
-                var bits3 = rowBuf1[2 * p + 0] >> 6;
-                if (bits3 < 0)
+                var green = (rowBuf0[2 * p + 1] >> 6) + (rowBuf1[2 * p + 0] >> 6);
+                if (green < 0)
                 {
-                    bits3 = 0;
+                    green = 0;
                 }
-                else if (bits3 > 0x7F)
+                else if (green > 0xFF)
                 {
-                    bits3 = 0x7F;
-                }
-
-                var bits4 = rowBuf1[2 * p + 1] >> 5;
-                if (bits4 < 0)
-                {
-                    bits4 = 0;
-                }
-                else if (bits4 > 0xFF)
-                {
-                    bits4 = 0xFF;
+                    green = 0xfF;
                 }
 
-                var red = bits1;
-                var green = bits2 + bits3;
-                var blue = bits4;
+                var blue = rowBuf1[2 * p + 1] >> 5;
+                if (blue < 0)
+                {
+                    blue = 0;
+                }
+                else if (blue > 0xFF)
+                {
+                    blue = 0xFF;
+                }
+
                 var color = Color.FromArgb(red, green, blue);
                 image1.SetPixel(p, q, color);
             }
