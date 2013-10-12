@@ -56,6 +56,7 @@
     <Compile Include="Canon5D3\UnitTest5D3.cs" />
     <Compile Include="Canon7D\C7DIfd3.cs" />
     <Compile Include="Canon7D\C7DIfd1.cs" />
+    <Compile Include="BeforeUnitTests.cs" />
     <Compile Include="JpegFileTests.cs" />
     <Compile Include="Jpeg\DefineHuffmanTableTests.cs" />
     <Compile Include="Jpeg\HuffmanTableTests.cs" />
