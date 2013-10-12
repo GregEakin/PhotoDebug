@@ -221,10 +221,32 @@
             }
         }
 
+        private static void DumpPixelDebug(int row, short[] rowBuf0, short[] rowBuf1)
+        {
+            const int X = 122; // 2116;
+            const int Y = 40; // 1416 / 2;
+
+            var q = row - Y;
+            if (q < 0 || q >= 5)
+            {
+                return;
+            }
+
+            for (var p = 0; p < 5; p++)
+            {
+                var red = rowBuf0[2 * p + X + 0] - 2047;
+                var green = rowBuf0[2 * p + X + 1] - 2047;
+                var blue = rowBuf1[2 * p + X + 1] - 2047;
+                var green2 = rowBuf1[2 * p + X + 0] - 2047;
+
+                Console.WriteLine("{4}, {5}: {0}, {1}, {2}, {3}", red, green, blue, green2, p + 1, q + 1);
+            }
+        }
+
         private static void DumpPixel(int row, short[] rowBuf0, short[] rowBuf1, Bitmap image1)
         {
-            const int X = 2116;
-            const int Y = 1416 / 2;
+            const int X = 0; // 2116;
+            const int Y = 0; // 1416 / 2;
 
             var q = row - Y;
             if (q < 0 || q >= 500)
@@ -234,7 +256,7 @@
 
             for (var p = 0; p < 500; p++)
             {
-                var red = rowBuf0[2 * p + X + 0] >> 5;
+                var red = (rowBuf0[2 * p + X + 0] - 2047) >> 5;
                 if (red < 0)
                 {
                     red = 0;
@@ -244,7 +266,7 @@
                     red = 0xFF;
                 }
 
-                var green = (rowBuf0[2 * p + X + 1] >> 6) + (rowBuf1[2 * p + X + 0] >> 6);
+                var green = ((rowBuf0[2 * p + X + 1] - 2047) >> 6) + ((rowBuf1[2 * p + X + 0] - 2047) >> 6);
                 if (green < 0)
                 {
                     green = 0;
@@ -254,7 +276,7 @@
                     green = 0xfF;
                 }
 
-                var blue = rowBuf1[2 * p + X + 1] >> 5;
+                var blue = (rowBuf1[2 * p + X + 1] - 2047) >> 5;
                 if (blue < 0)
                 {
                     blue = 0;
@@ -313,8 +335,8 @@
             // const string FileName2 = Directory + "IMG_0503.CR2";
 
             const string Folder = @"C:\Users\Greg\Pictures\2013-10-06 001\";
-            const string FileName2 = Folder + "0L2A8883.CR2";
-            const string Bitmap = Folder + "0L2A8883 C.BMP";
+            const string FileName2 = Folder + "0L2A8884.CR2";
+            const string Bitmap = Folder + "0L2A8884 C.BMP";
 
             using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
             {
@@ -350,78 +372,86 @@
                 var table0 = startOfImage.HuffmanTable.Tables[0x00];
                 var table1 = startOfImage.HuffmanTable.Tables[0x01];
 
+                Assert.AreEqual(1, x);
+                Assert.AreEqual(lossless.SamplesPerLine, y);
+                Assert.AreEqual(lossless.SamplesPerLine, z);
+
                 using (var image1 = new Bitmap(500, 500))
                 {
                     for (var j = 0; j < lossless.ScanLines; j++)
                     {
-                        for (var i = 0; i < lossless.SamplesPerLine / 2; i++)
+                        // for (var k = 0; k < x; k++)
                         {
-                            var hufCode0 = GetValue(startOfImage.ImageData, table0);
-                            var difCode0 = startOfImage.ImageData.GetSetOfBits(hufCode0);
-                            var dif0 = DecodeDifBits(hufCode0, difCode0);
+                            for (var i = 0; i < y / 2; i++)
+                            {
+                                var hufCode0 = GetValue(startOfImage.ImageData, table0);
+                                var difCode0 = startOfImage.ImageData.GetSetOfBits(hufCode0);
+                                var dif0 = DecodeDifBits(hufCode0, difCode0);
 
-                            if (i == 0)
-                            {
-                                rowBuf0[2 * i] = predictor[0] += dif0;
-                            }
-                            else
-                            {
-                                rowBuf0[2 * i] = (short)(rowBuf0[2 * i - 2] + dif0);
+                                if (i == 0)
+                                {
+                                    rowBuf0[2 * i] = predictor[0] += dif0;
+                                }
+                                else
+                                {
+                                    rowBuf0[2 * i] = (short)(rowBuf0[2 * i - 2] + dif0);
+                                }
+
+                                var hufCode1 = GetValue(startOfImage.ImageData, table0);
+                                var difCode1 = startOfImage.ImageData.GetSetOfBits(hufCode1);
+                                var dif1 = DecodeDifBits(hufCode1, difCode1);
+
+                                if (i == 0)
+                                {
+                                    rowBuf0[2 * i + 1] = predictor[1] += dif1;
+                                }
+                                else
+                                {
+                                    rowBuf0[2 * i + 1] = (short)(rowBuf0[2 * i - 1] + dif1);
+                                }
                             }
 
-                            var hufCode1 = GetValue(startOfImage.ImageData, table0);
-                            var difCode1 = startOfImage.ImageData.GetSetOfBits(hufCode1);
-                            var dif1 = DecodeDifBits(hufCode1, difCode1);
+                            for (var i = 0; i < y / 2; i++)
+                            {
+                                var hufCode0 = GetValue(startOfImage.ImageData, table1);
+                                var difCode0 = startOfImage.ImageData.GetSetOfBits(hufCode0);
+                                var dif0 = DecodeDifBits(hufCode0, difCode0);
 
-                            if (i == 0)
-                            {
-                                rowBuf0[2 * i + 1] = predictor[1] += dif1;
+                                if (i == 0)
+                                {
+                                    // rowBuf1[2 * i] = predictor[0] += dif0;
+                                    rowBuf1[2 * i] = (short)(rowBuf0[lossless.SamplesPerLine - 2] + dif0);
+                                }
+                                else
+                                {
+                                    rowBuf1[2 * i] = (short)(rowBuf1[2 * i - 2] + dif0);
+                                }
+
+                                var hufCode1 = GetValue(startOfImage.ImageData, table1);
+                                var difCode1 = startOfImage.ImageData.GetSetOfBits(hufCode1);
+                                var dif1 = DecodeDifBits(hufCode1, difCode1);
+
+                                if (i == 0)
+                                {
+                                    // rowBuf1[2 * i + 1] = predictor[1] += dif1;
+                                    rowBuf1[2 * i + 1] = (short)(rowBuf0[lossless.SamplesPerLine - 1] + dif1);
+                                }
+                                else
+                                {
+                                    rowBuf1[2 * i + 1] = (short)(rowBuf1[2 * i - 1] + dif1);
+                                }
                             }
-                            else
-                            {
-                                rowBuf0[2 * i + 1] = (short)(rowBuf0[2 * i - 1] + dif1);
-                            }
+
+                            DumpPixelDebug(j, rowBuf0, rowBuf1);
+                            DumpPixel(j, rowBuf0, rowBuf1, image1);
+
+                            //var cr2Cols = lossless.SamplesPerLine;
+                            //var cr2Slice = cr2Cols / 2;
+                            //var cr2QuadRows = lossless.ScanLines / 2;
+                            //var ibStart = j < cr2QuadRows ? 2 * j * cr2Cols : 2 * (j - cr2QuadRows) * cr2Cols + cr2Slice;
+                            //Array.Copy(rowBuf, 0, ib, ibStart, cr2Slice);
+                            //Array.Copy(rowBuf, cr2Slice, ib, ibStart + cr2Slice, cr2Slice);
                         }
-
-                        for (var i = 0; i < lossless.SamplesPerLine / 2; i++)
-                        {
-                            var hufCode0 = GetValue(startOfImage.ImageData, table1);
-                            var difCode0 = startOfImage.ImageData.GetSetOfBits(hufCode0);
-                            var dif0 = DecodeDifBits(hufCode0, difCode0);
-
-                            if (i == 0)
-                            {
-                                // rowBuf1[2 * i] = predictor[0] += dif0;
-                                rowBuf1[2 * i] = (short)(rowBuf0[lossless.SamplesPerLine - 2] + dif0);
-                            }
-                            else
-                            {
-                                rowBuf1[2 * i] = (short)(rowBuf1[2 * i - 2] + dif0);
-                            }
-
-                            var hufCode1 = GetValue(startOfImage.ImageData, table1);
-                            var difCode1 = startOfImage.ImageData.GetSetOfBits(hufCode1);
-                            var dif1 = DecodeDifBits(hufCode1, difCode1);
-
-                            if (i == 0)
-                            {
-                                // rowBuf1[2 * i + 1] = predictor[1] += dif1;
-                                rowBuf1[2 * i + 1] = (short)(rowBuf0[lossless.SamplesPerLine - 1] + dif1);
-                            }
-                            else
-                            {
-                                rowBuf1[2 * i + 1] = (short)(rowBuf1[2 * i - 1] + dif1);
-                            }
-                        }
-
-                        DumpPixel(j, rowBuf0, rowBuf1, image1);
-
-                        //var cr2Cols = lossless.SamplesPerLine;
-                        //var cr2Slice = cr2Cols / 2;
-                        //var cr2QuadRows = lossless.ScanLines / 2;
-                        //var ibStart = j < cr2QuadRows ? 2 * j * cr2Cols : 2 * (j - cr2QuadRows) * cr2Cols + cr2Slice;
-                        //Array.Copy(rowBuf, 0, ib, ibStart, cr2Slice);
-                        //Array.Copy(rowBuf, cr2Slice, ib, ibStart + cr2Slice, cr2Slice);
                     }
 
                     image1.Save(Bitmap);
