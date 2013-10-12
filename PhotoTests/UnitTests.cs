@@ -73,9 +73,6 @@
         [TestMethod]
         public void TestMethodC5M3()
         {
-            // const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
-            // const string FileName2 = Directory + "IMG_0503.CR2";
-
             const string Folder = @"C:\Users\Greg\Pictures\2013-10-06 001\";
             const string FileName2 = Folder + "0L2A8892.CR2";
             const string Bitmap = Folder + "0L2A8892 C.BMP";
@@ -103,15 +100,10 @@
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
                 var rawSize = address + length - binaryReader.BaseStream.Position - 2;
-                // Assert.AreEqual(23852856, rawSize);                                        // RawSize (Raw = new byte[RawSize]
                 startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
 
                 var lossless = startOfImage.Lossless;
                 Console.WriteLine("lines {0}, samples per line {1} * {2}", lossless.ScanLines, lossless.SamplesPerLine, lossless.Components.Length);
-
-                // Assert.AreEqual(4711440, lossless.SamplesPerLine * lossless.ScanLines);    // IbSize (IB = new ushort[IbSize])
-                // var ibSize = lossless.SamplesPerLine * lossless.ScanLines;
-                // var ib = new ushort[ibSize];
 
                 var rowBuf = new short[4, lossless.SamplesPerLine];
                 Console.WriteLine("Image: 0x{0}", binaryReader.BaseStream.Position.ToString("X8"));
@@ -140,7 +132,7 @@
         }
 
         private static void ParseRow(
-            StartOfFrame lossless, ushort y, StartOfImage startOfImage, HuffmanTable table0, short[,] rowBuf, short[] predictor, int k, Bitmap image1)
+            StartOfFrame lossless, ushort y, StartOfImage startOfImage, HuffmanTable table0, short[,] rowBuf, short[] predictor, int x, Bitmap image1)
         {
             var i1 = 4 / lossless.Components.Length;
 
@@ -168,7 +160,7 @@
                     }
                 }
 
-                DumpPixel(k * y, j, rowBuf, image1);
+                DumpPixel(x * y, j, rowBuf, image1);
             }
         }
 

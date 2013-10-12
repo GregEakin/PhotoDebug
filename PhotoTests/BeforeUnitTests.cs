@@ -39,21 +39,16 @@
 
         private static void DumpPixel(int col, int row, short[] rowBuf0, short[] rowBuf1, Bitmap image1)
         {
-            if (col > 0)
-            {
-                return;
-            }
-
             const int X = 0; // 2116;
             const int Y = 0; // 1416 / 2; // (3950 - 900) / 2;
 
             var q = row - Y;
-            if (q < 0 || q >= 500)
+            if (2 * q + 1 >= image1.Height)
             {
                 return;
             }
 
-            for (var p = 0; p < 500; p++)
+            for (var p = 0; p < rowBuf0.Length / 2 && 2 * p + 1 + col < image1.Width; p++)
             {
                 var red = (rowBuf0[2 * p + X + 0] - 2047) >> 5;
                 if (red < 0)
@@ -86,7 +81,10 @@
                 }
 
                 var color = Color.FromArgb(red, green, blue);
-                image1.SetPixel(p, q, color);
+                image1.SetPixel(2 * p + 0 + col, 2 * q, color);
+                image1.SetPixel(2 * p + 1 + col, 2 * q, color);
+                image1.SetPixel(2 * p + 0 + col, 2 * q + 1, color);
+                image1.SetPixel(2 * p + 1 + col, 2 * q + 1, color);
             }
         }
 
@@ -94,8 +92,8 @@
         public void TestMethodC5M3()
         {
             const string Folder = @"C:\Users\Greg\Pictures\2013-10-06 001\";
-            const string FileName2 = Folder + "0L2A8892.CR2";
-            const string Bitmap = Folder + "0L2A8892 Before.BMP";
+            const string FileName2 = Folder + "0L2A8883.CR2";
+            const string Bitmap = Folder + "0L2A8883 Before.BMP";
 
             DumpBitmap(FileName2, Bitmap);
         }
@@ -125,8 +123,8 @@
                 var lossless = startOfImage.Lossless;
                 Console.WriteLine("lines {0}, samples per line {1} * {2}", lossless.ScanLines, lossless.SamplesPerLine, lossless.Components.Length);
 
-                var rowBuf0 = new short[lossless.SamplesPerLine * 2];
-                var rowBuf1 = new short[lossless.SamplesPerLine * 2];
+                var rowBuf0 = new short[lossless.SamplesPerLine * lossless.Components.Length];
+                var rowBuf1 = new short[lossless.SamplesPerLine * lossless.Components.Length];
                 Console.WriteLine("Image: 0x{0}", binaryReader.BaseStream.Position.ToString("X8"));
 
                 var predictor = new[] { (short)(1 << (lossless.Precision - 1)), (short)(1 << (lossless.Precision - 1)) };
@@ -136,7 +134,7 @@
                 Assert.AreEqual(x * y + z, lossless.Width); // Sensor width (bits)
                 Assert.AreEqual(x * y + z, lossless.SamplesPerLine * lossless.Components.Length);
 
-                using (var image1 = new Bitmap(500, 500))
+                using (var image1 = new Bitmap(lossless.Width, lossless.ScanLines))
                 {
                     for (var k = 0; k < x; k++)
                     {
