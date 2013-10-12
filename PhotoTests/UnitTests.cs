@@ -223,10 +223,10 @@
 
         private static void DumpPixel(int row, short[] rowBuf0, short[] rowBuf1, Bitmap image1)
         {
-            const int X = 0; // 2116;
-            const int Y = 0; // 1416;
+            const int X = 2116;
+            const int Y = 1416 / 2;
 
-            var q = row / 2 - Y;
+            var q = row - Y;
             if (q < 0 || q >= 500)
             {
                 return;
@@ -352,9 +352,9 @@
 
                 using (var image1 = new Bitmap(500, 500))
                 {
-                    for (var j = 0; j < lossless.ScanLines; j += 2)
+                    for (var j = 0; j < lossless.ScanLines; j++)
                     {
-                        for (var i = 0; i < lossless.SamplesPerLine; i++)
+                        for (var i = 0; i < lossless.SamplesPerLine / 2; i++)
                         {
                             var hufCode0 = GetValue(startOfImage.ImageData, table0);
                             var difCode0 = startOfImage.ImageData.GetSetOfBits(hufCode0);
@@ -383,7 +383,7 @@
                             }
                         }
 
-                        for (var i = 0; i < lossless.SamplesPerLine; i++)
+                        for (var i = 0; i < lossless.SamplesPerLine / 2; i++)
                         {
                             var hufCode0 = GetValue(startOfImage.ImageData, table1);
                             var difCode0 = startOfImage.ImageData.GetSetOfBits(hufCode0);
@@ -391,7 +391,8 @@
 
                             if (i == 0)
                             {
-                                rowBuf1[2 * i] = predictor[0] += dif0;
+                                // rowBuf1[2 * i] = predictor[0] += dif0;
+                                rowBuf1[2 * i] = (short)(rowBuf0[lossless.SamplesPerLine - 2] + dif0);
                             }
                             else
                             {
@@ -404,7 +405,8 @@
 
                             if (i == 0)
                             {
-                                rowBuf1[2 * i + 1] = predictor[1] += dif1;
+                                // rowBuf1[2 * i + 1] = predictor[1] += dif1;
+                                rowBuf1[2 * i + 1] = (short)(rowBuf0[lossless.SamplesPerLine - 1] + dif1);
                             }
                             else
                             {
