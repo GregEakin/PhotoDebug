@@ -132,7 +132,7 @@
 
                 var predictor = new[] { (short)(1 << (lossless.Precision - 1)), (short)(1 << (lossless.Precision - 1)) };
                 var table0 = startOfImage.HuffmanTable.Tables[0x00];
-                var table1 = startOfImage.HuffmanTable.Tables[0x01];
+                // var table1 = startOfImage.HuffmanTable.Tables[0x01];
 
                 using (var image1 = new Bitmap(lossless.Width, lossless.ScanLines))
                 {
