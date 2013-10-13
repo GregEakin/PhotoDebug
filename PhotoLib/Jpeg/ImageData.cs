@@ -99,7 +99,11 @@
                 if (retval == 0xFF)
                 {
                     var code = rawData[++index];
-                    if (code != 0)
+                    if (code == 0xD9)
+                    {
+                        this.EndOfFile = true;
+                    }
+                    else if (code != 0)
                     {
                         throw new Exception(
                             "Not supposed to happen 0xFF 0x{0}: Position: {1}".FormatWith(code.ToString("X2"), (this.rawData.Length - this.index)));

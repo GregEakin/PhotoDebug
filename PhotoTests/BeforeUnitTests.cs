@@ -122,6 +122,7 @@
                 var length = imageFileDirectory.Entries.First(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length) { ImageData = new ImageData(binaryReader, length) };
+                
                 var lossless = startOfImage.Lossless;
                 Console.WriteLine("lines {0}, samples per line {1} * {2} = {3}", lossless.ScanLines, lossless.SamplesPerLine, lossless.Components.Length, lossless.Width);
                 Assert.AreEqual(x * y + z, lossless.Width); // Sensor width (bits)
@@ -129,7 +130,6 @@
 
                 var rowBuf0 = new short[lossless.SamplesPerLine * lossless.Components.Length];
                 var rowBuf1 = new short[lossless.SamplesPerLine * lossless.Components.Length];
-
                 var predictor = new[] { (short)(1 << (lossless.Precision - 1)), (short)(1 << (lossless.Precision - 1)) };
                 var table0 = startOfImage.HuffmanTable.Tables[0x00];
                 // var table1 = startOfImage.HuffmanTable.Tables[0x01];
@@ -266,9 +266,9 @@
                     }
 
                     image1.Save(bitmap);
-
-                    Console.WriteLine("EOF {0}", startOfImage.ImageData.RawData.Length - startOfImage.ImageData.Index);
                 }
+
+                Console.WriteLine("EOF {0}", startOfImage.ImageData.RawData.Length - startOfImage.ImageData.Index);
             }
         }
 
