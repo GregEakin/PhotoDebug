@@ -84,9 +84,14 @@
             return (ushort)retval;
         }
 
-        public byte GetNextByte()
+        private byte GetNextByte()
         {
             byte retval;
+
+            if (this.EndOfFile)
+            {
+                throw new Exception("Reading past EOF is bad!");
+            }
 
             if (index < rawData.Length - 1)
             {

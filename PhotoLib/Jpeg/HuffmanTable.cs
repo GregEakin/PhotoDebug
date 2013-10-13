@@ -114,7 +114,7 @@
             return retval;
         }
 
-        public Dictionary<int, HCode> BuildTree()
+        private Dictionary<int, HCode> BuildTree()
         {
             var retval = new Dictionary<int, HCode>();
 
