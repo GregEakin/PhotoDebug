@@ -6,6 +6,9 @@
 
     using PhotoLib.Utilities;
 
+    /// <summary>
+    /// SOI 0xFFD8
+    /// </summary>
     public class StartOfImage : JpegTag
     {
         #region Fields

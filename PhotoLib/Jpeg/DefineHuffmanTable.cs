@@ -8,7 +8,9 @@
 
     using PhotoLib.Utilities;
 
-    /// DHT: Define Huffman HuffmanTable
+    /// <summary>
+    /// DHT 0xFFC4
+    /// </summary>
     public class DefineHuffmanTable : JpegTag
     {
         #region Fields

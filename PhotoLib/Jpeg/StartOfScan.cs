@@ -3,6 +3,9 @@
     using System;
     using System.IO;
 
+    /// <summary>
+    /// SOS 0xFFDA
+    /// </summary>
     public class StartOfScan : JpegTag
     {
         #region Fields

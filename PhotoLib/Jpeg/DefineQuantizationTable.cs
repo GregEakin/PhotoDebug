@@ -3,6 +3,9 @@
     using System;
     using System.IO;
 
+    /// <summary>
+    /// DQT 0xFFDB
+    /// </summary>
     public class DefineQuantizationTable : JpegTag
     {
         #region Fields
