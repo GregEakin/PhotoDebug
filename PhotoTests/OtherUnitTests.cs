@@ -96,7 +96,7 @@
                 var length = imageFileDirectory.Entries.First(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
-                var lossless = startOfImage.Lossless;
+                var lossless = startOfImage.StartOfFrame;
                 // Assert.AreEqual(4711440, lossless.SamplesPerLine * lossless.ScanLines); // IbSize (IB = new ushort[IbSize])
 
                 var rawSize = address + length - binaryReader.BaseStream.Position - 2;
@@ -175,7 +175,7 @@
                 var length = imageFileDirectory.Entries.First(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
-                var lossless = startOfImage.Lossless;
+                var lossless = startOfImage.StartOfFrame;
 
                 var rawSize = address + length - binaryReader.BaseStream.Position - 2;
                 // Assert.AreEqual(23852858, rawSize); // RawSize (Raw = new byte[RawSize]

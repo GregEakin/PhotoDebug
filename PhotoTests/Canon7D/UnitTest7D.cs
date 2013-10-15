@@ -71,7 +71,7 @@
 
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
-                var lossless = startOfImage.Lossless;
+                var lossless = startOfImage.StartOfFrame;
                 Assert.AreEqual(14, lossless.Precision);
                 Assert.AreEqual(4, lossless.Components.Length);
                 Assert.AreEqual(1340, lossless.SamplesPerLine);
@@ -93,7 +93,7 @@
 
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
-                var lossless = startOfImage.Lossless;
+                var lossless = startOfImage.StartOfFrame;
                 Assert.AreEqual(14, lossless.Precision);
 
                 var startOfScan = startOfImage.StartOfScan;
@@ -117,7 +117,7 @@
 
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
-                var lossless = startOfImage.Lossless;
+                var lossless = startOfImage.StartOfFrame;
 
                 Assert.AreEqual(4, lossless.Components.Length); // clrs
                 foreach (var component in lossless.Components)
@@ -219,7 +219,7 @@
                 Assert.IsTrue(huffmanTable.Tables.ContainsKey(0x00));
                 Assert.IsTrue(huffmanTable.Tables.ContainsKey(0x01));
 
-                var lossless = startOfImage.Lossless;
+                var lossless = startOfImage.StartOfFrame;
                 Assert.AreEqual(0xFF, lossless.Mark);
                 Assert.AreEqual(0xC3, lossless.Tag);
 

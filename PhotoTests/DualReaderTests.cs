@@ -50,7 +50,7 @@ namespace PhotoTests
                 var length = imageFileDirectory.Entries.First(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length) { ImageData = new ImageData(binaryReader, length) };
-                var lossless = startOfImage.Lossless;
+                var lossless = startOfImage.StartOfFrame;
                 Console.WriteLine("lines {0}, samples per line {1} * {2} = {3}", lossless.ScanLines, lossless.SamplesPerLine, lossless.Components.Length, lossless.Width);
                 Assert.AreEqual(x * y + z, lossless.Width); // Sensor width (bits)
                 Assert.AreEqual(x * y + z, lossless.SamplesPerLine * lossless.Components.Length);

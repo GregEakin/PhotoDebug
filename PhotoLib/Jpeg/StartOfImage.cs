@@ -15,11 +15,13 @@
 
         private readonly DefineHuffmanTable huffmanTable;
 
+        private readonly DefineQuantizationTable quantizationTable;
+
         private ImageData imageData;
 
         private readonly JfifMarker jfifMarker;
 
-        private readonly StartOfFrame lossless;
+        private readonly StartOfFrame startOfFrame;
 
         private readonly StartOfScan startOfScan;
 
@@ -51,7 +53,7 @@
                     {
                         case 0xC0: // SOF0, Start of Frame 0, Baseline DCT
                         case 0xC3: // SOF3, Start of Frame 3, Lossless (sequential)
-                            this.lossless = new StartOfFrame(binaryReader);
+                            this.startOfFrame = new StartOfFrame(binaryReader);
                             break;
 
                         case 0xC4: // DHT, Define Huffman Table
@@ -70,7 +72,7 @@
                             return;
 
                         case 0xDB: // DQT, Define Quantization Table
-                            var defineQuantizatonTable = new DefineQuantizationTable(binaryReader);
+                            this.quantizationTable = new DefineQuantizationTable(binaryReader);
                             break;
 
                         case 0xE0: // APP0, Application Segment 0, JFIF - JFIF JPEG image, AVI1 - Motion JPEG (MJPG)
@@ -109,6 +111,14 @@
             }
         }
 
+        public DefineQuantizationTable QuantizationTable
+        {
+            get
+            {
+                return quantizationTable;
+            }
+        }
+
         public ImageData ImageData
         {
             get
@@ -121,11 +131,11 @@
             }
         }
 
-        public StartOfFrame Lossless
+        public StartOfFrame StartOfFrame
         {
             get
             {
-                return lossless;
+                return this.startOfFrame;
             }
         }
 
@@ -143,7 +153,7 @@
 
         public void DecodeHuffmanData()
         {
-            for (var i = 0; i < (this.lossless.SamplesPerLine + 7) / 8; i++)
+            for (var i = 0; i < (this.startOfFrame.SamplesPerLine + 7) / 8; i++)
             {
                 if (this.huffmanTable.Tables.ContainsKey(0x00))
                 {
