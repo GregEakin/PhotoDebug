@@ -3,6 +3,9 @@
     using System;
     using System.IO;
 
+    /// <summary>
+    /// APP0 0xFFEO
+    /// </summary>
     public class JfifMarker : JpegTag
     {
         #region Fields
