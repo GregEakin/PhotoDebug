@@ -106,7 +106,7 @@ namespace PhotoTests
                     }
                 }
 
-                UnitTests.DumpPixel(x * y, j, y, rowBuf, image1);
+                UnitTests.DumpPixel(x * y, j, rowBuf, image1);
             }
 
         }
