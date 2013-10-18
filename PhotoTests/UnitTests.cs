@@ -95,13 +95,12 @@
                 var rowBuf = new short[4, y2 / 4];
                 for (var i = 0; i < y2 / 4; i++)  // i < y / component count
                 {
-                    var hufCode0 = GetValue(imageData, table0);
-                    var difCode0 = imageData.GetSetOfBits(hufCode0);
-                    rowBuf[0, i] = (short)difCode0;
-
-                    var hufCode1 = GetValue(imageData, table0);
-                    var difCode1 = imageData.GetSetOfBits(hufCode1);
-                    rowBuf[1, i] = (short)difCode1;
+                    for (var w = 0; w < 2; w++)
+                    {
+                        var hufCode0 = GetValue(imageData, table0);
+                        var difCode0 = imageData.GetSetOfBits(hufCode0);
+                        rowBuf[w, i] = (short)difCode0;
+                    }
                     
                     for (var w = 2; w < 4; w++)
                     {
@@ -162,7 +161,7 @@
             const int Y = 0; // 1416 / 2; // (3950 - 900) / 2;
 
             var q = row - Y;
-            if (q >= image1.Height)
+            if (q < 0 || q >= image1.Height)
             {
                 return;
             }
