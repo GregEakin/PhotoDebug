@@ -35,6 +35,9 @@
                 var rawImage = new RawImage(binaryReader);
                 var imageFileDirectory = rawImage.Directories.Last();
 
+                var compressoin = imageFileDirectory.Entries.First(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer; // TIF_COMPRESSION
+                Assert.AreEqual(6u, compressoin);  // JpegCompression
+
                 var strips = imageFileDirectory.Entries.First(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
                 binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
                 var x = binaryReader.ReadUInt16();

@@ -94,8 +94,8 @@
         public void TestMethodC5M3()
         {
             const string Folder = @"C:\Users\Greg\Pictures\2013_10_14\";
-            const string FileName2 = Folder + "0L2A8899.CR2";
-            const string Bitmap = Folder + "0L2A8899 Before.BMP";
+            const string FileName2 = Folder + "0L2A8897.CR2";
+            const string Bitmap = Folder + "0L2A8897 Before.BMP";
 
             DumpBitmap(FileName2, Bitmap);
         }
@@ -107,6 +107,9 @@
                 var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
                 var imageFileDirectory = rawImage.Directories.Last();
+
+                var compressoin = imageFileDirectory.Entries.First(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer; // TIF_COMPRESSION
+                Assert.AreEqual(6u, compressoin);  // JpegCompression
 
                 var strips = imageFileDirectory.Entries.First(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
                 binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
@@ -122,23 +125,26 @@
                 var length = imageFileDirectory.Entries.First(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length) { ImageData = new ImageData(binaryReader, length) };
-                
-                var lossless = startOfImage.StartOfFrame;
-                Console.WriteLine("lines {0}, samples per line {1} * {2} = {3}", lossless.ScanLines, lossless.SamplesPerLine, lossless.Components.Length, lossless.Width);
+
+                //var startOfScan = startOfImage.StartOfScan;
+                //DumpStartOfScan(startOfScan);
+
+                var startOfFrame = startOfImage.StartOfFrame;
+                Console.WriteLine("lines {0}, samples per line {1} * {2} = {3}", startOfFrame.ScanLines, startOfFrame.SamplesPerLine, startOfFrame.Components.Length, startOfFrame.Width);
                 // Assert.AreEqual(x * y + z, lossless.Width); // Sensor width (bits)
                 // Assert.AreEqual(x * y + z, lossless.SamplesPerLine * lossless.Components.Length);
 
-                var rowBuf0 = new short[lossless.SamplesPerLine * lossless.Components.Length];
-                var rowBuf1 = new short[lossless.SamplesPerLine * lossless.Components.Length];
-                var predictor = new[] { (short)(1 << (lossless.Precision - 1)), (short)(1 << (lossless.Precision - 1)) };
+                var rowBuf0 = new short[startOfFrame.SamplesPerLine * startOfFrame.Components.Length];
+                var rowBuf1 = new short[startOfFrame.SamplesPerLine * startOfFrame.Components.Length];
+                var predictor = new[] { (short)(1 << (startOfFrame.Precision - 1)), (short)(1 << (startOfFrame.Precision - 1)) };
                 var table0 = startOfImage.HuffmanTable.Tables[0x00];
-                // var table1 = startOfImage.HuffmanTable.Tables[0x01];
+                var table1 = startOfImage.HuffmanTable.Tables[0x01];
 
-                using (var image1 = new Bitmap(lossless.Width, lossless.ScanLines))
+                using (var image1 = new Bitmap(startOfFrame.Width, startOfFrame.ScanLines))
                 {
                     for (var k = 0; k < x; k++)
                     {
-                        for (var j = 0; j < lossless.ScanLines / 2; j++)
+                        for (var j = 0; j < startOfFrame.ScanLines / 2; j++)
                         {
                             for (var i = 0; i < y / 2; i++)
                             {
@@ -155,7 +161,7 @@
                                     rowBuf0[2 * i] = (short)(rowBuf0[2 * i - 2] + dif0);
                                 }
 
-                                var hufCode1 = GetValue(startOfImage.ImageData, table0);
+                                var hufCode1 = GetValue(startOfImage.ImageData, table1);
                                 var difCode1 = startOfImage.ImageData.GetSetOfBits(hufCode1);
                                 var dif1 = DecodeDifBits(hufCode1, difCode1);
 
@@ -177,20 +183,20 @@
 
                                 if (i == 0)
                                 {
-                                    rowBuf1[2 * i] = (short)(rowBuf0[lossless.SamplesPerLine - 2] + dif0);
+                                    rowBuf1[2 * i] = (short)(rowBuf0[startOfFrame.SamplesPerLine - 2] + dif0);
                                 }
                                 else
                                 {
                                     rowBuf1[2 * i] = (short)(rowBuf1[2 * i - 2] + dif0);
                                 }
 
-                                var hufCode1 = GetValue(startOfImage.ImageData, table0);
+                                var hufCode1 = GetValue(startOfImage.ImageData, table1);
                                 var difCode1 = startOfImage.ImageData.GetSetOfBits(hufCode1);
                                 var dif1 = DecodeDifBits(hufCode1, difCode1);
 
                                 if (i == 0)
                                 {
-                                    rowBuf1[2 * i + 1] = (short)(rowBuf0[lossless.SamplesPerLine - 1] + dif1);
+                                    rowBuf1[2 * i + 1] = (short)(rowBuf0[startOfFrame.SamplesPerLine - 1] + dif1);
                                 }
                                 else
                                 {
@@ -202,7 +208,7 @@
                         }
                     }
 
-                    for (var j = 0; j < lossless.ScanLines / 2; j++)
+                    for (var j = 0; j < startOfFrame.ScanLines / 2; j++)
                     {
                         for (var i = 0; i < z / 2; i++)
                         {
@@ -219,7 +225,7 @@
                                 rowBuf0[2 * i] = (short)(rowBuf0[2 * i - 2] + dif0);
                             }
 
-                            var hufCode1 = GetValue(startOfImage.ImageData, table0);
+                            var hufCode1 = GetValue(startOfImage.ImageData, table1);
                             var difCode1 = startOfImage.ImageData.GetSetOfBits(hufCode1);
                             var dif1 = DecodeDifBits(hufCode1, difCode1);
 
@@ -241,20 +247,20 @@
 
                             if (i == 0)
                             {
-                                rowBuf1[2 * i] = (short)(rowBuf0[lossless.SamplesPerLine - 2] + dif0);
+                                rowBuf1[2 * i] = (short)(rowBuf0[startOfFrame.SamplesPerLine - 2] + dif0);
                             }
                             else
                             {
                                 rowBuf1[2 * i] = (short)(rowBuf1[2 * i - 2] + dif0);
                             }
 
-                            var hufCode1 = GetValue(startOfImage.ImageData, table0);
+                            var hufCode1 = GetValue(startOfImage.ImageData, table1);
                             var difCode1 = startOfImage.ImageData.GetSetOfBits(hufCode1);
                             var dif1 = DecodeDifBits(hufCode1, difCode1);
 
                             if (i == 0)
                             {
-                                rowBuf1[2 * i + 1] = (short)(rowBuf0[lossless.SamplesPerLine - 1] + dif1);
+                                rowBuf1[2 * i + 1] = (short)(rowBuf0[startOfFrame.SamplesPerLine - 1] + dif1);
                             }
                             else
                             {
@@ -303,6 +309,15 @@
             while (!table.Dictionary.TryGetValue(hufIndex, out hCode) || hCode.Length != hufBits);
 
             return hCode.Code;
+        }
+
+        private static void DumpStartOfScan(StartOfScan startOfScan)
+        {
+            Console.WriteLine("Ns: {0}", startOfScan.Components.Length);
+            foreach (var scanComponent in startOfScan.Components)
+            {
+                Console.WriteLine("    Cs {0}: Td {1}, Ta {2}", scanComponent.Id, scanComponent.Dc, scanComponent.Ac);
+            }
         }
 
         #endregion
