@@ -35,8 +35,12 @@
                 var rawImage = new RawImage(binaryReader);
                 var imageFileDirectory = rawImage.Directories.Last();
 
-                var compressoin = imageFileDirectory.Entries.First(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer; // TIF_COMPRESSION
-                Assert.AreEqual(6u, compressoin);  // JpegCompression
+                // compression for 7D RAW should be 4 -
+                // compression for 7D mRAW and sRAW should be 3 -
+                // compression for 5DIII RAW should be 2 -
+                // compression for 5DIII mRAW and sRAW should be 3 -
+                //var compressoin = imageFileDirectory.Entries.First(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer; // TIF_COMPRESSION
+                //Assert.AreEqual(6u, compressoin);  // JpegCompression
 
                 var strips = imageFileDirectory.Entries.First(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
                 binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);

@@ -319,6 +319,15 @@
                 binaryReader.BaseStream.Seek(makerNotes.ValuePointer, SeekOrigin.Begin);
                 var notes = new ImageFileDirectory(binaryReader);
 
+                var size1 = notes[0x4001];
+                Console.WriteLine("0x{0}, {1}, {2}, {3}", size1.TagId.ToString("X4"), size1.TagType, size1.NumberOfValue, size1.ValuePointer);
+                var size2 = notes[0x4002];
+                Console.WriteLine("0x{0}, {1}, {2}, {3}", size2.TagId.ToString("X4"), size2.TagType, size2.NumberOfValue, size2.ValuePointer);
+                var size5 = notes[0x4005];
+                Console.WriteLine("0x{0}, {1}, {2}, {3}", size5.TagId.ToString("X4"), size5.TagType, size5.NumberOfValue, size5.ValuePointer);
+
+                return;
+
                 var modelId = notes[0x0010];
                 // Assert.AreEqual(2147484240, modelId.ValuePointer);
                 Assert.AreEqual(2147484293, modelId.ValuePointer);
