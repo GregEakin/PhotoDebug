@@ -90,7 +90,8 @@
                 Assert.AreEqual(0x000000F4u, imageFileEntry.ValuePointer);
                 Assert.AreEqual(6u, imageFileEntry.NumberOfValue);
 
-                Assert.AreEqual("Canon", RawImage.ReadChars(binaryReader, imageFileEntry));
+                var readChars = RawImage.ReadChars(binaryReader, imageFileEntry);
+                Assert.AreEqual("Canon", readChars);
             }
         }
 

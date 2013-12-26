@@ -17,7 +17,8 @@
     {
         #region Public Methods and Operators
 
-        // [TestMethod]
+        [Ignore]
+        [TestMethod]
         public void DumpHuffmanTable()
         {
             const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
@@ -35,7 +36,8 @@
             }
         }
 
-        // [TestMethod]
+        [Ignore]
+        [TestMethod]
         public void TestMethod8()
         {
             const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
@@ -72,6 +74,7 @@
             //     Pix[R,C] = Pix[R,C-2] + Diff
         }
 
+        [Ignore]
         [TestMethod]
         public void TestMethodB()
         {
@@ -140,6 +143,7 @@
             }
         }
 
+        [Ignore]
         [TestMethod]
         public void TestMethodB6()
         {

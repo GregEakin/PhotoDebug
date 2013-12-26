@@ -158,7 +158,7 @@
         // dateTime 12)  0x0132 Ascii 8-bit: [0x0000012A] (20): 2013:07:13 01:10:00
         // 13)  0x013B Ascii 8-bit: [0x0000013E] (11): Greg Eakin
 
-        // [TestMethod]
+        [TestMethod]
         public void XmpMetadata()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
@@ -173,8 +173,13 @@
                 Assert.AreEqual(0x000119C4u, imageFileEntry.ValuePointer);
                 Assert.AreEqual(8192u, imageFileEntry.NumberOfValue);
 
-                const string Expected = "<?xpacket begin='ï»¿' id='W5M0MpCehiHzreSzNTczkc9d'?><x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\" xmlns:xmp=\"http://ns.adobe.com/xap/1.0/\"><xmp:Rating>0</xmp:Rating></rdf:Description></rdf:RDF></x:xmpmeta><?xpacket end='w'?>";
-                Assert.AreEqual(Expected, RawImage.ReadChars(binaryReader, imageFileEntry));
+                var readChars = RawImage.ReadChars(binaryReader, imageFileEntry);
+
+                const string Expected1 = "<?xpacket begin='ï»¿' id='W5M0MpCehiHzreSzNTczkc9d'?><x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\" xmlns:xmp=\"http://ns.adobe.com/xap/1.0/\"><xmp:Rating>0</xmp:Rating></rdf:Description></rdf:RDF></x:xmpmeta>";
+                Assert.AreEqual(Expected1, readChars.Substring(0, 291));
+                // lots of white space between these two substrings.
+                const string Expected2 = "<?xpacket end='w'?>";
+                Assert.AreEqual(Expected2, readChars.Substring(8173));
             }
         }
 

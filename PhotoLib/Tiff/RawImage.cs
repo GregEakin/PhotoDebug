@@ -96,12 +96,18 @@
                 binaryReader.BaseStream.Seek(imageFileEntry.ValuePointer, SeekOrigin.Begin);
             }
 
-            for (var j = 0; j < imageFileEntry.NumberOfValue - 1; j++)
+            for (var j = 0; j < imageFileEntry.NumberOfValue; j++)
             {
                 var us = binaryReader.ReadByte();
                 retval.Append((char)us);
             }
-   
+
+            var lastPosition = retval.Length - 1;
+            if (retval[lastPosition] == 0)
+            {
+                retval.Remove(lastPosition, 1);
+            }
+
             return retval.ToString();
         }
 

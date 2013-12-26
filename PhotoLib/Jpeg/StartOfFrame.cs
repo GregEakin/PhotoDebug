@@ -24,8 +24,6 @@
         public StartOfFrame(BinaryReader binaryReader)
             : base(binaryReader)
         {
-            // case 0xffc3: // SOF3, Start of Frame 3, Lossless (sequential)
-            //   jh->sraw = ((data[7] >> 4) * (data[7] & 15) - 1) & 3;
             // case 0xffc0: // SOF0, Start of Frame 0, Baseline DCT
             //   jh->bits = data[0];
             //   jh->high = data[1] << 8 | data[2];
@@ -33,6 +31,8 @@
             //   jh->clrs = data[5] + jh->sraw;
             //   if (len == 9 && !dng_version) getc(ifp);
             //   break;
+            // case 0xffc3: // SOF3, Start of Frame 3, Lossless (sequential)
+            //   jh->sraw = ((data[7] >> 4) * (data[7] & 15) - 1) & 3;
             // case 0xffc4:
             //   if (info_only) break;
             //   for (dp = data; dp < data+len && (c = *dp++) < 4; )
@@ -55,12 +55,7 @@
 
             for (var i = 0; i < componentCount; i++)
             {
-                var compId = binaryReader.ReadByte();
-                var sampleFactors = binaryReader.ReadByte();
-                var qTableId = binaryReader.ReadByte();
-                var sampleHFactor = (byte)(sampleFactors >> 4);
-                var sampleVFactor = (byte)(sampleFactors & 0x0f);
-                components[i] = new Component(compId, qTableId, sampleHFactor, sampleVFactor);
+                components[i] = new Component(binaryReader);
             }
 
             // var clrs = components.Sum(comp => comp.HFactor * comp.VFactor);
