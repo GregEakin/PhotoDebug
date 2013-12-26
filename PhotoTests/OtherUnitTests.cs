@@ -326,11 +326,10 @@
                 var size5 = notes[0x4005];
                 Console.WriteLine("0x{0}, {1}, {2}, {3}", size5.TagId.ToString("X4"), size5.TagType, size5.NumberOfValue, size5.ValuePointer);
 
-                return;
-
                 var modelId = notes[0x0010];
                 // Assert.AreEqual(2147484240, modelId.ValuePointer);
                 Assert.AreEqual(2147484293, modelId.ValuePointer);
+
                 var white = notes[0x4001];
                 //var whiteData = RawImage.ReadUInts16(binaryReader, white);
                 //Assert.AreEqual(1840, whiteData[0x003F]);
@@ -352,7 +351,65 @@
             }
         }
 
-        private static short DecodeDifBits(ushort difBits, ushort difCode)
+        [TestMethod]
+        public void TestMethodTags()
+        {
+            //const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
+            //const string FileName2 = Directory + "IMG_0503.CR2";
+            const string Directory = @"C:\Users\Greg\Pictures\";
+            const string FileName2 = Directory + "IMG_0516.CR2";
+
+            using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
+            {
+                var binaryReader = new BinaryReader(fileStream);
+                var rawImage = new RawImage(binaryReader);
+
+                var ifd0 = rawImage.Directories.First();
+                var make = ifd0[0x010f];
+                Assert.AreEqual("Canon", RawImage.ReadChars(binaryReader, make));
+                var model = ifd0[0x0110];
+                // Assert.AreEqual("Canon EOS 7D", RawImage.ReadChars(binaryReader, model));
+                Assert.AreEqual("Canon EOS 5D Mark III", RawImage.ReadChars(binaryReader, model));
+
+                var exif = ifd0[0x8769];
+                binaryReader.BaseStream.Seek(exif.ValuePointer, SeekOrigin.Begin);
+                var tags = new ImageFileDirectory(binaryReader);
+
+                var makerNotes = tags[0x927C];
+                binaryReader.BaseStream.Seek(makerNotes.ValuePointer, SeekOrigin.Begin);
+                var notes = new ImageFileDirectory(binaryReader);
+
+                var white = notes[0x4001];
+                Console.WriteLine("0x{0}, {1}, {2}, {3}", white.TagId.ToString("X4"), white.TagType, white.NumberOfValue, white.ValuePointer);
+                // var wb = new WhiteBalance(binaryReader, white);
+                this.ReadSomeData(binaryReader, white.ValuePointer);
+
+                var size2 = notes[0x4002];
+                Console.WriteLine("0x{0}, {1}, {2}, {3}", size2.TagId.ToString("X4"), size2.TagType, size2.NumberOfValue, size2.ValuePointer);
+                this.ReadSomeData(binaryReader, size2.ValuePointer);
+
+                var size5 = notes[0x4005];
+                Console.WriteLine("0x{0}, {1}, {2}, {3}", size5.TagId.ToString("X4"), size5.TagType, size5.NumberOfValue, size5.ValuePointer);
+                this.ReadSomeData(binaryReader, size5.ValuePointer);
+            }
+        }
+
+        private void ReadSomeData(BinaryReader binaryReader, uint valuePointer)
+        {
+            if (binaryReader.BaseStream.Position != valuePointer)
+            {
+                binaryReader.BaseStream.Seek(valuePointer, SeekOrigin.Begin);
+            }
+
+            var ar = 0;
+            var length = binaryReader.ReadUInt16();
+            Console.WriteLine("0x{0} Len = {1} Length", ar.ToString("X4"), length);
+            ar += 2;
+
+        }
+
+        private static
+                    short DecodeDifBits(ushort difBits, ushort difCode)
         {
             short dif0;
             if ((difCode & (0x01u << (difBits - 1))) != 0)

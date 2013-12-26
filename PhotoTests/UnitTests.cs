@@ -16,7 +16,8 @@
     public class UnitTests
     {
         #region Public Methods and Operators
-
+        
+        [Ignore]
         [TestMethod]
         public void TestMethodC7()
         {
