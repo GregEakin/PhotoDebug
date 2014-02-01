@@ -35,7 +35,7 @@
                 // the precision and the quantization table index -- one byte: precision is specified by the higher four bits and index is specified by the lower four bits
                 //   precision in this case is either 0 or 1 and indicates the precision of the quantized values; 8-bit (baseline) for 0 and  up to 16-bit for 1
                 // the quantization values -- 64 bytes
-                // t  he quantization tables are stored in zigzag format
+                // the quantization tables are stored in zigzag format
 
                 var data = binaryReader.ReadBytes(length - 2);
                 size += data.Length;

@@ -6,8 +6,6 @@
     using System.Linq;
     using System.Text;
 
-    using PhotoLib.Utilities;
-
     /// <summary>
     /// DHT 0xFFC4
     /// </summary>
@@ -36,7 +34,7 @@
             var size = 2;
             while (size + 17 <= length)
             {
-                // HT Info, bits 0..3 is number, bits 4 is 0 = DC, 1 = AC, bits 5..7 must be zero
+                // HT Info, bits 0..3 is number, bit 4 is 0 = DC, 1 = AC, bits 5..7 must be zero
                 var index = binaryReader.ReadByte();
                 var data1 = binaryReader.ReadBytes(16);
                 var sum = data1.Aggregate(0, (current, b) => current + b);

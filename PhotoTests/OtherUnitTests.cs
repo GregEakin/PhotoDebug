@@ -1,15 +1,13 @@
 ﻿namespace PhotoTests
 {
     using System;
+    using System.Collections.Generic;
     using System.Drawing;
     using System.IO;
     using System.Linq;
-
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-
     using PhotoLib.Jpeg;
     using PhotoLib.Tiff;
-
     using PhotoLib.Utilities;
 
     [TestClass]
@@ -225,7 +223,7 @@
             }
         }
 
-        private static void DumpPixelDebug(int row, short[] rowBuf0, short[] rowBuf1)
+        private static void DumpPixelDebug(int row, IList<short> rowBuf0, IList<short> rowBuf1)
         {
             const int X = 122; // 2116;
             const int Y = 40; // 1416 / 2;
@@ -291,7 +289,7 @@
             const uint Cam1H = Cam1 & 0xFFFF0000 >> 8;
             const uint Cam1L = Cam1 & 0x0000FFFF;
             Assert.AreEqual("ED00053346", "{0}{1}".FormatWith(Cam1H.ToString("X4"), Cam1L.ToString("D5")));
-            var cam2 = "%04X%05d";
+            // var cam2 = "%04X%05d";
         }
 
         [TestMethod]
@@ -386,19 +384,19 @@
                 var white = notes[0x4001];
                 Console.WriteLine("0x{0}, {1}, {2}, {3}", white.TagId.ToString("X4"), white.TagType, white.NumberOfValue, white.ValuePointer);
                 // var wb = new WhiteBalance(binaryReader, white);
-                this.ReadSomeData(binaryReader, white.ValuePointer);
+                ReadSomeData(binaryReader, white.ValuePointer);
 
                 var size2 = notes[0x4002];
                 Console.WriteLine("0x{0}, {1}, {2}, {3}", size2.TagId.ToString("X4"), size2.TagType, size2.NumberOfValue, size2.ValuePointer);
-                this.ReadSomeData(binaryReader, size2.ValuePointer);
+                ReadSomeData(binaryReader, size2.ValuePointer);
 
                 var size5 = notes[0x4005];
                 Console.WriteLine("0x{0}, {1}, {2}, {3}", size5.TagId.ToString("X4"), size5.TagType, size5.NumberOfValue, size5.ValuePointer);
-                this.ReadSomeData(binaryReader, size5.ValuePointer);
+                ReadSomeData(binaryReader, size5.ValuePointer);
             }
         }
 
-        private void ReadSomeData(BinaryReader binaryReader, uint valuePointer)
+        private static void ReadSomeData(BinaryReader binaryReader, uint valuePointer)
         {
             if (binaryReader.BaseStream.Position != valuePointer)
             {
@@ -409,11 +407,9 @@
             var length = binaryReader.ReadUInt16();
             Console.WriteLine("0x{0} Len = {1} Length", ar.ToString("X4"), length);
             ar += 2;
-
         }
 
-        private static
-                    short DecodeDifBits(ushort difBits, ushort difCode)
+        private static short DecodeDifBits(ushort difBits, ushort difCode)
         {
             short dif0;
             if ((difCode & (0x01u << (difBits - 1))) != 0)

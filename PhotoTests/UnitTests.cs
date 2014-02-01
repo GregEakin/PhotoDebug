@@ -10,8 +10,6 @@
     using PhotoLib.Jpeg;
     using PhotoLib.Tiff;
 
-    using PhotoLib.Utilities;
-
     [TestClass]
     public class UnitTests
     {

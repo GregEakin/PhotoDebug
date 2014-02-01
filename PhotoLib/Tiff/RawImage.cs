@@ -5,8 +5,6 @@
     using System.IO;
     using System.Text;
 
-    using PhotoLib.Utilities;
-
     public class RawImage
     {
         #region Fields
