@@ -297,7 +297,7 @@
         {
             //const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
             //const string FileName2 = Directory + "IMG_0503.CR2";
-            const string Directory = @"C:\Users\Greg\Pictures\";
+            const string Directory = @"C:\Users\Greg\Pictures\Old\";
             const string FileName2 = Directory + "IMG_0516.CR2";
 
             using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
@@ -358,7 +358,7 @@
         {
             //const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
             //const string FileName2 = Directory + "IMG_0503.CR2";
-            const string Directory = @"C:\Users\Greg\Pictures\";
+            const string Directory = @"C:\Users\Greg\Pictures\Old\";
             const string FileName2 = Directory + "IMG_0516.CR2";
 
             using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
