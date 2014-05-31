@@ -2,14 +2,9 @@
 {
     using System;
     using System.IO;
-    using System.Linq;
-
-    using PhotoLib.Jpeg;
 
     internal class Program
     {
-        #region Public Methods and Operators
-
         public static void TestMethod5(string fileName)
         {
             using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
@@ -74,8 +69,6 @@
                 }
             }
         }
-
-        #endregion
 
         #region Methods
 
