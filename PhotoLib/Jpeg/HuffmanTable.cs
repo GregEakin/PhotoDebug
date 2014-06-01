@@ -64,6 +64,9 @@ namespace PhotoLib.Jpeg
             }
         }
 
+        /// <summary>
+        /// HT Info, bits 0..3 is number, bit 4 is 0 = DC, 1 = AC, bits 5..7 must be zero
+        /// </summary>
         public byte Index
         {
             get

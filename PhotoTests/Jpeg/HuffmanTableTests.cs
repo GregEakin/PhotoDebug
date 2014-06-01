@@ -33,6 +33,7 @@ namespace PhotoTests.Jpeg
             Assert.AreEqual(0, huffmanTable.Index);
             Assert.AreSame(data1, huffmanTable.Data1);
             Assert.AreSame(data2, huffmanTable.Data2);
+            Assert.AreEqual(15, huffmanTable.Dictionary.Count);
         }
 
         [TestMethod]
