@@ -29,7 +29,7 @@
             {
                 var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
-                imageData.GetNextBit();
+                Assert.IsTrue(imageData.GetNextBit());
                 Assert.AreEqual(0, imageData.Index);
             }
         }
@@ -42,7 +42,7 @@
             {
                 var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
-                imageData.GetSetOfBits(8);
+                Assert.AreEqual(165, imageData.GetSetOfBits(8));
                 Assert.AreEqual(1, imageData.Index);
             }
         }
@@ -55,8 +55,8 @@
             {
                 var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
-                imageData.GetSetOfBits(8);
-                imageData.GetSetOfBits(8);
+                Assert.AreEqual(165, imageData.GetSetOfBits(8));
+                Assert.AreEqual(90, imageData.GetSetOfBits(8));
                 Assert.AreEqual(2, imageData.Index);
             }
         }
@@ -81,7 +81,7 @@
             {
                 var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
-                imageData.GetNextBit();
+                Assert.IsTrue(imageData.GetNextBit());
                 Assert.IsFalse(imageData.EndOfFile);
             }
         }
@@ -94,7 +94,7 @@
             {
                 var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
-                imageData.GetSetOfBits(8);
+                Assert.AreEqual(165, imageData.GetSetOfBits(8));
                 Assert.IsFalse(imageData.EndOfFile);
             }
         }
@@ -107,8 +107,8 @@
             {
                 var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
-                imageData.GetSetOfBits(8);
-                imageData.GetSetOfBits(8);
+                Assert.AreEqual(165, imageData.GetSetOfBits(8));
+                Assert.AreEqual(90, imageData.GetSetOfBits(8));
                 Assert.IsTrue(imageData.EndOfFile);
             }
         }
@@ -143,7 +143,7 @@
                 Assert.IsTrue(imageData.GetNextBit());
             }
         }
-        
+
         [TestMethod]
         public void GetBits2()
         {
