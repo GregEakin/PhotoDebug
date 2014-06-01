@@ -7,7 +7,6 @@ using PhotoLib.Jpeg;
 
 namespace PhotoTests.Jpeg
 {
-    using System;
 
     [TestClass]
     public class HuffmanTableTests
@@ -89,6 +88,17 @@ namespace PhotoTests.Jpeg
         }
 
         [TestMethod]
+        public void BuildTreeSetupTest()
+        {
+            var data1 = new byte[] { 0, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 };
+            var data2 = new byte[] { 0, 5, 3, 6, 7, 2, 8, 0, 1, 9, 10, 11, 12, 13, 15 };
+
+            Assert.AreEqual(16, data1.Length);
+            Assert.AreEqual(data2.Length, data1.Sum(b => b));
+            Assert.IsTrue(data2.Length <= 256);
+        }
+
+        [TestMethod]
         public void BuildTreeKeysTest()
         {
             var data1 = new byte[] { 0, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 };
@@ -96,16 +106,8 @@ namespace PhotoTests.Jpeg
 
             var keys = new[] { 0, 1, 4, 5, 12, 13, 28, 29, 30, 62, 126, 254, 510, 1022, 2046 };
 
-
-            Assert.AreEqual(16, data1.Length);
-            Assert.AreEqual(data2.Length, data1.Sum(b => b));
-            Assert.IsTrue(data2.Length <= 256);
             var dictionary = HuffmanTable.BuildTree(data1, data2);
 
-            foreach (var key in dictionary.Keys)
-            {
-                Console.Write("{0}, ", key);
-            }
             CollectionAssert.AreEqual(keys, dictionary.Keys);
         }
 
@@ -117,9 +119,6 @@ namespace PhotoTests.Jpeg
 
             var codes = new byte[] { 0, 5, 3, 6, 7, 2, 8, 0, 1, 9, 10, 11, 12, 13, 15, };
 
-            Assert.AreEqual(16, data1.Length);
-            Assert.AreEqual(data2.Length, data1.Sum(b => b));
-            Assert.IsTrue(data2.Length <= 256);
             var dictionary = HuffmanTable.BuildTree(data1, data2);
 
             CollectionAssert.AreEqual(codes, dictionary.Values.Select(key => key.Code).ToArray());
@@ -133,9 +132,6 @@ namespace PhotoTests.Jpeg
 
             var lengths = new byte[] { 2, 2, 3, 3, 4, 4, 5, 5, 5, 6, 7, 8, 9, 10, 11, };
 
-            Assert.AreEqual(16, data1.Length);
-            Assert.AreEqual(data2.Length, data1.Sum(b => b));
-            Assert.IsTrue(data2.Length <= 256);
             var dictionary = HuffmanTable.BuildTree(data1, data2);
 
             CollectionAssert.AreEqual(lengths, dictionary.Values.Select(key => key.Length).ToArray());
@@ -160,11 +156,6 @@ namespace PhotoTests.Jpeg
                     "1111111110",
                     "11111111110"
                 };
-
-
-            Assert.AreEqual(16, data1.Length);
-            Assert.AreEqual(data2.Length, data1.Sum(b => b));
-            Assert.IsTrue(data2.Length <= 256);
 
             CollectionAssert.AreEqual(treeBits, HuffmanTable.ToTextTree(data1, data2));
         }
