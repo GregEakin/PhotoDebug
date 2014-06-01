@@ -1,11 +1,18 @@
-﻿namespace PhotoLib.Jpeg
+﻿// Project Photo Library 0.1
+// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoDebug
+// FILE:		StartOfImage.cs
+// AUTHOR:		Greg Eakin
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+using PhotoLib.Utilities;
+
+namespace PhotoLib.Jpeg
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-
-    using PhotoLib.Utilities;
-
     /// <summary>
     /// SOI 0xFFD8
     /// </summary>
@@ -200,13 +207,13 @@
             {
                 bits = this.imageData.GetNextShort(bits);
                 len++;
-                
+
                 HuffmanTable.HCode hCode;
                 if (!dict.TryGetValue(bits, out hCode) || hCode.Length != len)
                 {
                     continue;
                 }
-                
+
                 if (hCode.Code == 0x00)
                 {
                     // Console.WriteLine("Found {0} {1} EOB", hCode.Code.ToString("X2"), bits.ToString("X4"));

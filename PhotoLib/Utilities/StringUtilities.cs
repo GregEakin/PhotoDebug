@@ -1,9 +1,16 @@
-﻿namespace PhotoLib.Utilities
-{
-    using System.Collections;
-    using System.Globalization;
-    using System.Text;
+﻿// Project Photo Library 0.1
+// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoDebug
+// FILE:		StringUtilities.cs
+// AUTHOR:		Greg Eakin
 
+using System.Collections;
+using System.Globalization;
+using System.Text;
+
+namespace PhotoLib.Utilities
+{
     public static class StringUtilities
     {
         #region Public Methods and Operators

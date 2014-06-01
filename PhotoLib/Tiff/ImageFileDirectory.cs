@@ -1,11 +1,18 @@
-﻿namespace PhotoLib.Tiff
+﻿// Project Photo Library 0.1
+// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoDebug
+// FILE:		ImageFileDirectory.cs
+// AUTHOR:		Greg Eakin
+
+using System;
+using System.IO;
+using System.Linq;
+
+using PhotoLib.Utilities;
+
+namespace PhotoLib.Tiff
 {
-    using System;
-    using System.IO;
-    using System.Linq;
-
-    using PhotoLib.Utilities;
-
     public class ImageFileDirectory
     {
         #region Fields

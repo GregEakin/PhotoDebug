@@ -1,10 +1,17 @@
-﻿namespace PhotoLib.Tiff
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Text;
+﻿// Project Photo Library 0.1
+// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoDebug
+// FILE:		RawImage.cs
+// AUTHOR:		Greg Eakin
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+
+namespace PhotoLib.Tiff
+{
     public class RawImage
     {
         #region Fields
@@ -66,6 +73,7 @@
             {
                 return directoryList[key];
             }
+
             set
             {
                 directoryList[key] = value;
@@ -112,7 +120,7 @@
         public static UInt16[] ReadUInts16(BinaryReader binaryReader, ImageFileEntry imageFileEntry)
         {
             var retval = new UInt16[imageFileEntry.NumberOfValue];
-            
+
             if (binaryReader.BaseStream.Position != imageFileEntry.ValuePointer)
             {
                 binaryReader.BaseStream.Seek(imageFileEntry.ValuePointer, SeekOrigin.Begin);

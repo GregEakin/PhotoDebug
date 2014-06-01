@@ -1,11 +1,18 @@
-﻿namespace PhotoLib.Jpeg
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
+﻿// Project Photo Library 0.1
+// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoDebug
+// FILE:		DefineHuffmanTable.cs
+// AUTHOR:		Greg Eakin
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+
+namespace PhotoLib.Jpeg
+{
     /// <summary>
     /// DHT 0xFFC4
     /// </summary>

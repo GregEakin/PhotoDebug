@@ -1,11 +1,18 @@
-﻿namespace PhotoLib
+﻿// Project Photo Library 0.1
+// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoDebug
+// FILE:		JpegImage.cs
+// AUTHOR:		Greg Eakin
+
+using System.IO;
+using System.Linq;
+
+using PhotoLib.Jpeg;
+using PhotoLib.Tiff;
+
+namespace PhotoLib
 {
-    using System.IO;
-    using System.Linq;
-
-    using PhotoLib.Jpeg;
-    using PhotoLib.Tiff;
-
     public class JpegImage
     {
         public static void TestImage()

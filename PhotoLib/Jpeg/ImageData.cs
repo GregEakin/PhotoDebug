@@ -1,10 +1,17 @@
-﻿namespace PhotoLib.Jpeg
+﻿// Project Photo Library 0.1
+// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoDebug
+// FILE:		ImageData.cs
+// AUTHOR:		Greg Eakin
+
+using System;
+using System.IO;
+
+using PhotoLib.Utilities;
+
+namespace PhotoLib.Jpeg
 {
-    using System;
-    using System.IO;
-
-    using PhotoLib.Utilities;
-
     public class ImageData
     {
         #region Fields

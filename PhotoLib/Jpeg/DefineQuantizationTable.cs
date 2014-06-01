@@ -1,8 +1,15 @@
-﻿namespace PhotoLib.Jpeg
-{
-    using System;
-    using System.IO;
+﻿// Project Photo Library 0.1
+// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoDebug
+// FILE:		DefineQuantizationTable.cs
+// AUTHOR:		Greg Eakin
 
+using System;
+using System.IO;
+
+namespace PhotoLib.Jpeg
+{
     /// <summary>
     /// DQT 0xFFDB
     /// </summary>

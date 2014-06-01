@@ -1,7 +1,14 @@
-﻿namespace PhotoLib.Tiff
-{
-    using System.IO;
+﻿// Project Photo Library 0.1
+// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoDebug
+// FILE:		ImageFileEntry.cs
+// AUTHOR:		Greg Eakin
 
+using System.IO;
+
+namespace PhotoLib.Tiff
+{
     public class ImageFileEntry
     {
         #region Fields

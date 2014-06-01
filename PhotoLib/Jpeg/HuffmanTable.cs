@@ -1,10 +1,17 @@
-﻿namespace PhotoLib.Jpeg
+﻿// Project Photo Library 0.1
+// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoDebug
+// FILE:		HuffmanTable.cs
+// AUTHOR:		Greg Eakin
+
+using System.Collections.Generic;
+using System.Text;
+
+using PhotoLib.Utilities;
+
+namespace PhotoLib.Jpeg
 {
-    using System.Collections.Generic;
-    using System.Text;
-
-    using PhotoLib.Utilities;
-
     public class HuffmanTable
     {
         #region Fields
