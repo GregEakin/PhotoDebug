@@ -14,7 +14,7 @@
     public class UnitTests
     {
         #region Public Methods and Operators
-        
+
         [Ignore]
         [TestMethod]
         public void TestMethodC7()
@@ -38,10 +38,10 @@
                 // compression for 7D mRAW and sRAW should be 3 -
                 // compression for 5DIII RAW should be 2 -
                 // compression for 5DIII mRAW and sRAW should be 3 -
-                //var compressoin = imageFileDirectory.Entries.First(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer; // TIF_COMPRESSION
+                //var compressoin = imageFileDirectory.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer; // TIF_COMPRESSION
                 //Assert.AreEqual(6u, compressoin);  // JpegCompression
 
-                var strips = imageFileDirectory.Entries.First(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
+                var strips = imageFileDirectory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
                 binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
                 var x = binaryReader.ReadUInt16();
                 var y = binaryReader.ReadUInt16();
@@ -51,8 +51,8 @@
                 //Assert.AreEqual(1728, y);
                 //Assert.AreEqual(1904, z);
 
-                var address = imageFileDirectory.Entries.First(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
-                var length = imageFileDirectory.Entries.First(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
+                var address = imageFileDirectory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
+                var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length) { ImageData = new ImageData(binaryReader, length) };
 
@@ -107,7 +107,7 @@
                         var difCode0 = imageData.GetSetOfBits(hufCode0);
                         rowBuf[w, i] = (short)difCode0;
                     }
-                    
+
                     for (var w = 2; w < 4; w++)
                     {
                         var hufCode = GetValue(imageData, table1);
