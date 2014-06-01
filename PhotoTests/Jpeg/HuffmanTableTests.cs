@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -14,23 +13,26 @@ namespace PhotoTests.Jpeg
         #region Public Methods and Operators
 
         [TestMethod]
-        public void BuildTree()
+        public void BuildTreeDataTest()
         {
-            var treeData = new byte[] { 0xFF, 0xC4, 0, 34, 0, 0, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 5, 3, 6, 7, 2, 8, 0, 1, 9, 10, 11, 12, 13, 15, 14 };
+            var data1 = new byte[] { 0, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 };
+            var data2 = new byte[] { 0, 5, 3, 6, 7, 2, 8, 0, 1, 9, 10, 11, 12, 13, 15 };
 
-            var treeBits = new[]
-                {
-                    "00", "01", "100", "101", "1100", "1101", "11100", "11101", "11110", "111110", "1111110", "11111110", "111111110", "1111111110",
-                    "11111111110"
-                };
+            Assert.AreEqual(16, data1.Length);
+            Assert.AreEqual(data2.Length, data1.Sum(b => b));
+            Assert.IsTrue(data2.Length <= 256);
+        }
 
-            using (var memory = new MemoryStream(treeData))
-            {
-                var reader = new BinaryReader(memory);
-                var huffmanTable = new DefineHuffmanTable(reader);
-                var table = huffmanTable.Tables.First().Value;
-                CollectionAssert.AreEqual(treeBits, table.BuildTextTree());
-            }
+        [TestMethod]
+        public void HuffmanTableTest()
+        {
+            var data1 = new byte[] { 0, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 };
+            var data2 = new byte[] { 0, 5, 3, 6, 7, 2, 8, 0, 1, 9, 10, 11, 12, 13, 15 };
+
+            var huffmanTable = new HuffmanTable(0, data1, data2);
+            Assert.AreEqual(0, huffmanTable.Index);
+            Assert.AreSame(data1, huffmanTable.Data1);
+            Assert.AreSame(data2, huffmanTable.Data2);
         }
 
         [TestMethod]
@@ -88,17 +90,6 @@ namespace PhotoTests.Jpeg
         }
 
         [TestMethod]
-        public void BuildTreeSetupTest()
-        {
-            var data1 = new byte[] { 0, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 };
-            var data2 = new byte[] { 0, 5, 3, 6, 7, 2, 8, 0, 1, 9, 10, 11, 12, 13, 15 };
-
-            Assert.AreEqual(16, data1.Length);
-            Assert.AreEqual(data2.Length, data1.Sum(b => b));
-            Assert.IsTrue(data2.Length <= 256);
-        }
-
-        [TestMethod]
         public void BuildTreeKeysTest()
         {
             var data1 = new byte[] { 0, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 };
@@ -117,7 +108,7 @@ namespace PhotoTests.Jpeg
             var data1 = new byte[] { 0, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 };
             var data2 = new byte[] { 0, 5, 3, 6, 7, 2, 8, 0, 1, 9, 10, 11, 12, 13, 15 };
 
-            var codes = new byte[] { 0, 5, 3, 6, 7, 2, 8, 0, 1, 9, 10, 11, 12, 13, 15, };
+            var codes = new byte[] { 0, 5, 3, 6, 7, 2, 8, 0, 1, 9, 10, 11, 12, 13, 15 };
 
             var dictionary = HuffmanTable.BuildTree(data1, data2);
 
@@ -130,7 +121,7 @@ namespace PhotoTests.Jpeg
             var data1 = new byte[] { 0, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 };
             var data2 = new byte[] { 0, 5, 3, 6, 7, 2, 8, 0, 1, 9, 10, 11, 12, 13, 15 };
 
-            var lengths = new byte[] { 2, 2, 3, 3, 4, 4, 5, 5, 5, 6, 7, 8, 9, 10, 11, };
+            var lengths = new byte[] { 2, 2, 3, 3, 4, 4, 5, 5, 5, 6, 7, 8, 9, 10, 11 };
 
             var dictionary = HuffmanTable.BuildTree(data1, data2);
 

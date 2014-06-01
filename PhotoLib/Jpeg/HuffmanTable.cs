@@ -103,11 +103,6 @@ namespace PhotoLib.Jpeg
             return retval.ToString();
         }
 
-        public string[] BuildTextTree()
-        {
-            return ToTextTree(data1, data2);
-        }
-
         /// <summary>
         /// Assert.AreEqual(16, data1.Length);
         /// Assert.AreEqual(data2.Length, data1.Sum(b => b));
@@ -164,7 +159,7 @@ namespace PhotoLib.Jpeg
             var tableType = (this.index & 0x10) == 0 ? "DC" : "AC";
 
             retval.AppendLine("HuffmanTable {0} {1}".FormatWith(tableType, tableNumber));
-            var bits = this.BuildTextTree();
+            var bits = ToTextTree(data1, data2);
 
             var offset = 0;
             for (byte i = 0; i < 16; i++)
