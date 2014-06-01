@@ -33,7 +33,7 @@ namespace PhotoLib.Jpeg
             this.index = index;
             this.data1 = data1;
             this.data2 = data2;
-            this.dictionary = this.BuildTree();
+            this.dictionary = BuildTree(data1, data2);
         }
 
         #endregion
@@ -105,23 +105,39 @@ namespace PhotoLib.Jpeg
 
         public string[] BuildTextTree()
         {
-            var retval = new string[this.data2.Length];
+            return ToTextTree(data1, data2);
+        }
+
+        /// <summary>
+        /// Assert.AreEqual(16, data1.Length);
+        /// Assert.AreEqual(data2.Length, data1.Sum(b => b));
+        /// Assert.IsTrue(data2.Length <= 256);
+        /// </summary>
+        public static string[] ToTextTree(IList<byte> data1, IList<byte> data2)
+        {
+            var retval = new string[data2.Count];
             var offset = 0;
             var bits = 0;
             for (var i = 0; i < 16; i++)
             {
                 bits = bits << 1;
-                for (var j = 0; j < this.data1[i]; j++)
+                for (var j = 0; j < data1[i]; j++)
                 {
                     retval[offset] = PrintBits(bits, i);
                     bits++;
                     offset++;
                 }
             }
+
             return retval;
         }
 
-        private Dictionary<int, HCode> BuildTree()
+        /// <summary>
+        /// Assert.AreEqual(16, data1.Length);
+        /// Assert.AreEqual(data2.Length, data1.Sum(b => b));
+        /// Assert.IsTrue(data2.Length <= 256);
+        /// </summary>
+        public static Dictionary<int, HCode> BuildTree(IList<byte> data1, IList<byte> data2)
         {
             var retval = new Dictionary<int, HCode>();
 
@@ -130,9 +146,9 @@ namespace PhotoLib.Jpeg
             for (var i = 0; i < 16; i++)
             {
                 bits = bits << 1;
-                for (var j = 0; j < this.data1[i]; j++)
+                for (var j = 0; j < data1[i]; j++)
                 {
-                    var value = new HCode { Code = this.data2[offset], Length = (byte)(i + 1) };
+                    var value = new HCode { Code = data2[offset], Length = (byte)(i + 1) };
                     retval.Add(bits, value);
                     bits++;
                     offset++;
