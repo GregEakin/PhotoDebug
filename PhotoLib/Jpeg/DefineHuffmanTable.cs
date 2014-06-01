@@ -44,7 +44,7 @@ namespace PhotoLib.Jpeg
                 // HT Info, bits 0..3 is number, bit 4 is 0 = DC, 1 = AC, bits 5..7 must be zero
                 var index = binaryReader.ReadByte();
                 var data1 = binaryReader.ReadBytes(16);
-                var sum = data1.Aggregate(0, (current, b) => current + b);
+                var sum = data1.Sum(b => b);
                 // sum must be <= 256
                 var data2 = binaryReader.ReadBytes(sum);
                 this.tables.Add(index, new HuffmanTable(index, data1, data2));
