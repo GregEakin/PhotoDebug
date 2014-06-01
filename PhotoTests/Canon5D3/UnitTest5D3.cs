@@ -253,6 +253,23 @@
             }
         }
 
+        [TestMethod]
+        public void Test1()
+        {
+            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            {
+                var binaryReader = new BinaryReader(fileStream);
+                var rawImage = new RawImage(binaryReader);
+
+                var directory = rawImage.Directories.Last();
+                var address = directory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
+                var length = directory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
+
+                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
+                var startOfImage = new StartOfImage(binaryReader, address, length);
+            }
+        }
+
         #endregion
     }
 }

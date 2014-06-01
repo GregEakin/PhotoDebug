@@ -91,6 +91,14 @@ namespace PhotoLib.Jpeg
             }
         }
 
+        public byte Bb2
+        {
+            get
+            {
+                return bB2;
+            }
+        }
+
         public byte Bb3
         {
             get
