@@ -10,7 +10,7 @@
     {
         #region Constants
 
-        private const string FileName = @"C:\Users\Greg\Pictures\Old\IMG_0511.CR2";
+        private const string FileName = @"C:..\..\Photos\7Dhigh.CR2";
 
         #endregion
 

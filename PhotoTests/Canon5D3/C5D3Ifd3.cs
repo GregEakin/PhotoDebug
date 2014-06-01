@@ -10,7 +10,7 @@
     {
         #region Constants
 
-        private const string FileName = @"C:\Users\Greg\Pictures\Old\IMG_0516.CR2";
+        private const string FileName = @"C:..\..\Photos\5DIIIhigh.CR2";
 
         #endregion
 
@@ -41,14 +41,14 @@
             }
         }
 
- //== Tiff Direcotry [0x00011964]:
- //0)  0x0103 UShort 16-bit: 6
- //1)  0x0111 ULong 32-bit: 4223344
- //2)  0x0117 ULong 32-bit: 25591542
- //3)  0xC5D8 ULong 32-bit: 1
- //4)  0xC5E0 ULong 32-bit: 1
- //5)  0xC640 UShort 16-bit: [0x000119BE] (3): 1, 2960, 2960, 
- //6)  0xC6C5 ULong 32-bit: 1
+        //== Tiff Direcotry [0x00011964]:
+        //0)  0x0103 UShort 16-bit: 6
+        //1)  0x0111 ULong 32-bit: 4223344
+        //2)  0x0117 ULong 32-bit: 25591542
+        //3)  0xC5D8 ULong 32-bit: 1
+        //4)  0xC5E0 ULong 32-bit: 1
+        //5)  0xC640 UShort 16-bit: [0x000119BE] (3): 1, 2960, 2960, 
+        //6)  0xC6C5 ULong 32-bit: 1
 
         [TestMethod]
         public void Compression()

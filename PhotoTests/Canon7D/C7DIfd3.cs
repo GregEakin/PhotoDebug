@@ -10,7 +10,7 @@
     {
         #region Constants
 
-        private const string FileName = @"C:\Users\Greg\Pictures\Old\IMG_0511.CR2";
+        private const string FileName = @"C:..\..\Photos\7Dhigh.CR2";
 
         #endregion
 
@@ -49,7 +49,7 @@
         // 4)  0xC5E0 ULong 32-bit: 3
         // 5)  0xC640 UShort 16-bit: [0x0000BFA0] (3): 2, 1728, 1904, 
         // 6)  0xC6C5 ULong 32-bit: 1
-        
+
         [TestMethod]
         public void Compression()
         {
@@ -116,7 +116,7 @@
                 Assert.AreEqual(0x0000BFA0u, imageFileEntry.ValuePointer);
                 Assert.AreEqual(3u, imageFileEntry.NumberOfValue);
 
-                CollectionAssert.AreEqual(new[] { (ushort)2, (ushort)1728, (ushort)1904}, RawImage.ReadUInts16(binaryReader, imageFileEntry));
+                CollectionAssert.AreEqual(new[] { (ushort)2, (ushort)1728, (ushort)1904 }, RawImage.ReadUInts16(binaryReader, imageFileEntry));
             }
         }
 
