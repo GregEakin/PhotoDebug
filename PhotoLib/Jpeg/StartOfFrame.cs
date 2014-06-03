@@ -51,15 +51,15 @@ namespace PhotoLib.Jpeg
                 throw new ArgumentException();
             }
 
-            Console.WriteLine("SoF {0}: {1}", Tag.ToString("X2"), (binaryReader.BaseStream.Position - 2).ToString("X8"));
+            // Console.WriteLine("SoF {0}: {1}", Tag.ToString("X2"), (binaryReader.BaseStream.Position - 2).ToString("X8"));
 
             length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
             precision = binaryReader.ReadByte();    // bits
             scanLines = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());   // high
             samplesPerLine = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());  // wide
+
             var componentCount = binaryReader.ReadByte();
             components = new Component[componentCount];
-
             for (var i = 0; i < componentCount; i++)
             {
                 components[i] = new Component(binaryReader);

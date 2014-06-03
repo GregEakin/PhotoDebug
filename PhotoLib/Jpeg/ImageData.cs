@@ -87,7 +87,8 @@ namespace PhotoLib.Jpeg
 
         public ushort GetNextShort(ushort lastShort)
         {
-            var retval = lastShort << 1 | (this.GetNextBit() ? 0x01 : 0x00);
+            var bit = this.GetNextBit() ? 0x01 : 0x00;
+            var retval = (lastShort << 1) | bit;
             return (ushort)retval;
         }
 
@@ -103,18 +104,29 @@ namespace PhotoLib.Jpeg
             if (index < rawData.Length - 1)
             {
                 retval = rawData[++index];
-                if (retval == 0xFF)
+                // Console.WriteLine("Read 0x{0}", retval.ToString("X2"));
+
+                if (retval != 0xFF)
                 {
-                    var code = rawData[++index];
-                    if (code == 0xD9)
-                    {
+                    return retval;
+                }
+
+                var code = this.rawData[++this.index];
+                // Console.WriteLine("Read code 0x{0}", code.ToString("X2"));
+
+                switch (code)
+                {
+                    case 0x0:
+                        break;
+
+                    case 0xD9:
                         this.EndOfFile = true;
-                    }
-                    else if (code != 0)
-                    {
+                        Console.WriteLine("Fournd 0xD9 EOF marker");
+                        break;
+
+                    default:
                         throw new Exception(
                             "Not supposed to happen 0xFF 0x{0}: Position: {1}".FormatWith(code.ToString("X2"), (this.rawData.Length - this.index)));
-                    }
                 }
             }
             else
@@ -122,6 +134,8 @@ namespace PhotoLib.Jpeg
                 index++;
                 this.EndOfFile = true;
                 retval = 0xFF;
+
+                Console.WriteLine("Read to EOF");
             }
 
             return retval;

@@ -6,13 +6,14 @@
 // AUTHOR:		Greg Eakin
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 using PhotoLib.Utilities;
 
 namespace PhotoLib.Jpeg
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// SOI 0xFFD8
     /// </summary>
@@ -61,6 +62,8 @@ namespace PhotoLib.Jpeg
                         case 0xC0: // SOF0, Start of Frame 0, Baseline DCT
                         case 0xC3: // SOF3, Start of Frame 3, Lossless (sequential)
                             this.startOfFrame = new StartOfFrame(binaryReader);
+                            var image = startOfFrame.SamplesPerLine * startOfFrame.ScanLines;
+                            Console.WriteLine("Image = {0} * {1} = {2}", startOfFrame.ScanLines, startOfFrame.SamplesPerLine, image);
                             break;
 
                         case 0xC4: // DHT, Define Huffman Table
@@ -159,48 +162,86 @@ namespace PhotoLib.Jpeg
 
         public void DecodeHuffmanData()
         {
-            HuffmanTable luminanceDc;
-            var table1 = huffmanTable.Tables.TryGetValue(0x00, out luminanceDc);
-            HuffmanTable luminanceAc;
-            var table2 = huffmanTable.Tables.TryGetValue(0x10, out luminanceAc);
-            HuffmanTable chrominanceDc;
-            var table3 = huffmanTable.Tables.TryGetValue(0x01, out chrominanceDc);
-            HuffmanTable chrominanceAc;
-            var table4 = huffmanTable.Tables.TryGetValue(0x11, out chrominanceAc);
+            // choice:
+            //   1, 0, 1, 1
+            //   2, 1, 1, 1
+            //   3, 1, 1, 1
 
-            for (var i = 0; i < (this.startOfFrame.SamplesPerLine + 7) / 8; i++)
+            //   1, 0, 1, 1
+            //   2, 0, 1, 1
+
+            switch (this.startOfFrame.Components.Length)
             {
-                if (table1)
+                case 2:
+                    {
+                        HuffmanTable luminanceDc;
+                        var table1 = this.huffmanTable.Tables.TryGetValue(0x00, out luminanceDc);
+
+                        this.TableOne(luminanceDc);
+                    }
+                    break;
+
+                case 3:
+                    {
+                        HuffmanTable luminanceDc;
+                        var table1 = this.huffmanTable.Tables.TryGetValue(0x00, out luminanceDc);
+                        HuffmanTable luminanceAc;
+                        var table2 = this.huffmanTable.Tables.TryGetValue(0x10, out luminanceAc);
+                        HuffmanTable chrominanceDc;
+                        var table3 = this.huffmanTable.Tables.TryGetValue(0x01, out chrominanceDc);
+                        HuffmanTable chrominanceAc;
+                        var table4 = this.huffmanTable.Tables.TryGetValue(0x11, out chrominanceAc);
+
+                        this.TableFour(luminanceDc, luminanceAc, chrominanceDc, chrominanceAc);
+                    }
+                    break;
+            }
+        }
+
+        private void TableOne(HuffmanTable luminanceDc)
+        {
+            var width = (this.startOfFrame.SamplesPerLine + 7) / 8;
+
+            // for (var j = 0; j < startOfFrame.ScanLines; j++)
+            {
+                for (var i = 0; i < width; i++)
                 {
                     // Luminance (Y) - DC
                     this.ReadComponent(luminanceDc.Dictionary, 1);
 
-                    if (table2)
-                    {
-                        // Luminance (Y) - AC
-                        this.ReadComponent(luminanceAc.Dictionary, 63);
-                    }
+                    // Luminance (Y) - AC
+                    this.ReadComponent(luminanceDc.Dictionary, 1);
                 }
+            }
+        }
 
-                if (!table3)
+        private void TableFour(
+            HuffmanTable luminanceDc,
+            HuffmanTable luminanceAc,
+            HuffmanTable chrominanceDc,
+            HuffmanTable chrominanceAc)
+        {
+            var width = (this.startOfFrame.SamplesPerLine + 7) / 8;
+
+            // for (var j = 0; j < startOfFrame.ScanLines; j++)
+            {
+                for (var i = 0; i < width; i++)
                 {
-                    continue;
-                }
+                    // Luminance (Y) - DC
+                    this.ReadComponent(luminanceDc.Dictionary, 1);
 
-                // Chrominance (Cb) - DC
-                this.ReadComponent(chrominanceDc.Dictionary, 1);
+                    // Luminance (Y) - AC
+                    this.ReadComponent(luminanceAc.Dictionary, 63);
 
-                if (table4)
-                {
+                    // Chrominance (Cb) - DC
+                    this.ReadComponent(chrominanceDc.Dictionary, 1);
+
                     // Chrominance (Cb) - AC
                     this.ReadComponent(chrominanceAc.Dictionary, 63);
-                }
 
-                // Chrominance (Cr) - DC
-                this.ReadComponent(chrominanceDc.Dictionary, 1);
+                    // Chrominance (Cr) - DC
+                    this.ReadComponent(chrominanceDc.Dictionary, 1);
 
-                if (table4)
-                {
                     // Chrominance (Cr) - AC
                     this.ReadComponent(chrominanceAc.Dictionary, 63);
                 }
@@ -226,21 +267,20 @@ namespace PhotoLib.Jpeg
 
                 if (hCode.Code == 0x00)
                 {
-                    // Console.WriteLine("Found {0} {1} EOB", hCode.Code.ToString("X2"), bits.ToString("X4"));
                     break;
                 }
 
                 var z = this.imageData.GetSetOfBits(hCode.Code);
                 var value = Jpeg.HuffmanTable.DcValueEncoding(hCode.Code, z);
-                // Console.WriteLine("Found {0} {1} {2}", hCode.Code.ToString("X2"), z.ToString("X4"), value);
-
-                bits = 0;
-                len = 0;
+                // Console.WriteLine("Found code:{0} bits:{1} value:{2}", hCode.Code.ToString("X2"), z.ToString("X4"), value);
 
                 if (++count >= elements)
                 {
                     break;
                 }
+
+                bits = 0;
+                len = 0;
             }
         }
 

@@ -244,10 +244,10 @@
                 Assert.AreEqual(0xFF, startOfScan.Mark);
                 Assert.AreEqual(0xDA, startOfScan.Tag);
 
-                foreach (var scanComponent in startOfScan.Components)
-                {
-                    Console.WriteLine("{0}: {1} {2}", scanComponent.Id, scanComponent.Dc, scanComponent.Ac);
-                }
+                //foreach (var scanComponent in startOfScan.Components)
+                //{
+                //    Console.WriteLine("{0}: {1} {2}", scanComponent.Id, scanComponent.Dc, scanComponent.Ac);
+                //}
 
                 var imageData = startOfImage.ImageData;
             }
@@ -261,12 +261,14 @@
                 var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
-                var directory = rawImage.Directories.Last();
+                var directory = rawImage.Directories.Skip(3).First();
                 var address = directory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
                 var length = directory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
 
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
+
+                // Assert.AreEqual(0, startOfImage.);
             }
         }
 
