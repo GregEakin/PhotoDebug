@@ -1,0 +1,34 @@
+The conversion separates the RGB image to monochrome ( luminance Y) and colour (chrominance Cr Cb) channels so that different levels of compression can be applied to the monochrome and colour components.
+
+YCbCr (256 levels) can be computed directly from 8-bit RGB as follows:
+	Y = 0.299 R + 0.587 G + 0.114 B
+	Cb = - 0.1687 R - 0.3313 G + 0.5 B + 128
+	Cr = 0.5 R - 0.4187 G - 0.0813 B + 128
+
+Down sampling is often applied the Cr and Cb chroma channels after conversion.
+Before this happens the chrominance channels will have to be up sampled to match the original image size.
+
+RGB can be computed directly from YCbCr (256 levels) as follows:
+	R = Y + 1.402 (Cr-128)
+	G = Y - 0.34414 (Cb-128) - 0.71414 (Cr-128)
+	B = Y + 1.772 (Cb-128)	
+
+http://www.ams.org/samplings/feature-column/fcarc-image-compression
+[Y]  = [  0.29900  0.58700  0.11400 ] [ R ]
+[Cb] = [ -0.16874 -0.33126  0.50000 ] [ G ]
+[Cr] = [  0.50000 -0.41869 -0.08131 ] [ B ]
+
+
+===================================
+Tag 0x0097 (Dust Delete Data, DDD)
+
+Example of jpeg analysis (exifprobe):
+
+===== Start of JPEG data for IFD 0, data length 524974
+    JPEG_SOI
+      JPEG_DHT length 418 table class = 0 table id = 0
+      JPEG_DQT length 132
+      JPEG_SOF_0 length 17, 8 bits/sample, components=3, width=2256, height=1504
+      JPEG_SOS length 12  start of JPEG data, 3 components 3393024 pixels
+    JPEG_EOI JPEG length 524974
+===== End of JPEG data ====
