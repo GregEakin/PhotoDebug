@@ -19,6 +19,10 @@ namespace PhotoLib.Jpeg
 
         private readonly ushort length;
 
+        private readonly byte index;
+
+        private readonly byte[] data;
+
         #endregion
 
         // DHT: Define Huffman HuffmanTable
@@ -36,7 +40,7 @@ namespace PhotoLib.Jpeg
             length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
 
             var size = 2;
-            while (size < length)
+            if (size < length)
             {
                 // until the length is exhausted (loads two quantization tables for baseline JPEG)
                 // the precision and the quantization table index -- one byte: precision is specified by the higher four bits and index is specified by the lower four bits
@@ -44,7 +48,8 @@ namespace PhotoLib.Jpeg
                 // the quantization values -- 64 bytes
                 // the quantization tables are stored in zigzag format
 
-                var data = binaryReader.ReadBytes(length - 2);
+                index = binaryReader.ReadByte();
+                data = binaryReader.ReadBytes(length - 3);
                 size += data.Length;
             }
 
@@ -63,6 +68,22 @@ namespace PhotoLib.Jpeg
             get
             {
                 return length;
+            }
+        }
+
+        public byte Index
+        {
+            get
+            {
+                return index;
+            }
+        }
+
+        public byte[] Data
+        {
+            get
+            {
+                return data;
             }
         }
 
