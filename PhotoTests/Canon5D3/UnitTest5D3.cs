@@ -261,6 +261,11 @@
                 var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
+                // The first IFD contains a small RGB version of the picture (one fourth the size) compressed in Jpeg, the EXIF part, and the Makernotes part. 
+                // The second IFD contains a small RGB version (160x120 pixels) of the picture, compressed in Jpeg.
+                // The third IFD contains a small RGB version of the picture, NOT compressed (even with compression==6), and one which no white balance, correction has been applied.
+                // The fourth IFD contains the RAW data compressed in lossless Jpeg. 
+
                 var directory = rawImage.Directories.Skip(3).First();
                 var address = directory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
                 var length = directory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS

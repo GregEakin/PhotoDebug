@@ -13,6 +13,7 @@ using PhotoLib.Utilities;
 namespace PhotoLib.Jpeg
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// SOI 0xFFD8
@@ -162,43 +163,89 @@ namespace PhotoLib.Jpeg
 
         public void DecodeHuffmanData()
         {
-            // choice:
-            //   1, 0, 1, 1
-            //   2, 1, 1, 1
-            //   3, 1, 1, 1
-
-            //   1, 0, 1, 1
-            //   2, 0, 1, 1
-
-            switch (this.startOfFrame.Components.Length)
+            Console.WriteLine("Frame Components: ");
+            for (var i = 0; i < this.startOfFrame.Components.Length; i++)
             {
-                case 2:
+                var component = startOfFrame.Components[i];
+                Console.WriteLine("  {0}: id {1}, HF {2}, VF {3}", i, component.TableId, component.HFactor, component.VFactor);
+            }
+            Console.WriteLine("Scan Components: ");
+            for (var i = 0; i < startOfScan.Components.Length; i++)
+            {
+                var component = startOfScan.Components[i];
+                Console.WriteLine("  {0}: id {1}, DC {2}, AC {3}", i, component.Id, component.Dc, component.Ac);
+            }
+            Console.WriteLine("  {0}, {1}, {2}", startOfScan.Bb1, startOfScan.Bb2, startOfScan.Bb3);
+
+            var tables = this.startOfFrame.Components.Select(component => component.TableId).Distinct().Count();
+            Console.WriteLine("Tables: rows {0}, unique entries {1}", huffmanTable.Tables.Count, tables);
+
+            switch (tables)
+            {
+                case 1:
                     {
+                        //      V-- type (0=DC, 1=AC)
+                        //   1, 0, 1, 1
+                        //   2, 0, 1, 1
+
+                        //   1, 0, 2, 1
+                        //   2, 0, 1, 1
+                        //   3, 0, 1, 1
+
+                        //   1, 0, 1, 1
+                        //   2, 0, 1, 1
+                        //   3, 0, 1, 1
+                        //   4, 0, 1, 1
+
                         HuffmanTable luminanceDc;
                         var table1 = this.huffmanTable.Tables.TryGetValue(0x00, out luminanceDc);
+                        HuffmanTable chrominanceDc;
+                        var table3 = this.huffmanTable.Tables.TryGetValue(0x01, out chrominanceDc);
 
-                        this.TableOne(luminanceDc);
+                        this.TableTwo(huffmanTable.Tables, luminanceDc, chrominanceDc);
                     }
                     break;
 
-                case 3:
+                case 2:
                     {
+                        //      V-- type (0=DC, 1=AC)
+                        //   1, 0, 1, 1
+                        //   2, 1, 1, 1
+                        //   3, 1, 1, 1
+
                         HuffmanTable luminanceDc;
                         var table1 = this.huffmanTable.Tables.TryGetValue(0x00, out luminanceDc);
-                        HuffmanTable luminanceAc;
-                        var table2 = this.huffmanTable.Tables.TryGetValue(0x10, out luminanceAc);
                         HuffmanTable chrominanceDc;
                         var table3 = this.huffmanTable.Tables.TryGetValue(0x01, out chrominanceDc);
+                        HuffmanTable luminanceAc;
+                        var table2 = this.huffmanTable.Tables.TryGetValue(0x10, out luminanceAc);
                         HuffmanTable chrominanceAc;
                         var table4 = this.huffmanTable.Tables.TryGetValue(0x11, out chrominanceAc);
 
-                        this.TableFour(luminanceDc, luminanceAc, chrominanceDc, chrominanceAc);
+                        this.TableFour(huffmanTable.Tables, luminanceDc, luminanceAc, chrominanceDc, chrominanceAc);
                     }
                     break;
+
+                default:
+                    Console.WriteLine("Frame Components: ");
+                    for (var i = 0; i < this.startOfFrame.Components.Length; i++)
+                    {
+                        var component = startOfFrame.Components[i];
+                        Console.WriteLine(" {0}, {1}, {2}, {3}", i, component.TableId, component.HFactor, component.VFactor);
+                    }
+                    Console.WriteLine("Scan Components: ");
+                    for (var i = 0; i < startOfScan.Components.Length; i++)
+                    {
+                        var component = startOfScan.Components[i];
+                        Console.WriteLine(" {0}, {1}, {2}, {3}", i, component.Id, component.Dc, component.Ac);
+                    }
+                    Console.WriteLine("Tables: {0}", huffmanTable.Tables.Count);
+
+                    throw new NotImplementedException("Subsampling not implemented {0}".FormatWith(this.startOfFrame.Components.Length));
             }
         }
 
-        private void TableOne(HuffmanTable luminanceDc)
+        private void TableTwo(Dictionary<byte, HuffmanTable> tables, HuffmanTable luminanceDc, HuffmanTable luminanceAc)
         {
             var width = (this.startOfFrame.SamplesPerLine + 7) / 8;
 
@@ -210,16 +257,12 @@ namespace PhotoLib.Jpeg
                     this.ReadComponent(luminanceDc.Dictionary, 1);
 
                     // Luminance (Y) - AC
-                    this.ReadComponent(luminanceDc.Dictionary, 1);
+                    this.ReadComponent(luminanceAc.Dictionary, 1);
                 }
             }
         }
 
-        private void TableFour(
-            HuffmanTable luminanceDc,
-            HuffmanTable luminanceAc,
-            HuffmanTable chrominanceDc,
-            HuffmanTable chrominanceAc)
+        private void TableFour(Dictionary<byte, HuffmanTable> tables, HuffmanTable luminanceDc, HuffmanTable luminanceAc, HuffmanTable chrominanceDc, HuffmanTable chrominanceAc)
         {
             var width = (this.startOfFrame.SamplesPerLine + 7) / 8;
 

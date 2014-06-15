@@ -104,16 +104,12 @@ namespace PhotoLib.Jpeg
             if (index < rawData.Length - 1)
             {
                 retval = rawData[++index];
-                // Console.WriteLine("Read 0x{0}", retval.ToString("X2"));
-
                 if (retval != 0xFF)
                 {
                     return retval;
                 }
 
                 var code = this.rawData[++this.index];
-                // Console.WriteLine("Read code 0x{0}", code.ToString("X2"));
-
                 switch (code)
                 {
                     case 0x0:
