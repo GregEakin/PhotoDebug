@@ -10,6 +10,8 @@ using System.IO;
 
 namespace PhotoLib.Jpeg
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// DQT 0xFFDB
     /// </summary>
@@ -19,9 +21,7 @@ namespace PhotoLib.Jpeg
 
         private readonly ushort length;
 
-        private readonly byte index;
-
-        private readonly byte[] data;
+        private readonly Dictionary<byte, byte[]> dictionary = new Dictionary<byte, byte[]>();
 
         #endregion
 
@@ -40,7 +40,7 @@ namespace PhotoLib.Jpeg
             length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
 
             var size = 2;
-            if (size < length)
+            while (size < length)
             {
                 // until the length is exhausted (loads two quantization tables for baseline JPEG)
                 // the precision and the quantization table index -- one byte: precision is specified by the higher four bits and index is specified by the lower four bits
@@ -48,9 +48,13 @@ namespace PhotoLib.Jpeg
                 // the quantization values -- 64 bytes
                 // the quantization tables are stored in zigzag format
 
-                index = binaryReader.ReadByte();
-                data = binaryReader.ReadBytes(length - 3);
-                size += data.Length;
+                var index = binaryReader.ReadByte();
+                var data = binaryReader.ReadBytes(64);
+                dictionary.Add(index, data);
+
+                Console.WriteLine("DQT Table found 0x{0}", index.ToString("X2"));
+
+                size += 1 + data.Length;
             }
 
             if (size != length)
@@ -71,19 +75,11 @@ namespace PhotoLib.Jpeg
             }
         }
 
-        public byte Index
+        public Dictionary<byte, byte[]> Dictionary
         {
             get
             {
-                return index;
-            }
-        }
-
-        public byte[] Data
-        {
-            get
-            {
-                return data;
+                return dictionary;
             }
         }
 
