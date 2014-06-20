@@ -61,34 +61,21 @@
             using (var memory = new MemoryStream(SimpleData))
             {
                 var binaryReader = new BinaryReader(memory);
-                binaryReader.BaseStream.Seek(0x0000u, SeekOrigin.Begin);
                 var length = (uint)SimpleData.Length;
-
-                // NextMark E0 APP0
-
-                // NextMark EC APP12
-
-                // NextMark EE APP14
-
-                // NextMark DB SOI
                 var startOfImage = new StartOfImage(binaryReader, 0x0000u, length);
                 Assert.AreEqual(0xFF, startOfImage.Mark);
                 Assert.AreEqual(0xD8, startOfImage.Tag);
 
-                // NextMark C0 SOF0
-
-                // NextMark C4 DHT
                 var huffmanTable = startOfImage.HuffmanTable;
                 Assert.AreEqual(0xFF, huffmanTable.Mark);
                 Assert.AreEqual(0xC4, huffmanTable.Tag);
-                Console.WriteLine(huffmanTable);
 
-                // NextMark DA SOS
                 var startOfScan = startOfImage.StartOfScan;
                 Assert.AreEqual(0xFF, startOfScan.Mark);
                 Assert.AreEqual(0xDA, startOfScan.Tag);
 
                 var imageData = startOfImage.ImageData;
+                CollectionAssert.AreEqual(new Byte[] { 0xFC, 0xFF, 0x00, 0xE2, 0xAF, 0xEF, 0xF3, 0x15, 0x7F, 0xFF, 0xD9 }, imageData.RawData);
             }
         }
 

@@ -277,6 +277,38 @@
             }
         }
 
+        [TestMethod]
+        public void Test2()
+        {
+            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            {
+                var binaryReader = new BinaryReader(fileStream);
+                var rawImage = new RawImage(binaryReader);
+
+                // The first IFD contains a small RGB version of the picture (one fourth the size) compressed in Jpeg, the EXIF part, and the Makernotes part. 
+                // The second IFD contains a small RGB version (160x120 pixels) of the picture, compressed in Jpeg.
+                // The third IFD contains a small RGB version of the picture, NOT compressed (even with compression==6), and one which no white balance, correction has been applied.
+                // The fourth IFD contains the RAW data compressed in lossless Jpeg. 
+
+                var directory = rawImage.Directories.First();
+                // stripOffset 6)  0x0111 ULong 32-bit: 96332
+                // orientation 7)  0x0112 UShort 16-bit: 1
+                // stripByteCounts 8)  0x0117 ULong 32-bit: 2390306
+                var address = directory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
+                var orientation = directory.Entries.Single(e => e.TagId == 0x0112).ValuePointer;
+                var length = directory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
+
+                Assert.AreEqual(0x000170D4u, address);
+                Assert.AreEqual(0x001C21FBu, length);
+                Assert.AreEqual(1u, orientation);
+
+                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
+                var startOfImage = new StartOfImage(binaryReader, address, length);
+
+                // Assert.AreEqual(0, startOfImage.);
+            }
+        }
+
         #endregion
     }
 }

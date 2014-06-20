@@ -26,7 +26,30 @@
             DumpBitmap(FileName2, Bitmap);
         }
 
-        private static void DumpBitmap(string fileName2, string bitmap)
+        [TestMethod]
+        public void ReadFile()
+        {
+            const string Folder = @"C:\Users\Greg\Pictures\2013_10_14\";
+            const string FileName2 = Folder + "IMG_4195.CR2";
+
+            using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
+            {
+                var binaryReader = new BinaryReader(fileStream);
+                var rawImage = new RawImage(binaryReader);
+                var imageFileDirectory = rawImage.Directories.Last();
+
+                var address = imageFileDirectory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
+                var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
+                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
+                var startOfImage = new StartOfImage(binaryReader, address, length);
+                Assert.IsTrue(startOfImage.ImageData.EndOfFile);
+                Assert.AreEqual(startOfImage.ImageData.RawData.Length, startOfImage.ImageData.Index + 1);
+                Assert.AreEqual(7, startOfImage.ImageData.BitsLeft);
+            }
+        }
+
+        private static
+            void DumpBitmap(string fileName2, string bitmap)
         {
             using (var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read))
             {

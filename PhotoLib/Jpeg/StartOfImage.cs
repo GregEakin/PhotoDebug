@@ -46,12 +46,13 @@ namespace PhotoLib.Jpeg
                 throw new ArgumentException();
             }
 
-            Console.WriteLine("SOI: 0x{0}", binaryReader.BaseStream.Position.ToString("X8"));
-
-            while (binaryReader.BaseStream.Position < binaryReader.BaseStream.Length)
+            var start = binaryReader.BaseStream.Position;
+            while (binaryReader.BaseStream.Position < start + length - 2)
             {
+                var arg1 = binaryReader.BaseStream.Position - start - length;
+                Console.WriteLine("DONE bytes left: {0}", arg1);
+
                 var pos = binaryReader.BaseStream.Position;
-                var rawSize = address + length - pos;
                 var nextMark = binaryReader.ReadByte();
                 if (nextMark == 0xFF)
                 {
@@ -77,6 +78,7 @@ namespace PhotoLib.Jpeg
 
                         case 0xDA: // SOS, Start of Scan
                             this.startOfScan = new StartOfScan(binaryReader);
+                            var rawSize = address + length - binaryReader.BaseStream.Position;
                             this.imageData = new ImageData(binaryReader, (uint)rawSize);
                             this.DecodeHuffmanData();
                             break;
@@ -163,6 +165,8 @@ namespace PhotoLib.Jpeg
 
         public void DecodeHuffmanData()
         {
+            Console.WriteLine("cr2_slice: ");
+
             Console.WriteLine("Frame Components: ");
             for (var i = 0; i < startOfFrame.Components.Length; i++)
             {
@@ -236,7 +240,7 @@ namespace PhotoLib.Jpeg
                         HuffmanTable chrominanceAc;
                         var table4 = this.huffmanTable.Tables.TryGetValue(0x11, out chrominanceAc);
 
-                        //  this.TableFour(startOfFrame.Components, luminanceDc, luminanceAc, chrominanceDc, chrominanceAc);
+                        this.TableFour(startOfFrame.Components, luminanceDc, luminanceAc, chrominanceDc, chrominanceAc);
                     }
                     break;
 
@@ -261,57 +265,78 @@ namespace PhotoLib.Jpeg
 
         private void TableTwo(StartOfFrame.Component[] components, HuffmanTable luminanceDc, HuffmanTable luminanceAc)
         {
-            var width = (this.startOfFrame.SamplesPerLine + 7) / 8;
-
-            for (var j = 0; j < startOfFrame.ScanLines; j++)
+            var i = 0;
+            while (true)
             {
-                for (var i = 0; i < width; i++)
+                try
                 {
                     // Luminance (Y) - DC
-                    this.ReadComponent(luminanceDc.Dictionary, 1);
+                    var dc = this.ReadDcComponent(luminanceDc.Dictionary);
 
                     // Luminance (Y) - AC
-                    this.ReadComponent(luminanceAc.Dictionary, 1);
+                    var ac = this.ReadAcComponent(luminanceAc.Dictionary);
+
+                    i++;
+                }
+                catch (Exception)
+                {
+                    break;
                 }
             }
+
+            Console.WriteLine("Count = {0}", i);
         }
 
         private void TableFour(StartOfFrame.Component[] components, HuffmanTable luminanceDc, HuffmanTable luminanceAc, HuffmanTable chrominanceDc, HuffmanTable chrominanceAc)
         {
-            var width = (this.startOfFrame.SamplesPerLine + 7) / 8;
+            var lastYdc = 0;
 
-            for (var j = 0; j < startOfFrame.ScanLines; j++)
+            // read 8x8 blocks
+            var width = this.startOfFrame.SamplesPerLine / 8;
+            var length = this.startOfFrame.ScanLines / 8;
+            var size = width * length;
+            // for (var i = 0; i < size; i++)
+            while (!imageData.EndOfImage)
             {
-                for (var i = 0; i < width; i++)
+                try
                 {
                     // Luminance (Y) - DC
-                    this.ReadComponent(luminanceDc.Dictionary, 1);
+                    var ydc = lastYdc + this.ReadDcComponent(luminanceDc.Dictionary);
+                    lastYdc = ydc;
 
                     // Luminance (Y) - AC
-                    this.ReadComponent(luminanceAc.Dictionary, 63);
+                    var yac = this.ReadAcComponent(luminanceAc.Dictionary);
 
                     // Chrominance (Cb) - DC
-                    this.ReadComponent(chrominanceDc.Dictionary, 1);
+                    var cbdc = this.ReadDcComponent(chrominanceDc.Dictionary);
 
                     // Chrominance (Cb) - AC
-                    this.ReadComponent(chrominanceAc.Dictionary, 63);
+                    var cbac = this.ReadAcComponent(chrominanceAc.Dictionary);
 
                     // Chrominance (Cr) - DC
-                    this.ReadComponent(chrominanceDc.Dictionary, 1);
+                    var crdc = this.ReadDcComponent(chrominanceDc.Dictionary);
 
                     // Chrominance (Cr) - AC
-                    this.ReadComponent(chrominanceAc.Dictionary, 63);
+                    var crac = this.ReadAcComponent(chrominanceAc.Dictionary);
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine("Crash {0}", exception);
+                    // Console.WriteLine("  i={0}, size={1}", i, size);
+
+                    break;
                 }
             }
         }
 
-        private void ReadComponent(IReadOnlyDictionary<int, HuffmanTable.HCode> dict, int elements)
+        private int ReadDcComponent(IReadOnlyDictionary<int, HuffmanTable.HCode> dict)
         {
+            var value = 0;
+
             var bits = (ushort)0;
             var len = 0;
-            var count = 0;
 
-            while (true)
+            while (!imageData.EndOfImage)
             {
                 bits = this.imageData.GetNextShort(bits);
                 len++;
@@ -328,16 +353,55 @@ namespace PhotoLib.Jpeg
                 }
 
                 var z = this.imageData.GetSetOfBits(hCode.Code);
-                var value = Jpeg.HuffmanTable.DcValueEncoding(hCode.Code, z);
-                // Console.WriteLine("Found code:{0} bits:{1} value:{2}", hCode.Code.ToString("X2"), z.ToString("X4"), value);
+                value = Jpeg.HuffmanTable.DcValueEncoding(hCode.Code, z);
+                break;
+            }
 
-                if (++count >= elements)
+            return value;
+        }
+
+        private int[] ReadAcComponent(IReadOnlyDictionary<int, HuffmanTable.HCode> dict)
+        {
+            var value = new int[63];
+
+            var bits = (ushort)0;
+            var len = 0;
+            var count = 0;
+
+            while (true)
+            {
+                bits = this.imageData.GetNextShort(bits);
+                len++;
+
+                if (len > 16)
+                {
+                    throw new Exception("Didn't find the code! len: {0}, bits: 0x{1}".FormatWith(len, bits.ToString("X8")));
+                }
+
+                HuffmanTable.HCode hCode;
+                if (!dict.TryGetValue(bits, out hCode) || hCode.Length != len)
+                {
+                    continue;
+                }
+
+                if (hCode.Code == 0x00)
+                {
+                    break;
+                }
+
+                var z = this.imageData.GetSetOfBits(hCode.Code);
+                value[count] = Jpeg.HuffmanTable.DcValueEncoding(hCode.Code, z);
+
+                if (++count >= 63)
                 {
                     break;
                 }
 
                 len = 0;
+                bits = 0;
             }
+
+            return value;
         }
 
         #endregion
