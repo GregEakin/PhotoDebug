@@ -31,22 +31,32 @@ namespace PhotoLib.Jpeg
         public StartOfFrame(BinaryReader binaryReader)
             : base(binaryReader)
         {
-            // case 0xffc0: // SOF0, Start of Frame 0, Baseline DCT
-            //   jh->bits = data[0];
-            //   jh->high = data[1] << 8 | data[2];
-            //   jh->wide = data[3] << 8 | data[4];
-            //   jh->clrs = data[5] + jh->sraw;
-            //   if (len == 9 && !dng_version) getc(ifp);
-            //   break;
-            // case 0xffc3: // SOF3, Start of Frame 3, Lossless (sequential)
-            //   jh->sraw = ((data[7] >> 4) * (data[7] & 15) - 1) & 3;
-            // case 0xffc4:
-            //   if (info_only) break;
-            //   for (dp = data; dp < data+len && (c = *dp++) < 4; )
-            //     jh->free[c] = jh->huff[c] = make_decoder_ref (&dp);
+            // Nondifferential Huffman-coding frames:
+            // case 0xFFC0: // Baseline DCT
+            // case 0xFFC1: // Extended sequential DCT
+            // case 0xFFC2: // Progressive DCT
+            // case 0xFFC3: // Lossless (sequential)
             //   break;
 
-            if (Mark != 0xFF || (Tag & 0xF0) != 0xC0)
+            // Differential Huffman-coding frames:
+            // case 0xFFC5: // Differential sequential DCT
+            // case 0xFFC6: // Differential progressive DCT
+            // case 0xFFC7: // Differential lossless
+            //   break;
+
+            // Nondifferential arithmetic-coded frames:
+            // case 0xFFC9: // Extended sequential DCT
+            // case 0xFFCA: // Progressive DCT
+            // case 0xFFCB: // Lossless (sequential)
+            //   break;
+
+            // Differential arithmetic-coded frames:
+            // case 0xFFCD: // Differential sequential DCT
+            // case 0xFFCE: // Differential progressive DCT
+            // case 0xFFCF: // Differential lossless
+            //   break;
+
+            if (Mark != 0xFF || (Tag & 0xF0) != 0xC0 || Tag == 0xC4 || Tag == 0xC8 || Tag == 0xCC)
             {
                 throw new ArgumentException();
             }
@@ -131,12 +141,16 @@ namespace PhotoLib.Jpeg
         {
             #region Fields
 
+            // 0, 1, 2 for the YCbCr
             private readonly byte componentId;
 
+            // 1 for the colour components, 1 or 2 for the Y component
             private readonly byte hFactor;
 
+            // 1 for the colour components, 1 or 2 for the Y component
             private readonly byte tableId;
 
+            // 0 for the Y component and 1 for the colour components
             private readonly byte vFactor;
 
             #endregion

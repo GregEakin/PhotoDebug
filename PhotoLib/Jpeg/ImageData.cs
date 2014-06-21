@@ -112,12 +112,13 @@ namespace PhotoLib.Jpeg
                 var code = this.rawData[++this.index];
                 switch (code)
                 {
-                    case 0x0:
+                    case 0x00:
+                    case 0xFF:
                         break;
 
                     case 0xD9:
                         this.EndOfFile = true;
-                        Console.WriteLine("Fournd 0xD9 EOF marker");
+                        Console.WriteLine("Fournd 0xD9 EOI marker");
                         break;
 
                     default:

@@ -80,7 +80,8 @@
             // const string FileName = Directory + "IMG_0503.JPG";
             // const string FileName = Directory + "IMAG0086.jpg";
             // const string FileName = Directory + "IMG_0511.CR2";
-            const string FileName = @"C:\Users\Greg\Pictures\IMG_0511.CR2";
+            // const string FileName = @"C:\Users\Greg\Pictures\IMG_0511.CR2";
+            const string FileName = @"C:\Users\Greg\Downloads\" + "huff_simple0.jpg";
 
             TestMethod5(FileName);
         }

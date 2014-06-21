@@ -41,6 +41,7 @@ namespace PhotoLib.Jpeg
             var size = 2;
             while (size + 17 <= length)
             {
+                // 0 for DC, 1 for AC; 0 for the Y component and 1 for the colour components
                 var index = binaryReader.ReadByte();
                 var data1 = binaryReader.ReadBytes(16);
                 var sum = data1.Sum(b => b);

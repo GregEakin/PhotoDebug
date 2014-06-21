@@ -49,9 +49,6 @@ namespace PhotoLib.Jpeg
             var start = binaryReader.BaseStream.Position;
             while (binaryReader.BaseStream.Position < start + length - 2)
             {
-                var arg1 = binaryReader.BaseStream.Position - start - length;
-                Console.WriteLine("DONE bytes left: {0}", arg1);
-
                 var pos = binaryReader.BaseStream.Position;
                 var nextMark = binaryReader.ReadByte();
                 if (nextMark == 0xFF)
@@ -296,7 +293,7 @@ namespace PhotoLib.Jpeg
             var length = this.startOfFrame.ScanLines / 8;
             var size = width * length;
             // for (var i = 0; i < size; i++)
-            while (!imageData.EndOfImage)
+            while (!imageData.EndOfFile)
             {
                 try
                 {
@@ -336,7 +333,7 @@ namespace PhotoLib.Jpeg
             var bits = (ushort)0;
             var len = 0;
 
-            while (!imageData.EndOfImage)
+            while (!imageData.EndOfFile)
             {
                 bits = this.imageData.GetNextShort(bits);
                 len++;
