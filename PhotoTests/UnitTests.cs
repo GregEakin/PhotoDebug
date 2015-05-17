@@ -19,7 +19,7 @@
         [TestMethod]
         public void TestMethodC7()
         {
-            const string Folder = @"C:\Users\Greg\Pictures\2013_10_14\";
+            const string Folder = @"D:\Users\Greg\Pictures\2013_10_14\";
             const string FileName2 = Folder + "IMG_4195.CR2";
             const string Bitmap = Folder + "IMG_4195 C.BMP";
 
@@ -29,7 +29,7 @@
         [TestMethod]
         public void ReadFile()
         {
-            const string Folder = @"C:\Users\Greg\Pictures\2013_10_14\";
+            const string Folder = @"D:\Users\Greg\Pictures\2013_10_14\";
             const string FileName2 = Folder + "IMG_4195.CR2";
 
             using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
@@ -48,8 +48,7 @@
             }
         }
 
-        private static
-            void DumpBitmap(string fileName2, string bitmap)
+        private static void DumpBitmap(string fileName2, string bitmap)
         {
             using (var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read))
             {

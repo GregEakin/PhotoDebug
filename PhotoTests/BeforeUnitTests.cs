@@ -94,7 +94,7 @@
         [TestMethod]
         public void TestMethodC5M3()
         {
-            const string Folder = @"C:\Users\Greg\Pictures\2013_10_14\";
+            const string Folder = @"D:\Users\Greg\Pictures\2013_10_14\";
             const string FileName2 = Folder + "0L2A8897.CR2";
             const string Bitmap = Folder + "0L2A8897 Before.BMP";
 

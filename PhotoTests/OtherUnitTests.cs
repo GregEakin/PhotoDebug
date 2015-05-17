@@ -19,7 +19,7 @@
         [TestMethod]
         public void DumpHuffmanTable()
         {
-            const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
+            const string Directory = @"..\..\..\Samples\";
             const string FileName2 = Directory + "huff_simple0.jpg";
 
             using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
@@ -38,7 +38,7 @@
         [TestMethod]
         public void TestMethod8()
         {
-            const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
+            const string Directory = @"..\..\..\Samples\";
             const string FileName2 = Directory + "IMAG0086.jpg";
 
             using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
@@ -78,7 +78,7 @@
         {
             // const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
             // const string FileName2 = Directory + "IMG_0503.CR2";
-            const string Directory = @"C:\Users\Greg\Pictures\2013-10-06 001\";
+            const string Directory = @"D:\Users\Greg\Pictures\2013-10-06 001\";
             const string FileName2 = Directory + "0L2A8892.CR2";
 
             using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
@@ -148,7 +148,7 @@
             // const string Folder = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
             // const string FileName2 = Folder + "IMG_0503.CR2";
 
-            const string Folder = @"C:\Users\Greg\Pictures\2013-10-06 001\";
+            const string Folder = @"D:\Users\Greg\Pictures\2013-10-06 001\";
             const string FileName2 = Folder + "0L2A8892.CR2";
             const string Bitmap = Folder + "0L2A8892 B6.BMP";
 

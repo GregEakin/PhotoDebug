@@ -97,8 +97,8 @@ namespace PhotoLib.Jpeg
 
         public static void DecodeD()
         {
-            var c = 0;
-            var j = 0;
+            // var c = 0;
+            // var j = 0;
             // while (c > maxcoded[j]) do
             {
                 //nbit
