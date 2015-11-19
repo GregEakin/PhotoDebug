@@ -8,7 +8,7 @@
 using System;
 using System.IO;
 using System.Linq;
-
+using System.Text;
 using PhotoLib.Utilities;
 
 namespace PhotoLib.Tiff
@@ -114,13 +114,13 @@ namespace PhotoLib.Tiff
                 {
                     switch (entry.TagType)
                     {
-                        case 0x01:
-                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Byte 8-bit");
+                        case 0x01:  // ubyte
+                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "UByte 8-bit");
                             Console.WriteLine(ReferencedItem, entry.ValuePointer.ToString("X8"), entry.NumberOfValue);
                             break;
 
-                        case 0x02:
-                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Ascii 8-bit");
+                        case 0x02:  // string, null terminated
+                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Ascii 8-bit, null terminated");
                             Console.Write(ReferencedItem, entry.ValuePointer.ToString("X8"), entry.NumberOfValue);
 
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
@@ -128,16 +128,16 @@ namespace PhotoLib.Tiff
                                 binaryReader.BaseStream.Seek(entry.ValuePointer, SeekOrigin.Begin);
                             }
 
-                            for (var j = 0; j < entry.NumberOfValue - 1; j++)
-                            {
-                                var us = binaryReader.ReadByte();
-                                Console.Write("{0}", (char)us);
-                            }
-                            binaryReader.ReadByte();
-                            Console.WriteLine();
+                            var len = entry.NumberOfValue;
+                            var bytes = binaryReader.ReadBytes((int)len);
+                            var str = Encoding.ASCII.GetString(bytes);
+                            var zero = str.IndexOf('\0');
+                            if (zero >= 0)
+                                str = str.Substring(0, zero);
+                            Console.WriteLine("\"{0}\"",str);
                             break;
 
-                        case 0x03:
+                        case 0x03:  // ushort
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "UShort 16-bit");
                             if (entry.NumberOfValue == 1)
                             {
@@ -160,7 +160,7 @@ namespace PhotoLib.Tiff
                             Console.WriteLine();
                             break;
 
-                        case 0x04:
+                        case 0x04:  // ulong
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "ULong 32-bit");
                             if (entry.NumberOfValue == 1)
                             {
@@ -183,8 +183,8 @@ namespace PhotoLib.Tiff
                             Console.WriteLine();
                             break;
 
-                        case 0x05:
-                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Rational 2x32-bit");
+                        case 0x05:  // urational, numeration & demoninator ulongs
+                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "URational 2x32-bit");
                             Console.Write(ReferencedItem, entry.ValuePointer.ToString("X8"), 2);
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
                             {
@@ -196,12 +196,13 @@ namespace PhotoLib.Tiff
                             Console.WriteLine(RationalItem, us1, us2, us1 / (double)us2);
                             break;
 
-                        case 0x06:
+                        case 0x06:  // sbyte
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "SByte 8-bit");
+                            Console.WriteLine(ReferencedItem, entry.ValuePointer.ToString("X8"), entry.NumberOfValue);
                             throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
 
-                        case 0x07:
-                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Undefinded");
+                        case 0x07:  // ubyte sequence
+                            Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "UByte[]");
                             if (entry.NumberOfValue <= 4)
                             {
                                 Console.Write("{0}, ", entry.ValuePointer >> 0 & 0xFF);
@@ -216,15 +217,15 @@ namespace PhotoLib.Tiff
                             Console.WriteLine();
                             break;
 
-                        case 0x08:
+                        case 0x08:  // short
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "SShort 16-bit");
                             throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
 
-                        case 0x09:
+                        case 0x09:  // long
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "SLong 32-bit");
                             throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
 
-                        case 0x0A:
+                        case 0x0A:  // rational, signed two longs
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "SRational 2x32-bit");
                             Console.Write(ReferencedItem, entry.ValuePointer.ToString("X8"), entry.NumberOfValue);
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
@@ -237,12 +238,27 @@ namespace PhotoLib.Tiff
                             Console.WriteLine(RationalItem, s1, s2, s1 / (double)s2);
                             break;
 
-                        case 0x0B:
+                        case 0x0B:  // single persision, 2 bytes IEEE format
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Float 4-Byte");
+                            Console.Write(ReferencedItem, entry.ValuePointer.ToString("X8"), entry.NumberOfValue);
+                            if (binaryReader.BaseStream.Position != entry.ValuePointer)
+                            {
+                                binaryReader.BaseStream.Seek(entry.ValuePointer, SeekOrigin.Begin);
+                            }
+
+                            var x1 = binaryReader.ReadSingle();
+                            Console.WriteLine("{0}", x1);
                             throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
 
-                        case 0x0C:
+                        case 0x0C:  // double persision, 4 bytes IEEE format
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Double 8-Byte");
+                            if (binaryReader.BaseStream.Position != entry.ValuePointer)
+                            {
+                                binaryReader.BaseStream.Seek(entry.ValuePointer, SeekOrigin.Begin);
+                            }
+
+                            var x2 = binaryReader.ReadDouble();
+                            Console.WriteLine("{0}", x2);
                             throw new NotImplementedException("Undfined message {0}".FormatWith(entry.TagType));
 
                         default:

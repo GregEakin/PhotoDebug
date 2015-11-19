@@ -40,15 +40,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JpegImage.cs" />
-    <Compile Include="Jpeg\DefineQuantizationTable.cs" />
-    <Compile Include="Jpeg\DefineHuffmanTable.cs" />
+    <Compile Include="Jpeg\JpegBnf.cs" />
+    <Compile Include="Jpeg\NonStartOfFrame\Comment.cs" />
+    <Compile Include="Jpeg\NonStartOfFrame\DefineQuantizationTable.cs" />
+    <Compile Include="Jpeg\NonStartOfFrame\DefineHuffmanTable.cs" />
     <Compile Include="Jpeg\HuffmanTable.cs" />
     <Compile Include="Jpeg\ImageData.cs" />
-    <Compile Include="Jpeg\JfifMarker.cs" />
+    <Compile Include="Jpeg\NonStartOfFrame\JfifMarker.cs" />
     <Compile Include="Jpeg\JpegTag.cs" />
-    <Compile Include="Jpeg\StartOfFrame.cs" />
-    <Compile Include="Jpeg\StartOfImage.cs" />
-    <Compile Include="Jpeg\StartOfScan.cs" />
+    <Compile Include="Jpeg\StartOfFrame\StartOfFrame.cs" />
+    <Compile Include="Jpeg\NonStartOfFrame\StartOfImage.cs" />
+    <Compile Include="Jpeg\NonStartOfFrame\StartOfScan.cs" />
     <Compile Include="Tiff\RawData.cs" />
     <Compile Include="Tiff\RawImage.cs" />
     <Compile Include="Tiff\CR2Header.cs" />

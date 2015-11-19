@@ -319,6 +319,22 @@
                 binaryReader.BaseStream.Seek(makerNotes.ValuePointer, SeekOrigin.Begin);
                 var notes = new ImageFileDirectory(binaryReader);
 
+                Assert.AreEqual(0x2A, notes.Entries.Length);
+                Assert.AreEqual(0u, notes.NextEntry); // last
+                var settings = notes[0x0001];
+                Console.WriteLine("Camera Settings {0} {1}", settings.ValuePointer, settings.NumberOfValue);
+                var focalLength = notes[0x0002];
+                Console.WriteLine("Focal Length {0} {1}", focalLength.ValuePointer, focalLength.NumberOfValue);
+
+                binaryReader.BaseStream.Seek(settings.ValuePointer, SeekOrigin.Begin);
+                for (var i = 0; i < settings.NumberOfValue; i++)
+                {
+                    var x = binaryReader.ReadUInt16();
+                    Console.WriteLine("{0} : {1}", i, x);
+                }
+
+                return;
+
                 var size1 = notes[0x4001];
                 Console.WriteLine("0x{0}, {1}, {2}, {3}", size1.TagId.ToString("X4"), size1.TagType, size1.NumberOfValue, size1.ValuePointer);
                 var size2 = notes[0x4002];

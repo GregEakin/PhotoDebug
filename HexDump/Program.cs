@@ -74,14 +74,12 @@
 
         private static void Main(string[] args)
         {
-            // const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
-            // const string FileName = Directory + "huff_simple0.jpg";
+            const string Directory = @"..\..\..\Samples\";
             // const string FileName = Directory + "IMG_0503.CR2";
             // const string FileName = Directory + "IMG_0503.JPG";
             // const string FileName = Directory + "IMAG0086.jpg";
             // const string FileName = Directory + "IMG_0511.CR2";
-            // const string FileName = @"C:\Users\Greg\Pictures\IMG_0511.CR2";
-            const string FileName = @"C:\Users\Greg\Downloads\" + "huff_simple0.jpg";
+            const string FileName = Directory + "huff_simple0.jpg";
 
             TestMethod5(FileName);
         }

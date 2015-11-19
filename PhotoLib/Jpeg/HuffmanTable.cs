@@ -166,7 +166,7 @@ namespace PhotoLib.Jpeg
                 bits = bits << 1;
                 for (var j = 0; j < data1[i]; j++)
                 {
-                    var value = new HCode { Code = data2[offset], Length = (byte)(i + 1) };
+                    var value = new HCode(data2[offset], (byte)(i + 1));
                     retval.Add(bits, value);
                     bits++;
                     offset++;
@@ -210,11 +210,17 @@ namespace PhotoLib.Jpeg
         {
             #region Fields
 
-            public byte Code;
+            public readonly byte Code;
 
-            public byte Length;
+            public readonly byte Length;
 
             #endregion
+
+            public HCode(byte code, byte length)
+            {
+                this.Code = code;
+                this.Length = length;
+            }
         }
     }
 }
