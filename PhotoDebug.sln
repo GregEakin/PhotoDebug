@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoLib", "PhotoLib\PhotoLib.csproj", "{C2A55E4A-98F7-48D9-ADF8-85558C90FC3F}"
 EndProject
@@ -17,6 +17,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexDump", "HexDump\HexDump.csproj", "{F01A7386-D527-40CD-95E9-981E8A56D008}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoDump", "PhotoDump\PhotoDump.csproj", "{D5C1C792-2218-458D-BE24-8DCF338F54AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JpegParser", "JpegParser\JpegParser.csproj", "{B9175329-64D3-4499-B107-FA23A1A11422}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JpegParserTests", "JpegParserTests\JpegParserTests.csproj", "{44D694A6-4DFD-4505-B518-86E9B5D1E7B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +44,14 @@ Global
 		{D5C1C792-2218-458D-BE24-8DCF338F54AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5C1C792-2218-458D-BE24-8DCF338F54AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5C1C792-2218-458D-BE24-8DCF338F54AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9175329-64D3-4499-B107-FA23A1A11422}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9175329-64D3-4499-B107-FA23A1A11422}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9175329-64D3-4499-B107-FA23A1A11422}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9175329-64D3-4499-B107-FA23A1A11422}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44D694A6-4DFD-4505-B518-86E9B5D1E7B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44D694A6-4DFD-4505-B518-86E9B5D1E7B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44D694A6-4DFD-4505-B518-86E9B5D1E7B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44D694A6-4DFD-4505-B518-86E9B5D1E7B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

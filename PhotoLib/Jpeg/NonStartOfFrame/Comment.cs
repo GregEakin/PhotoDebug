@@ -46,5 +46,7 @@ namespace PhotoLib.Jpeg
                 return length;
             }
         }
+
+        #endregion
     }
 }

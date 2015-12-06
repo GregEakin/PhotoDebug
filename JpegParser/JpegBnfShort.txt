@@ -1,0 +1,46 @@
+﻿Test Name:	DeepDumpFile
+Test Outcome:	Passed
+Result StandardOutput:	
+<jpeg_data> → { { <fill> BYFF } BYD8 } { <tblsmisc> { { <fill> BYFF } { BYC0 | BYC1 | BYC2 | BYC3 | BYC9 | BYCA | BYCB } } { { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { { BY00 | … | BYFF } } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { { BY01 | … | BYFF } } fspec() } <scanset> } { { <fill> BYFF } BYD9 } 
+            | { { <fill> BYFF } BYD8 } <tblsmisc> { { <fill> BYFF } BYD9 } 
+            | { { <fill> BYFF } BYD8 } <tblsmisc> { { <fill> BYFF } BYDE } { { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { { BY00 | … | BYFF } } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { { BY01 | … | BYFF } } fspec() } { { <tblsmisc> { { <fill> BYFF } { BYC0 | BYC1 | BYC2 | BYC3 | BYC9 | BYCA | BYCB } } { { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { { BY00 | … | BYFF } } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { { BY01 | … | BYFF } } fspec() } <scanset> } <xframes> } { { <fill> BYFF } BYD9 } 
+            | { { <fill> BYFF } BYD8 } <forbid> { { <fill> BYFF } BYD9 } 
+<fill> → ϵ
+       | <fill> BYFF
+<tblsmisc> → ϵ
+           | <tblsmisc> { { <fill> BYFF } BYDB } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } <dqt_data>
+           | <tblsmisc> { { <fill> BYFF } BYC4 } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } <dht_data>
+           | <tblsmisc> { { <fill> BYFF } BYCC } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } <dac_data>
+           | <tblsmisc> { { <fill> BYFF } BYDD } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } 
+           | <tblsmisc> { { <fill> BYFF } BYFE } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } comspec()
+           | <tblsmisc> { { <fill> BYFF } { BYE0 | … | BYEF } } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } appspec()
+<scanset> → { <tblsmisc> { { <fill> BYFF } BYDA } { { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { BY01 | BY02 | BY03 | BY04 } sspec() { { { BY00 | … | BY3F } } { { BY00 | … | BY3F } } { { BY00 | … | BYFF } } } } <ecdataf> } 
+          | <scanset> { <tblsmisc> { { <fill> BYFF } BYDA } { { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { BY01 | BY02 | BY03 | BY04 } sspec() { { { BY00 | … | BY3F } } { { BY00 | … | BY3F } } { { BY00 | … | BYFF } } } } <ecdata> } 
+<xframes> → ϵ
+          | <xframes> { <dtblsmisc> { { <fill> BYFF } { BYC5 | BYC6 | BYC7 | BYCD | BYCE | BYCF } } { { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { { BY00 | … | BYFF } } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { { BY01 | … | BYFF } } fspec() } <scanset> } 
+          | <xframes> { <tblsmisc> { { <fill> BYFF } { BYC0 | BYC1 | BYC2 | BYC3 | BYC9 | BYCA | BYCB } } { { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { { BY00 | … | BYFF } } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { { BY01 | … | BYFF } } fspec() } <scanset> } 
+<forbid> → { <fill> BYFF } { BY02 | … | BYBF } 
+         | { { <fill> BYFF } BY01 } 
+         | { { <fill> BYFF } BYC8 } 
+         | { { <fill> BYFF } { BYF0 | … | BYFD } } 
+<dqt_data> → <qt_tbl>
+           | <dqt_data><qt_tbl>
+<dht_data> → { <tabspec>huffspec() } 
+           | <dht_data> { <tabspec>huffspec() } 
+<dac_data> → <dac_cond>
+           | <dac_data><dac_cond>
+<ecdataf> → <ecdata>
+          | <ecdata> { { <fill> BYFF } BYDC } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } 
+<ecdata> → ϵ
+         | <ecdata> { BY00 | … | BYFE } 
+         | <ecdata> { { <fill> BYFF } { BYD0 | … | BYD7 } } 
+         | <ecdata> BYFF BY00
+<dtblsmisc> → <tblsmisc>
+            | <tblsmisc> { { <fill> BYFF } BYDF } BY00 BY03 { BY01 | BY10 | BY11 } <tblsmisc>
+<qt_tbl> → { { BY00 | BY01 | BY02 | BY03 } } s64chr()
+         | { { BY10 | BY11 | BY12 | BY13 } } s64int()
+<tabspec> → { { BY00 | BY01 | BY02 | BY03 } } 
+          | { { BY10 | BY11 | BY12 | BY13 } } 
+<dac_cond> → { { BY00 | BY01 | BY02 | BY03 } } { { BY00 | … | BYFF } } 
+           | { { BY10 | BY11 | BY12 | BY13 } } { { BY01 | … | BY3F } }
+

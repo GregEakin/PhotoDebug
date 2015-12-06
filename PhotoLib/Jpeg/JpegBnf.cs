@@ -32,11 +32,11 @@ namespace PhotoLib.Jpeg
         // <dac>        → <prefix> BYCC
         // <dhp>        → <prefix> BYDE
         // <dht>        → <prefix> BYC4
-        // <dhl>        → <prefix> BYDC
+        // <dnl>        → <prefix> BYDC
         // <dqt>        → <prefix> BYDB
         // <dri>        → <prefix> BYDD
         // <dsof>       → <prefix> <dsofb>
-        // <eol>        → <prefix> BYD9
+        // <eoi>        → <prefix> BYD9
         // <exp>        → <prefix> BYDF
         // <jpg>        → <prefix> BYC8
         // <jpgn>       → <prefix> <jpgnb>
@@ -53,13 +53,13 @@ namespace PhotoLib.Jpeg
         /// tables and miscellaneous marker segments
         // <intval>     → <anyb> <anyb>
         // <len>        → <intval>
-        // <gbyt_spec>  → <spechi0b>
+        // <qbyt_spec>  → <spechi0b>
         // <qint_spec>  → <spechi1b>
         // <qt_tbl>     → <qbyt_spec> s64chr()
         //              | <qint_spec> s64int()
         // <dqt_data>   → <qt_tbl>
         //              | <dqt_data> <qt_tbl>
-        // <dc_spec>    → <spechib>
+        // <dc_spec>    → <spechi0b>
         // <ac_spec>    → <spechi1b>
         // <tabspec>    → <dc_spec>
         //              | <ac_spec>
@@ -105,7 +105,7 @@ namespace PhotoLib.Jpeg
         //              | <scanset> <scan>
         // <nframe>     → <tblsmisc> <nsof> <fparms> <scanset>
         // <exp_data>   → BY01 | BY10 | BY11
-        // <dtblsmisc>  → <tblmisc>
+        // <dtblsmisc>  → <tblsmisc>
         //              | <tblsmisc> <exp> BY00 BY03 <exp_data> <tblsmisc>
         // <dframe>     → <dtblsmisc> <dsof> <fparms> <scanset>
 
