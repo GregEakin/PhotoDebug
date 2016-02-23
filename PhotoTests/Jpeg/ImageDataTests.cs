@@ -5,7 +5,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using PhotoLib.Jpeg;
-
+    using System;
     [TestClass]
     public class ImageDataTests
     {
@@ -171,6 +171,102 @@
                 Assert.AreEqual(0x000A, imageData.GetSetOfBits(4));
                 Assert.AreEqual(0x0055, imageData.GetSetOfBits(8));
                 Assert.AreEqual(0x000A, imageData.GetSetOfBits(4));
+            }
+        }
+
+        [TestMethod]
+        public void GetValuesTest()
+        {
+            var table0 = new HuffmanTable(0, 
+                new byte[] { 0x00, 0x01, 0x05, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00 }, 
+                new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F });
+            Console.WriteLine("Table 0 {0}", table0.ToString());
+
+            var table1 = new HuffmanTable(1, 
+                new byte[] { 0x00, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00 },
+                new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F });
+            Console.WriteLine("Table 1 {0}", table0.ToString());
+
+            var data = new byte[] { 0xff, 0x00, 0xe0, 0x0b, 0xa2, 0x89, 0x68, 0xc7, 0x00, 0xb0 };
+            using (var memory = new MemoryStream(data))
+            {
+                var reader = new BinaryReader(memory);
+                var imageData = new ImageData(reader, (uint)data.Length);
+                var prevY = 16384;
+                var prevCb = 16384;
+                var prevCr = 16384;
+
+                Assert.AreEqual(14, imageData.GetValue(table0));
+                Assert.AreEqual(0x2E, imageData.GetValue(14));
+                Assert.AreEqual(-16337, HuffmanTable.DecodeDifBits(14, 0x2E));
+                prevY += -16337;
+                Assert.AreEqual(47, prevY);
+
+                Assert.AreEqual(3, imageData.GetValue(table0));
+                Assert.AreEqual(0x2, imageData.GetValue(3));
+                Assert.AreEqual(-5, HuffmanTable.DecodeDifBits(3, 0x2));
+                prevY += -5;
+                Assert.AreEqual(42, prevY);
+
+                Assert.AreEqual(2, imageData.GetValue(table1));
+                Assert.AreEqual(0x0, imageData.GetValue(2));
+                Assert.AreEqual(-3, HuffmanTable.DecodeDifBits(2, 0x0));
+                prevCb += -3;
+                Assert.AreEqual(16381, prevCb);
+
+                Assert.AreEqual(2, imageData.GetValue(table1));
+                Assert.AreEqual(0x1, imageData.GetValue(2));
+                Assert.AreEqual(-2, HuffmanTable.DecodeDifBits(2, 0x1));
+                prevCr += -2;
+                Assert.AreEqual(16382, prevCr);
+
+                Assert.AreEqual(2, imageData.GetValue(table0));
+                Assert.AreEqual(0x1, imageData.GetValue(2));
+                Assert.AreEqual(-2, HuffmanTable.DecodeDifBits(2, 0x1));
+                prevY += -2;
+                Assert.AreEqual(40, prevY);
+
+                Assert.AreEqual(0, imageData.GetValue(table0));
+                Assert.AreEqual(0x0, imageData.GetValue(0));
+                Assert.AreEqual(0, HuffmanTable.DecodeDifBits(0, 0));
+                prevY += 0;
+                Assert.AreEqual(40, prevY);
+
+                Assert.AreEqual(1, imageData.GetValue(table1));
+                Assert.AreEqual(0x1, imageData.GetValue(1));
+                Assert.AreEqual(1, HuffmanTable.DecodeDifBits(1, 0x1));
+                prevCb += 1;
+                Assert.AreEqual(16382, prevCb);
+
+                Assert.AreEqual(0, imageData.GetValue(table1));
+                Assert.AreEqual(0x0, imageData.GetValue(0));
+                Assert.AreEqual(0, HuffmanTable.DecodeDifBits(0, 0x0));
+                prevCr += 0;
+                Assert.AreEqual(16382, prevCr);
+
+                Assert.AreEqual(2, imageData.GetValue(table0));
+                Assert.AreEqual(0x2, imageData.GetValue(2));
+                Assert.AreEqual(2, HuffmanTable.DecodeDifBits(2, 0x2));
+                prevY += 2;
+                Assert.AreEqual(42, prevY);
+
+                Assert.AreEqual(0, imageData.GetValue(table0));
+                Assert.AreEqual(0x0, imageData.GetValue(0));
+                Assert.AreEqual(0, HuffmanTable.DecodeDifBits(0, 0));
+                prevY += 0;
+                Assert.AreEqual(42, prevY);
+
+                Assert.AreEqual(0, imageData.GetValue(table1));
+                Assert.AreEqual(0x0, imageData.GetValue(0));
+                Assert.AreEqual(0, HuffmanTable.DecodeDifBits(0, 0x0));
+                prevCb += 0;
+                Assert.AreEqual(16382, prevCb);
+
+                Assert.AreEqual(0, imageData.GetValue(table1));
+                Assert.AreEqual(0x0, imageData.GetValue(0));
+                Assert.AreEqual(0, HuffmanTable.DecodeDifBits(0, 0x0));
+                prevCr += 0;
+                Assert.AreEqual(16382, prevCr);
             }
         }
     }

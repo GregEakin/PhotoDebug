@@ -137,14 +137,14 @@ namespace PhotoTests.Jpeg
 
             var treeBits = new[]
                 {
-                    "00", "01", 
-                    "100", "101", 
-                    "1100", "1101", 
-                    "11100", "11101", "11110", 
-                    "111110", 
-                    "1111110", 
-                    "11111110", 
-                    "111111110", 
+                    "00", "01",
+                    "100", "101",
+                    "1100", "1101",
+                    "11100", "11101", "11110",
+                    "111110",
+                    "1111110",
+                    "11111110",
+                    "111111110",
                     "1111111110",
                     "11111111110"
                 };
@@ -153,5 +153,48 @@ namespace PhotoTests.Jpeg
         }
 
         #endregion
+
+        [TestMethod]
+        public void DecodeDifBitsTest()
+        {
+            Assert.AreEqual(0, HuffmanTable.DecodeDifBits(0, 0));
+
+            Assert.AreEqual(-1, HuffmanTable.DecodeDifBits(1, 0));
+            Assert.AreEqual(1, HuffmanTable.DecodeDifBits(1, 1));
+
+            Assert.AreEqual(-3, HuffmanTable.DecodeDifBits(2, 0));
+            Assert.AreEqual(-2, HuffmanTable.DecodeDifBits(2, 1));
+            Assert.AreEqual(2, HuffmanTable.DecodeDifBits(2, 2));
+            Assert.AreEqual(3, HuffmanTable.DecodeDifBits(2, 3));
+
+            Assert.AreEqual(-7, HuffmanTable.DecodeDifBits(3, 0));
+            Assert.AreEqual(-6, HuffmanTable.DecodeDifBits(3, 1));
+            Assert.AreEqual(-5, HuffmanTable.DecodeDifBits(3, 2));
+            Assert.AreEqual(-4, HuffmanTable.DecodeDifBits(3, 3));
+            Assert.AreEqual(4, HuffmanTable.DecodeDifBits(3, 4));
+            Assert.AreEqual(5, HuffmanTable.DecodeDifBits(3, 5));
+            Assert.AreEqual(6, HuffmanTable.DecodeDifBits(3, 6));
+            Assert.AreEqual(7, HuffmanTable.DecodeDifBits(3, 7));
+
+            for (var bits = 4; bits < 16; bits++)
+            {
+                var x = 0x01u << bits;
+                var y = 0x01u << (bits - 1);
+
+                for (var codes = 0u; codes < (0x01u << bits); codes++)
+                {
+                    if (codes < y)
+                    {
+                        var expected = -x + 1 + codes;
+                        Assert.AreEqual((short)expected, HuffmanTable.DecodeDifBits((ushort)bits, (ushort)codes));
+                    }
+                    else
+                    {
+                        var expected = codes;
+                        Assert.AreEqual((short)expected, HuffmanTable.DecodeDifBits((ushort)bits, (ushort)codes));
+                    }
+                }
+            }
+        }
     }
 }

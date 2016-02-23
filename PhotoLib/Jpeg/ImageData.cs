@@ -183,5 +183,29 @@ namespace PhotoLib.Jpeg
         }
 
         #endregion
+
+        public byte GetValue(HuffmanTable table)
+        {
+            var hufIndex = (ushort)0;
+            var hufBits = (ushort)0;
+            HuffmanTable.HCode hCode;
+            do
+            {
+                hufIndex = this.GetNextShort(hufIndex);
+                hufBits++;
+            }
+            while (!table.Dictionary.TryGetValue(hufIndex, out hCode) || hCode.Length != hufBits);
+
+            return hCode.Code;
+        }
+
+        public ushort GetValue(int bits)
+        {
+            var hufIndex = (ushort)0;
+            for (var i = 0; i < bits; i++)
+                hufIndex = this.GetNextShort(hufIndex);
+
+            return hufIndex;
+        }
     }
 }

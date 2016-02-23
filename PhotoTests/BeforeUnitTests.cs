@@ -327,7 +327,7 @@
         {
             var hufCode = GetValue(startOfImage.ImageData, table0);
             var difCode = GetValue(startOfImage.ImageData, hufCode);
-            var dif = DecodeDifBits(hufCode, difCode);
+            var dif = HuffmanTable.DecodeDifBits(hufCode, difCode);
             prev = prev + dif;
             return prev;
         }
@@ -534,24 +534,6 @@
 
                 Console.WriteLine("EOF {0}", startOfImage.ImageData.RawData.Length - startOfImage.ImageData.Index);
             }
-        }
-
-        private static short DecodeDifBits(ushort difBits, ushort difCode)
-        {
-            short dif0;
-            if ((difCode & (0x01u << (difBits - 1))) != 0)
-            {
-                // msb is 1, thus decoded DifCode is positive
-                dif0 = (short)difCode;
-            }
-            else
-            {
-                // msb is 0, thus DifCode is negative
-                var mask = (1 << difBits) - 1;
-                var m1 = difCode ^ mask;
-                dif0 = (short)(0 - m1);
-            }
-            return dif0;
         }
 
         private static byte GetValue(ImageData imageData, HuffmanTable table)

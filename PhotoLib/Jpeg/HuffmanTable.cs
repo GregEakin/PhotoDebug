@@ -222,5 +222,19 @@ namespace PhotoLib.Jpeg
                 this.Length = length;
             }
         }
+
+        public static short DecodeDifBits(ushort difBits, ushort difCode)
+        {
+            if ((difCode & (0x01u << (difBits - 1))) != 0)
+            {
+                // msb is 1, thus decoded DifCode is positive
+                return (short)difCode;
+            }
+
+            // msb is 0, thus DifCode is negative
+            var mask = (1 << difBits) - 1;
+            var m1 = difCode ^ mask;
+            return (short)(0 - m1);
+        }
     }
 }
