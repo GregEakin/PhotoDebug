@@ -5,7 +5,9 @@
 // FILE:		CR2Header.cs
 // AUTHOR:		Greg Eakin
 
+using System;
 using System.IO;
+using System.Text;
 
 namespace PhotoLib.Tiff
 {
@@ -34,11 +36,16 @@ namespace PhotoLib.Tiff
 
         public CR2Header(BinaryReader binaryReader)
         {
-            byteOrder = binaryReader.ReadBytes(2);
-            tiffMagic = binaryReader.ReadUInt16();
+            byteOrder = binaryReader.ReadBytes(2);     // either "II" or "MM" 
+            tiffMagic = binaryReader.ReadUInt16();     // "*\0"
             tiffOffset = binaryReader.ReadUInt32();
+
+            //var cr2Magic = binaryReader.ReadBytes(4);
+            //if (Encoding.ASCII.GetString(cr2Magic) != "CR2\0")
+            //    throw new ArgumentException();
             cr2Magic = binaryReader.ReadUInt16();
             cr2Version = binaryReader.ReadBytes(2);
+
             rawIfdOffset = binaryReader.ReadUInt32();
         }
 

@@ -14,6 +14,7 @@ Result StandardOutput:
            | <tblsmisc> { { <fill> BYFF } BYDD } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } 
            | <tblsmisc> { { <fill> BYFF } BYFE } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } comspec()
            | <tblsmisc> { { <fill> BYFF } { BYE0 | … | BYEF } } { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } appspec()
+
 <scanset> → { <tblsmisc> { { <fill> BYFF } BYDA } { { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { BY01 | BY02 | BY03 | BY04 } sspec() { { { BY00 | … | BY3F } } { { BY00 | … | BY3F } } { { BY00 | … | BYFF } } } } <ecdataf> } 
           | <scanset> { <tblsmisc> { { <fill> BYFF } BYDA } { { { { BY00 | … | BYFF } { BY00 | … | BYFF } } } { BY01 | BY02 | BY03 | BY04 } sspec() { { { BY00 | … | BY3F } } { { BY00 | … | BY3F } } { { BY00 | … | BYFF } } } } <ecdata> } 
 <xframes> → ϵ

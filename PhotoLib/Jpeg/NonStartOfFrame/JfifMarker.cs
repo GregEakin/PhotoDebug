@@ -7,6 +7,7 @@
 
 using System;
 using System.IO;
+using System.Text;
 
 namespace PhotoLib.Jpeg
 {
@@ -33,8 +34,9 @@ namespace PhotoLib.Jpeg
 
             length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
 
-            var indentifer = binaryReader.ReadBytes(5);
-            // TODO see if identifier == "JFIF";
+            var identifer = binaryReader.ReadBytes(5);
+            if (Encoding.ASCII.GetString(identifer) != "JFIF\0")
+                throw new ArgumentException();
 
             var version = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
             var units = binaryReader.ReadByte();

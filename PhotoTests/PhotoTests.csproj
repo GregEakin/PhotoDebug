@@ -57,6 +57,7 @@
     <Compile Include="Canon7D\C7DIfd1.cs" />
     <Compile Include="BeforeUnitTests.cs" />
     <Compile Include="DualReaderTests.cs" />
+    <Compile Include="Jpeg\JiffMarkerTests.cs" />
     <Compile Include="OtherUnitTests.cs" />
     <Compile Include="JpegFileTests.cs" />
     <Compile Include="Jpeg\DefineHuffmanTableTests.cs" />

@@ -71,8 +71,7 @@ namespace JpegParserTests
             var dict = stuff.Dict;
 
             var key = "<jpeg_data>";
-            var value = dict[key];
-            var allTokens = DumpBlock(key, value, dict);
+            var allTokens = DumpBlock(key, dict);
             var procTokens = new HashSet<string>();
             while (!allTokens.SetEquals(procTokens))
             {
@@ -80,19 +79,24 @@ namespace JpegParserTests
                 temp.ExceptWith(procTokens);
                 foreach (var tt in temp)
                 {
-                    var blocks = DumpBlock(tt, dict[tt], dict);
+                    var blocks = DumpBlock(tt, dict);
                     allTokens.UnionWith(blocks);
                     procTokens.Add(tt);
                 }
             }
+
+            Console.WriteLine("======= =====");
+            foreach (var x in procTokens)
+            {
+                Console.WriteLine(x);
+            }
         }
 
-        private static HashSet<string> DumpBlock(string key, Class1.Data value, Dictionary<string, Class1.Data> dict)
+        private static HashSet<string> DumpBlock(string key, Dictionary<string, Class1.Data> dict)
         {
             var data = new HashSet<string>();
-
             var index = 0;
-            foreach (var line in value.Lines)
+            foreach (var line in dict[key].Lines)
             {
                 if (index++ == 0)
                 {

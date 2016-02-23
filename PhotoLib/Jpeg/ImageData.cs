@@ -14,6 +14,15 @@ namespace PhotoLib.Jpeg
 {
     public class ImageData
     {
+        public void Reset()
+        {
+            this.EndOfFile = false;
+            currentByte = 0xFF;
+            index = -1;
+            nextBit = -1;
+            this.CheckByte();
+        }
+
         #region Fields
 
         private readonly byte[] rawData;
@@ -52,7 +61,7 @@ namespace PhotoLib.Jpeg
         {
             get
             {
-                //Console.WriteLine("Lenght = 0x{0}", rawData.Length.ToString("X8"));
+                //Console.WriteLine("Length = 0x{0}", rawData.Length.ToString("X8"));
                 //Console.WriteLine("Index = 0x{0}, nextBit = {1}, currentByte = 0x{2}", index.ToString("X8"), nextBit, currentByte.ToString("X2"));
                 //Console.WriteLine("Diff = {0}", rawData.Length - index);
                 ////Console.WriteLine("Val = 0x{0}", this.GetNextByte());

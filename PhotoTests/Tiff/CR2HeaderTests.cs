@@ -35,7 +35,7 @@
             {
                 var reader = new BinaryReader(memory);
                 var cr2Header = new CR2Header(reader);
-                Assert.AreEqual(0x5243, cr2Header.CR2Magic);
+                Assert.AreEqual(0x5243, cr2Header.CR2Magic);  // "CR2\0"
             }
         }
 
