@@ -9,7 +9,7 @@
 
     using PhotoLib.Jpeg;
     using PhotoLib.Tiff;
-
+    using System.Drawing.Imaging;
     [TestClass]
     public class BeforeUnitTests
     {
@@ -91,17 +91,13 @@
         }
 
         [TestMethod]
-        public void TestMethodC5M3()
+        public void DumpImage0Test()
         {
-            // const string Folder = @"D:\Users\Greg\Pictures\2013_10_14\";
-            // DumpIFDs(Folder, "0L2A8897.CR2");
-            //// DumpBitmap(Folder, "0L2A8897.CR2", "0L2A8897 Before.BMP");
-
             const string Folder = @"D:\Users\Greg\Pictures\2016-02-21 Studio\";
-            DumpIFDs(Folder, "Studio 016.CR2");
+            DumpImage0(Folder, "Studio 015.CR2");
         }
 
-        private static void DumpIFDs(string folder, string file)
+        private static void DumpImage0(string folder, string file)
         {
             var fileName2 = folder + file;
             using (var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read))
@@ -119,8 +115,25 @@
                     var orientation = image.Entries.Single(e => e.TagId == 0x0112 && e.TagType == 3).ValuePointer;
                     // Assert.AreEqual(1u, orientation);
 
-                    // DumpImage(binaryReader, folder + "0L2A8897-0.JPG", offset, length);
+                    DumpImage(binaryReader, folder + "0L2A8897-0.JPG", offset, length);
                 }
+            }
+        }
+
+        [TestMethod]
+        public void DumpImage1Test()
+        {
+            const string Folder = @"D:\Users\Greg\Pictures\2016-02-21 Studio\";
+            DumpImage1(Folder, "Studio 015.CR2");
+        }
+
+        private static void DumpImage1(string folder, string file)
+        {
+            var fileName2 = folder + file;
+            using (var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read))
+            {
+                var binaryReader = new BinaryReader(fileStream);
+                var rawImage = new RawImage(binaryReader);
 
                 // Images #0 and #1 are compressed in lossy (classic) JPEG
                 {
@@ -130,8 +143,25 @@
                     var length = image.Entries.Single(e => e.TagId == 0x0202 && e.TagType == 4).ValuePointer;
                     // Assert.AreEqual(10334u, length);
 
-                    // DumpImage(binaryReader, folder + "0L2A8897-1.JPG", offset, length);
+                    DumpImage(binaryReader, folder + "0L2A8897-1.JPG", offset, length);
                 }
+            }
+        }
+
+        [TestMethod]
+        public void DumpImage2Test()
+        {
+            const string Folder = @"D:\Users\Greg\Pictures\2016-02-21 Studio\";
+            DumpImage2(Folder, "Studio 015.CR2");
+        }
+
+        private static void DumpImage2(string folder, string file)
+        {
+            var fileName2 = folder + file;
+            using (var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read))
+            {
+                var binaryReader = new BinaryReader(fileStream);
+                var rawImage = new RawImage(binaryReader);
 
                 // Image #2 is RGB, 16 bits per color, little endian.
                 // Length = 3 * 16 bits * nb pixels
@@ -149,12 +179,34 @@
                     Assert.AreEqual(395u, rows);
                     var count = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
                     Assert.AreEqual(1403040u, count);
+
+                    Assert.AreEqual(count, width * height * samples * 2);
+
+                    DumpImage(binaryReader, folder, offset, width, height);
                 }
+            }
+        }
+
+        [TestMethod]
+        public void DumpImage3Test()
+        {
+            const string Folder = @"D:\Users\Greg\Pictures\2016-02-21 Studio\";
+            DumpImage3(Folder, "Studio 015.CR2");
+        }
+
+        private static void DumpImage3(string folder, string file)
+        {
+            var fileName2 = folder + file;
+            using (var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read))
+            {
+                var binaryReader = new BinaryReader(fileStream);
+                var rawImage = new RawImage(binaryReader);
 
                 // Image #3 is a raw image compressed in ITU-T81 lossless JPEG
                 {
                     var image = rawImage.Directories.Skip(3).First();
                     var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;
+                    Assert.AreEqual(6u, compression);
                     var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
                     // Assert.AreEqual(0x2D42DCu, offset);
                     var count = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
@@ -181,6 +233,7 @@
                     // var rowBuf0 = new short[startOfFrame.SamplesPerLine * startOfFrame.Components.Length];
                     // var rowBuf1 = new short[startOfFrame.SamplesPerLine * startOfFrame.Components.Length];
                     // var predictor = new[] { (short)(1 << (startOfFrame.Precision - 1)), (short)(1 << (startOfFrame.Precision - 1)) };
+                    Assert.AreEqual(2, startOfImage.HuffmanTable.Tables.Count);
                     var table0 = startOfImage.HuffmanTable.Tables[0x00];
                     var table1 = startOfImage.HuffmanTable.Tables[0x01];
 
@@ -220,12 +273,12 @@
                     Assert.AreEqual(1, startOfScan.Components[1].Dc);
                     Assert.AreEqual(0, startOfScan.Components[1].Ac);
 
+                    // DumpCompressedData(startOfImage);
+
                     using (var image1 = new Bitmap(startOfFrame.Width / 2, startOfFrame.ScanLines / 2))
                     {
-                        //      horz sampling == 1
+                        // horz sampling == 1
                         startOfImage.ImageData.Reset();
-
-                        DumpCompressedData(startOfImage);
 
                         var prevR = 1 << (startOfFrame.Precision - 1);
                         var prevG = 1 << (startOfFrame.Precision - 1);
@@ -240,7 +293,7 @@
                                 ProcessLine(data[0], line, data[2] / 2, startOfImage, table0, ref prevR, ref prevG, ref prevB, image1);
                         }
 
-                        image1.Save(folder + "oops.bmp");
+                        image1.Save(folder + "0L2A8897-3.bmp");
                     }
 
                     Console.WriteLine("R {0} G {1} B {2}", maxR, maxG, maxB);
@@ -285,7 +338,7 @@
 
         private static void ProcessLine(int slice, int line, int width, StartOfImage startOfImage, HuffmanTable table0, ref int prevR, ref int prevG, ref int prevB, Bitmap image1)
         {
-            const double divisor = 12726122.0/512.0;
+            const double divisor = 12726122.0 / 512.0;
 
             var red = new int[width];
             var green1 = new int[width];
@@ -325,11 +378,32 @@
 
         private static int ProcessColor(StartOfImage startOfImage, HuffmanTable table0, ref int prev)
         {
-            var hufCode = GetValue(startOfImage.ImageData, table0);
-            var difCode = GetValue(startOfImage.ImageData, hufCode);
+            var hufCode = startOfImage.ImageData.GetValue(table0);
+            var difCode = startOfImage.ImageData.GetValue(hufCode);
             var dif = HuffmanTable.DecodeDifBits(hufCode, difCode);
             prev = prev + dif;
             return prev;
+        }
+
+        private static void DumpImage(BinaryReader binaryReader, string folder, uint offset, uint width, uint height)
+        {
+            using (var image1 = new Bitmap((int)width, (int)height)) // , PixelFormat.Format48bppRgb))
+            {
+                binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
+
+                for (var y = 0; y < height; y++)
+                    for (var x = 0; x < width; x++)
+                    {
+                        var r = binaryReader.ReadUInt16();
+                        var g = binaryReader.ReadUInt16();
+                        var b = binaryReader.ReadUInt16();
+                        // var color = Color.FromArgb(r, g, b);
+                        var color = Color.FromArgb((byte)(r >> 5), (byte)(g >> 5), (byte)(b >> 5));
+                        image1.SetPixel(x, y, color);
+                    }
+
+                image1.Save(folder + "0L2A8897-2.bmp");
+            }
         }
 
         private static void DumpImage(BinaryReader binaryReader, string filename, uint offset, uint length)
@@ -355,6 +429,13 @@
                 //Flush the contents of the buffer to the file
                 fout.Flush();
             }
+        }
+
+        [TestMethod]
+        public void TestMethodC5M3()
+        {
+            const string Folder = @"D:\Users\Greg\Pictures\2013_10_14\";
+            DumpBitmap(Folder, "0L2A8897.CR2", "0L2A8897 Before.BMP");
         }
 
         private static void DumpBitmap(string folder, string file1, string file2)
@@ -534,30 +615,6 @@
 
                 Console.WriteLine("EOF {0}", startOfImage.ImageData.RawData.Length - startOfImage.ImageData.Index);
             }
-        }
-
-        private static byte GetValue(ImageData imageData, HuffmanTable table)
-        {
-            var hufIndex = (ushort)0;
-            var hufBits = (ushort)0;
-            HuffmanTable.HCode hCode;
-            do
-            {
-                hufIndex = imageData.GetNextShort(hufIndex);
-                hufBits++;
-            }
-            while (!table.Dictionary.TryGetValue(hufIndex, out hCode) || hCode.Length != hufBits);
-
-            return hCode.Code;
-        }
-
-        private static ushort GetValue(ImageData imageData, int bits)
-        {
-            var hufIndex = (ushort)0;
-            for (var i = 0; i < bits; i++)
-                hufIndex = imageData.GetNextShort(hufIndex);
-
-            return hufIndex;
         }
 
         private static void DumpStartOfScan(StartOfScan startOfScan)
