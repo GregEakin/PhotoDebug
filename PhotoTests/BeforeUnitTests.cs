@@ -244,10 +244,10 @@
 
             for (var x = 0; x < width; x++)
             {
-                var r = red[x];
-                var g = (green1[x] + green2[x]) / 2;
-                var b = blue[x];
-                var color = Color.FromArgb((byte)((int)r >> 8), (byte)((int)g >> 8), (byte)((int)b >> 8));
+                var r = (byte)Math.Max(Math.Min((red[x] >> 8), 255), 0);
+                //var g = red[x]; // (green1[x] + green2[x]) / 2;
+                //var b = red[x]; // blue[x];
+                var color = Color.FromArgb(r, r, r);
                 image1.SetPixel(2 * slice * width + 2 * x, 2 * line, color);
                 image1.SetPixel(2 * slice * width + 2 * x + 1, 2 * line, color);
                 image1.SetPixel(2 * slice * width + 2 * x, 2 * line + 1, color);
@@ -421,9 +421,6 @@
             var difCode = startOfImage.ImageData.GetValue(hufCode);
             var dif = HuffmanTable.DecodeDifBits(hufCode, difCode);
 
-            if (dif < -10000 || dif > 10000)
-                Console.WriteLine("S: {0}", dif);
-
             prev = (short)(prev + dif);
             return prev;
         }
@@ -433,9 +430,6 @@
             var hufCode = startOfImage.ImageData.GetValue(table);
             var difCode = startOfImage.ImageData.GetValue(hufCode);
             var dif = HuffmanTable.DecodeDifBits(hufCode, difCode);
-
-            if (dif < -10000 || dif > 10000)
-                Console.WriteLine("U: {0}", dif);
 
             if (dif >= 0)
                 prev += (ushort)dif;
