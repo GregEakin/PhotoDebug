@@ -150,10 +150,10 @@
                     var startOfImage = new StartOfImage(binaryReader, offset, count); // { ImageData = new ImageData(binaryReader, count) };
 
                     var startOfFrame = startOfImage.StartOfFrame;
-                    Assert.AreEqual(3950u, startOfFrame.ScanLines);
-                    Assert.AreEqual(2960u, startOfFrame.SamplesPerLine);
+                    Assert.AreEqual(3950u, startOfFrame.ScanLines);      // = 3840 + 110
+                    Assert.AreEqual(2960u, startOfFrame.SamplesPerLine); // = 5920 / 2
                     Assert.AreEqual(2, startOfFrame.Components.Length);
-                    Assert.AreEqual(5920, startOfFrame.Width);
+                    Assert.AreEqual(5920, startOfFrame.Width);           // = 5760 + 160
 
                     // var rowBuf0 = new short[startOfFrame.SamplesPerLine * startOfFrame.Components.Length];
                     // var rowBuf1 = new short[startOfFrame.SamplesPerLine * startOfFrame.Components.Length];
@@ -200,7 +200,7 @@
 
                     // DumpCompressedData(startOfImage);
 
-                    using (var image1 = new Bitmap(startOfFrame.Width / 2, startOfFrame.ScanLines / 2))
+                    using (var image1 = new Bitmap(startOfFrame.Width, startOfFrame.ScanLines))
                     {
                         // horz sampling == 1
                         startOfImage.ImageData.Reset();
@@ -210,11 +210,11 @@
                         for (var slice = 0; slice < data[0]; slice++)
                         {
                             for (var line = 0; line < startOfFrame.ScanLines / 2; line++)
-                                ProcessLine211(slice, line, data[1] / 2, startOfImage, table0, table1, ref prevA, ref prevB, image1);
+                                ProcessLine14211(slice, line, data[1] / 2, startOfImage, table0, table1, ref prevA, ref prevB, image1);
                         }
                         {
                             for (var line = 0; line < startOfFrame.ScanLines / 2; line++)
-                                ProcessLine211(data[0], line, data[2] / 2, startOfImage, table0, table1, ref prevA, ref prevB, image1);
+                                ProcessLine14211(data[0], line, data[2] / 2, startOfImage, table0, table1, ref prevA, ref prevB, image1);
                         }
 
                         image1.Save(folder + "0L2A8897-3.bmp");
@@ -223,7 +223,7 @@
             }
         }
 
-        private static void ProcessLine211(int slice, int line, int width, StartOfImage startOfImage, HuffmanTable table0, HuffmanTable table1, ref ushort prevA, ref ushort prevB, Bitmap image1)
+        private static void ProcessLine14211(int slice, int line, int width, StartOfImage startOfImage, HuffmanTable table0, HuffmanTable table1, ref ushort prevA, ref ushort prevB, Bitmap image1)
         {
             var red = new ushort[width];
             var green1 = new ushort[width];
@@ -233,22 +233,25 @@
             for (var x = 0; x < width; x++)
             {
                 red[x] = ProcessColor(startOfImage, table0, ref prevA);
-                green1[x] = ProcessColor(startOfImage, table0, ref prevB);
+                green1[x] = ProcessColor(startOfImage, table1, ref prevB);
             }
 
             for (var x = 0; x < width; x++)
             {
                 green2[x] = ProcessColor(startOfImage, table0, ref prevA);
-                blue[x] = ProcessColor(startOfImage, table0, ref prevB);
+                blue[x] = ProcessColor(startOfImage, table1, ref prevB);
             }
 
             for (var x = 0; x < width; x++)
             {
                 var r = red[x];
-                var g = (green1[x] + green2[x])/2;
+                var g = (green1[x] + green2[x]) / 2;
                 var b = blue[x];
                 var color = Color.FromArgb((byte)((int)r >> 8), (byte)((int)g >> 8), (byte)((int)b >> 8));
-                image1.SetPixel(slice * width + x, line, color);
+                image1.SetPixel(2 * slice * width + 2 * x, 2 * line, color);
+                image1.SetPixel(2 * slice * width + 2 * x + 1, 2 * line, color);
+                image1.SetPixel(2 * slice * width + 2 * x, 2 * line + 1, color);
+                image1.SetPixel(2 * slice * width + 2 * x + 1, 2 * line + 1, color);
             }
         }
 
@@ -401,7 +404,7 @@
                 var r = y1[x] + 1.40200 * cr[x];
                 var g = y1[x] - 0.34414 * cb[x] - 0.71414 * cr[x];
                 var b = y1[x] + 1.77200 * cb[x];
-                var color = Color.FromArgb((byte)((int)r>>8), (byte)((int)g >> 8), (byte)((int)b >> 8));
+                var color = Color.FromArgb((byte)((int)r >> 8), (byte)((int)g >> 8), (byte)((int)b >> 8));
                 image1.SetPixel(2 * slice * width + 2 * x, line, color);
 
                 r = y2[x] + 1.40200 * cr[x];
@@ -417,6 +420,10 @@
             var hufCode = startOfImage.ImageData.GetValue(table);
             var difCode = startOfImage.ImageData.GetValue(hufCode);
             var dif = HuffmanTable.DecodeDifBits(hufCode, difCode);
+
+            if (dif < -10000 || dif > 10000)
+                Console.WriteLine("S: {0}", dif);
+
             prev = (short)(prev + dif);
             return prev;
         }
@@ -427,8 +434,8 @@
             var difCode = startOfImage.ImageData.GetValue(hufCode);
             var dif = HuffmanTable.DecodeDifBits(hufCode, difCode);
 
-            if (dif < -2000 || dif > 2000)
-                Console.WriteLine(dif);
+            if (dif < -10000 || dif > 10000)
+                Console.WriteLine("U: {0}", dif);
 
             if (dif >= 0)
                 prev += (ushort)dif;
