@@ -225,6 +225,12 @@ namespace PhotoLib.Jpeg
 
         public static short DecodeDifBits(ushort difBits, ushort difCode)
         {
+            if (difBits == 0)
+                return 0;
+
+            //if (difBits >= 16)
+            //    return 32768;
+
             if ((difCode & (0x01u << (difBits - 1))) != 0)
             {
                 // msb is 1, thus decoded DifCode is positive

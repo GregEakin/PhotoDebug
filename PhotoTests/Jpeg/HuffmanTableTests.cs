@@ -195,6 +195,8 @@ namespace PhotoTests.Jpeg
                     }
                 }
             }
+
+            // Assert.AreEqual(32768, HuffmanTable.DecodeDifBits(16, 0));
         }
     }
 }
