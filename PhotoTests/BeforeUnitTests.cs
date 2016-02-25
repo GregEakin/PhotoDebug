@@ -162,8 +162,8 @@
                     var table0 = startOfImage.HuffmanTable.Tables[0x00];
                     var table1 = startOfImage.HuffmanTable.Tables[0x01];
 
-                    Console.WriteLine(table0.ToString());
-                    Console.WriteLine(table1.ToString());
+                    //Console.WriteLine(table0.ToString());
+                    //Console.WriteLine(table1.ToString());
 
                     Assert.AreEqual(14, startOfFrame.Precision); // RGGB
                     Assert.AreEqual(2, startOfFrame.Components.Length); // RGGB
@@ -198,6 +198,10 @@
                     Assert.AreEqual(1, startOfScan.Components[1].Dc);
                     Assert.AreEqual(0, startOfScan.Components[1].Ac);
 
+                    // @@ White Balance
+
+                    // @@ Black Substraction
+
                     // DumpCompressedData(startOfImage);
 
                     // horz sampling == 1
@@ -231,20 +235,20 @@
                     {
                         if (row % 2 == 0 && col % 2 == 0)
                         {
-                            var r = (byte)Math.Min((memory[col, row] >> 5), 255);
+                            var r = (byte)Math.Min((memory[col, row] >> 4), 255);
                             var color = Color.FromArgb(r, 0, 0);
                             bitmap.SetPixel(col, row, color);
                         }
                         else if ((row % 2 == 1 && col % 2 == 0) || (row % 2 == 0 && col % 2 == 1))
                         {
-                            var r = (byte)Math.Min((memory[col, row] >> 6), 255);
-                            var color = Color.FromArgb(0, r, 0);
+                            var g = (byte)Math.Min((memory[col, row] >> 5), 255);
+                            var color = Color.FromArgb(0, g, 0);
                             bitmap.SetPixel(col, row, color);
                         }
                         else if (row % 2 == 1 && col % 2 == 1)
                         {
-                            var r = (byte)Math.Min((memory[col, row] >> 5), 255);
-                            var color = Color.FromArgb(0, 0, r);
+                            var b = (byte)Math.Min((memory[col, row] >> 4), 255);
+                            var color = Color.FromArgb(0, 0, b);
                             bitmap.SetPixel(col, row, color);
                         }
                     }
@@ -269,36 +273,92 @@
                 diff[2 * x + 1, 1] = ProcessColor(startOfImage, table1);
             }
 
-            if (slice == 0)
+            var pp = new[] { (ushort)0x03FF, (ushort)0x03FF };
+            if (slice != 0)
             {
-                var pp = new[] { (ushort)0x2000, (ushort)0x2000 };
-                for (var y = 0; y < 2; y++)
-                {
-                    var row = 2 * line + y;
-                    for (var x = 0; x < 2 * width; x++)
-                    {
-                        var col = 2 * slice * width + x;
-                        var p = (ushort)((pp[x % 2] + diff[x, y]) % 0x4000);
-                        pp[x % 2] = p;
-                        memory[col, row] = p;
-                    }
-                }
-            }
-            else
-            {
-                var pp = new[] { (ushort)0x2000, (ushort)0x2000 };
                 pp[0] = memory[2 * slice * width - 2, 2 * line];
                 pp[1] = memory[2 * slice * width - 1, 2 * line];
-                for (var y = 0; y < 2; y++)
+            }
+
+            for (var y = 0; y < 2; y++)
+            {
+                var row = 2 * line + y;
+                for (var x = 0; x < 2 * width; x++)
                 {
-                    var row = 2 * line + y;
-                    for (var x = 0; x < 2 * width; x++)
-                    {
-                        var col = 2 * slice * width + x;
-                        var p = (ushort)((pp[x % 2] + diff[x, y]) % 0x4000);
-                        pp[x % 2] = p;
-                        memory[col, row] = p;
-                    }
+                    var col = 2 * slice * width + x;
+                    var p = (ushort)((pp[x % 2] + diff[x, y]) % 0x4000);
+                    pp[x % 2] = p;
+                    memory[col, row] = p;
+                }
+            }
+        }
+
+        private static void ProcessLine14211B(int slice, int line, int width, StartOfImage startOfImage, HuffmanTable table0, HuffmanTable table1, ushort[,] memory)
+        {
+            var diff = new short[width * 2, 2];
+
+            for (var x = 0; x < width; x++)
+            {
+                diff[2 * x, 0] = ProcessColor(startOfImage, table0);
+                diff[2 * x + 1, 0] = ProcessColor(startOfImage, table1);
+            }
+
+            for (var x = 0; x < width; x++)
+            {
+                diff[2 * x, 1] = ProcessColor(startOfImage, table0);
+                diff[2 * x + 1, 1] = ProcessColor(startOfImage, table1);
+            }
+
+            // In slice zero:
+            // There seams to be a pattern for every four rows,
+            //   where the the first two are feed into the last two
+            //for (var y = 0; y < 2; y++)
+            //{
+            //    {
+            //        var sum = 0.0;
+            //        var min = double.MaxValue;
+            //        var max = double.MinValue;
+            //        for (var x = 0; x < 2 * width; x += 2)
+            //        {
+            //            sum += diff[x, y];
+            //            if (min > sum) min = sum;
+            //            if (max < sum) max = sum;
+            //        }
+
+            //        Console.WriteLine("{0}, {1}, 1, {2}, {3}, {4}, {5}", slice, 2 * line + y, sum, min, max, diff[0, y]);
+            //    }
+            //    {
+            //        var sum = 0.0;
+            //        var min = double.MaxValue;
+            //        var max = double.MinValue;
+
+            //        for (var x = 1; x < 2 * width; x += 2)
+            //        {
+            //            sum += diff[x, y];
+            //            if (min > sum) min = sum;
+            //            if (max < sum) max = sum;
+            //        }
+
+            //        Console.WriteLine("{0}, {1}, 2, {2}, {3}, {4}, {5}", slice, 2 * line + y, sum, min, max, diff[1, y]);
+            //    }
+            //}
+
+            var pp = new[] { (ushort)0x2000, (ushort)0x2000 };
+            if (slice != 0)
+            {
+                pp[0] = memory[2 * slice * width - 2, 2 * line];
+                pp[1] = memory[2 * slice * width - 1, 2 * line];
+            }
+
+            for (var y = 0; y < 2; y++)
+            {
+                var row = 2 * line + y;
+                for (var x = 0; x < 2 * width; x++)
+                {
+                    var col = 2 * slice * width + x;
+                    var p = (ushort)((pp[x % 2] + diff[x, y]) % 0x4000);
+                    pp[x % 2] = p;
+                    memory[col, row] = p;
                 }
             }
         }
