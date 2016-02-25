@@ -229,19 +229,21 @@
                 for (var row = 0; row < y; row++)
                     for (var col = 0; col < x; col++)
                     {
-                        var r = (byte)Math.Min((memory[col, row] >> 6), 255);
                         if (row % 2 == 0 && col % 2 == 0)
                         {
+                            var r = (byte)Math.Min((memory[col, row] >> 5), 255);
                             var color = Color.FromArgb(r, 0, 0);
                             bitmap.SetPixel(col, row, color);
                         }
                         else if ((row % 2 == 1 && col % 2 == 0) || (row % 2 == 0 && col % 2 == 1))
                         {
+                            var r = (byte)Math.Min((memory[col, row] >> 6), 255);
                             var color = Color.FromArgb(0, r, 0);
                             bitmap.SetPixel(col, row, color);
                         }
                         else if (row % 2 == 1 && col % 2 == 1)
                         {
+                            var r = (byte)Math.Min((memory[col, row] >> 5), 255);
                             var color = Color.FromArgb(0, 0, r);
                             bitmap.SetPixel(col, row, color);
                         }
@@ -276,7 +278,6 @@
                     for (var x = 0; x < 2 * width; x++)
                     {
                         var col = 2 * slice * width + x;
-
                         var p = (ushort)((pp[x % 2] + diff[x, y]) % 0x4000);
                         pp[x % 2] = p;
                         memory[col, row] = p;
@@ -286,16 +287,14 @@
             else
             {
                 var pp = new[] { (ushort)0x2000, (ushort)0x2000 };
+                pp[0] = memory[2 * slice * width - 2, 2 * line];
+                pp[1] = memory[2 * slice * width - 1, 2 * line];
                 for (var y = 0; y < 2; y++)
                 {
                     var row = 2 * line + y;
-                    pp[0] = memory[2 * slice * width - 2, row];
-                    pp[1] = memory[2 * slice * width - 1, row];
-
                     for (var x = 0; x < 2 * width; x++)
                     {
                         var col = 2 * slice * width + x;
-
                         var p = (ushort)((pp[x % 2] + diff[x, y]) % 0x4000);
                         pp[x % 2] = p;
                         memory[col, row] = p;
