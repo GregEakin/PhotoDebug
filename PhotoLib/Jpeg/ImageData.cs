@@ -127,7 +127,7 @@ namespace PhotoLib.Jpeg
 
                     case 0xD9:
                         this.EndOfFile = true;
-                        Console.WriteLine("Fournd 0xD9 EOI marker");
+                        Console.WriteLine("Found 0xD9 EOI marker");
                         break;
 
                     default:

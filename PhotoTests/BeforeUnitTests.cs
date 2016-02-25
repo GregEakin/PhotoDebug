@@ -229,7 +229,7 @@
                 for (var row = 0; row < y; row++)
                     for (var col = 0; col < x; col++)
                     {
-                        var r = (byte)Math.Min((memory[col, row] >> 8), 255);
+                        var r = (byte)Math.Min((memory[col, row] >> 6), 255);
                         if (row % 2 == 0 && col % 2 == 0)
                         {
                             var color = Color.FromArgb(r, 0, 0);
@@ -257,35 +257,51 @@
 
             for (var x = 0; x < width; x++)
             {
-                diff[x * 2, 0] = ProcessColor(startOfImage, table0);
-                diff[x * 2 + 1, 0] = ProcessColor(startOfImage, table1);
+                diff[2 * x, 0] = ProcessColor(startOfImage, table0);
+                diff[2 * x + 1, 0] = ProcessColor(startOfImage, table1);
             }
 
             for (var x = 0; x < width; x++)
             {
-                diff[x * 2, 1] = ProcessColor(startOfImage, table0);
-                diff[x * 2 + 1, 1] = ProcessColor(startOfImage, table1);
+                diff[2 * x, 1] = ProcessColor(startOfImage, table0);
+                diff[2 * x + 1, 1] = ProcessColor(startOfImage, table1);
             }
 
-            for (var y = 0; y < 2; y++)
-                for (var x = 0; x < 2 * width; x++)
+            if (slice == 0)
+            {
+                var pp = new[] { (ushort)0x2000, (ushort)0x2000 };
+                for (var y = 0; y < 2; y++)
                 {
                     var row = 2 * line + y;
-                    var col = 2 * slice * width + x;
+                    for (var x = 0; x < 2 * width; x++)
+                    {
+                        var col = 2 * slice * width + x;
 
-                    if (row == 0 && (col == 0 || col == 1))
-                    {
-                        memory[col, row] = (ushort)(0x2000 + diff[x, y]);
-                    }
-                    else if (col == 0 || col == 1)
-                    {
-                        memory[col, row] = (ushort)(memory[col, row - 1] + diff[x, y]);
-                    }
-                    else
-                    {
-                        memory[col, row] = (ushort)(memory[col - 2, row] + diff[x, y]);
+                        var p = (ushort)((pp[x % 2] + diff[x, y]) % 0x4000);
+                        pp[x % 2] = p;
+                        memory[col, row] = p;
                     }
                 }
+            }
+            else
+            {
+                var pp = new[] { (ushort)0x2000, (ushort)0x2000 };
+                for (var y = 0; y < 2; y++)
+                {
+                    var row = 2 * line + y;
+                    pp[0] = memory[2 * slice * width - 2, row];
+                    pp[1] = memory[2 * slice * width - 1, row];
+
+                    for (var x = 0; x < 2 * width; x++)
+                    {
+                        var col = 2 * slice * width + x;
+
+                        var p = (ushort)((pp[x % 2] + diff[x, y]) % 0x4000);
+                        pp[x % 2] = p;
+                        memory[col, row] = p;
+                    }
+                }
+            }
         }
 
         [TestMethod]
@@ -406,11 +422,11 @@
                         for (var slice = 0; slice < data[0]; slice++)
                         {
                             for (var line = 0; line < startOfFrame.ScanLines; line++)
-                                ProcessLine321(slice, line, data[1] / 4, startOfImage, table0, table1, ref prevY, ref prevCb, ref prevCr, image1);
+                                ProcessLine15321(slice, line, data[1] / 4, startOfImage, table0, table1, ref prevY, ref prevCb, ref prevCr, image1);
                         }
                         {
                             for (var line = 0; line < startOfFrame.ScanLines; line++)
-                                ProcessLine321(data[0], line, data[2] / 4, startOfImage, table0, table1, ref prevY, ref prevCb, ref prevCr, image1);
+                                ProcessLine15321(data[0], line, data[2] / 4, startOfImage, table0, table1, ref prevY, ref prevCb, ref prevCr, image1);
                         }
 
                         // Assert.IsTrue(startOfImage.ImageData.EndOfFile);
@@ -426,7 +442,7 @@
         // 1111 1111 0000 0000 1110 0000 0101 0100 0001 1111 1111 0011 0101 1111 1010 0110 1111 0100 1111 0001 0100 1110 1101 0010 0101 0001 0000 1110 0010 1001 1101 1011 1111 0001 1110 1010 1110 1100 1100 0111
         // 
 
-        private static void ProcessLine321(int slice, int line, int width, StartOfImage startOfImage, HuffmanTable table0, HuffmanTable table1, ref ushort prevY, ref short prevCb, ref short prevCr, Bitmap image1)
+        private static void ProcessLine15321(int slice, int line, int width, StartOfImage startOfImage, HuffmanTable table0, HuffmanTable table1, ref ushort prevY, ref short prevCb, ref short prevCr, Bitmap image1)
         {
             var y1 = new ushort[width];
             var y2 = new ushort[width];
