@@ -216,6 +216,8 @@ namespace PhotoTests
                             ProcessLine14211(data[0], line, data[2] / 2, startOfImage, table0, table1, memory);
                     }
 
+                    Assert.AreEqual(1, startOfImage.ImageData.DistFromEnd);
+
                     MakeBitmap(memory, folder);
                 }
             }
@@ -294,6 +296,7 @@ namespace PhotoTests
         [TestMethod]
         public void DumpImage3SRawTest()
         {
+            // 2592 x 1728, Canon EOS 7D, 1/160 sec. f/1.8 85mm, SRAW   
             const string Folder = @"D:\Users\Greg\Pictures\2013_10_14\";
             DumpImage3SRaw(Folder, "IMG_4194.CR2");
         }
@@ -402,8 +405,7 @@ namespace PhotoTests
                             ProcessLine15321(data[0], line, data[2] / 4, startOfImage, table0, table1, memory);
                     }
 
-                    // Assert.IsTrue(startOfImage.ImageData.EndOfFile);
-                    // var hufCode = startOfImage.ImageData.GetValue(table0);
+                    Assert.AreEqual(3, startOfImage.ImageData.DistFromEnd);
 
                     MakeBitmap2(memory, folder);
                 }
@@ -429,10 +431,6 @@ namespace PhotoTests
         // 1111 1111 0000 0000 1110 0000 0101 0100 0001 1111 1111 0011 0101 1111 1010 0110 1111 0100 1111 0001 0100 1110 1101 0010 0101 0001 0000 1110 0010 1001 1101 1011 1111 0001 1110 1010 1110 1100 1100 0111
         // 
 
-        static ushort prevY = (ushort)0x4000;
-        static short prevCb = (short)0;
-        static short prevCr = (short)0;
-
         private static void ProcessLine15321(int slice, int line, int width, StartOfImage startOfImage, HuffmanTable table0, HuffmanTable table1, DataBuf[,] memory)
         {
             var diff = new DiffBuf[width];
@@ -444,6 +442,38 @@ namespace PhotoTests
                 diff[x].Cr = ProcessColor(startOfImage, table1);
             }
 
+            if (line == 0)
+            {
+                DataBuf TopLine = new DataBuf { Y = (ushort)(0x4000u - 300u), Cb = 40, Cr = -80 };
+                if (slice > 0)
+                {
+                    TopLine.Y = 0x0000;
+                    TopLine.Cb = 0x0000;
+                    TopLine.Cr = 0x0000;
+                }
+
+                for (var x = 0; x < width; x++)
+                {
+                    var col = slice * width + x;
+                    var y1 = TopLine.Y + diff[x].Y1 % 0x8000;
+                    var y2 = TopLine.Y + +diff[x].Y1 + diff[x].Y2 % 0x8000;
+                    var cb = TopLine.Cb + diff[x].Cb % 0x8000;
+                    var cr = TopLine.Cr + diff[x].Cr % 0x8000;
+                    TopLine.Y = (ushort)y2;
+                    TopLine.Cb = (short)cb;
+                    TopLine.Cr = (short)cr;
+                    Console.WriteLine("{0}, 0, {1}, {2}, {3}, {4}, {5}", slice, col, y1, y2, cb, cr);
+                }
+            }
+
+            DataBuf Prev = new DataBuf { Y = (ushort)(0x4000u - 300u), Cb = 40, Cr = -80 };
+            if (slice > 0)
+            {
+                Prev.Y = 0x0000;
+                Prev.Cb = 0x0000;
+                Prev.Cr = 0x0000;
+            }
+
             //if (slice != 0)
             //{
             //    prevY = memory[2 * slice * width - 3, line].Y;
@@ -453,28 +483,29 @@ namespace PhotoTests
 
             for (var x = 0; x < width; x++)
             {
-                var p1 = (ushort)((prevY + diff[x].Y1) % 0x8000 );
-                prevY = p1;
+                var y1 = (ushort)((Prev.Y + diff[x].Y1) % 0x8000);
+                var y2 = (ushort)((Prev.Y + diff[x].Y1 + diff[x].Y2) % 0x8000);
+                var cb = (short)((Prev.Cb + diff[x].Cb) % 0x8000);
+                var cr = (short)((Prev.Cr + diff[x].Cr) % 0x8000);
 
-                var p2 = (ushort)((prevY + diff[x].Y2) % 0x8000);
-                prevY = p2;
-
-                var p3 = (short)((prevCb + diff[x].Cb) % 0x8000);
-                prevCb = p3;
-
-                var p4 = (short)((prevCr + diff[x].Cr) % 0x8000);
-                prevCr = p4;
+                Prev.Y = y2;
+                Prev.Cb = cb;
+                Prev.Cr = cr;
 
                 var col = 2 * slice * width + 2 * x;
-                memory[col, line].Y = p1;
-                memory[col, line].Cb = p3;
-                memory[col, line].Cr = p4;
+                memory[col, line].Y = y1;
+                memory[col, line].Cb = cb;
+                memory[col, line].Cr = cr;
 
-                memory[col + 1, line].Y = p2;
-                memory[col + 1, line].Cb = p3;
-                memory[col + 1, line].Cr = p4;
+                memory[col + 1, line].Y = y2;
+                memory[col + 1, line].Cb = cb;
+                memory[col + 1, line].Cr = cr;
             }
         }
+
+        // 50% red
+        // 2% green
+        // 8% blue
 
         private static void MakeBitmap2(DataBuf[,] memory, string folder)
         {

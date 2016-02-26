@@ -207,5 +207,15 @@ namespace PhotoLib.Jpeg
 
             return hufIndex;
         }
+
+        public int DistFromEnd
+        {
+            get
+            {
+                if (index < 0)
+                    return -1;
+                return rawData.Length - index;
+            }
+        }
     }
 }
