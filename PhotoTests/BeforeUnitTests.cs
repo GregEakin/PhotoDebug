@@ -296,6 +296,7 @@ namespace PhotoTests
             }
         }
 
+        // This processes two lines at a time.
         private static void ProcessLine14211(int slice, int line, int width, StartOfImage startOfImage, HuffmanTable table0, HuffmanTable table1, ushort[,] memory)
         {
             var diff = new short[width * 2, 2];
@@ -339,7 +340,7 @@ namespace PhotoTests
             // const string Folder = @"D:\Users\Greg\Pictures\2013_10_14\";
             // DumpImage3SRaw(Folder, "IMG_4194.CR2");
             const string Folder = @"D:\Users\Greg\Pictures\2016-02-26\";
-            DumpImage3SRaw(Folder, "001.CR2");
+            DumpImage3SRaw(Folder, "003.CR2");
         }
 
         private static void DumpImage3SRaw(string folder, string file)
@@ -388,8 +389,11 @@ namespace PhotoTests
                     Console.WriteLine(table1.ToString());
 
                     Assert.AreEqual(15, startOfFrame.Precision); // sraw/sraw2
+
+                    // chrominance subsampling factors
                     Assert.AreEqual(3, startOfFrame.Components.Length); // sraw/sraw2
 
+                    // J:a:b = 4:2:2, h/v = 2/1
                     Assert.AreEqual(1, startOfFrame.Components[0].ComponentId);
                     Assert.AreEqual(2, startOfFrame.Components[0].HFactor);
                     Assert.AreEqual(1, startOfFrame.Components[0].VFactor);
@@ -477,11 +481,13 @@ namespace PhotoTests
         static double minCb = double.MaxValue; static double maxCb = double.MinValue;
         static double minCr = double.MaxValue; static double maxCr = double.MinValue;
 
+        // This process two lines at a time
         private static void ProcessLine15321(int slice, int lines, int line, int width, StartOfImage startOfImage, HuffmanTable table0, HuffmanTable table1, DataBuf[,] memory)
         {
             var diff = new DiffBuf[width];
             for (var x = 0; x < width; x++)
             {
+                // YUYV
                 diff[x].Y1 = ProcessColor(startOfImage, table0);
                 diff[x].Y2 = ProcessColor(startOfImage, table0);
                 diff[x].Cb = ProcessColor(startOfImage, table1);
