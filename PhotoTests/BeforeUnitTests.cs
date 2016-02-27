@@ -452,7 +452,7 @@ namespace PhotoTests
 
                     Assert.AreEqual(3, startOfImage.ImageData.DistFromEnd);
 
-                    MakeBitmap2(memory, folder);
+                    MakeBitmap(memory, folder);
                 }
             }
         }
@@ -529,10 +529,10 @@ namespace PhotoTests
                 if (line == 0)
                 {
                     Prev = new DataBuf[lines];
-                    Prev[0] = new DataBuf { Y = 0x8000, Cb = 0, Cr = 0 };
+                    Prev[0] = new DataBuf { Y = 0x8000 - 3720, Cb = 0, Cr = 0 };
                 }
                 else
-                    Prev[line] = new DataBuf { Y = 0x4000, Cb = 0, Cr = 0 };
+                    Prev[line] = new DataBuf { Y = 0x4000 - 3720, Cb = 0, Cr = 0 };
             }
 
             for (var x = 0; x < width; x++)
@@ -578,9 +578,16 @@ namespace PhotoTests
                 }
             }
         }
+        private static short check(double value)
+        {
+            if (value > 0x7FFF)
+                return (short)0x7FFF;
+            if (value < 0x0000)
+                return (short)0x0000;
+            return (short)value;
+        }
 
-
-        private static void MakeBitmap2(DataBuf[,] memory, string folder)
+        private static void MakeBitmap(DataBuf[,] memory, string folder)
         {
             var x = memory.GetLength(0);
             var y = memory.GetLength(1);
@@ -589,19 +596,28 @@ namespace PhotoTests
             //{
             //    var size = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
             //    var data = bitmap.LockBits(size, ImageLockMode.ReadWrite, bitmap.PixelFormat);
-            //    for (var row = 0; row < y; row++)
+            //    try
             //    {
-            //        var scan0 = data.Scan0 + data.Stride * row;
-            //        for (var col = 0; col < x; col++)
+            //        for (var row = 0; row < y; row++)
             //        {
-            //            var c = (short)(memory[col, row].Y);
-            //            Marshal.WriteInt16(scan0, 3 * col + 0, c);
-            //            Marshal.WriteInt16(scan0, 3 * col + 1, c);
-            //            Marshal.WriteInt16(scan0, 3 * col + 2, c);
+            //            var scan0 = data.Scan0 + data.Stride * row;
+            //            for (var col = 0; col < x; col++)
+            //            {
+            //                var pt = memory[col, row];
+            //                var r = pt.Y + 1.40200 * pt.Cr;
+            //                var g = pt.Y - 0.34414 * pt.Cb - 0.71414 * pt.Cr;
+            //                var b = pt.Y + 1.77200 * pt.Cb;
+            //                Marshal.WriteInt16(scan0, 3 * col + 0, check(b));
+            //                Marshal.WriteInt16(scan0, 3 * col + 1, check(g));
+            //                Marshal.WriteInt16(scan0, 3 * col + 2, check(r));
+            //            }
             //        }
             //    }
+            //    finally
+            //    {
+            //        bitmap.UnlockBits(data);
+            //    }
 
-            //    bitmap.UnlockBits(data);
             //    bitmap.Save(folder + "0L2A8897-3.bmp");
             //}
 
@@ -613,7 +629,7 @@ namespace PhotoTests
                         //var r = memory[col, row].Y + 1.40200 * memory[col, row].Cr;
                         //var g = memory[col, row].Y - 0.34414 * memory[col, row].Cb - 0.71414 * memory[col, row].Cr;
                         //var b = memory[col, row].Y + 1.77200 * memory[col, row].Cb;
-                        var c = (memory[col, row].Y - 3720) >> 7;
+                        var c = (memory[col, row].Y) >> 7;
                         var color = Color.FromArgb((byte)c, (byte)c, (byte)c);
                         bitmap.SetPixel(col, row, color);
                     }
