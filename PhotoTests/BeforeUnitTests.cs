@@ -253,32 +253,22 @@ namespace PhotoTests
             //{
             //    var size = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
             //    var data = bitmap.LockBits(size, ImageLockMode.ReadWrite, bitmap.PixelFormat);
-            //    for (var row = 0; row < y; row++)
+            //    for (var mrow = 0; mrow < y; mrow++)
             //    {
-            //        var scan0 = data.Scan0 + data.Stride * row;
-            //        for (var col = 0; col < x; col++)
+            //        var rdata = memory[mrow];
+            //        for (var mcol = 0; mcol < x; mcol++)
             //        {
-            //            if (row % 2 == 0 && col % 2 == 0)
-            //            {
-            //                var r = (short)memory[row, col];
-            //                Marshal.WriteInt16(scan0, 3 * col + 0, r);
-            //                Marshal.WriteInt16(scan0, 3 * col + 1, 0);
-            //                Marshal.WriteInt16(scan0, 3 * col + 2, 0);
-            //            }
-            //            else if ((row % 2 == 1 && col % 2 == 0) || (row % 2 == 0 && col % 2 == 1))
-            //            {
-            //                var g = (short)memory[row, col];
-            //                Marshal.WriteInt16(scan0, 3 * col + 0, 0);
-            //                Marshal.WriteInt16(scan0, 3 * col + 1, g);
-            //                Marshal.WriteInt16(scan0, 3 * col + 2, 0);
-            //            }
-            //            else if (row % 2 == 1 && col % 2 == 1)
-            //            {
-            //                var b = (short)memory[row, col];
-            //                Marshal.WriteInt16(scan0, 3 * col + 0, 0);
-            //                Marshal.WriteInt16(scan0, 3 * col + 1, 0);
-            //                Marshal.WriteInt16(scan0, 3 * col + 2, b);
-            //            }
+            //            var index = mrow * x + mcol;
+            //            var slice = index / (sizes[1] * y);
+            //            if (slice >= sizes[0])
+            //                slice = sizes[0];
+            //            index -= slice * (sizes[1] * y);
+            //            var brow = index / sizes[slice < sizes[0] ? 1 : 2];
+            //            var bcol = index % sizes[slice < sizes[0] ? 1 : 2] + slice * sizes[1];
+            //            var scan0 = data.Scan0 + data.Stride * brow;
+
+            //            var val = rdata[mcol];
+            //            PixelSet(scan0, brow, bcol, (short)val);
             //        }
             //    }
 
@@ -286,7 +276,7 @@ namespace PhotoTests
             //    bitmap.Save(folder + "0L2A8897-3.bmp");
             //}
 
-            using (var bitmap = new Bitmap(x, y)) 
+            using (var bitmap = new Bitmap(x, y))
             {
                 for (var mrow = 0; mrow < y; mrow++)
                 {
@@ -353,6 +343,28 @@ namespace PhotoTests
                 var b = (byte)Math.Min((val >> 4), 255);
                 var color = Color.FromArgb(0, 0, b);
                 bitmap.SetPixel(col, row, color);
+            }
+        }
+
+        private static void PixelSet(IntPtr scan0, int row, int col, short value)
+        {
+            if (row % 2 == 0 && col % 2 == 0)
+            {
+                Marshal.WriteInt16(scan0, 3 * col + 0, 0);
+                Marshal.WriteInt16(scan0, 3 * col + 1, 0);
+                Marshal.WriteInt16(scan0, 3 * col + 2, value);
+            }
+            else if ((row % 2 == 1 && col % 2 == 0) || (row % 2 == 0 && col % 2 == 1))
+            {
+                Marshal.WriteInt16(scan0, 3 * col + 0, 0);
+                Marshal.WriteInt16(scan0, 3 * col + 1, value);
+                Marshal.WriteInt16(scan0, 3 * col + 2, 0);
+            }
+            else if (row % 2 == 1 && col % 2 == 1)
+            {
+                Marshal.WriteInt16(scan0, 3 * col + 0, value);
+                Marshal.WriteInt16(scan0, 3 * col + 1, 0);
+                Marshal.WriteInt16(scan0, 3 * col + 2, 0);
             }
         }
 
