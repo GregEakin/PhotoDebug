@@ -9,14 +9,8 @@ using System.Linq;
 namespace PhotoTests.Prototypes
 {
     [TestClass]
-    public class SRawI
+    public class Image3SRawII
     {
-        static DataBuf[] Prev;
-        static double minY = double.MaxValue; static double maxY = double.MinValue;
-        static double minCb = double.MaxValue; static double maxCb = double.MinValue;
-        static double minCr = double.MaxValue; static double maxCr = double.MinValue;
-        static int cc = 0;
-
         struct DataBuf
         {
             public ushort Y;
@@ -31,6 +25,8 @@ namespace PhotoTests.Prototypes
             public short Cb;
             public short Cr;
         }
+
+        static int cc = 0;
 
         [TestMethod]
         public void DumpImage3SRawTest()
@@ -138,119 +134,71 @@ namespace PhotoTests.Prototypes
                     // horz sampling == 1
                     startOfImage.ImageData.Reset();
 
-                    var memory = new DataBuf[startOfFrame.ScanLines, startOfFrame.Width / 3];   // 1728 x 7776 / 3 (= 2592)
-                    for (var slice = 0; slice < sizes[0]; slice++)                              // 0..5
+                    var memory = new DataBuf[startOfFrame.ScanLines][];          // [1728][]
+                    for (var line = 0; line < startOfFrame.ScanLines; line++)   // 0 .. 1728
                     {
-                        for (var line = 0; line < startOfFrame.ScanLines; line++)
-                            ProcessLine15321(slice, startOfFrame.ScanLines, line, sizes[1] / 4, startOfImage, table0, table1, memory);  // 1728, 864 / 4 = 216
-                    }
-                    {
-                        for (var line = 0; line < startOfFrame.ScanLines; line++)
-                            ProcessLine15321(sizes[0], startOfFrame.ScanLines, line, sizes[2] / 4, startOfImage, table0, table1, memory);  // 1728, 864 / 4 = 216
+                        var pp = (line == 0)
+                                ? new DataBuf { Y = 0x8000 - 3720, Cb = 0, Cr = 0 }
+                                : new DataBuf { Y = 0x4000 - 3720, Cb = 0, Cr = 0 };
+                        memory[line] = ProcessLine15321B(line, startOfFrame.SamplesPerLine, startOfImage, pp, table0, table1);  //2592
                     }
                     Assert.AreEqual(8957952, cc);
                     Assert.AreEqual(3, startOfImage.ImageData.DistFromEnd);
-                    MakeBitmap(memory, folder);
+                    MakeBitmap(memory, folder, sizes);
                 }
             }
         }
 
-        private static void ProcessLine15321(int slice, int lines, int line, int width, StartOfImage startOfImage, HuffmanTable table0, HuffmanTable table1, DataBuf[,] memory)
+        private static DataBuf[] ProcessLine15321B(int line, int samplesPerLine, StartOfImage startOfImage, DataBuf pp, HuffmanTable table0, HuffmanTable table1)
         {
-            var diff = new DiffBuf[width];
-            for (var x = 0; x < width; x++)
+            var diff = new DiffBuf[samplesPerLine / 2];         // 1296
+            for (var x = 0; x < samplesPerLine / 2; x++)        // 1296
             {
-                // YUYV
                 diff[x].Y1 = ProcessColor(startOfImage, table0);
                 diff[x].Y2 = ProcessColor(startOfImage, table0);
                 diff[x].Cb = ProcessColor(startOfImage, table1);
                 diff[x].Cr = ProcessColor(startOfImage, table1);
                 cc += 4;
+
+                if (line < 4 && x < 4)
+                {
+                    Console.WriteLine("{0}, {1}: {2}, {3}, {4}, {5}", line, x, diff[x].Y1, diff[x].Y2, diff[x].Cb, diff[x].Cr);
+                }
             }
 
-            // Debug: Dump the diff data.
-            //{
-            //    var y1 = 0.0; var minY = double.MaxValue; var maxY = double.MinValue;
-            //    var y2 = 0.0;
-            //    var cb = 0.0; var minCb = double.MaxValue; var maxCb = double.MinValue;
-            //    var cr = 0.0; var minCr = double.MaxValue; var maxCr = double.MinValue;
-
-            //    for (var x = 0; x < width; x++)
-            //    {
-            //        y1 += diff[x].Y1;
-            //        y2 += diff[x].Y2;
-            //        if (minY > y1 + y2) minY = y1 + y2;
-            //        if (maxY < y1 + y2) maxY = y1 + y2;
-
-            //        cb += diff[x].Cb;
-            //        if (minCb > cb) minCb = cb;
-            //        if (maxCb < cb) maxCb = cb;
-
-            //        cr += diff[x].Cr;
-            //        if (minCr > cb) minCr = cr;
-            //        if (maxCr < cb) maxCr = cr;
-            //    }
-
-            //    // if (line == 1000 || line == 0 || line == 1 || line == 999)
-            //    {
-            //        Console.Write("{0}, {1}, {2}, {3}, {4}, {5},  ", slice, line, y1, y2, cb, cr);
-            //        Console.WriteLine("{0}, {1}, {2}, {3}, {4}, {5},  ", minY, maxY, minCb, maxCb, minCr, maxCb);
-            //    }
-            //}
-
-            if (slice == 0)
+            var memory = new DataBuf[samplesPerLine];
+            for (var x = 0; x < samplesPerLine / 2; x++)
             {
-                if (line == 0)
+                if (x == 0)
                 {
-                    Prev = new DataBuf[lines];
-                    Prev[0] = new DataBuf { Y = 0x8000 - 3720, Cb = 0, Cr = 0 };
+                    var predY = pp.Y;
+                    pp.Y += (ushort)diff[x].Y1;
+                    pp.Y += (ushort)diff[x].Y2;
+                    memory[2 * x + 0].Y = (ushort)(predY + diff[x].Y1);
+                    memory[2 * x + 1].Y = (ushort)(predY + diff[x].Y1 + diff[x].Y2);
+
+                    var predCr = pp.Cr;
+                    pp.Cr += diff[x].Cr;
+                    memory[2 * x + 0].Cr = (short)(predCr + diff[x].Cr);
+                    memory[2 * x + 1].Cr = (short)(predCr + diff[x].Cr);
+
+                    var predCb = pp.Cb;
+                    pp.Cb += diff[x].Cb;
+                    memory[2 * x + 0].Cb = (short)(predCb + diff[x].Cb);
+                    memory[2 * x + 1].Cb = (short)(predCb + diff[x].Cb);
                 }
                 else
-                    Prev[line] = new DataBuf { Y = 0x4000 - 3720, Cb = 0, Cr = 0 };
+                {
+                    memory[2 * x + 0].Y = (ushort)(memory[2 * x - 2].Y + diff[x].Y1);
+                    memory[2 * x + 1].Y = (ushort)(memory[2 * x - 1].Y + diff[x].Y2);
+                    memory[2 * x + 0].Cr = (short)(memory[2 * x - 2].Cr + diff[x].Cr);
+                    memory[2 * x + 1].Cr = (short)(memory[2 * x - 1].Cr + diff[x].Cr);
+                    memory[2 * x + 0].Cb = (short)(memory[2 * x - 2].Cr + diff[x].Cb);
+                    memory[2 * x + 1].Cb = (short)(memory[2 * x - 1].Cr + diff[x].Cb);
+                }
             }
 
-            for (var x = 0; x < width; x++)
-            {
-                var y1 = (ushort)((Prev[line].Y + diff[x].Y1));
-                var y2 = (ushort)((Prev[line].Y + diff[x].Y1 + diff[x].Y2));
-                var cb = (short)((Prev[line].Cb + diff[x].Cb));
-                var cr = (short)((Prev[line].Cr + diff[x].Cr));
-
-                Prev[line].Y = y2;
-                Prev[line].Cb = cb;
-                Prev[line].Cr = cr;
-
-                var col = 2 * slice * width + 2 * x;
-                memory[line, col].Y = y1;
-                memory[line, col].Cb = cb;
-                memory[line, col].Cr = cr;
-
-                memory[line, col + 1].Y = y2;
-                memory[line, col + 1].Cb = cb;
-                memory[line, col + 1].Cr = cr;
-
-                // debug: check the bounds of the running sum
-                if (minY > Prev[line].Y) minY = Prev[line].Y;
-                if (maxY < Prev[line].Y) maxY = Prev[line].Y;
-
-                if (minCb > Prev[line].Cb) minCb = Prev[line].Cb;
-                if (maxCb < Prev[line].Cb) maxCb = Prev[line].Cb;
-
-                if (minCr > Prev[line].Cr) minCr = Prev[line].Cr;
-                if (maxCr < Prev[line].Cr) maxCr = Prev[line].Cr;
-            }
-
-            // debug: report bounds of the running sum
-            //if (slice == 5)
-            //{
-            //    Console.WriteLine("{0}, {1}, {2}, {3}", line, Prev[line].Y, Prev[line].Cb, Prev[line].Cr);
-
-            //    if (line == lines - 1)
-            //    {
-            //        Console.WriteLine();
-            //        Console.WriteLine("{0}, {1}, {2}, {3}, {4}, {5}", minY, maxY, minCb, maxCb, minCr, maxCr);
-            //    }
-            //}
+            return memory;
         }
 
         private static short ProcessColor(StartOfImage startOfImage, HuffmanTable table)
@@ -261,10 +209,10 @@ namespace PhotoTests.Prototypes
             return difValue;
         }
 
-        private static void MakeBitmap(DataBuf[,] memory, string folder)
+        private static void MakeBitmap(DataBuf[][] memory, string folder, ushort[] sizes)
         {
             var y = memory.GetLength(0);
-            var x = memory.GetLength(1);
+            var x = memory[0].GetLength(0);
 
             //using (var bitmap = new Bitmap(x, y, PixelFormat.Format24bppRgb))
             //{
@@ -297,41 +245,36 @@ namespace PhotoTests.Prototypes
 
             using (var bitmap = new Bitmap(x, y))
             {
-                for (var row = 0; row < y; row++)
-                    for (var col = 0; col < x; col++)
+                for (var mrow = 0; mrow < y; mrow++)
+                {
+                    var rdata = memory[mrow];
+                    for (var mcol = 0; mcol < x; mcol++)
                     {
-                        //var r = memory[row, col].Y + 1.40200 * memory[row, col].Cr;
-                        //var g = memory[row, col].Y - 0.34414 * memory[row, col].Cb - 0.71414 * memory[col, row].Cr;
-                        //var b = memory[row, col].Y + 1.77200 * memory[row, col].Cb;
-                        var c = (memory[row, col].Y) >> 7;
-                        var color = Color.FromArgb((byte)c, (byte)c, (byte)c);
-                        bitmap.SetPixel(col, row, color);
+                        var index = mrow * x + mcol;
+                        var slice = index / (sizes[1] * y);
+                        if (slice >= sizes[0])
+                            slice = sizes[0];
+                        index -= slice * (sizes[1] * y);
+                        var brow = index / sizes[slice < sizes[0] ? 1 : 2];
+                        var bcol = index % sizes[slice < sizes[0] ? 1 : 2] + slice * sizes[1];
+
+                        var val = rdata[mcol];
+                        PixelSet(bitmap, brow, bcol, val);
                     }
+                }
 
                 bitmap.Save(folder + "0L2A8897-3.bmp");
             }
         }
 
-        private static void PixelSet(Bitmap bitmap, int row, int col, ushort val)
+        private static void PixelSet(Bitmap bitmap, int row, int col, DataBuf val)
         {
-            if (row % 2 == 0 && col % 2 == 0)
-            {
-                var r = (byte)Math.Min((val >> 4), 255);
-                var color = Color.FromArgb(r, 0, 0);
-                bitmap.SetPixel(col, row, color);
-            }
-            else if ((row % 2 == 1 && col % 2 == 0) || (row % 2 == 0 && col % 2 == 1))
-            {
-                var g = (byte)Math.Min((val >> 5), 255);
-                var color = Color.FromArgb(0, g, 0);
-                bitmap.SetPixel(col, row, color);
-            }
-            else if (row % 2 == 1 && col % 2 == 1)
-            {
-                var b = (byte)Math.Min((val >> 4), 255);
-                var color = Color.FromArgb(0, 0, b);
-                bitmap.SetPixel(col, row, color);
-            }
+            //var r = memory[row, col].Y + 1.40200 * memory[row, col].Cr;
+            //var g = memory[row, col].Y - 0.34414 * memory[row, col].Cb - 0.71414 * memory[col, row].Cr;
+            //var b = memory[row, col].Y + 1.77200 * memory[row, col].Cb;
+            var c = (val.Y) >> 7;
+            var color = Color.FromArgb((byte)c, (byte)c, (byte)c);
+            bitmap.SetPixel(col, row, color);
         }
     }
 }

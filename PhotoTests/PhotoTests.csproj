@@ -68,8 +68,8 @@
     <Compile Include="Jpeg\StartOfImageTests.cs" />
     <Compile Include="Jpeg\StartOfScanTests.cs" />
     <Compile Include="Jpeg\StripedImageDataTests.cs" />
-    <Compile Include="Prototypes\SRawI.cs" />
-    <Compile Include="Prototypes\SRawII.cs" />
+    <Compile Include="Prototypes\Image3SRawI.cs" />
+    <Compile Include="Prototypes\Image3SRawII.cs" />
     <Compile Include="Prototypes\Image3Raw.cs" />
     <Compile Include="Prototypes\Image0.cs" />
     <Compile Include="Prototypes\Image1.cs" />

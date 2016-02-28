@@ -1,11 +1,7 @@
 ﻿namespace PhotoTests.Jpeg
 {
     using System;
-    using System.IO;
-
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-    using PhotoLib.Jpeg;
 
     [TestClass]
     public class StripedImageDataTests

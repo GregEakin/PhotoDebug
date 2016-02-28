@@ -5,9 +5,7 @@
 // FILE:		CR2Header.cs
 // AUTHOR:		Greg Eakin
 
-using System;
 using System.IO;
-using System.Text;
 
 namespace PhotoLib.Tiff
 {

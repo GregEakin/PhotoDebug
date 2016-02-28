@@ -1,11 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PhotoLib.Jpeg;
-using PhotoLib.Tiff;
-using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace PhotoTests
