@@ -1,13 +1,16 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoLib.Tiff;
 
 namespace PhotoTests.Prototypes
 {
     [TestClass]
-    public class Image2
+    public class Image2Bit16
     {
         [TestMethod]
         public void DumpImage2Test()
@@ -52,20 +55,44 @@ namespace PhotoTests.Prototypes
         {
             binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
 
-            using (var bitmap = new Bitmap((int)width, (int)height)) // , PixelFormat.Format48bppRgb))
+            using (var bitmap = new Bitmap((int)width, (int)height, PixelFormat.Format48bppRgb))
             {
+                var size = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+                var data = bitmap.LockBits(size, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+
                 for (var y = 0; y < height; y++)
                     for (var x = 0; x < width; x++)
                     {
-                        var r = binaryReader.ReadUInt16();
-                        var g = binaryReader.ReadUInt16();
-                        var b = binaryReader.ReadUInt16();
-                        // var color = Color.FromArgb(r, g, b);
-                        var color = Color.FromArgb((byte)(r >> 5), (byte)(g >> 5), (byte)(b >> 5));
-                        bitmap.SetPixel(x, y, color);
+                        var scan0 = data.Scan0 + data.Stride * y + x;
+
+                        var c = binaryReader.ReadUInt16();
+                        PixelSet(scan0, x, y, (short)c);
                     }
 
+                bitmap.UnlockBits(data);
                 bitmap.Save(folder + "0L2A8897-2.bmp");
+            }
+        }
+
+        private static void PixelSet(IntPtr scan0, int row, int col, short value)
+        {
+            if (row % 2 == 0 && col % 2 == 0)
+            {
+                Marshal.WriteInt16(scan0, 3 * col + 0, 0);
+                Marshal.WriteInt16(scan0, 3 * col + 1, 0);
+                Marshal.WriteInt16(scan0, 3 * col + 2, value);
+            }
+            else if ((row % 2 == 1 && col % 2 == 0) || (row % 2 == 0 && col % 2 == 1))
+            {
+                Marshal.WriteInt16(scan0, 3 * col + 0, 0);
+                Marshal.WriteInt16(scan0, 3 * col + 1, value);
+                Marshal.WriteInt16(scan0, 3 * col + 2, 0);
+            }
+            else if (row % 2 == 1 && col % 2 == 1)
+            {
+                Marshal.WriteInt16(scan0, 3 * col + 0, value);
+                Marshal.WriteInt16(scan0, 3 * col + 1, 0);
+                Marshal.WriteInt16(scan0, 3 * col + 2, 0);
             }
         }
     }

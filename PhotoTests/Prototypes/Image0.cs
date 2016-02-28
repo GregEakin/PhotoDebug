@@ -50,7 +50,7 @@ namespace PhotoTests.Prototypes
                 {
                     //Read from the source file
                     //The Read method returns the number of bytes read
-                    int n = binaryReader.Read(buffer, 0, buffer.Length);
+                    var n = binaryReader.Read(buffer, 0, buffer.Length);
 
                     //Write the contents of the buffer to the destination file
                     fout.Write(buffer, 0, n);
