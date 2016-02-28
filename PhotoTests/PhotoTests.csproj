@@ -70,6 +70,10 @@
     <Compile Include="Jpeg\StripedImageDataTests.cs" />
     <Compile Include="Prototypes\SRawI.cs" />
     <Compile Include="Prototypes\SRawII.cs" />
+    <Compile Include="Prototypes\Image3Raw.cs" />
+    <Compile Include="Prototypes\Image0.cs" />
+    <Compile Include="Prototypes\Image1.cs" />
+    <Compile Include="Prototypes\Image2.cs" />
     <Compile Include="Tiff\RawDataTests.cs" />
     <Compile Include="Tiff\RawImageTests.cs" />
     <Compile Include="Tiff\ImageFileDirectoryTests.cs" />
@@ -77,6 +81,7 @@
     <Compile Include="Tiff\ImageFileEntryTests.cs" />
     <Compile Include="Canon7D\UnitTest7D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTest1.cs" />
     <Compile Include="UnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
