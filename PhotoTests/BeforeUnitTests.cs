@@ -143,8 +143,8 @@ namespace PhotoTests
                     // Assert.AreEqual(0x000119BEu, slices);
                     var number = imageFileEntry.NumberOfValue;
                     Assert.AreEqual(3u, number);
-                    var data = RawImage.ReadUInts16(binaryReader, imageFileEntry);
-                    CollectionAssert.AreEqual(new[] { (ushort)1, (ushort)2960, (ushort)2960 }, data);
+                    var sizes = RawImage.ReadUInts16(binaryReader, imageFileEntry);
+                    CollectionAssert.AreEqual(new[] { (ushort)1, (ushort)2960, (ushort)2960 }, sizes);
 
                     binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
                     var startOfImage = new StartOfImage(binaryReader, offset, count); // { ImageData = new ImageData(binaryReader, count) };
@@ -202,33 +202,52 @@ namespace PhotoTests
 
                     // @@ Black Substraction
 
-                    // DumpCompressedData(startOfImage);
-
                     // horz sampling == 1
                     startOfImage.ImageData.Reset();
 
-                    var memory = new ushort[startOfFrame.Width, startOfFrame.ScanLines];
-                    for (var slice = 0; slice < data[0]; slice++)
-                    {
-                        for (var line = 0; line < startOfFrame.ScanLines / 2; line++)
-                            ProcessLine14211(slice, line, data[1] / 2, startOfImage, table0, table1, memory);
-                    }
-                    {
-                        for (var line = 0; line < startOfFrame.ScanLines / 2; line++)
-                            ProcessLine14211(data[0], line, data[2] / 2, startOfImage, table0, table1, memory);
-                    }
-
+                    var memory = new ushort[startOfFrame.ScanLines][];          // 3950 x 5920
+                    var pp = new[] { (ushort)0x2000, (ushort)0x2000 };
+                    for (var line = 0; line < startOfFrame.ScanLines; line++)   // 0 .. 3950
+                        memory[line] = ProcessLine14211(line, startOfFrame.SamplesPerLine, startOfImage, pp, table0, table1); // 2960
                     Assert.AreEqual(1, startOfImage.ImageData.DistFromEnd);
-
-                    MakeBitmap(memory, folder);
+                    MakeBitmap(memory, folder, sizes);
                 }
             }
         }
 
-        private static void MakeBitmap(ushort[,] memory, string folder)
+        private static ushort[] ProcessLine14211(int row, int width, StartOfImage startOfImage, ushort[] pp, HuffmanTable table0, HuffmanTable table1)
         {
-            var x = memory.GetLength(0);
-            var y = memory.GetLength(1);
+            var diff = new short[2 * width];
+            for (var x = 0; x < width; x++)
+            {
+                diff[2 * x + 0] = ProcessColor(startOfImage, table0);
+                diff[2 * x + 1] = ProcessColor(startOfImage, table1);
+            }
+
+            var memory = new ushort[2 * width];
+            for (var x = 0; x < width; x++)     //  0..2960
+                for (var c = 0; c < 2; c++)     //  0..2
+                {
+                    if (x == 0)
+                    {
+                        var pred = pp[c];
+                        pp[c] += (ushort)diff[2 * x + c];
+                        memory[2 * x + c] = (ushort)(pred + diff[2 * x + c]);
+                    }
+                    else
+                    {
+                        var pred = memory[2 * x + c - 2];
+                        memory[2 * x + c] = (ushort)(pred + diff[2 * x + c]);
+                    }
+                }
+
+            return memory;
+        }
+
+        private static void MakeBitmap(ushort[][] memory, string folder, ushort[] sizes)
+        {
+            var y = memory.GetLength(0);
+            var x = memory[0].GetLength(0);
 
             //using (var bitmap = new Bitmap(x, y, PixelFormat.Format24bppRgb))
             //{
@@ -241,21 +260,21 @@ namespace PhotoTests
             //        {
             //            if (row % 2 == 0 && col % 2 == 0)
             //            {
-            //                var r = (short)memory[col, row];
+            //                var r = (short)memory[row, col];
             //                Marshal.WriteInt16(scan0, 3 * col + 0, r);
             //                Marshal.WriteInt16(scan0, 3 * col + 1, 0);
             //                Marshal.WriteInt16(scan0, 3 * col + 2, 0);
             //            }
             //            else if ((row % 2 == 1 && col % 2 == 0) || (row % 2 == 0 && col % 2 == 1))
             //            {
-            //                var g = (short)memory[col, row];
+            //                var g = (short)memory[row, col];
             //                Marshal.WriteInt16(scan0, 3 * col + 0, 0);
             //                Marshal.WriteInt16(scan0, 3 * col + 1, g);
             //                Marshal.WriteInt16(scan0, 3 * col + 2, 0);
             //            }
             //            else if (row % 2 == 1 && col % 2 == 1)
             //            {
-            //                var b = (short)memory[col, row];
+            //                var b = (short)memory[row, col];
             //                Marshal.WriteInt16(scan0, 3 * col + 0, 0);
             //                Marshal.WriteInt16(scan0, 3 * col + 1, 0);
             //                Marshal.WriteInt16(scan0, 3 * col + 2, b);
@@ -267,69 +286,73 @@ namespace PhotoTests
             //    bitmap.Save(folder + "0L2A8897-3.bmp");
             //}
 
-            using (var bitmap = new Bitmap(x, y))
+            using (var bitmap = new Bitmap(x, y)) 
             {
-                for (var row = 0; row < y; row++)
-                    for (var col = 0; col < x; col++)
+                for (var mrow = 0; mrow < y; mrow++)
+                {
+                    var rdata = memory[mrow];
+                    for (var mcol = 0; mcol < x; mcol++)
                     {
-                        if (row % 2 == 0 && col % 2 == 0)
-                        {
-                            var r = (byte)Math.Min((memory[col, row] >> 4), 255);
-                            var color = Color.FromArgb(r, 0, 0);
-                            bitmap.SetPixel(col, row, color);
-                        }
-                        else if ((row % 2 == 1 && col % 2 == 0) || (row % 2 == 0 && col % 2 == 1))
-                        {
-                            var g = (byte)Math.Min((memory[col, row] >> 3), 255);
-                            var color = Color.FromArgb(0, g, 0);
-                            bitmap.SetPixel(col, row, color);
-                        }
-                        else if (row % 2 == 1 && col % 2 == 1)
-                        {
-                            var b = (byte)Math.Min((memory[col, row] >> 4), 255);
-                            var color = Color.FromArgb(0, 0, b);
-                            bitmap.SetPixel(col, row, color);
-                        }
+                        var index = mrow * x + mcol;
+                        var slice = index / (sizes[1] * y);
+                        if (slice >= sizes[0])
+                            slice = sizes[0];
+                        index -= slice * (sizes[1] * y);
+                        var brow = index / sizes[slice < sizes[0] ? 1 : 2];
+                        var bcol = index % sizes[slice < sizes[0] ? 1 : 2] + slice * sizes[1];
+
+                        var val = rdata[mcol];
+                        PixelSet(bitmap, brow, bcol, val);
                     }
+                }
 
                 bitmap.Save(folder + "0L2A8897-3.bmp");
             }
         }
 
-        // This processes two lines at a time.
-        private static void ProcessLine14211(int slice, int line, int width, StartOfImage startOfImage, HuffmanTable table0, HuffmanTable table1, ushort[,] memory)
+        [TestMethod]
+        public void CheckSlices()
         {
-            var diff = new short[width * 2, 2];
+            var sizes = new[] { 2, 5, 7 };
+            const int y = 6;
+            const int x = 17;
 
-            for (var x = 0; x < width; x++)
-            {
-                diff[2 * x, 0] = ProcessColor(startOfImage, table0);
-                diff[2 * x + 1, 0] = ProcessColor(startOfImage, table1);
-            }
+            Assert.AreEqual(x, sizes[0] * sizes[1] + sizes[2]);
 
-            for (var x = 0; x < width; x++)
+            for (var mrow = 0; mrow < y; mrow++)
             {
-                diff[2 * x, 1] = ProcessColor(startOfImage, table0);
-                diff[2 * x + 1, 1] = ProcessColor(startOfImage, table1);
-            }
-
-            var pp = new[] { (ushort)0x047F, (ushort)0x047F };
-            if (slice != 0)
-            {
-                pp[0] = memory[2 * slice * width - 2, 2 * line];
-                pp[1] = memory[2 * slice * width - 1, 2 * line];
-            }
-
-            for (var y = 0; y < 2; y++)
-            {
-                var row = 2 * line + y;
-                for (var x = 0; x < 2 * width; x++)
+                for (var mcol = 0; mcol < x; mcol++)
                 {
-                    var col = 2 * slice * width + x;
-                    var p = (ushort)((pp[x % 2] + diff[x, y]) % 0x4000);
-                    pp[x % 2] = p;
-                    memory[col, row] = p;
+                    var index = mrow * x + mcol;
+                    var slice = index / (sizes[1] * y);
+                    if (slice >= sizes[0])
+                        slice = sizes[0];
+                    index -= slice * (sizes[1] * y);
+                    var brow = index / sizes[slice < sizes[0] ? 1 : 2];
+                    var bcol = index % sizes[slice < sizes[0] ? 1 : 2] + slice * sizes[1];
                 }
+            }
+        }
+
+        private static void PixelSet(Bitmap bitmap, int row, int col, ushort val)
+        {
+            if (row % 2 == 0 && col % 2 == 0)
+            {
+                var r = (byte)Math.Min((val >> 4), 255);
+                var color = Color.FromArgb(r, 0, 0);
+                bitmap.SetPixel(col, row, color);
+            }
+            else if ((row % 2 == 1 && col % 2 == 0) || (row % 2 == 0 && col % 2 == 1))
+            {
+                var g = (byte)Math.Min((val >> 5), 255);
+                var color = Color.FromArgb(0, g, 0);
+                bitmap.SetPixel(col, row, color);
+            }
+            else if (row % 2 == 1 && col % 2 == 1)
+            {
+                var b = (byte)Math.Min((val >> 4), 255);
+                var color = Color.FromArgb(0, 0, b);
+                bitmap.SetPixel(col, row, color);
             }
         }
 
@@ -367,8 +390,8 @@ namespace PhotoTests
                     // Assert.AreEqual(0x000119BEu, slices);
                     var number = imageFileEntry.NumberOfValue;
                     Assert.AreEqual(3u, number);
-                    var data = RawImage.ReadUInts16(binaryReader, imageFileEntry);
-                    CollectionAssert.AreEqual(new[] { (ushort)5, (ushort)864, (ushort)864 }, data);
+                    var sizes = RawImage.ReadUInts16(binaryReader, imageFileEntry);
+                    CollectionAssert.AreEqual(new[] { (ushort)5, (ushort)864, (ushort)864 }, sizes);
 
                     binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
                     var startOfImage = new StartOfImage(binaryReader, offset, count); // { ImageData = new ImageData(binaryReader, count) };
@@ -439,15 +462,15 @@ namespace PhotoTests
                     // horz sampling == 1
                     startOfImage.ImageData.Reset();
 
-                    var memory = new DataBuf[startOfFrame.Width / 3, startOfFrame.ScanLines];
-                    for (var slice = 0; slice < data[0]; slice++)
+                    var memory = new DataBuf[startOfFrame.ScanLines, startOfFrame.Width / 3];
+                    for (var slice = 0; slice < sizes[0]; slice++)
                     {
                         for (var line = 0; line < startOfFrame.ScanLines; line++)
-                            ProcessLine15321(slice, startOfFrame.ScanLines, line, data[1] / 4, startOfImage, table0, table1, memory);
+                            ProcessLine15321(slice, startOfFrame.ScanLines, line, sizes[1] / 4, startOfImage, table0, table1, memory);
                     }
                     {
                         for (var line = 0; line < startOfFrame.ScanLines; line++)
-                            ProcessLine15321(data[0], startOfFrame.ScanLines, line, data[2] / 4, startOfImage, table0, table1, memory);
+                            ProcessLine15321(sizes[0], startOfFrame.ScanLines, line, sizes[2] / 4, startOfImage, table0, table1, memory);
                     }
 
                     Assert.AreEqual(3, startOfImage.ImageData.DistFromEnd);
@@ -547,13 +570,13 @@ namespace PhotoTests
                 Prev[line].Cr = cr;
 
                 var col = 2 * slice * width + 2 * x;
-                memory[col, line].Y = y1;
-                memory[col, line].Cb = cb;
-                memory[col, line].Cr = cr;
+                memory[line, col].Y = y1;
+                memory[line, col].Cb = cb;
+                memory[line, col].Cr = cr;
 
-                memory[col + 1, line].Y = y2;
-                memory[col + 1, line].Cb = cb;
-                memory[col + 1, line].Cr = cr;
+                memory[line, col + 1].Y = y2;
+                memory[line, col + 1].Cb = cb;
+                memory[line, col + 1].Cr = cr;
 
                 // debug: check the bounds of the running sum
                 if (minY > Prev[line].Y) minY = Prev[line].Y;
@@ -589,8 +612,8 @@ namespace PhotoTests
 
         private static void MakeBitmap(DataBuf[,] memory, string folder)
         {
-            var x = memory.GetLength(0);
-            var y = memory.GetLength(1);
+            var y = memory.GetLength(0);
+            var x = memory.GetLength(1);
 
             //using (var bitmap = new Bitmap(x, y, PixelFormat.Format24bppRgb))
             //{
@@ -603,7 +626,7 @@ namespace PhotoTests
             //            var scan0 = data.Scan0 + data.Stride * row;
             //            for (var col = 0; col < x; col++)
             //            {
-            //                var pt = memory[col, row];
+            //                var pt = memory[row, col];
             //                var r = pt.Y + 1.40200 * pt.Cr;
             //                var g = pt.Y - 0.34414 * pt.Cb - 0.71414 * pt.Cr;
             //                var b = pt.Y + 1.77200 * pt.Cb;
@@ -626,10 +649,10 @@ namespace PhotoTests
                 for (var row = 0; row < y; row++)
                     for (var col = 0; col < x; col++)
                     {
-                        //var r = memory[col, row].Y + 1.40200 * memory[col, row].Cr;
-                        //var g = memory[col, row].Y - 0.34414 * memory[col, row].Cb - 0.71414 * memory[col, row].Cr;
-                        //var b = memory[col, row].Y + 1.77200 * memory[col, row].Cb;
-                        var c = (memory[col, row].Y) >> 7;
+                        //var r = memory[row, col].Y + 1.40200 * memory[row, col].Cr;
+                        //var g = memory[row, col].Y - 0.34414 * memory[row, col].Cb - 0.71414 * memory[col, row].Cr;
+                        //var b = memory[row, col].Y + 1.77200 * memory[row, col].Cb;
+                        var c = (memory[row, col].Y) >> 7;
                         var color = Color.FromArgb((byte)c, (byte)c, (byte)c);
                         bitmap.SetPixel(col, row, color);
                     }
@@ -729,6 +752,12 @@ namespace PhotoTests
                 //Flush the contents of the buffer to the file
                 fout.Flush();
             }
+        }
+
+        public void FastStuff(string filename)
+        {
+            byte[] data;
+            data = File.ReadAllBytes(filename);
         }
     }
 }
