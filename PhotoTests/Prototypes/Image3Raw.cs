@@ -16,16 +16,13 @@ namespace PhotoTests.Prototypes
         [TestMethod]
         public void DumpImage3Test()
         {
-            const string folder = @"D:\Users\Greg\Pictures\2016-02-21 Studio\";
-            DumpImage3(folder, "Studio 015.CR2");
-            //const string Folder = @"D:\Users\Greg\Pictures\2013_10_14\";
-            // DumpImage3(Folder, "IMG_4194.CR2");
+            const string fileName = @"D:\Users\Greg\Pictures\2016-02-21 Studio\Studio 015.CR2";
+            DumpImage3(fileName);
         }
 
-        private static void DumpImage3(string folder, string file)
+        private static void DumpImage3(string fileName)
         {
-            var fileName2 = folder + file;
-            using (var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read))
+            using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
             {
                 var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
@@ -124,7 +121,9 @@ namespace PhotoTests.Prototypes
 
                     Assert.AreEqual(23384000, _cc);
                     Assert.AreEqual(1, startOfImage.ImageData.DistFromEnd);
-                    MakeBitmap(memory, folder, slices);
+
+                    var outFile = Path.ChangeExtension(fileName, ".bmp");
+                    MakeBitmap(memory, outFile, slices);
                 }
             }
         }

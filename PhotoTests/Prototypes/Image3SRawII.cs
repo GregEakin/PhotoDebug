@@ -32,17 +32,13 @@ namespace PhotoTests.Prototypes
         [TestMethod]
         public void DumpImage3SRawTest()
         {
-            // 2592 x 1728, Canon EOS 7D, 1/160 sec. f/1.8 85mm, SRAW   
-            // const string Folder = @"D:\Users\Greg\Pictures\2013_10_14\";
-            // DumpImage3SRaw(Folder, "IMG_4194.CR2");
-            const string Folder = @"D:\Users\Greg\Pictures\2016-02-26\";
-            DumpImage3SRaw(Folder, "003.CR2");
+            const string fileName = @"D:\Users\Greg\Pictures\2016-02-26\003.CR2";
+            DumpImage3SRaw(fileName);
         }
 
-        private static void DumpImage3SRaw(string folder, string file)
+        private static void DumpImage3SRaw(string fileName)
         {
-            var fileName2 = folder + file;
-            using (var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read))
+            using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
             {
                 var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
@@ -50,21 +46,32 @@ namespace PhotoTests.Prototypes
                 // Image #3 is a raw image compressed in ITU-T81 lossless JPEG
                 {
                     var image = rawImage.Directories.Skip(3).First();
+                    Assert.AreEqual(7, image.Entries.Length);
+
                     var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;
                     Assert.AreEqual(6u, compression);
+
                     var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
                     // Assert.AreEqual(0x2D42DCu, offset);
+
                     var count = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
                     // Assert.AreEqual(0x1501476u, count);
 
-                    // 0xC640 UShort 16-bit: [0x000119BE] (3): 1, 2960, 2960, 
+                    var item3 = image.Entries.Single(e => e.TagId == 0xC5D8 && e.TagType == 4).ValuePointer;
+                    Assert.AreEqual(0x1u, item3);
+
+                    var item4 = image.Entries.Single(e => e.TagId == 0xC5E0 && e.TagType == 4).ValuePointer;
+                    Assert.AreEqual(0x3u, item4);
+
+                    // 0xC640 UShort 16-bit: [0x000119BE] (3): 5, 864, 864, 
                     var imageFileEntry = image.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3);
-                    var slices = imageFileEntry.ValuePointer;
-                    // Assert.AreEqual(0x000119BEu, slices);
-                    var number = imageFileEntry.NumberOfValue;
-                    Assert.AreEqual(3u, number);
-                    var sizes = RawImage.ReadUInts16(binaryReader, imageFileEntry);
-                    CollectionAssert.AreEqual(new[] { (ushort)5, (ushort)864, (ushort)864 }, sizes);
+                    // Assert.AreEqual(0x000119BEu, imageFileEntry.ValuePointer);
+                    Assert.AreEqual(3u, imageFileEntry.NumberOfValue);
+                    var slices = RawImage.ReadUInts16(binaryReader, imageFileEntry);
+                    CollectionAssert.AreEqual(new ushort[] { 5, 864, 864 }, slices);
+
+                    var item6 = image.Entries.Single(e => e.TagId == 0xC6C5 && e.TagType == 4).ValuePointer;
+                    Assert.AreEqual(0x4u, item6);
 
                     binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
                     var startOfImage = new StartOfImage(binaryReader, offset, count); // { ImageData = new ImageData(binaryReader, count) };
@@ -141,7 +148,9 @@ namespace PhotoTests.Prototypes
 
                     Assert.AreEqual(8957952, cc);
                     Assert.AreEqual(3, startOfImage.ImageData.DistFromEnd);
-                    MakeBitmap(memory, folder, sizes);
+
+                    var outFile = Path.ChangeExtension(fileName, ".bmp");
+                    MakeBitmap(memory, outFile, slices);
                 }
             }
         }
@@ -234,7 +243,7 @@ namespace PhotoTests.Prototypes
             return memory;
         }
 
-        private static void MakeBitmap(DataBuf[][] memory, string folder, ushort[] sizes)
+        private static void MakeBitmap(DataBuf[][] memory, string folder, ushort[] slices)
         {
             var y = memory.GetLength(0);
             var x = memory[0].GetLength(0);
@@ -271,10 +280,10 @@ namespace PhotoTests.Prototypes
             Assert.AreEqual(1728, y);   // scan lines
             Assert.AreEqual(2592, x);   // samples per line
 
-            Assert.AreEqual(2 * x, sizes[0] * sizes[1] + sizes[2]);
-            CollectionAssert.AreEqual(new[] { (ushort)5, (ushort)864, (ushort)864 }, sizes);
-            sizes[1] /= 2;
-            sizes[2] /= 2;
+            Assert.AreEqual(2 * x, slices[0] * slices[1] + slices[2]);
+            CollectionAssert.AreEqual(new[] { (ushort)5, (ushort)864, (ushort)864 }, slices);
+            slices[1] /= 2;
+            slices[2] /= 2;
 
             using (var bitmap = new Bitmap(x, y))
             {
@@ -284,13 +293,13 @@ namespace PhotoTests.Prototypes
                     for (var mcol = 0; mcol < x; mcol++)    // 0..2592
                     {
                         var index = mrow * x + mcol;
-                        var slice = index / (sizes[1] * y);
-                        if (slice > sizes[0])
-                            slice = sizes[0];
-                        var offset = index - slice * sizes[1] * y;
-                        var page = slice < sizes[0] ? 1 : 2;
-                        var brow = offset / sizes[page];
-                        var bcol = offset % sizes[page] + slice * sizes[1];
+                        var slice = index / (slices[1] * y);
+                        if (slice > slices[0])
+                            slice = slices[0];
+                        var offset = index - slice * slices[1] * y;
+                        var page = slice < slices[0] ? 1 : 2;
+                        var brow = offset / slices[page];
+                        var bcol = offset % slices[page] + slice * slices[1];
 
                         var val = rdata[mcol];
                         PixelSet(bitmap, brow, bcol, val);
