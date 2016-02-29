@@ -31,12 +31,17 @@ namespace PhotoTests.Prototypes
                 // Image #3 is a raw image compressed in ITU-T81 lossless JPEG
                 {
                     var image = rawImage.Directories.Skip(3).First();
+                    Assert.AreEqual(7, image.Entries.Length);
+
                     var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;
                     Assert.AreEqual(6u, compression);
                     var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
                     // Assert.AreEqual(0x2D42DCu, offset);
                     var count = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
                     // Assert.AreEqual(0x1501476u, count);
+
+                    // 0xC5D8
+                    // 0xC5E0
 
                     // 0xC640 UShort 16-bit: [0x000119BE] (3): 1, 2960, 2960, 
                     var imageFileEntry = image.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3);
@@ -47,8 +52,10 @@ namespace PhotoTests.Prototypes
                     var sizes = RawImage.ReadUInts16(binaryReader, imageFileEntry);
                     CollectionAssert.AreEqual(new[] { (ushort)1, (ushort)2960, (ushort)2960 }, sizes);
 
+                    // 0xC6C5
+
                     binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
-                    var startOfImage = new StartOfImage(binaryReader, offset, count); // { ImageData = new ImageData(binaryReader, count) };
+                    var startOfImage = new StartOfImage(binaryReader, offset, count); 
 
                     var startOfFrame = startOfImage.StartOfFrame;
                     Assert.AreEqual(3950u, startOfFrame.ScanLines);      // = 3840 + 110
@@ -56,15 +63,9 @@ namespace PhotoTests.Prototypes
                     Assert.AreEqual(2, startOfFrame.Components.Length);
                     Assert.AreEqual(5920, startOfFrame.Width);           // = 5760 + 160
 
-                    // var rowBuf0 = new short[startOfFrame.SamplesPerLine * startOfFrame.Components.Length];
-                    // var rowBuf1 = new short[startOfFrame.SamplesPerLine * startOfFrame.Components.Length];
-                    // var predictor = new[] { (short)(1 << (startOfFrame.Precision - 1)), (short)(1 << (startOfFrame.Precision - 1)) };
                     Assert.AreEqual(2, startOfImage.HuffmanTable.Tables.Count);
                     var table0 = startOfImage.HuffmanTable.Tables[0x00];
                     var table1 = startOfImage.HuffmanTable.Tables[0x01];
-
-                    //Console.WriteLine(table0.ToString());
-                    //Console.WriteLine(table1.ToString());
 
                     Assert.AreEqual(14, startOfFrame.Precision); // RGGB
                     Assert.AreEqual(2, startOfFrame.Components.Length); // RGGB
@@ -108,15 +109,21 @@ namespace PhotoTests.Prototypes
 
                     var memory = new ushort[startOfFrame.ScanLines][];          // 3950 x 5920
                     var pp = new[] { (ushort)0x2000, (ushort)0x2000 };
-                    for (var line = 0; line < startOfFrame.ScanLines; line++)   // 0 .. 3950
-                        memory[line] = ProcessLine14211(line, startOfFrame.SamplesPerLine, startOfImage, pp, table0, table1); // 2960
+                    for (var line = 0; line < startOfFrame.ScanLines; line++) // 0 .. 3950
+                    {
+                        int samplesPerLine = startOfFrame.SamplesPerLine;
+                        var diff = ReadDiffRow(samplesPerLine, startOfImage, table0, table1);
+                        var memory1 = ProcessDiff(diff, samplesPerLine, pp);
+                        memory[line] = memory1;
+                    }
+
                     Assert.AreEqual(1, startOfImage.ImageData.DistFromEnd);
                     MakeBitmap(memory, folder, sizes);
                 }
             }
         }
 
-        private static ushort[] ProcessLine14211(int row, int samplesPerLine, StartOfImage startOfImage, ushort[] pp, HuffmanTable table0, HuffmanTable table1)
+        private static short[] ReadDiffRow(int samplesPerLine, StartOfImage startOfImage, HuffmanTable table0, HuffmanTable table1)
         {
             var diff = new short[2 * samplesPerLine];
             for (var x = 0; x < samplesPerLine; x++)
@@ -125,6 +132,19 @@ namespace PhotoTests.Prototypes
                 diff[2 * x + 1] = ProcessColor(startOfImage, table1);
             }
 
+            return diff;
+        }
+
+        private static short ProcessColor(StartOfImage startOfImage, HuffmanTable table)
+        {
+            var hufBits = startOfImage.ImageData.GetValue(table);
+            var difCode = startOfImage.ImageData.GetValue(hufBits);
+            var difValue = HuffmanTable.DecodeDifBits(hufBits, difCode);
+            return difValue;
+        }
+
+        private static ushort[] ProcessDiff(short[] diff, int samplesPerLine, ushort[] pp)
+        {
             var memory = new ushort[2 * samplesPerLine];
             for (var x = 0; x < samplesPerLine; x++)     //  0..2960
                 for (var c = 0; c < 2; c++)     //  0..2
@@ -143,14 +163,6 @@ namespace PhotoTests.Prototypes
                 }
 
             return memory;
-        }
-
-        private static short ProcessColor(StartOfImage startOfImage, HuffmanTable table)
-        {
-            var hufBits = startOfImage.ImageData.GetValue(table);
-            var difCode = startOfImage.ImageData.GetValue(hufBits);
-            var difValue = HuffmanTable.DecodeDifBits(hufBits, difCode);
-            return difValue;
         }
 
         private static void MakeBitmap(ushort[][] memory, string folder, ushort[] sizes)

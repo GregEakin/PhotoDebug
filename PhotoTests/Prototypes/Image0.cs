@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoLib.Tiff;
 
@@ -26,14 +28,67 @@ namespace PhotoTests.Prototypes
                 // Images #0 and #1 are compressed in lossy (classic) JPEG
                 {
                     var image = rawImage.Directories.First();
-                    var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
-                    // Assert.AreEqual(90660u, offset);
-                    var length = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
-                    // Assert.AreEqual(1138871u, length);
+                    Assert.AreEqual(18, image.Entries.Length);
+
+                    var imageWidth = image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == 3).ValuePointer;
+                    Assert.AreEqual(5760u, imageWidth);
+                
+                    var imageLength = image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == 3).ValuePointer;
+                    Assert.AreEqual(3840u, imageLength);
+
+                    var imageFileEntry0102 = image.Entries.Single(e => e.TagId == 0x0102 && e.TagType == 3);
+                    Assert.AreEqual(238u, imageFileEntry0102.ValuePointer);
+                    Assert.AreEqual(3u, imageFileEntry0102.NumberOfValue);
+                    var bitsPerSample = RawImage.ReadUInts16(binaryReader, imageFileEntry0102);
+                    CollectionAssert.AreEqual(new[] { (ushort)8, (ushort)8, (ushort)8 }, bitsPerSample);
+
+                    var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;
+                    Assert.AreEqual(6u, compression);
+
+                    var imageFileEntry010F = image.Entries.Single(e => e.TagId == 0x010F && e.TagType == 2);
+                    var len0104 = imageFileEntry010F.NumberOfValue;
+                    var xx0104 = imageFileEntry010F.ValuePointer;
+                    //var identifer = binaryReader.ReadBytes(len0104);
+                    //Assert.AreEqual("Canon", Encoding.ASCII.GetString(identifer));
+
+                    var make = image.Entries.Single(e => e.TagId == 0x010f && e.TagType == 2).ValuePointer;
+                    //Assert.AreEqual("Canon", make);
+
+                    var imageFileEntry0110 = image.Entries.Single(e => e.TagId == 0x0110 && e.TagType == 2);
+                    var model = image.Entries.Single(e => e.TagId == 0x0110 && e.TagType == 2).ValuePointer;
+                    //Assert.AreEqual("Canon EOS 5D", model);
+
+                    var stripOffset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
+                    // Assert.AreEqual(90660u, stripOffset);
+
                     var orientation = image.Entries.Single(e => e.TagId == 0x0112 && e.TagType == 3).ValuePointer;
                     // Assert.AreEqual(1u, orientation);
 
-                    DumpImage(binaryReader, folder + "0L2A8897-0.JPG", offset, length);
+                    var stripByteCounts = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
+                    // Assert.AreEqual(1138871u, length);
+
+                    var xResolution = image.Entries.Single(e => e.TagId == 0x011A && e.TagType == 5).ValuePointer;
+                    Assert.AreEqual(282u, xResolution);
+
+                    var yResolution = image.Entries.Single(e => e.TagId == 0x011B && e.TagType == 5).ValuePointer;
+                    Assert.AreEqual(290u, yResolution);
+
+                    var imageFileEntry0128 = image.Entries.Single(e => e.TagId == 0x0128 && e.TagType == 3);
+                    // Assert.AreEqual(2u, imageFileEntry0128.ValuePointer);
+                    // Assert.AreEqual(1u, imageFileEntry0128.NumberOfValue);
+                    var resolutionUnit = RawImage.ReadUInts16(binaryReader, imageFileEntry0128);
+                    CollectionAssert.AreEqual(new[] { (ushort)42 }, resolutionUnit);
+
+                    //var dateTime = image.Entries.Single(e => e.TagId == 0x0132 && e.TagType == 2).ValuePointer;
+                    //Assert.AreEqual("1234", dateTime);
+
+                    var exipf = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == 4).ValuePointer;
+                    Assert.AreEqual(446u, exipf);
+
+                    var gps = image.Entries.Single(e => e.TagId == 0x8825 && e.TagType == 4).ValuePointer;
+                    Assert.AreEqual(70028u, gps);
+
+                    DumpImage(binaryReader, folder + "0L2A8897-0.JPG", stripOffset, stripByteCounts);
                 }
             }
         }

@@ -74,15 +74,9 @@ namespace PhotoTests.Prototypes
                     Assert.AreEqual(2592u, startOfFrame.SamplesPerLine);
                     Assert.AreEqual(7776, startOfFrame.Width);
 
-                    // var rowBuf0 = new short[startOfFrame.SamplesPerLine * startOfFrame.Components.Length];
-                    // var rowBuf1 = new short[startOfFrame.SamplesPerLine * startOfFrame.Components.Length];
-                    // var predictor = new[] { (short)(1 << (startOfFrame.Precision - 1)), (short)(1 << (startOfFrame.Precision - 1)) };
                     Assert.AreEqual(2, startOfImage.HuffmanTable.Tables.Count);
                     var table0 = startOfImage.HuffmanTable.Tables[0x00];
                     var table1 = startOfImage.HuffmanTable.Tables[0x01];
-
-                    // Console.WriteLine(table0.ToString());
-                    // Console.WriteLine(table1.ToString());
 
                     Assert.AreEqual(15, startOfFrame.Precision); // sraw/sraw2
 
@@ -136,6 +130,7 @@ namespace PhotoTests.Prototypes
                     startOfImage.ImageData.Reset();
 
                     var memory = new DataBuf[startOfFrame.ScanLines][];          // [1728][]
+                    var pp = new[] { (ushort)0x2000, (ushort)0x0000, (ushort)0x0000 };
                     for (var line = 0; line < startOfFrame.ScanLines; line++)   // 0 .. 1728
                     {
                         var diff = ReadDiffRow(startOfFrame.SamplesPerLine, startOfImage, table0, table1);
@@ -162,6 +157,14 @@ namespace PhotoTests.Prototypes
             }
 
             return diff;
+        }
+
+        private static short ProcessColor(StartOfImage startOfImage, HuffmanTable table)
+        {
+            var hufBits = startOfImage.ImageData.GetValue(table);
+            var difCode = startOfImage.ImageData.GetValue(hufBits);
+            var difValue = HuffmanTable.DecodeDifBits(hufBits, difCode);
+            return difValue;
         }
 
         private static void VerifyDiff(DiffBuf[] diff, int line)
@@ -225,14 +228,6 @@ namespace PhotoTests.Prototypes
             }
 
             return memory;
-        }
-
-        private static short ProcessColor(StartOfImage startOfImage, HuffmanTable table)
-        {
-            var hufBits = startOfImage.ImageData.GetValue(table);
-            var difCode = startOfImage.ImageData.GetValue(hufBits);
-            var difValue = HuffmanTable.DecodeDifBits(hufBits, difCode);
-            return difValue;
         }
 
         private static void MakeBitmap(DataBuf[][] memory, string folder, ushort[] sizes)

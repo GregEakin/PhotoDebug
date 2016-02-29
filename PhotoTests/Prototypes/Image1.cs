@@ -26,8 +26,11 @@ namespace PhotoTests.Prototypes
                 // Images #0 and #1 are compressed in lossy (classic) JPEG
                 {
                     var image = rawImage.Directories.Skip(1).First();
+                    Assert.AreEqual(2, image.Entries.Length);
+
                     var offset = image.Entries.Single(e => e.TagId == 0x0201 && e.TagType == 4).ValuePointer;
                     // Assert.AreEqual(80324u, offset);
+
                     var length = image.Entries.Single(e => e.TagId == 0x0202 && e.TagType == 4).ValuePointer;
                     // Assert.AreEqual(10334u, length);
 
