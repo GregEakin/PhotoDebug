@@ -75,8 +75,8 @@ namespace PhotoTests.Prototypes
                     Assert.AreEqual(7776, startOfFrame.Width);
 
                     Assert.AreEqual(2, startOfImage.HuffmanTable.Tables.Count);
-                    var table0 = startOfImage.HuffmanTable.Tables[0x00];
-                    var table1 = startOfImage.HuffmanTable.Tables[0x01];
+                    //var table0 = startOfImage.HuffmanTable.Tables[0x00];
+                    //var table1 = startOfImage.HuffmanTable.Tables[0x01];
 
                     Assert.AreEqual(15, startOfFrame.Precision); // sraw/sraw2
 
@@ -130,13 +130,15 @@ namespace PhotoTests.Prototypes
                     startOfImage.ImageData.Reset();
 
                     var memory = new DataBuf[startOfFrame.ScanLines][];          // [1728][]
-                    var pp = new[] { (ushort)0x2000, (ushort)0x0000, (ushort)0x0000 };
+                    var prev = new DataBuf { Y = 0x4000, Cb = 0, Cr = 0 };
                     for (var line = 0; line < startOfFrame.ScanLines; line++)   // 0 .. 1728
                     {
-                        var diff = ReadDiffRow(startOfFrame.SamplesPerLine, startOfImage, table0, table1);
+                        var diff = ReadDiffRow(startOfImage); 
                         // VerifyDiff(diff, line);
-                        memory[line] = ProcessDiff(diff, startOfFrame.SamplesPerLine);  //2592
+                        var memory1 = ProcessDiff(diff, prev);  // 2592
+                        memory[line] = memory1;
                     }
+
                     Assert.AreEqual(8957952, cc);
                     Assert.AreEqual(3, startOfImage.ImageData.DistFromEnd);
                     MakeBitmap(memory, folder, sizes);
@@ -144,8 +146,13 @@ namespace PhotoTests.Prototypes
             }
         }
 
-        private static DiffBuf[] ReadDiffRow(int samplesPerLine, StartOfImage startOfImage, HuffmanTable table0, HuffmanTable table1)
+        private static DiffBuf[] ReadDiffRow(StartOfImage startOfImage)
         {
+            var startOfFrame = startOfImage.StartOfFrame;
+            int samplesPerLine = startOfFrame.SamplesPerLine;
+            var table0 = startOfImage.HuffmanTable.Tables[0x00];
+            var table1 = startOfImage.HuffmanTable.Tables[0x01];
+
             var diff = new DiffBuf[samplesPerLine / 2];         // 1296
             for (var x = 0; x < samplesPerLine / 2; x++)        // 1296
             {
@@ -153,6 +160,7 @@ namespace PhotoTests.Prototypes
                 diff[x].Y2 = ProcessColor(startOfImage, table0);
                 diff[x].Cb = ProcessColor(startOfImage, table1);
                 diff[x].Cr = ProcessColor(startOfImage, table1);
+
                 cc += 4;
             }
 
@@ -200,14 +208,10 @@ namespace PhotoTests.Prototypes
             }
         }
 
-        private static DataBuf[] ProcessDiff(DiffBuf[] diff, int samplesPerLine)
+        private static DataBuf[] ProcessDiff(DiffBuf[] diff, DataBuf prev)
         {
-            Assert.AreEqual(samplesPerLine / 2, diff.Length);
-
-            var prev = new DataBuf { Y = 0x4000, Cb = 0, Cr = 0 };
-
-            var memory = new DataBuf[samplesPerLine];       // 2592
-            for (var x = 0; x < samplesPerLine / 2; x++)    // 2592
+            var memory = new DataBuf[2 * diff.Length];       // 2592
+            for (var x = 0; x < diff.Length; x++)    // 2592
             {
                 var y1 = (ushort)(prev.Y + diff[x].Y1);
                 var y2 = (ushort)(prev.Y + diff[x].Y1 + diff[x].Y2);
@@ -283,7 +287,7 @@ namespace PhotoTests.Prototypes
                         var slice = index / (sizes[1] * y);
                         if (slice > sizes[0])
                             slice = sizes[0];
-                        var offset = index - slice * (sizes[1] * y);
+                        var offset = index - slice * sizes[1] * y;
                         var page = slice < sizes[0] ? 1 : 2;
                         var brow = offset / sizes[page];
                         var bcol = offset % sizes[page] + slice * sizes[1];

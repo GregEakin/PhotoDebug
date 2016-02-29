@@ -76,11 +76,8 @@ namespace PhotoTests.Prototypes
                     // var rowBuf1 = new short[startOfFrame.SamplesPerLine * startOfFrame.Components.Length];
                     // var predictor = new[] { (short)(1 << (startOfFrame.Precision - 1)), (short)(1 << (startOfFrame.Precision - 1)) };
                     Assert.AreEqual(2, startOfImage.HuffmanTable.Tables.Count);
-                    var table0 = startOfImage.HuffmanTable.Tables[0x00];
-                    var table1 = startOfImage.HuffmanTable.Tables[0x01];
-
-                    Console.WriteLine(table0.ToString());
-                    Console.WriteLine(table1.ToString());
+                    // var table0 = startOfImage.HuffmanTable.Tables[0x00];
+                    // var table1 = startOfImage.HuffmanTable.Tables[0x01];
 
                     Assert.AreEqual(15, startOfFrame.Precision); // mraw/sraw1
 
@@ -136,9 +133,10 @@ namespace PhotoTests.Prototypes
                     var memory = new DataBuf[startOfFrame.ScanLines][];          // [2592][]
                     for (var line = 0; line < startOfFrame.ScanLines; line++)   // 0 .. 2592
                     {
-                        var diff = ReadDiffRow(startOfFrame.SamplesPerLine, startOfImage, table0, table1);
+                        var diff = ReadDiffRow(startOfImage);
                         // VerifyDiff(diff, line);
-                        memory[line] = ProcessDiff(diff, startOfFrame.SamplesPerLine);  //
+                        var memory1 = ProcessDiff(diff, startOfFrame.SamplesPerLine);  //
+                        memory[line] = memory1;
                     }
                     Assert.AreEqual(10077696, cc);
                     Assert.AreEqual(1, startOfImage.ImageData.DistFromEnd);
@@ -147,8 +145,13 @@ namespace PhotoTests.Prototypes
             }
         }
 
-        private static DiffBuf[] ReadDiffRow(int samplesPerLine, StartOfImage startOfImage, HuffmanTable table0, HuffmanTable table1)
+        private static DiffBuf[] ReadDiffRow(StartOfImage startOfImage)
         {
+            var startOfFrame = startOfImage.StartOfFrame;
+            int samplesPerLine = startOfFrame.SamplesPerLine;
+            var table0 = startOfImage.HuffmanTable.Tables[0x00];
+            var table1 = startOfImage.HuffmanTable.Tables[0x01];
+
             var diff = new DiffBuf[samplesPerLine / 4];         // 648
             for (var x = 0; x < samplesPerLine / 4; x++)        // 0..648
             {
