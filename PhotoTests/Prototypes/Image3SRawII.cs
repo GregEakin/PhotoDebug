@@ -305,11 +305,10 @@ namespace PhotoTests.Prototypes
 
         private static void PixelSet(Bitmap bitmap, int row, int col, DataBuf val)
         {
-            //var r = memory[row, col].Y + 1.40200 * memory[row, col].Cr;
-            //var g = memory[row, col].Y - 0.34414 * memory[row, col].Cb - 0.71414 * memory[col, row].Cr;
-            //var b = memory[row, col].Y + 1.77200 * memory[row, col].Cb;
-            var c = (val.Y) >> 7;
-            var color = Color.FromArgb((byte)c, (byte)c, (byte)c);
+            var r = val.Y + 1.40200 * val.Cr;
+            var g = val.Y - 0.34414 * val.Cb - 0.71414 * val.Cr;
+            var b = val.Y + 1.77200 * val.Cb;
+            var color = Color.FromArgb((byte)((int)r >> 7), (byte)((int)g >> 7), (byte)((int)b >> 7));
             bitmap.SetPixel(col, row, color);
         }
     }
