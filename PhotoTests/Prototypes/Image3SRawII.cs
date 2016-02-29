@@ -12,14 +12,14 @@ namespace PhotoTests.Prototypes
     [TestClass]
     public class Image3SRawII
     {
-        struct DataBuf
+        private struct DataBuf
         {
             public ushort Y;
             public short Cb;
             public short Cr;
         }
 
-        struct DiffBuf
+        private struct DiffBuf
         {
             public short Y1;
             public short Y2;
@@ -139,7 +139,7 @@ namespace PhotoTests.Prototypes
                     for (var line = 0; line < startOfFrame.ScanLines; line++)   // 0 .. 1728
                     {
                         var diff = ReadDiffRow(startOfFrame.SamplesPerLine, startOfImage, table0, table1);
-                        VerifyDiff(diff, line);
+                        // VerifyDiff(diff, line);
                         memory[line] = ProcessDiff(diff, startOfFrame.SamplesPerLine);  //2592
                     }
                     Assert.AreEqual(8957952, cc);
@@ -168,8 +168,8 @@ namespace PhotoTests.Prototypes
         {
             // Debug: Dump the diff data.
             {
-                var y1 = 0.0; var minY = double.MaxValue; var maxY = double.MinValue;
-                var y2 = 0.0;
+                var y1 = (double)0x4000; var minY = double.MaxValue; var maxY = double.MinValue;
+                var y2 = (double)0x4000;
                 var cb = 0.0; var minCb = double.MaxValue; var maxCb = double.MinValue;
                 var cr = 0.0; var minCr = double.MaxValue; var maxCr = double.MinValue;
 
@@ -215,14 +215,13 @@ namespace PhotoTests.Prototypes
                 prev.Cb = cb;
                 prev.Cr = cr;
 
-                var col = 2 * x;
-                memory[col].Y = y1;
-                memory[col].Cb = cb;
-                memory[col].Cr = cr;
+                memory[2 * x].Y = y1;
+                memory[2 * x].Cb = cb;
+                memory[2 * x].Cr = cr;
 
-                memory[col + 1].Y = y2;
-                memory[col + 1].Cb = cb;
-                memory[col + 1].Cr = cr;
+                memory[2 * x + 1].Y = y2;
+                memory[2 * x + 1].Cb = cb;
+                memory[2 * x + 1].Cr = cr;
             }
 
             return memory;

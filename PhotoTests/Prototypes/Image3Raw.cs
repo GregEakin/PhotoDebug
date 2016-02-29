@@ -193,11 +193,12 @@ namespace PhotoTests.Prototypes
                     {
                         var index = mrow * x + mcol;
                         var slice = index / (sizes[1] * y);
-                        if (slice >= sizes[0])
+                        if (slice > sizes[0])
                             slice = sizes[0];
-                        index -= slice * (sizes[1] * y);
-                        var brow = index / sizes[slice < sizes[0] ? 1 : 2];
-                        var bcol = index % sizes[slice < sizes[0] ? 1 : 2] + slice * sizes[1];
+                        var offset = index - slice * (sizes[1] * y);
+                        var page = slice < sizes[0] ? 1 : 2;
+                        var brow = offset / sizes[page];
+                        var bcol = offset % sizes[page] + slice * sizes[1];
 
                         var val = rdata[mcol];
                         PixelSet(bitmap, brow, bcol, val);
