@@ -12,14 +12,13 @@ namespace PhotoTests.Prototypes
         [TestMethod]
         public void DumpImage2Test()
         {
-            const string Folder = @"D:\Users\Greg\Pictures\2016-02-21 Studio\";
-            DumpImage2(Folder, "Studio 015.CR2");
+            const string fileName = @"D:\Users\Greg\Pictures\2016-02-21 Studio\Studio 015.CR2";
+            DumpImage2(fileName);
         }
 
-        private static void DumpImage2(string folder, string file)
+        private static void DumpImage2(string fileName)
         {
-            var fileName2 = folder + file;
-            using (var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read))
+            using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
             {
                 var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
@@ -77,12 +76,13 @@ namespace PhotoTests.Prototypes
                     var stuff = RawImage.ReadULongs(binaryReader, imageFileEntryC6DC);
                     CollectionAssert.AreEqual(new[] { 577u, 386u, 14u, 9u }, stuff);
 
-                    DumpImage(binaryReader, folder + file + ".RGB", stripOffset, imageWidth, imageHeight);
+                    var outFile = Path.ChangeExtension(fileName, ".bmp");
+                    CreateBitmap(binaryReader, outFile, stripOffset, imageWidth, imageHeight);
                 }
             }
         }
 
-        private static void DumpImage(BinaryReader binaryReader, string folder, uint offset, uint width, uint height)
+        private static void CreateBitmap(BinaryReader binaryReader, string outFile, uint offset, uint width, uint height)
         {
             binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
 
@@ -99,7 +99,7 @@ namespace PhotoTests.Prototypes
                         bitmap.SetPixel(x, y, color);
                     }
 
-                bitmap.Save(folder + "0L2A8897-2.bmp");
+                bitmap.Save(outFile);
             }
         }
     }
