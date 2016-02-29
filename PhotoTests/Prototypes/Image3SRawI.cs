@@ -155,10 +155,10 @@ namespace PhotoTests.Prototypes
             }
         }
 
-        private static void ProcessLine15321(int slice, int lines, int line, int width, StartOfImage startOfImage, HuffmanTable table0, HuffmanTable table1, DataBuf[,] memory)
+        private static void ProcessLine15321(int slice, int lines, int line, int samplesPerLine, StartOfImage startOfImage, HuffmanTable table0, HuffmanTable table1, DataBuf[,] memory)
         {
-            var diff = new DiffBuf[width];
-            for (var x = 0; x < width; x++)
+            var diff = new DiffBuf[samplesPerLine];     // 216
+            for (var x = 0; x < samplesPerLine; x++)    // 216
             {
                 // YUYV
                 diff[x].Y1 = ProcessColor(startOfImage, table0);
@@ -166,16 +166,19 @@ namespace PhotoTests.Prototypes
                 diff[x].Cb = ProcessColor(startOfImage, table1);
                 diff[x].Cr = ProcessColor(startOfImage, table1);
                 cc += 4;
+
+                //if (line < 4 && x < 4)
+                //    Console.WriteLine("{0}, {1}: {2}, {3}, {4}, {5}", line, x, diff[x].Y1, diff[x].Y2, diff[x].Cb, diff[x].Cr);
             }
 
-            // Debug: Dump the diff data.
+            //// Debug: Dump the diff data.
             //{
             //    var y1 = 0.0; var minY = double.MaxValue; var maxY = double.MinValue;
             //    var y2 = 0.0;
             //    var cb = 0.0; var minCb = double.MaxValue; var maxCb = double.MinValue;
             //    var cr = 0.0; var minCr = double.MaxValue; var maxCr = double.MinValue;
 
-            //    for (var x = 0; x < width; x++)
+            //    for (var x = 0; x < samplesPerLine; x++)
             //    {
             //        y1 += diff[x].Y1;
             //        y2 += diff[x].Y2;
@@ -209,7 +212,7 @@ namespace PhotoTests.Prototypes
                     Prev[line] = new DataBuf { Y = 0x4000 - 3720, Cb = 0, Cr = 0 };
             }
 
-            for (var x = 0; x < width; x++)
+            for (var x = 0; x < samplesPerLine; x++)        // 216
             {
                 var y1 = (ushort)((Prev[line].Y + diff[x].Y1));
                 var y2 = (ushort)((Prev[line].Y + diff[x].Y1 + diff[x].Y2));
@@ -220,7 +223,7 @@ namespace PhotoTests.Prototypes
                 Prev[line].Cb = cb;
                 Prev[line].Cr = cr;
 
-                var col = 2 * slice * width + 2 * x;
+                var col = 2 * slice * samplesPerLine + 2 * x;
                 memory[line, col].Y = y1;
                 memory[line, col].Cb = cb;
                 memory[line, col].Cr = cr;
