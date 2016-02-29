@@ -1,127 +1,89 @@
-﻿namespace PhotoDump
+﻿using PhotoLib.Jpeg.NonStartOfFrame;
+using PhotoLib.Tiff;
+using System;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+
+namespace PhotoDump
 {
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-
-    using PhotoLib.Jpeg;
-    using PhotoLib.Tiff;
-
     public class PhotoStuff
     {
-        public int Width { get; private set; }
-        public int Height { get; private set; }
-        public ushort[] Array { get; private set; }
-
         public PhotoStuff(string fileName)
         {
             using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
             {
                 var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
-                var imageFileDirectory = rawImage.Directories.Last();
+                var image = rawImage.Directories.Last();
 
-                var strips = imageFileDirectory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
-                binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
-                var blockCount = binaryReader.ReadUInt16();
-                var blockWidth = binaryReader.ReadUInt16();
-                var blockRest = binaryReader.ReadUInt16();
+                // var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;
 
-                var address = imageFileDirectory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
-                var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
-                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-                var startOfImage = new StartOfImage(binaryReader, address, length);
-                var lossless = startOfImage.StartOfFrame;
+                var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
+                var count = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
+                var imageFileEntry = image.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3);
+                var slices = RawImage.ReadUInts16(binaryReader, imageFileEntry);
 
-                var rawSize = address + length - binaryReader.BaseStream.Position - 2;
-                startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
+                binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
+                var startOfImage = new StartOfImageRgb(binaryReader, offset, count);
+                startOfImage.ImageData.Reset();
+                var memory = startOfImage.ReadImage();
 
-                var colors = lossless.Components.Sum(comp => comp.HFactor * comp.VFactor);
-                var tables = startOfImage.HuffmanTable.Tables.Values.ToList();
+                var outFile = Path.ChangeExtension(fileName, ".bmp");
+                MakeBitmap(memory, outFile, slices);
+            }
+        }
 
-                Width = lossless.SamplesPerLine * colors;
-                Height = lossless.ScanLines;
-                Array = new ushort[Width * Height];
-                var pred = (ushort)(1 << (lossless.Precision - 1));
-                var predictor = Enumerable.Repeat(pred, colors).ToArray();
+        private static void MakeBitmap(ushort[][] memory, string outFile, ushort[] slices)
+        {
+            var y = memory.GetLength(0);
+            var x = memory[0].GetLength(0);
 
-                for (var i = 0; i < Width * Height; i += colors)
+            using (var bitmap = new Bitmap(x, y))
+            {
+                for (var mrow = 0; mrow < y; mrow++)
                 {
-                    int jcol;
-                    int jrow;
-                    var block = i / (Height * blockWidth);
-                    if (block < blockCount)
+                    var rdata = memory[mrow];
+                    for (var mcol = 0; mcol < x; mcol++)
                     {
-                        jrow = (i - block * Height * blockWidth) / blockWidth;
-                        var x1 = (i - block * Height * blockWidth) % blockWidth;
-                        jcol = block * blockWidth + x1;
+                        var index = mrow * x + mcol;
+                        var slice = index / (slices[1] * y);
+                        if (slice > slices[0])
+                            slice = slices[0];
+                        var offset = index - slice * slices[1] * y;
+                        var page = slice < slices[0] ? 1 : 2;
+                        var brow = offset / slices[page];
+                        var bcol = offset % slices[page] + slice * slices[1];
+
+                        var val = rdata[mcol];
+                        PixelSet(bitmap, brow, bcol, val);
                     }
-                    else
-                    {
-                        jrow = (i - blockCount * Height * blockWidth) / blockRest;
-                        var x1 = (i - blockCount * Height * blockWidth) % blockRest;
-                        jcol = blockCount * blockWidth + x1;
-                    }
-
-                    var index = jrow * Width + jcol;
-                    PokeValues(startOfImage, tables, jcol, jrow, index, predictor);
                 }
+
+                bitmap.Save(outFile);
             }
         }
 
-        private void PokeValues(StartOfImage startOfImage, IList<HuffmanTable> tables, int x, int y, int index, IList<ushort> predictor)
+        private static void PixelSet(Bitmap bitmap, int row, int col, ushort val)
         {
-            const int Colors = 4;
-            for (var c = 0; c < Colors; c++)
+            if (row % 2 == 0 && col % 2 == 0)
             {
-                var hufCode = GetValue(startOfImage.ImageData, tables[0]);
-                var difCode = startOfImage.ImageData.GetSetOfBits(hufCode);
-                var dif = (ushort)DecodeDifBits(difCode, hufCode);
-
-                int value;
-                if (x == 0)
-                {
-                    // value = predictor[c] += dif;
-                    value = 0x2000 + dif;
-                }
-                else
-                {
-                    value = this.Array[index + c - Colors] + dif;
-                }
-
-                this.Array[index + c] = (ushort)(value);
+                var r = (byte)Math.Min((val >> 4), 255);
+                var color = Color.FromArgb(r, 0, 0);
+                bitmap.SetPixel(col, row, color);
             }
-        }
-
-        private static short DecodeDifBits(ushort difCode, ushort difBits)
-        {
-            short dif0;
-            if ((difCode & (0x01u << (difBits - 1))) != 0)
+            else if ((row % 2 == 1 && col % 2 == 0) || (row % 2 == 0 && col % 2 == 1))
             {
-                // msb is 1, thus decoded DifCode is positive
-                dif0 = (short)difCode;
+                var g = (byte)Math.Min((val >> 5), 255);
+                var color = Color.FromArgb(0, g, 0);
+                bitmap.SetPixel(col, row, color);
             }
-            else
+            else if (row % 2 == 1 && col % 2 == 1)
             {
-                // msb is 0, thus DifCode is negative
-                dif0 = (short)(difCode - (1 << difBits) + 1);
+                var b = (byte)Math.Min((val >> 4), 255);
+                var color = Color.FromArgb(0, 0, b);
+                bitmap.SetPixel(col, row, color);
             }
-            return dif0;
-        }
-
-        public static ushort GetValue(ImageData imageData, HuffmanTable table)
-        {
-            var hufIndex = (ushort)0;
-            var hufBits = (ushort)0;
-            HuffmanTable.HCode hCode;
-            do
-            {
-                hufIndex = imageData.GetNextShort(hufIndex);
-                hufBits++;
-            }
-            while (!table.Dictionary.TryGetValue(hufIndex, out hCode) || hCode.Length != hufBits);
-
-            return hCode.Code;
         }
     }
 }
