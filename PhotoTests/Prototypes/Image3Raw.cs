@@ -174,7 +174,6 @@ namespace PhotoTests.Prototypes
             //            index -= slice * (sizes[1] * y);
             //            var brow = index / sizes[slice < sizes[0] ? 1 : 2];
             //            var bcol = index % sizes[slice < sizes[0] ? 1 : 2] + slice * sizes[1];
-            //            var scan0 = data.Scan0 + data.Stride * brow;
 
             //            var val = rdata[mcol];
             //            PixelSet(scan0, brow, bcol, (short)val);

@@ -75,6 +75,7 @@
     <Compile Include="Prototypes\Image1.cs" />
     <Compile Include="Prototypes\Image2.cs" />
     <Compile Include="Prototypes\Image2Bit16.cs" />
+    <Compile Include="Prototypes\Image3MRaw.cs" />
     <Compile Include="Tiff\RawDataTests.cs" />
     <Compile Include="Tiff\RawImageTests.cs" />
     <Compile Include="Tiff\ImageFileDirectoryTests.cs" />
