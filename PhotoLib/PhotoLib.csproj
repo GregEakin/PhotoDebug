@@ -48,6 +48,9 @@
     <Compile Include="Jpeg\ImageData.cs" />
     <Compile Include="Jpeg\NonStartOfFrame\JfifMarker.cs" />
     <Compile Include="Jpeg\JpegTag.cs" />
+    <Compile Include="Jpeg\NonStartOfFrame\StartOfImage411.cs" />
+    <Compile Include="Jpeg\NonStartOfFrame\StartOfImageRgb.cs" />
+    <Compile Include="Jpeg\NonStartOfFrame\StartOfImageYcc.cs" />
     <Compile Include="Jpeg\StartOfFrame\StartOfFrame.cs" />
     <Compile Include="Jpeg\NonStartOfFrame\StartOfImage.cs" />
     <Compile Include="Jpeg\NonStartOfFrame\StartOfScan.cs" />
