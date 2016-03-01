@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PhotoLib.Tiff;
 using System.IO;
 using System.Linq;
-using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PhotoLib.Tiff;
 
 namespace PhotoTests.Prototypes
 {
@@ -14,7 +11,7 @@ namespace PhotoTests.Prototypes
         [TestMethod]
         public void DumpExifData()
         {
-            const string fileName = @"D:\Users\Greg\Pictures\2016-02-21 Studio\Studio 015.CR2";
+            const string fileName = @"C:..\..\Photos\5DIIIhigh.CR2";
             DumpExifInfo(fileName);
         }
 
