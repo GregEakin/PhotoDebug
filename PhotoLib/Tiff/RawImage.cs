@@ -93,6 +93,24 @@ namespace PhotoLib.Tiff
             }
         }
 
+        public static byte[] ReadBytes(BinaryReader binaryReader, ImageFileEntry imageFileEntry)
+        {
+            var retval = new byte[imageFileEntry.NumberOfValue];
+
+            if (binaryReader.BaseStream.Position != imageFileEntry.ValuePointer)
+            {
+                binaryReader.BaseStream.Seek(imageFileEntry.ValuePointer, SeekOrigin.Begin);
+            }
+
+            for (var j = 0; j < imageFileEntry.NumberOfValue; j++)
+            {
+                var us = binaryReader.ReadByte();
+                retval[j] = us;
+            }
+
+            return retval;
+        }
+
         public static string ReadChars(BinaryReader binaryReader, ImageFileEntry imageFileEntry)
         {
             var retval = new StringBuilder();
@@ -129,6 +147,24 @@ namespace PhotoLib.Tiff
             for (var j = 0; j < imageFileEntry.NumberOfValue; j++)
             {
                 var us = binaryReader.ReadUInt16();
+                retval[j] = us;
+            }
+
+            return retval;
+        }
+
+        public static UInt32[] ReadRational(BinaryReader binaryReader, ImageFileEntry imageFileEntry)
+        {
+            var retval = new UInt32[imageFileEntry.NumberOfValue * 2];
+
+            if (binaryReader.BaseStream.Position != imageFileEntry.ValuePointer)
+            {
+                binaryReader.BaseStream.Seek(imageFileEntry.ValuePointer, SeekOrigin.Begin);
+            }
+
+            for (var j = 0; j < imageFileEntry.NumberOfValue * 2; j++)
+            {
+                var us = binaryReader.ReadUInt32();
                 retval[j] = us;
             }
 

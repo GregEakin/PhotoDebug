@@ -40,6 +40,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -76,6 +77,10 @@
     <Compile Include="Prototypes\Image2.cs" />
     <Compile Include="Prototypes\Image2Bit16.cs" />
     <Compile Include="Prototypes\Image3MRaw.cs" />
+    <Compile Include="Prototypes\GpsData.cs" />
+    <Compile Include="Prototypes\Ifid0Tests.cs" />
+    <Compile Include="Prototypes\ExifData.cs" />
+    <Compile Include="Prototypes\XmpData.cs" />
     <Compile Include="Tiff\RawDataTests.cs" />
     <Compile Include="Tiff\RawImageTests.cs" />
     <Compile Include="Tiff\ImageFileDirectoryTests.cs" />
