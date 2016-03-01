@@ -50,7 +50,7 @@
     <Compile Include="Jpeg\JpegTags\StartOfImage411.cs" />
     <Compile Include="Jpeg\JpegTags\StartOfImageRgb.cs" />
     <Compile Include="Jpeg\JpegTags\StartOfImageYcc.cs" />
-    <Compile Include="Jpeg\StartOfFrame\StartOfFrame.cs" />
+    <Compile Include="Jpeg\JpegTags\StartOfFrame.cs" />
     <Compile Include="Jpeg\JpegTags\StartOfImage.cs" />
     <Compile Include="Jpeg\JpegTags\StartOfScan.cs" />
     <Compile Include="Tiff\RawData.cs" />
@@ -64,6 +64,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="XMLFile1.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Jpeg\StartOfFrame\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
