@@ -25,60 +25,29 @@ namespace PhotoTests.Prototypes
 
                 // Image #2 is RGB, 16 bits per color, little endian.
                 // Length = 3 * 16 bits * nb pixels
-                {
-                    var image = rawImage.Directories.Skip(2).First();
-                    Assert.AreEqual(13, image.Entries.Length);
 
-                    var imageWidth = image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == 3).ValuePointer;
-                    Assert.AreEqual(592u, imageWidth);
+                var image = rawImage.Directories.Skip(2).First();
 
-                    var imageHeight = image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == 3).ValuePointer;
-                    Assert.AreEqual(395u, imageHeight);
+                var stripOffset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
+                // Assert.AreEqual(1229532u, stripOffset);
 
-                    var imageFileEntry0102 = image.Entries.Single(e => e.TagId == 0x0102 && e.TagType == 3);
-                    Assert.AreEqual(72014u, imageFileEntry0102.ValuePointer);
-                    Assert.AreEqual(3u, imageFileEntry0102.NumberOfValue);
-                    var bitsPerSample = RawImage.ReadUInts16(binaryReader, imageFileEntry0102);
-                    CollectionAssert.AreEqual(new[] { (ushort)16, (ushort)16, (ushort)16 }, bitsPerSample);
+                var imageWidth = image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == 3).ValuePointer;
+                Assert.AreEqual(592u, imageWidth);
 
-                    var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;
-                    Assert.AreEqual(1u, compression);
+                var imageHeight = image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == 3).ValuePointer;
+                Assert.AreEqual(395u, imageHeight);
 
-                    var photometricInterpretation = image.Entries.Single(e => e.TagId == 0x0106 && e.TagType == 3).ValuePointer;
-                    Assert.AreEqual(2u, photometricInterpretation);
+                var samplesPerPixel = image.Entries.Single(e => e.TagId == 0x0115 && e.TagType == 3).ValuePointer;
+                Assert.AreEqual(3u, samplesPerPixel);
 
-                    var stripOffset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
-                    // Assert.AreEqual(1229532u, stripOffset);
+                var imageFileEntry0102 = image.Entries.Single(e => e.TagId == 0x0102 && e.TagType == 3);
+                Assert.AreEqual(3u, imageFileEntry0102.NumberOfValue);
+                // Assert.AreEqual(72014u, imageFileEntry0102.ValuePointer);
+                var bitsPerSample = RawImage.ReadUInts16(binaryReader, imageFileEntry0102);
+                CollectionAssert.AreEqual(new[] {(ushort) 16, (ushort) 16, (ushort) 16}, bitsPerSample);
 
-                    var samplesPerPixel = image.Entries.Single(e => e.TagId == 0x0115 && e.TagType == 3).ValuePointer;
-                    Assert.AreEqual(3u, samplesPerPixel);
-
-                    var rowsPerStrip = image.Entries.Single(e => e.TagId == 0x0116 && e.TagType == 3).ValuePointer;
-                    Assert.AreEqual(395u, rowsPerStrip);
-
-                    var stripByteCounts = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
-                    Assert.AreEqual(1403040u, stripByteCounts);
-                    Assert.AreEqual(stripByteCounts, imageWidth * imageHeight * samplesPerPixel * 2);
-
-                    var planarConfiguration = image.Entries.Single(e => e.TagId == 0x011C && e.TagType == 3).ValuePointer;
-                    Assert.AreEqual(1u, planarConfiguration);
-
-                    // unknown
-                    var table1 = image.Entries.Single(e => e.TagId == 0xC5D9 && e.TagType == 4).ValuePointer;
-                    Assert.AreEqual(2u, table1);
-
-                    var table2 = image.Entries.Single(e => e.TagId == 0xC6C5 && e.TagType == 4).ValuePointer;
-                    Assert.AreEqual(3u, table2);
-
-                    var imageFileEntryC6DC = image.Entries.Single(e => e.TagId == 0xC6DC && e.TagType == 4);
-                    // Assert.AreEqual(72020u, imageFileEntry011C.ValuePointer);
-                    Assert.AreEqual(4u, imageFileEntryC6DC.NumberOfValue);
-                    var stuff = RawImage.ReadULongs(binaryReader, imageFileEntryC6DC);
-                    CollectionAssert.AreEqual(new[] { 577u, 386u, 14u, 9u }, stuff);
-
-                    var outFile = Path.ChangeExtension(fileName, ".bmp");
-                    CreateBitmap(binaryReader, outFile, stripOffset, imageWidth, imageHeight);
-                }
+                var outFile = Path.ChangeExtension(fileName, ".bmp");
+                CreateBitmap(binaryReader, outFile, stripOffset, imageWidth, imageHeight);
             }
         }
 

@@ -1,10 +1,10 @@
-﻿namespace PhotoTests.Canon5D3
-{
-    using System;
-    using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using PhotoLib.Tiff;
+﻿using System;
+using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PhotoLib.Tiff;
 
+namespace PhotoTests.Canon5D3
+{
     [TestClass]
     public class C5D3Ifd1
     {

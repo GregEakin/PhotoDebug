@@ -24,18 +24,17 @@ namespace PhotoTests.Prototypes
                 var rawImage = new RawImage(binaryReader);
 
                 // Images #0 and #1 are compressed in lossy (classic) JPEG
-                {
-                    var image = rawImage.Directories.Skip(1).First();
-                    Assert.AreEqual(2, image.Entries.Length);
 
-                    var offset = image.Entries.Single(e => e.TagId == 0x0201 && e.TagType == 4).ValuePointer;
-                    // Assert.AreEqual(80324u, offset);
+                var image = rawImage.Directories.Skip(1).First();
+                Assert.AreEqual(2, image.Entries.Length);
 
-                    var length = image.Entries.Single(e => e.TagId == 0x0202 && e.TagType == 4).ValuePointer;
-                    // Assert.AreEqual(10334u, length);
+                var offset = image.Entries.Single(e => e.TagId == 0x0201 && e.TagType == 4).ValuePointer;
+                // Assert.AreEqual(80324u, offset);
 
-                    DumpImage(binaryReader, folder + "0L2A8897-1.JPG", offset, length);
-                }
+                var length = image.Entries.Single(e => e.TagId == 0x0202 && e.TagType == 4).ValuePointer;
+                // Assert.AreEqual(10334u, length);
+
+                DumpImage(binaryReader, folder + "0L2A8897-1.JPG", offset, length);
             }
         }
 
