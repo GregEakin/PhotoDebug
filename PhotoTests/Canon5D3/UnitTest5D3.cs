@@ -1,13 +1,12 @@
-﻿namespace PhotoTests.Canon5D3
+﻿using PhotoLib.Jpeg.JpegTags;
+
+namespace PhotoTests.Canon5D3
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using PhotoLib.Tiff;
     using System;
     using System.IO;
     using System.Linq;
-
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-    using PhotoLib.Jpeg;
-    using PhotoLib.Tiff;
 
     [TestClass]
     public class UnitTest5D3

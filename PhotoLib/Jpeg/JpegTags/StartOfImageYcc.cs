@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace PhotoLib.Jpeg.NonStartOfFrame
+namespace PhotoLib.Jpeg.JpegTags
 {
     public class StartOfImageYcc : StartOfImage
     {

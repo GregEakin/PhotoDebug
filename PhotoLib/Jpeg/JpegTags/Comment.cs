@@ -8,7 +8,7 @@ using System.IO;
 // FILE:		Comment.cs
 // AUTHOR:		Greg Eakin
 
-namespace PhotoLib.Jpeg
+namespace PhotoLib.Jpeg.JpegTags
 {
     /// <summary>
     /// Comment 0xFFFE

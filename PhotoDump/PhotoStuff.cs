@@ -1,4 +1,4 @@
-﻿using PhotoLib.Jpeg.NonStartOfFrame;
+﻿using PhotoLib.Jpeg.JpegTags;
 using PhotoLib.Tiff;
 using System;
 using System.Drawing;

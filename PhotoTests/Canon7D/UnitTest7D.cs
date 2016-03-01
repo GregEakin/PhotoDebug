@@ -1,13 +1,12 @@
-﻿namespace PhotoTests.Canon7D
+﻿using PhotoLib.Jpeg.JpegTags;
+
+namespace PhotoTests.Canon7D
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using PhotoLib.Tiff;
     using System;
     using System.IO;
     using System.Linq;
-
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-    using PhotoLib.Jpeg;
-    using PhotoLib.Tiff;
 
     [TestClass]
     public class UnitTest7D

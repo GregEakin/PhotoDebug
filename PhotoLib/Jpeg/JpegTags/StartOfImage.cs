@@ -5,12 +5,11 @@
 // FILE:		StartOfImage.cs
 // AUTHOR:		Greg Eakin
 
+using PhotoLib.Utilities;
 using System;
 using System.IO;
 
-using PhotoLib.Utilities;
-
-namespace PhotoLib.Jpeg
+namespace PhotoLib.Jpeg.JpegTags
 {
     using System.Collections.Generic;
     using System.Linq;

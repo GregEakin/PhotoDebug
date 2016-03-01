@@ -1,11 +1,10 @@
-﻿namespace PhotoTests.Jpeg
+﻿using PhotoLib.Jpeg.JpegTags;
+
+namespace PhotoTests.Jpeg
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;
     using System.IO;
-
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-    using PhotoLib.Jpeg;
 
     [TestClass]
     public class StartOfScanTests

@@ -1,14 +1,14 @@
-﻿namespace PhotoTests
+﻿using PhotoLib.Jpeg.JpegTags;
+
+namespace PhotoTests
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using PhotoLib.Jpeg;
+    using PhotoLib.Tiff;
     using System;
     using System.Drawing;
     using System.IO;
     using System.Linq;
-
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-    using PhotoLib.Jpeg;
-    using PhotoLib.Tiff;
 
     [TestClass]
     public class UnitTests

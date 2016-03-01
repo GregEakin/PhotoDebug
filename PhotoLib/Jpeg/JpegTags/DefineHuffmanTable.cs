@@ -11,7 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace PhotoLib.Jpeg
+namespace PhotoLib.Jpeg.JpegTags
 {
     /// <summary>
     /// DHT 0xFFC4

@@ -39,21 +39,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JpegImage.cs" />
     <Compile Include="Jpeg\JpegBnf.cs" />
-    <Compile Include="Jpeg\NonStartOfFrame\Comment.cs" />
-    <Compile Include="Jpeg\NonStartOfFrame\DefineQuantizationTable.cs" />
-    <Compile Include="Jpeg\NonStartOfFrame\DefineHuffmanTable.cs" />
+    <Compile Include="Jpeg\JpegTags\Comment.cs" />
+    <Compile Include="Jpeg\JpegTags\DefineQuantizationTable.cs" />
+    <Compile Include="Jpeg\JpegTags\DefineHuffmanTable.cs" />
     <Compile Include="Jpeg\HuffmanTable.cs" />
     <Compile Include="Jpeg\ImageData.cs" />
-    <Compile Include="Jpeg\NonStartOfFrame\JfifMarker.cs" />
+    <Compile Include="Jpeg\JpegTags\JfifMarker.cs" />
     <Compile Include="Jpeg\JpegTag.cs" />
-    <Compile Include="Jpeg\NonStartOfFrame\StartOfImage411.cs" />
-    <Compile Include="Jpeg\NonStartOfFrame\StartOfImageRgb.cs" />
-    <Compile Include="Jpeg\NonStartOfFrame\StartOfImageYcc.cs" />
+    <Compile Include="Jpeg\JpegTags\StartOfImage411.cs" />
+    <Compile Include="Jpeg\JpegTags\StartOfImageRgb.cs" />
+    <Compile Include="Jpeg\JpegTags\StartOfImageYcc.cs" />
     <Compile Include="Jpeg\StartOfFrame\StartOfFrame.cs" />
-    <Compile Include="Jpeg\NonStartOfFrame\StartOfImage.cs" />
-    <Compile Include="Jpeg\NonStartOfFrame\StartOfScan.cs" />
+    <Compile Include="Jpeg\JpegTags\StartOfImage.cs" />
+    <Compile Include="Jpeg\JpegTags\StartOfScan.cs" />
     <Compile Include="Tiff\RawData.cs" />
     <Compile Include="Tiff\RawImage.cs" />
     <Compile Include="Tiff\CR2Header.cs" />

@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoLib.Jpeg;
+using PhotoLib.Jpeg.JpegTags;
 using PhotoLib.Tiff;
 using System;
 using System.Drawing;

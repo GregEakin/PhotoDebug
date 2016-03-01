@@ -9,7 +9,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace PhotoLib.Jpeg
+namespace PhotoLib.Jpeg.JpegTags
 {
     /// <summary>
     /// APP0 0xFFEO

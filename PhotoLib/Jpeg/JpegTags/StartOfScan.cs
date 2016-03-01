@@ -8,7 +8,7 @@
 using System;
 using System.IO;
 
-namespace PhotoLib.Jpeg
+namespace PhotoLib.Jpeg.JpegTags
 {
     /// <summary>
     /// SOS 0xFFDA

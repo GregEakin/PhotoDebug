@@ -8,7 +8,7 @@
 using System;
 using System.IO;
 
-namespace PhotoLib.Jpeg
+namespace PhotoLib.Jpeg.JpegTags
 {
     using System.Collections.Generic;
 
