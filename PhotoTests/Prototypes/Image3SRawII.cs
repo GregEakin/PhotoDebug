@@ -32,7 +32,7 @@ namespace PhotoTests.Prototypes
         [TestMethod]
         public void DumpImage3SRawTest()
         {
-            const string fileName = @"D:\Users\Greg\Pictures\2016-02-26\003.CR2";
+            const string fileName = @"D:\Users\Greg\Pictures\2016-02-26\007.CR2";
             DumpImage3SRaw(fileName);
         }
 
@@ -46,10 +46,6 @@ namespace PhotoTests.Prototypes
                 // Image #3 is a raw image compressed in ITU-T81 lossless JPEG
                 {
                     var image = rawImage.Directories.Skip(3).First();
-                    Assert.AreEqual(7, image.Entries.Length);
-
-                    var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;
-                    Assert.AreEqual(6u, compression);
 
                     var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
                     // Assert.AreEqual(0x2D42DCu, offset);
@@ -57,21 +53,12 @@ namespace PhotoTests.Prototypes
                     var count = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
                     // Assert.AreEqual(0x1501476u, count);
 
-                    var item3 = image.Entries.Single(e => e.TagId == 0xC5D8 && e.TagType == 4).ValuePointer;
-                    Assert.AreEqual(0x1u, item3);
-
-                    var item4 = image.Entries.Single(e => e.TagId == 0xC5E0 && e.TagType == 4).ValuePointer;
-                    Assert.AreEqual(0x3u, item4);
-
                     // 0xC640 UShort 16-bit: [0x000119BE] (3): 5, 864, 864, 
                     var imageFileEntry = image.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3);
                     // Assert.AreEqual(0x000119BEu, imageFileEntry.ValuePointer);
                     Assert.AreEqual(3u, imageFileEntry.NumberOfValue);
                     var slices = RawImage.ReadUInts16(binaryReader, imageFileEntry);
                     CollectionAssert.AreEqual(new ushort[] { 5, 864, 864 }, slices);
-
-                    var item6 = image.Entries.Single(e => e.TagId == 0xC6C5 && e.TagType == 4).ValuePointer;
-                    Assert.AreEqual(0x4u, item6);
 
                     binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
                     var startOfImage = new StartOfImage(binaryReader, offset, count); // { ImageData = new ImageData(binaryReader, count) };
@@ -136,11 +123,11 @@ namespace PhotoTests.Prototypes
                     // horz sampling == 1
                     startOfImage.ImageData.Reset();
 
-                    var memory = new DataBuf[startOfFrame.ScanLines][];          // [1728][]
                     var prev = new DataBuf { Y = 0x4000, Cb = 0, Cr = 0 };
+                    var memory = new DataBuf[startOfFrame.ScanLines][];          // [1728][]
                     for (var line = 0; line < startOfFrame.ScanLines; line++)   // 0 .. 1728
                     {
-                        var diff = ReadDiffRow(startOfImage); 
+                        var diff = ReadDiffRow(startOfImage);
                         // VerifyDiff(diff, line);
                         var memory1 = ProcessDiff(diff, prev);  // 2592
                         memory[line] = memory1;
@@ -289,9 +276,13 @@ namespace PhotoTests.Prototypes
             {
                 for (var mrow = 0; mrow < y; mrow++)  // 0..1728
                 {
+                    // if (mrow < y / 6 && mrow % 3 > 0) continue;
+
                     var rdata = memory[mrow];
                     for (var mcol = 0; mcol < x; mcol++)    // 0..2592
                     {
+                        // if (mcol < x / 6 && mcol % 3 > 0) continue;
+
                         var index = mrow * x + mcol;
                         var slice = index / (slices[1] * y);
                         if (slice > slices[0])

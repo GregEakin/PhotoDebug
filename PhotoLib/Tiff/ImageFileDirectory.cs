@@ -45,10 +45,10 @@ namespace PhotoLib.Tiff
             var next = binaryReader.ReadUInt32();
             this.nextEntry = next;
 
-            if (next == 0) next = (uint)(binaryReader.BaseStream.Length + 1);
-            Console.WriteLine("### Directory {0}, [0x{1} - 0x{2}]", length, dirStart.ToString("X8"), (next - 1).ToString("X8"));
-            var heapStart = binaryReader.BaseStream.Position;
-            Console.WriteLine("    Heap [0x{0} - 0x{1}]", heapStart.ToString("X8"), (next - 1).ToString("X8"));
+            // if (next == 0) next = (uint)(binaryReader.BaseStream.Length + 1);
+            // Console.WriteLine("### Directory {0}, [0x{1} - 0x{2}]", length, dirStart.ToString("X8"), (next - 1).ToString("X8"));
+            // var heapStart = binaryReader.BaseStream.Position;
+            // Console.WriteLine("    Heap [0x{0} - 0x{1}]", heapStart.ToString("X8"), (next - 1).ToString("X8"));
         }
 
         #endregion

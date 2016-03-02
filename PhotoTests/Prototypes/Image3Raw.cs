@@ -96,9 +96,13 @@ namespace PhotoTests.Prototypes
                     Assert.AreEqual(0, startOfScan.Bb3);    // successive approximation bit positions
                     Assert.AreEqual(2, startOfScan.Components.Length);   // RGGB
 
+                    // startOfScan.Bb1 == 1, Ss = Algroithm A
+                    //     C, B, D
+                    //     A, X
+
                     Assert.AreEqual(1, startOfScan.Components[0].Id);
                     Assert.AreEqual(0, startOfScan.Components[0].Dc);
-                    Assert.AreEqual(0, startOfScan.Components[0].Ac);
+                    Assert.AreEqual(0, startOfScan.Components[0].Ac);   // in lossless, this value is always zero
 
                     Assert.AreEqual(2, startOfScan.Components[1].Id);
                     Assert.AreEqual(1, startOfScan.Components[1].Dc);

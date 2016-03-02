@@ -40,7 +40,7 @@ namespace PhotoTests.Prototypes
             // const string Folder = @"D:\Users\Greg\Pictures\2013_10_14\";
             // DumpImage3SRaw(Folder, "IMG_4194.CR2");
             const string Folder = @"D:\Users\Greg\Pictures\2016-02-26\";
-            DumpImage3SRaw(Folder, "003.CR2");
+            DumpImage3SRaw(Folder, "007.CR2");
         }
 
         private static void DumpImage3SRaw(string folder, string file)
@@ -167,40 +167,7 @@ namespace PhotoTests.Prototypes
                 diff[x].Cb = ProcessColor(startOfImage, table1);
                 diff[x].Cr = ProcessColor(startOfImage, table1);
                 cc += 4;
-
-                //if (line < 4 && x < 4)
-                //    Console.WriteLine("{0}, {1}: {2}, {3}, {4}, {5}", line, x, diff[x].Y1, diff[x].Y2, diff[x].Cb, diff[x].Cr);
             }
-
-            //// Debug: Dump the diff data.
-            //{
-            //    var y1 = 0.0; var minY = double.MaxValue; var maxY = double.MinValue;
-            //    var y2 = 0.0;
-            //    var cb = 0.0; var minCb = double.MaxValue; var maxCb = double.MinValue;
-            //    var cr = 0.0; var minCr = double.MaxValue; var maxCr = double.MinValue;
-
-            //    for (var x = 0; x < samplesPerLine; x++)
-            //    {
-            //        y1 += diff[x].Y1;
-            //        y2 += diff[x].Y2;
-            //        if (minY > y1 + y2) minY = y1 + y2;
-            //        if (maxY < y1 + y2) maxY = y1 + y2;
-
-            //        cb += diff[x].Cb;
-            //        if (minCb > cb) minCb = cb;
-            //        if (maxCb < cb) maxCb = cb;
-
-            //        cr += diff[x].Cr;
-            //        if (minCr > cb) minCr = cr;
-            //        if (maxCr < cb) maxCr = cr;
-            //    }
-
-            //    // if (line == 1000 || line == 0 || line == 1 || line == 999)
-            //    {
-            //        Console.Write("{0}, {1}, {2}, {3}, {4}, {5},  ", slice, line, y1, y2, cb, cr);
-            //        Console.WriteLine("{0}, {1}, {2}, {3}, {4}, {5},  ", minY, maxY, minCb, maxCb, minCr, maxCb);
-            //    }
-            //}
 
             if (slice == 0)
             {
@@ -215,10 +182,10 @@ namespace PhotoTests.Prototypes
 
             for (var x = 0; x < samplesPerLine; x++)        // 216
             {
-                var y1 = (ushort)((Prev[line].Y + diff[x].Y1));
-                var y2 = (ushort)((Prev[line].Y + diff[x].Y1 + diff[x].Y2));
-                var cb = (short)((Prev[line].Cb + diff[x].Cb));
-                var cr = (short)((Prev[line].Cr + diff[x].Cr));
+                var y1 = (ushort)(Prev[line].Y + diff[x].Y1);
+                var y2 = (ushort)(Prev[line].Y + diff[x].Y1 + diff[x].Y2);
+                var cb = (short)(Prev[line].Cb + diff[x].Cb);
+                var cr = (short)(Prev[line].Cr + diff[x].Cr);
 
                 Prev[line].Y = y2;
                 Prev[line].Cb = cb;
@@ -243,18 +210,6 @@ namespace PhotoTests.Prototypes
                 if (minCr > Prev[line].Cr) minCr = Prev[line].Cr;
                 if (maxCr < Prev[line].Cr) maxCr = Prev[line].Cr;
             }
-
-            // debug: report bounds of the running sum
-            //if (slice == 5)
-            //{
-            //    Console.WriteLine("{0}, {1}, {2}, {3}", line, Prev[line].Y, Prev[line].Cb, Prev[line].Cr);
-
-            //    if (line == lines - 1)
-            //    {
-            //        Console.WriteLine();
-            //        Console.WriteLine("{0}, {1}, {2}, {3}, {4}, {5}", minY, maxY, minCb, maxCb, minCr, maxCr);
-            //    }
-            //}
         }
 
         private static short ProcessColor(StartOfImage startOfImage, HuffmanTable table)
@@ -269,36 +224,6 @@ namespace PhotoTests.Prototypes
         {
             var y = memory.GetLength(0);
             var x = memory.GetLength(1);
-
-            //using (var bitmap = new Bitmap(x, y, PixelFormat.Format24bppRgb))
-            //{
-            //    var size = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-            //    var data = bitmap.LockBits(size, ImageLockMode.ReadWrite, bitmap.PixelFormat);
-            //    try
-            //    {
-            //        for (var row = 0; row < y; row++)
-            //        {
-            //            var scan0 = data.Scan0 + data.Stride * row;
-            //            for (var col = 0; col < x; col++)
-            //            {
-            //                var pt = memory[row, col];
-            //                var r = pt.Y + 1.40200 * pt.Cr;
-            //                var g = pt.Y - 0.34414 * pt.Cb - 0.71414 * pt.Cr;
-            //                var b = pt.Y + 1.77200 * pt.Cb;
-            //                Marshal.WriteInt16(scan0, 3 * col + 0, check(b));
-            //                Marshal.WriteInt16(scan0, 3 * col + 1, check(g));
-            //                Marshal.WriteInt16(scan0, 3 * col + 2, check(r));
-            //            }
-            //        }
-            //    }
-            //    finally
-            //    {
-            //        bitmap.UnlockBits(data);
-            //    }
-
-            //    bitmap.Save(folder + "0L2A8897-3.bmp");
-            //}
-
             using (var bitmap = new Bitmap(x, y))
             {
                 for (var row = 0; row < y; row++)

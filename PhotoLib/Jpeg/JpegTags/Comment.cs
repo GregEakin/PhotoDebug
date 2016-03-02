@@ -19,6 +19,8 @@ namespace PhotoLib.Jpeg.JpegTags
 
         private readonly ushort length;
 
+        private readonly byte[] data;
+
         #endregion
 
         #region Constructors and Destructors
@@ -32,7 +34,7 @@ namespace PhotoLib.Jpeg.JpegTags
             }
 
             length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
-            var data = binaryReader.ReadBytes(length - 2);
+            data = binaryReader.ReadBytes(length - 2);
         }
 
         #endregion
@@ -41,10 +43,12 @@ namespace PhotoLib.Jpeg.JpegTags
 
         public ushort Length
         {
-            get
-            {
-                return length;
-            }
+            get { return length; }
+        }
+
+        public byte[] Data
+        {
+            get { return data; }
         }
 
         #endregion
