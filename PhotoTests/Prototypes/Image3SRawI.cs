@@ -12,10 +12,9 @@ namespace PhotoTests.Prototypes
     [TestClass]
     public class Image3SRawI
     {
-        static DataBuf[] Prev;
-        static double minY = double.MaxValue; static double maxY = double.MinValue;
-        static double minCb = double.MaxValue; static double maxCb = double.MinValue;
-        static double minCr = double.MaxValue; static double maxCr = double.MinValue;
+        //static double minY = double.MaxValue; static double maxY = double.MinValue;
+        //static double minCb = double.MaxValue; static double maxCb = double.MinValue;
+        //static double minCr = double.MaxValue; static double maxCr = double.MinValue;
         static int cc = 0;
 
         struct DataBuf
@@ -39,8 +38,8 @@ namespace PhotoTests.Prototypes
             // 2592 x 1728, Canon EOS 7D, 1/160 sec. f/1.8 85mm, SRAW   
             // const string Folder = @"D:\Users\Greg\Pictures\2013_10_14\";
             // DumpImage3SRaw(Folder, "IMG_4194.CR2");
-            const string Folder = @"D:\Users\Greg\Pictures\2016-02-26\";
-            DumpImage3SRaw(Folder, "007.CR2");
+            const string folder = @"D:\Users\Greg\Pictures\2016-02-26\";
+            DumpImage3SRaw(folder, "007.CR2");
         }
 
         private static void DumpImage3SRaw(string folder, string file)
@@ -54,39 +53,24 @@ namespace PhotoTests.Prototypes
                 // Image #3 is a raw image compressed in ITU-T81 lossless JPEG
                 {
                     var image = rawImage.Directories.Skip(3).First();
-                    var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;
-                    Assert.AreEqual(6u, compression);
+
                     var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
                     // Assert.AreEqual(0x2D42DCu, offset);
+
                     var count = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
                     // Assert.AreEqual(0x1501476u, count);
 
-                    // 0xC640 UShort 16-bit: [0x000119BE] (3): 1, 2960, 2960, 
                     var imageFileEntry = image.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3);
-                    var slices = imageFileEntry.ValuePointer;
-                    // Assert.AreEqual(0x000119BEu, slices);
-                    var number = imageFileEntry.NumberOfValue;
-                    Assert.AreEqual(3u, number);
-                    var sizes = RawImage.ReadUInts16(binaryReader, imageFileEntry);
-                    CollectionAssert.AreEqual(new[] { (ushort)5, (ushort)864, (ushort)864 }, sizes);
+                    var slices = RawImage.ReadUInts16(binaryReader, imageFileEntry);
+                    CollectionAssert.AreEqual(new[] { (ushort)5, (ushort)864, (ushort)864 }, slices);
 
                     binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
-                    var startOfImage = new StartOfImage(binaryReader, offset, count); // { ImageData = new ImageData(binaryReader, count) };
+                    var startOfImage = new StartOfImage(binaryReader, offset, count);
 
                     var startOfFrame = startOfImage.StartOfFrame;
                     Assert.AreEqual(1728u, startOfFrame.ScanLines);
                     Assert.AreEqual(2592u, startOfFrame.SamplesPerLine);
                     Assert.AreEqual(7776, startOfFrame.Width);
-
-                    // var rowBuf0 = new short[startOfFrame.SamplesPerLine * startOfFrame.Components.Length];
-                    // var rowBuf1 = new short[startOfFrame.SamplesPerLine * startOfFrame.Components.Length];
-                    // var predictor = new[] { (short)(1 << (startOfFrame.Precision - 1)), (short)(1 << (startOfFrame.Precision - 1)) };
-                    Assert.AreEqual(2, startOfImage.HuffmanTable.Tables.Count);
-                    var table0 = startOfImage.HuffmanTable.Tables[0x00];
-                    var table1 = startOfImage.HuffmanTable.Tables[0x01];
-
-                    // Console.WriteLine(table0.ToString());
-                    // Console.WriteLine(table1.ToString());
 
                     Assert.AreEqual(15, startOfFrame.Precision); // sraw/sraw2
 
@@ -139,59 +123,54 @@ namespace PhotoTests.Prototypes
                     // horz sampling == 1
                     startOfImage.ImageData.Reset();
 
+                    var prev = new DataBuf[startOfFrame.ScanLines / 6];
+                    for (var line = 0; line < prev.Length; line++)
+                        prev[line] = line == 0
+                            ? new DataBuf { Y = 0x8000 - 3720, Cb = 0, Cr = 0 }
+                            : new DataBuf { Y = 0x4000 - 3720, Cb = 0, Cr = 0 };
+
                     var memory = new DataBuf[startOfFrame.ScanLines, startOfFrame.Width / 3];   // 1728 x 7776 / 3 (= 2592)
-                    for (var slice = 0; slice < sizes[0]; slice++)                              // 0..5
+                    for (var slice = 0; slice < slices[0]; slice++)                              // 0..5
                     {
-                        for (var line = 0; line < startOfFrame.ScanLines; line++)
-                            ProcessLine15321(slice, startOfFrame.ScanLines, line, sizes[1] / 4, startOfImage, table0, table1, memory);  // 1728, 864 / 4 = 216
+                        for (var line = 0; line < startOfFrame.ScanLines; line++)                 // 0..1728
+                            ProcessLine15321(slice, line, slices[1], startOfImage, memory, prev);  // 864
                     }
                     {
-                        for (var line = 0; line < startOfFrame.ScanLines; line++)
-                            ProcessLine15321(sizes[0], startOfFrame.ScanLines, line, sizes[2] / 4, startOfImage, table0, table1, memory);  // 1728, 864 / 4 = 216
+                        for (var line = 0; line < startOfFrame.ScanLines; line++)                 // 0..1728
+                            ProcessLine15321(slices[0], line, slices[2], startOfImage, memory, prev);  // 864   
                     }
+
                     Assert.AreEqual(8957952, cc);
                     Assert.AreEqual(3, startOfImage.ImageData.DistFromEnd);
+                    
+                    //for (var slice = 0; slice < 2; slice++)                              // 0..5
+                    //    for (var line = 0; line < startOfFrame.ScanLines; line++)
+                    //        ProcessLine15321(slice, line, slices[1], startOfImage, memory, prev);  // 864
+
                     MakeBitmap(memory, folder);
                 }
             }
         }
 
-        private static void ProcessLine15321(int slice, int lines, int line, int samplesPerLine, StartOfImage startOfImage, HuffmanTable table0, HuffmanTable table1, DataBuf[,] memory)
+        private static void ProcessLine15321(int slice, int line, int samplesPerLine, StartOfImage startOfImage, DataBuf[,] memory, DataBuf[] prev)
         {
-            var diff = new DiffBuf[samplesPerLine];     // 216
-            for (var x = 0; x < samplesPerLine; x++)    // 216
+            var diff = ReadDiffBufs(samplesPerLine, startOfImage);
+
+            //if (500 < line || line > 1000) return;
+            //if (slice == 1 && line % 2 == 0) return;
+
+            for (var x = 0; x < diff.Length; x++)        // 216
             {
-                // YUYV
-                diff[x].Y1 = ProcessColor(startOfImage, table0);
-                diff[x].Y2 = ProcessColor(startOfImage, table0);
-                diff[x].Cb = ProcessColor(startOfImage, table1);
-                diff[x].Cr = ProcessColor(startOfImage, table1);
-                cc += 4;
-            }
+                var y1 = (ushort)(prev[line / 6].Y + diff[x].Y1);
+                var y2 = (ushort)(prev[line / 6].Y + diff[x].Y1 + diff[x].Y2);
+                var cb = (short)(prev[line / 6].Cb + diff[x].Cb);
+                var cr = (short)(prev[line / 6].Cr + diff[x].Cr);
 
-            if (slice == 0)
-            {
-                if (line == 0)
-                {
-                    Prev = new DataBuf[lines];
-                    Prev[0] = new DataBuf { Y = 0x8000 - 3720, Cb = 0, Cr = 0 };
-                }
-                else
-                    Prev[line] = new DataBuf { Y = 0x4000 - 3720, Cb = 0, Cr = 0 };
-            }
+                prev[line / 6].Y = y2;
+                prev[line / 6].Cb = cb;
+                prev[line / 6].Cr = cr;
 
-            for (var x = 0; x < samplesPerLine; x++)        // 216
-            {
-                var y1 = (ushort)(Prev[line].Y + diff[x].Y1);
-                var y2 = (ushort)(Prev[line].Y + diff[x].Y1 + diff[x].Y2);
-                var cb = (short)(Prev[line].Cb + diff[x].Cb);
-                var cr = (short)(Prev[line].Cr + diff[x].Cr);
-
-                Prev[line].Y = y2;
-                Prev[line].Cb = cb;
-                Prev[line].Cr = cr;
-
-                var col = 2 * slice * samplesPerLine + 2 * x;
+                var col = 2 * slice * diff.Length + 2 * x;
                 memory[line, col].Y = y1;
                 memory[line, col].Cb = cb;
                 memory[line, col].Cr = cr;
@@ -201,15 +180,33 @@ namespace PhotoTests.Prototypes
                 memory[line, col + 1].Cr = cr;
 
                 // debug: check the bounds of the running sum
-                if (minY > Prev[line].Y) minY = Prev[line].Y;
-                if (maxY < Prev[line].Y) maxY = Prev[line].Y;
+                //if (minY > prev[line].Y) minY = prev[line].Y;
+                //if (maxY < prev[line].Y) maxY = prev[line].Y;
 
-                if (minCb > Prev[line].Cb) minCb = Prev[line].Cb;
-                if (maxCb < Prev[line].Cb) maxCb = Prev[line].Cb;
+                //if (minCb > prev[line].Cb) minCb = prev[line].Cb;
+                //if (maxCb < prev[line].Cb) maxCb = prev[line].Cb;
 
-                if (minCr > Prev[line].Cr) minCr = Prev[line].Cr;
-                if (maxCr < Prev[line].Cr) maxCr = Prev[line].Cr;
+                //if (minCr > prev[line].Cr) minCr = prev[line].Cr;
+                //if (maxCr < prev[line].Cr) maxCr = prev[line].Cr;
             }
+        }
+
+        private static DiffBuf[] ReadDiffBufs(int samplesPerLine, StartOfImage startOfImage)
+        {
+            var table0 = startOfImage.HuffmanTable.Tables[0x00];
+            var table1 = startOfImage.HuffmanTable.Tables[0x01];
+
+            var diff = new DiffBuf[samplesPerLine / 4]; // 864 / 4 == 216
+            for (var x = 0; x < diff.Length; x++)
+            {
+                diff[x].Y1 = ProcessColor(startOfImage, table0);
+                diff[x].Y2 = ProcessColor(startOfImage, table0);
+                diff[x].Cb = ProcessColor(startOfImage, table1);
+                diff[x].Cr = ProcessColor(startOfImage, table1);
+                cc += 4;
+            }
+
+            return diff;
         }
 
         private static short ProcessColor(StartOfImage startOfImage, HuffmanTable table)
