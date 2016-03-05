@@ -83,6 +83,7 @@
     <Compile Include="Prototypes\GpsData.cs" />
     <Compile Include="Prototypes\Ifid0Tests.cs" />
     <Compile Include="Prototypes\ExifData.cs" />
+    <Compile Include="Prototypes\MakerNoteTests.cs" />
     <Compile Include="Prototypes\XmpData.cs" />
     <Compile Include="Tiff\RawDataTests.cs" />
     <Compile Include="Tiff\RawImageTests.cs" />

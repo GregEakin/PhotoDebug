@@ -79,7 +79,7 @@ namespace PhotoTests.Prototypes
 
                     // J:a:b = 4:2:2, h/v = 2/1
                     Assert.AreEqual(1, startOfFrame.Components[0].ComponentId);
-                    Assert.AreEqual(2, startOfFrame.Components[0].HFactor);
+                    Assert.AreEqual(2, startOfFrame.Components[0].HFactor);         // SRAW
                     Assert.AreEqual(1, startOfFrame.Components[0].VFactor);
                     Assert.AreEqual(0, startOfFrame.Components[0].TableId);
 

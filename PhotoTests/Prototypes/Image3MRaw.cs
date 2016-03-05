@@ -98,7 +98,7 @@ namespace PhotoTests.Prototypes
                     // 
                     Assert.AreEqual(1, startOfFrame.Components[0].ComponentId);
                     Assert.AreEqual(2, startOfFrame.Components[0].HFactor);
-                    Assert.AreEqual(2, startOfFrame.Components[0].VFactor);
+                    Assert.AreEqual(2, startOfFrame.Components[0].VFactor);     // MRAW
                     Assert.AreEqual(0, startOfFrame.Components[0].TableId);
 
                     Assert.AreEqual(2, startOfFrame.Components[1].ComponentId);
