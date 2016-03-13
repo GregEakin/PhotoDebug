@@ -76,7 +76,7 @@ namespace PhotoTests.Prototypes
                     var imageFileEntryC6DC = image.Entries.Single(e => e.TagId == 0xC6DC && e.TagType == 4);
                     // Assert.AreEqual(72020u, imageFileEntry011C.ValuePointer);
                     Assert.AreEqual(4u, imageFileEntryC6DC.NumberOfValue);
-                    var stuff = RawImage.ReadULongs(binaryReader, imageFileEntryC6DC);
+                    var stuff = RawImage.ReadUInts(binaryReader, imageFileEntryC6DC);
                     CollectionAssert.AreEqual(new[] { 577u, 386u, 14u, 9u }, stuff);
 
                     var outFile = Path.ChangeExtension(fileName, ".png");

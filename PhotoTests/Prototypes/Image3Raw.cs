@@ -30,109 +30,108 @@ namespace PhotoTests.Prototypes
                 var rawImage = new RawImage(binaryReader);
 
                 // Image #3 is a raw image compressed in ITU-T81 lossless JPEG
+
+                var image = rawImage.Directories.Skip(3).First();
+                Assert.AreEqual(7, image.Entries.Length);
+
+                var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;
+                Assert.AreEqual(6u, compression);
+
+                var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
+                // Assert.AreEqual(0x2D42DCu, offset);
+
+                var count = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
+                // Assert.AreEqual(0x1501476u, count);
+
+                var item3 = image.Entries.Single(e => e.TagId == 0xC5D8 && e.TagType == 4).ValuePointer;
+                Assert.AreEqual(0x1u, item3);
+
+                var item4 = image.Entries.Single(e => e.TagId == 0xC5E0 && e.TagType == 4).ValuePointer;
+                Assert.AreEqual(0x1u, item4);
+
+                // 0xC640 UShort 16-bit: [0x000119BE] (3): 1, 2960, 2960, 
+                var imageFileEntry = image.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3);
+                // Assert.AreEqual(0x000119BEu, imageFileEntry.ValuePointer);
+                Assert.AreEqual(3u, imageFileEntry.NumberOfValue);
+                var slices = RawImage.ReadUInts16(binaryReader, imageFileEntry);
+                CollectionAssert.AreEqual(new ushort[] {1, 2960, 2960}, slices);
+
+                var item6 = image.Entries.Single(e => e.TagId == 0xC6C5 && e.TagType == 4).ValuePointer;
+                Assert.AreEqual(0x1u, item6);
+
+                binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
+                var startOfImage = new StartOfImage(binaryReader, offset, count);
+
+                var startOfFrame = startOfImage.StartOfFrame;
+                Assert.AreEqual(3950u, startOfFrame.ScanLines); // = 3840 + 110
+                Assert.AreEqual(2960u, startOfFrame.SamplesPerLine); // = 5920 / 2
+                Assert.AreEqual(2, startOfFrame.Components.Length);
+                Assert.AreEqual(5920, startOfFrame.Width); // = 5760 + 160
+
+                Assert.AreEqual(2, startOfImage.HuffmanTable.Tables.Count);
+                //var table0 = startOfImage.HuffmanTable.Tables[0x00];
+                //var table1 = startOfImage.HuffmanTable.Tables[0x01];
+
+                Assert.AreEqual(14, startOfFrame.Precision); // RGGB
+                Assert.AreEqual(2, startOfFrame.Components.Length); // RGGB
+
+                Assert.AreEqual(1, startOfFrame.Components[0].ComponentId);
+                Assert.AreEqual(1, startOfFrame.Components[0].HFactor);
+                Assert.AreEqual(1, startOfFrame.Components[0].VFactor);
+                Assert.AreEqual(0, startOfFrame.Components[0].TableId);
+
+                Assert.AreEqual(2, startOfFrame.Components[1].ComponentId);
+                Assert.AreEqual(1, startOfFrame.Components[1].HFactor);
+                Assert.AreEqual(1, startOfFrame.Components[1].VFactor);
+                Assert.AreEqual(0, startOfFrame.Components[1].TableId);
+
+                // normal RAW (RGGB)
+                // RGRGRGRG...GBGBGBGB...
+                // R G R G R G 
+                // G B G B G B
+
+                var startOfScan = startOfImage.StartOfScan;
+                //DumpStartOfScan(startOfScan);
+                Assert.AreEqual(1, startOfScan.Bb1); // Start of spectral or predictor selection
+                Assert.AreEqual(0, startOfScan.Bb2); // end of spectral selection
+                Assert.AreEqual(0, startOfScan.Bb3); // successive approximation bit positions
+                Assert.AreEqual(2, startOfScan.Components.Length); // RGGB
+
+                // startOfScan.Bb1 == 1, Ss = Algroithm A
+                //     C, B, D
+                //     A, X
+
+                Assert.AreEqual(1, startOfScan.Components[0].Id);
+                Assert.AreEqual(0, startOfScan.Components[0].Dc);
+                Assert.AreEqual(0, startOfScan.Components[0].Ac); // in lossless, this value is always zero
+
+                Assert.AreEqual(2, startOfScan.Components[1].Id);
+                Assert.AreEqual(1, startOfScan.Components[1].Dc);
+                Assert.AreEqual(0, startOfScan.Components[1].Ac);
+
+                // @@ White Balance
+
+                // @@ Black Substraction
+
+                // horz sampling == 1
+                startOfImage.ImageData.Reset();
+
+                var memory = new ushort[startOfFrame.ScanLines][]; // 3950 x 5920
+                var pp = new[] {(ushort) 0x2000, (ushort) 0x2000};
+                for (var line = 0; line < startOfFrame.ScanLines; line++) // 0 .. 3950
                 {
-                    var image = rawImage.Directories.Skip(3).First();
-                    Assert.AreEqual(7, image.Entries.Length);
-
-                    var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;
-                    Assert.AreEqual(6u, compression);
-
-                    var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
-                    // Assert.AreEqual(0x2D42DCu, offset);
-
-                    var count = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
-                    // Assert.AreEqual(0x1501476u, count);
-
-                    var item3 = image.Entries.Single(e => e.TagId == 0xC5D8 && e.TagType == 4).ValuePointer;
-                    Assert.AreEqual(0x1u, item3);
-
-                    var item4 = image.Entries.Single(e => e.TagId == 0xC5E0 && e.TagType == 4).ValuePointer;
-                    Assert.AreEqual(0x1u, item4);
-
-                    // 0xC640 UShort 16-bit: [0x000119BE] (3): 1, 2960, 2960, 
-                    var imageFileEntry = image.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3);
-                    // Assert.AreEqual(0x000119BEu, imageFileEntry.ValuePointer);
-                    Assert.AreEqual(3u, imageFileEntry.NumberOfValue);
-                    var slices = RawImage.ReadUInts16(binaryReader, imageFileEntry);
-                    CollectionAssert.AreEqual(new ushort[] { 1, 2960, 2960 }, slices);
-
-                    var item6 = image.Entries.Single(e => e.TagId == 0xC6C5 && e.TagType == 4).ValuePointer;
-                    Assert.AreEqual(0x1u, item6);
-
-                    binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
-                    var startOfImage = new StartOfImage(binaryReader, offset, count);
-
-                    var startOfFrame = startOfImage.StartOfFrame;
-                    Assert.AreEqual(3950u, startOfFrame.ScanLines);      // = 3840 + 110
-                    Assert.AreEqual(2960u, startOfFrame.SamplesPerLine); // = 5920 / 2
-                    Assert.AreEqual(2, startOfFrame.Components.Length);
-                    Assert.AreEqual(5920, startOfFrame.Width);           // = 5760 + 160
-
-                    Assert.AreEqual(2, startOfImage.HuffmanTable.Tables.Count);
-                    //var table0 = startOfImage.HuffmanTable.Tables[0x00];
-                    //var table1 = startOfImage.HuffmanTable.Tables[0x01];
-
-                    Assert.AreEqual(14, startOfFrame.Precision); // RGGB
-                    Assert.AreEqual(2, startOfFrame.Components.Length); // RGGB
-
-                    Assert.AreEqual(1, startOfFrame.Components[0].ComponentId);
-                    Assert.AreEqual(1, startOfFrame.Components[0].HFactor);
-                    Assert.AreEqual(1, startOfFrame.Components[0].VFactor);
-                    Assert.AreEqual(0, startOfFrame.Components[0].TableId);
-
-                    Assert.AreEqual(2, startOfFrame.Components[1].ComponentId);
-                    Assert.AreEqual(1, startOfFrame.Components[1].HFactor);
-                    Assert.AreEqual(1, startOfFrame.Components[1].VFactor);
-                    Assert.AreEqual(0, startOfFrame.Components[1].TableId);
-
-                    // normal RAW (RGGB)
-                    // RGRGRGRG...GBGBGBGB...
-                    // R G R G R G 
-                    // G B G B G B
-
-                    var startOfScan = startOfImage.StartOfScan;
-                    //DumpStartOfScan(startOfScan);
-                    Assert.AreEqual(1, startOfScan.Bb1);    // Start of spectral or predictor selection
-                    Assert.AreEqual(0, startOfScan.Bb2);    // end of spectral selection
-                    Assert.AreEqual(0, startOfScan.Bb3);    // successive approximation bit positions
-                    Assert.AreEqual(2, startOfScan.Components.Length);   // RGGB
-
-                    // startOfScan.Bb1 == 1, Ss = Algroithm A
-                    //     C, B, D
-                    //     A, X
-
-                    Assert.AreEqual(1, startOfScan.Components[0].Id);
-                    Assert.AreEqual(0, startOfScan.Components[0].Dc);
-                    Assert.AreEqual(0, startOfScan.Components[0].Ac);   // in lossless, this value is always zero
-
-                    Assert.AreEqual(2, startOfScan.Components[1].Id);
-                    Assert.AreEqual(1, startOfScan.Components[1].Dc);
-                    Assert.AreEqual(0, startOfScan.Components[1].Ac);
-
-                    // @@ White Balance
-
-                    // @@ Black Substraction
-
-                    // horz sampling == 1
-                    startOfImage.ImageData.Reset();
-
-                    var memory = new ushort[startOfFrame.ScanLines][];          // 3950 x 5920
-                    var pp = new[] { (ushort)0x2000, (ushort)0x2000 };
-                    for (var line = 0; line < startOfFrame.ScanLines; line++) // 0 .. 3950
-                    {
-                        var diff = ReadDiffRow(startOfImage);
-                        var memory1 = ProcessDiff(diff, pp);
-                        memory[line] = memory1;
-                    }
-
-                    Assert.AreEqual(23384000, _cc);
-                    Assert.AreEqual(1, startOfImage.ImageData.DistFromEnd);
-
-                    //var outFile = Path.ChangeExtension(fileName, ".bmp");
-                    //MakeBitmap(memory, outFile, slices);
-
-                    DumpData(memory, fileName);
+                    var diff = ReadDiffRow(startOfImage);
+                    var memory1 = ProcessDiff(diff, pp);
+                    memory[line] = memory1;
                 }
+
+                Assert.AreEqual(23384000, _cc);
+                Assert.AreEqual(1, startOfImage.ImageData.DistFromEnd);
+
+                //var outFile = Path.ChangeExtension(fileName, ".bmp");
+                //MakeBitmap(memory, outFile, slices);
+
+                DumpData(memory, fileName);
             }
         }
 

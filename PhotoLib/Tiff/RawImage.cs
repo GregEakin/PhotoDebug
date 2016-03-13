@@ -171,7 +171,7 @@ namespace PhotoLib.Tiff
             return retval;
         }
 
-        public static UInt32[] ReadULongs(BinaryReader binaryReader, ImageFileEntry imageFileEntry)
+        public static UInt32[] ReadUInts(BinaryReader binaryReader, ImageFileEntry imageFileEntry)
         {
             var retval = new UInt32[imageFileEntry.NumberOfValue];
 
