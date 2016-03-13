@@ -4,6 +4,7 @@ using PhotoLib.Jpeg.JpegTags;
 using PhotoLib.Tiff;
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 
@@ -127,9 +128,46 @@ namespace PhotoTests.Prototypes
                     Assert.AreEqual(23384000, _cc);
                     Assert.AreEqual(1, startOfImage.ImageData.DistFromEnd);
 
-                    var outFile = Path.ChangeExtension(fileName, ".bmp");
-                    MakeBitmap(memory, outFile, slices);
+                    //var outFile = Path.ChangeExtension(fileName, ".bmp");
+                    //MakeBitmap(memory, outFile, slices);
+
+                    DumpData(memory, fileName);
                 }
+            }
+        }
+
+        private static void DumpData(ushort[][] memory, string fileName)
+        {
+            var y = memory.GetLength(0);
+            var x = memory[0].GetLength(0);
+
+            var hist = new int[128];
+            var min = ushort.MaxValue;
+            var max = ushort.MinValue;
+
+            for (var mrow = 0; mrow < y; mrow++)
+            {
+                var rdata = memory[mrow];
+                for (var mcol = 0; mcol < x; mcol++)
+                {
+                    var data = rdata[mcol];
+                    if (min > data) min = data;
+                    if (max < data) max = data;
+                    var index = data >> 7;
+                    hist[index]++;
+                }
+            }
+
+            Console.WriteLine("Min = 0x{0:X4}, Max = 0x{1:X4}", min, max);
+            for (var i = 0; i < hist.Length; i++)
+                Console.WriteLine("0x{0:X4}: {1,8}", i << 7, hist[i]);
+
+            var name = Path.ChangeExtension(fileName, ".txt");
+            using (var file = new StreamWriter(name))
+            {
+                file.WriteLine("Min = 0x{0:X4}, Max = 0x{1:X4}", min, max);
+                for (var i = 0; i < hist.Length; i++)
+                    file.WriteLine("0x{0:X4}: {1,8}", i << 7, hist[i]);
             }
         }
 
@@ -187,32 +225,6 @@ namespace PhotoTests.Prototypes
             var y = memory.GetLength(0);
             var x = memory[0].GetLength(0);
 
-            //using (var bitmap = new Bitmap(x, y, PixelFormat.Format24bppRgb))
-            //{
-            //    var size = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-            //    var data = bitmap.LockBits(size, ImageLockMode.ReadWrite, bitmap.PixelFormat);
-            //    for (var mrow = 0; mrow < y; mrow++)
-            //    {
-            //        var rdata = memory[mrow];
-            //        for (var mcol = 0; mcol < x; mcol++)
-            //        {
-            //            var index = mrow * x + mcol;
-            //            var slice = index / (sizes[1] * y);
-            //            if (slice >= sizes[0])
-            //                slice = sizes[0];
-            //            index -= slice * (sizes[1] * y);
-            //            var brow = index / sizes[slice < sizes[0] ? 1 : 2];
-            //            var bcol = index % sizes[slice < sizes[0] ? 1 : 2] + slice * sizes[1];
-
-            //            var val = rdata[mcol];
-            //            PixelSet(scan0, brow, bcol, (short)val);
-            //        }
-            //    }
-
-            //    bitmap.UnlockBits(data);
-            //    bitmap.Save(folder + "0L2A8897-3.bmp");
-            //}
-
             using (var bitmap = new Bitmap(x, y))
             {
                 for (var mrow = 0; mrow < y; mrow++)
@@ -234,6 +246,39 @@ namespace PhotoTests.Prototypes
                     }
                 }
 
+                bitmap.Save(folder + "0L2A8897-3.bmp");
+            }
+        }
+
+        private static void MakeBitmapLockBits(ushort[][] memory, string folder, ushort[] slices)
+        {
+            var y = memory.GetLength(0);
+            var x = memory[0].GetLength(0);
+
+            using (var bitmap = new Bitmap(x, y, PixelFormat.Format24bppRgb))
+            {
+                var size = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+                var data = bitmap.LockBits(size, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+                for (var mrow = 0; mrow < y; mrow++)
+                {
+                    var rdata = memory[mrow];
+                    for (var mcol = 0; mcol < x; mcol++)
+                    {
+                        var index = mrow * x + mcol;
+                        var slice = index / (slices[1] * y);
+                        if (slice >= slices[0])
+                            slice = slices[0];
+                        var offset = index - slice * slices[1] * y;
+                        var page = slice < slices[0] ? 1 : 2;
+                        var brow = offset / slices[page];
+                        var bcol = offset % slices[page] + slice * slices[1];
+
+                        var val = rdata[mcol];
+                        // PixelSet(scan0, brow, bcol, (short)val);
+                    }
+                }
+
+                bitmap.UnlockBits(data);
                 bitmap.Save(folder + "0L2A8897-3.bmp");
             }
         }
