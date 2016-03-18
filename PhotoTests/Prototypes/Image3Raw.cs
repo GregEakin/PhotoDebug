@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace PhotoTests.Prototypes
 {
@@ -35,7 +36,7 @@ namespace PhotoTests.Prototypes
                 Assert.AreEqual(7, image.Entries.Length);
 
                 var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;
-                Assert.AreEqual(6u, compression);
+                Assert.AreEqual(6u, compression);       // 6 == old jpeg
 
                 var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
                 // Assert.AreEqual(0x2D42DCu, offset);
@@ -54,7 +55,7 @@ namespace PhotoTests.Prototypes
                 // Assert.AreEqual(0x000119BEu, imageFileEntry.ValuePointer);
                 Assert.AreEqual(3u, imageFileEntry.NumberOfValue);
                 var slices = RawImage.ReadUInts16(binaryReader, imageFileEntry);
-                CollectionAssert.AreEqual(new ushort[] {1, 2960, 2960}, slices);
+                CollectionAssert.AreEqual(new ushort[] { 1, 2960, 2960 }, slices);
 
                 var item6 = image.Entries.Single(e => e.TagId == 0xC6C5 && e.TagType == 4).ValuePointer;
                 Assert.AreEqual(0x1u, item6);
@@ -84,6 +85,8 @@ namespace PhotoTests.Prototypes
                 Assert.AreEqual(1, startOfFrame.Components[1].HFactor);
                 Assert.AreEqual(1, startOfFrame.Components[1].VFactor);
                 Assert.AreEqual(0, startOfFrame.Components[1].TableId);
+
+                Assert.AreEqual(2, startOfFrame.Components.Sum(component => component.HFactor * component.VFactor));
 
                 // normal RAW (RGGB)
                 // RGRGRGRG...GBGBGBGB...
@@ -117,7 +120,7 @@ namespace PhotoTests.Prototypes
                 startOfImage.ImageData.Reset();
 
                 var memory = new ushort[startOfFrame.ScanLines][]; // 3950 x 5920
-                var pp = new[] {(ushort) 0x2000, (ushort) 0x2000};
+                var pp = new[] { (ushort)0x2000, (ushort)0x2000 };
                 for (var line = 0; line < startOfFrame.ScanLines; line++) // 0 .. 3950
                 {
                     var diff = ReadDiffRow(startOfImage);
@@ -128,8 +131,8 @@ namespace PhotoTests.Prototypes
                 Assert.AreEqual(23384000, _cc);
                 Assert.AreEqual(1, startOfImage.ImageData.DistFromEnd);
 
-                //var outFile = Path.ChangeExtension(fileName, ".bmp");
-                //MakeBitmap(memory, outFile, slices);
+                var outFile = Path.ChangeExtension(fileName, ".2.png");
+                MakeBitmapLockBits(memory, outFile, slices);
 
                 DumpData(memory, fileName);
             }
@@ -173,12 +176,12 @@ namespace PhotoTests.Prototypes
         private static short[] ReadDiffRow(StartOfImage startOfImage)
         {
             var startOfFrame = startOfImage.StartOfFrame;
-            int samplesPerLine = startOfFrame.SamplesPerLine;
+            var width = startOfFrame.Width;
             var table0 = startOfImage.HuffmanTable.Tables[0x00];
             var table1 = startOfImage.HuffmanTable.Tables[0x01];
 
-            var diff = new short[2 * samplesPerLine];
-            for (var x = 0; x < samplesPerLine; x++)
+            var diff = new short[width];
+            for (var x = 0; x < width / 2; x++)
             {
                 diff[2 * x + 0] = ProcessColor(startOfImage, table0);
                 diff[2 * x + 1] = ProcessColor(startOfImage, table1);
@@ -245,7 +248,7 @@ namespace PhotoTests.Prototypes
                     }
                 }
 
-                bitmap.Save(folder + "0L2A8897-3.bmp");
+                bitmap.Save(folder + "0L2A8897-3b.bmp");
             }
         }
 
@@ -254,31 +257,47 @@ namespace PhotoTests.Prototypes
             var y = memory.GetLength(0);
             var x = memory[0].GetLength(0);
 
-            using (var bitmap = new Bitmap(x, y, PixelFormat.Format24bppRgb))
+            using (var bitmap = new Bitmap(x, y, PixelFormat.Format48bppRgb))
             {
                 var size = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
                 var data = bitmap.LockBits(size, ImageLockMode.ReadWrite, bitmap.PixelFormat);
-                for (var mrow = 0; mrow < y; mrow++)
+                try
                 {
-                    var rdata = memory[mrow];
-                    for (var mcol = 0; mcol < x; mcol++)
-                    {
-                        var index = mrow * x + mcol;
-                        var slice = index / (slices[1] * y);
-                        if (slice >= slices[0])
-                            slice = slices[0];
-                        var offset = index - slice * slices[1] * y;
-                        var page = slice < slices[0] ? 1 : 2;
-                        var brow = offset / slices[page];
-                        var bcol = offset % slices[page] + slice * slices[1];
+                    Assert.AreEqual(6 * 5920, data.Stride);  // 6 bytes * 8 bits == 48 bits per pixel
 
-                        var val = rdata[mcol];
-                        // PixelSet(scan0, brow, bcol, (short)val);
+                    for (var mrow = 0; mrow < y; mrow++)
+                    {
+                        var rdata = memory[mrow];
+                        for (var mcol = 0; mcol < x; mcol++)
+                        {
+                            var index = mrow * x + mcol;
+                            var slice = index / (slices[1] * y);
+                            if (slice > slices[0])
+                                slice = slices[0];
+                            var offset = index - slice * slices[1] * y;
+                            var page = slice < slices[0] ? 1 : 2;
+                            var brow = offset / slices[page];
+                            var bcol = offset % slices[page] + slice * slices[1];
+
+                            var val = rdata[mcol];
+
+                            var scan0 = data.Scan0 + data.Stride * brow;
+                            if (brow % 2 == 0 && bcol % 2 == 0)
+                                Marshal.WriteInt16(scan0, 6 * bcol + 4, (short)val);
+                            else if ((brow % 2 == 1 && bcol % 2 == 0) || (brow % 2 == 0 && bcol % 2 == 1))
+                                Marshal.WriteInt16(scan0, 6 * bcol + 2, (short)val);
+                            else if (brow % 2 == 1 && bcol % 2 == 1)
+                                Marshal.WriteInt16(scan0, 6 * bcol + 0, (short)val);
+                        }
                     }
+
+                }
+                finally
+                {
+                    bitmap.UnlockBits(data);
                 }
 
-                bitmap.UnlockBits(data);
-                bitmap.Save(folder + "0L2A8897-3.bmp");
+                bitmap.Save(folder + "0L2A8897-3.png");
             }
         }
 

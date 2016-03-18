@@ -27,61 +27,62 @@ namespace PhotoTests.Prototypes
                 var rawImage = new RawImage(binaryReader);
 
                 // Image #2 is RGB, 16 bits per color, little endian.
-                // Length = 3 * 16 bits * nb pixels
-                {
-                    var image = rawImage.Directories.Skip(2).First();
-                    Assert.AreEqual(13, image.Entries.Length);
 
-                    var imageWidth = image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == 3).ValuePointer;
-                    Assert.AreEqual(592u, imageWidth);
+                var image = rawImage.Directories.Skip(2).First();
+                Assert.AreEqual(13, image.Entries.Length);
 
-                    var imageHeight = image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == 3).ValuePointer;
-                    Assert.AreEqual(395u, imageHeight);
+                var imageWidth = image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == 3).ValuePointer;
+                Assert.AreEqual(592u, imageWidth);
 
-                    var imageFileEntry0102 = image.Entries.Single(e => e.TagId == 0x0102 && e.TagType == 3);
-                    Assert.AreEqual(72014u, imageFileEntry0102.ValuePointer);
-                    Assert.AreEqual(3u, imageFileEntry0102.NumberOfValue);
-                    var bitsPerSample = RawImage.ReadUInts16(binaryReader, imageFileEntry0102);
-                    CollectionAssert.AreEqual(new[] { (ushort)16, (ushort)16, (ushort)16 }, bitsPerSample);
+                var imageHeight = image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == 3).ValuePointer;
+                Assert.AreEqual(395u, imageHeight);
 
-                    var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;
-                    Assert.AreEqual(1u, compression);
+                var imageFileEntry0102 = image.Entries.Single(e => e.TagId == 0x0102 && e.TagType == 3);
+                // Assert.AreEqual(72014u, imageFileEntry0102.ValuePointer);
+                // Assert.AreEqual(3u, imageFileEntry0102.NumberOfValue);
+                var bitsPerSample = RawImage.ReadUInts16(binaryReader, imageFileEntry0102);
+                CollectionAssert.AreEqual(new[] { (ushort)16, (ushort)16, (ushort)16 }, bitsPerSample);
 
-                    var photometricInterpretation = image.Entries.Single(e => e.TagId == 0x0106 && e.TagType == 3).ValuePointer;
-                    Assert.AreEqual(2u, photometricInterpretation);
+                var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;
+                Assert.AreEqual(1u, compression);               // 1 == uncompressed
 
-                    var stripOffset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
-                    // Assert.AreEqual(1229532u, stripOffset);
+                var photometricInterpretation =
+                    image.Entries.Single(e => e.TagId == 0x0106 && e.TagType == 3).ValuePointer;
+                Assert.AreEqual(2u, photometricInterpretation); // 2 == RGB
 
-                    var samplesPerPixel = image.Entries.Single(e => e.TagId == 0x0115 && e.TagType == 3).ValuePointer;
-                    Assert.AreEqual(3u, samplesPerPixel);
+                var stripOffset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
+                // Assert.AreEqual(1229532u, stripOffset);
 
-                    var rowsPerStrip = image.Entries.Single(e => e.TagId == 0x0116 && e.TagType == 3).ValuePointer;
-                    Assert.AreEqual(395u, rowsPerStrip);
+                var samplesPerPixel = image.Entries.Single(e => e.TagId == 0x0115 && e.TagType == 3).ValuePointer;
+                Assert.AreEqual(3u, samplesPerPixel);
 
-                    var stripByteCounts = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
-                    Assert.AreEqual(1403040u, stripByteCounts);
-                    Assert.AreEqual(stripByteCounts, imageWidth * imageHeight * samplesPerPixel * 2);
+                var rowsPerStrip = image.Entries.Single(e => e.TagId == 0x0116 && e.TagType == 3).ValuePointer;
+                Assert.AreEqual(395u, rowsPerStrip);
 
-                    var planarConfiguration = image.Entries.Single(e => e.TagId == 0x011C && e.TagType == 3).ValuePointer;
-                    Assert.AreEqual(1u, planarConfiguration);
+                var stripByteCounts = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
+                Assert.AreEqual(1403040u, stripByteCounts);
+                Assert.AreEqual(stripByteCounts, imageWidth * imageHeight * samplesPerPixel * 2);
 
-                    // unknown
-                    var table1 = image.Entries.Single(e => e.TagId == 0xC5D9 && e.TagType == 4).ValuePointer;
-                    Assert.AreEqual(2u, table1);
+                var planarConfiguration = image.Entries.Single(e => e.TagId == 0x011C && e.TagType == 3).ValuePointer;
+                Assert.AreEqual(1u, planarConfiguration);       // 1 == chunky
 
-                    var table2 = image.Entries.Single(e => e.TagId == 0xC6C5 && e.TagType == 4).ValuePointer;
-                    Assert.AreEqual(3u, table2);
+                // unknown
+                var table1 = image.Entries.Single(e => e.TagId == 0xC5D9 && e.TagType == 4).ValuePointer;
+                Assert.AreEqual(2u, table1);
 
-                    var imageFileEntryC6DC = image.Entries.Single(e => e.TagId == 0xC6DC && e.TagType == 4);
-                    // Assert.AreEqual(72020u, imageFileEntry011C.ValuePointer);
-                    Assert.AreEqual(4u, imageFileEntryC6DC.NumberOfValue);
-                    var stuff = RawImage.ReadUInts(binaryReader, imageFileEntryC6DC);
-                    CollectionAssert.AreEqual(new[] { 577u, 386u, 14u, 9u }, stuff);
+                var table2 = image.Entries.Single(e => e.TagId == 0xC6C5 && e.TagType == 4).ValuePointer;
+                Assert.AreEqual(3u, table2);
 
-                    var outFile = Path.ChangeExtension(fileName, ".png");
-                    CreateBitmap(binaryReader, outFile, stripOffset, imageWidth, imageHeight);
-                }
+                var imageFileEntryC6DC = image.Entries.Single(e => e.TagId == 0xC6DC && e.TagType == 4);
+                // Assert.AreEqual(72020u, imageFileEntry011C.ValuePointer);
+                // Assert.AreEqual(4u, imageFileEntryC6DC.NumberOfValue);
+                var stuff = RawImage.ReadUInts(binaryReader, imageFileEntryC6DC);
+                CollectionAssert.AreEqual(new[] { 577u, 386u, 14u, 9u }, stuff);
+                Assert.AreEqual(imageWidth, stuff[0] + stuff[2] + 1);
+                Assert.AreEqual(imageHeight, stuff[1] + stuff[3]);
+
+                var outFile = Path.ChangeExtension(fileName, ".png");
+                CreateBitmap(binaryReader, outFile, stripOffset, imageWidth, imageHeight);
             }
         }
 
@@ -93,41 +94,49 @@ namespace PhotoTests.Prototypes
             {
                 var size = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
                 var data = bitmap.LockBits(size, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+                try
+                {
+                    Assert.AreEqual((int)(6 * width), data.Stride);
 
-                for (var y = 0; y < height; y++)
-                    for (var x = 0; x < width; x++)
+                    for (var y = 0; y < height; y++)
                     {
-                        var scan0 = data.Scan0 + data.Stride * y + x;
+                        var scan0 = data.Scan0 + data.Stride * y;
+                        for (var x = 0; x < width; x++)
+                        {
+                            var r = CheckValue(binaryReader.ReadUInt16());
+                            Marshal.WriteInt16(scan0, 6 * x + 4, (short)r);
 
-                        var c = binaryReader.ReadUInt16();
-                        PixelSet(scan0, x, y, (short)c);
+                            var g = CheckValue(binaryReader.ReadUInt16());
+                            Marshal.WriteInt16(scan0, 6 * x + 2, (short)g);
+
+                            var b = CheckValue(binaryReader.ReadUInt16());
+                            Marshal.WriteInt16(scan0, 6 * x + 0, (short)b);
+                        }
                     }
+                }
+                finally
+                {
+                    bitmap.UnlockBits(data);
+                }
 
-                bitmap.UnlockBits(data);
                 bitmap.Save(outFile);
             }
+
+            Console.WriteLine("Min = 0x{0:X4}, Max = 0x{1:X4}", min, max);
         }
 
-        private static void PixelSet(IntPtr scan0, int row, int col, short value)
+        private static ushort min = ushort.MaxValue;
+        private static ushort max = ushort.MinValue;
+
+        private static ushort CheckValue(ushort p0)
         {
-            if (row % 2 == 0 && col % 2 == 0)
-            {
-                Marshal.WriteInt16(scan0, 3 * col + 0, 0);
-                Marshal.WriteInt16(scan0, 3 * col + 1, 0);
-                Marshal.WriteInt16(scan0, 3 * col + 2, value);
-            }
-            else if ((row % 2 == 1 && col % 2 == 0) || (row % 2 == 0 && col % 2 == 1))
-            {
-                Marshal.WriteInt16(scan0, 3 * col + 0, 0);
-                Marshal.WriteInt16(scan0, 3 * col + 1, value);
-                Marshal.WriteInt16(scan0, 3 * col + 2, 0);
-            }
-            else if (row % 2 == 1 && col % 2 == 1)
-            {
-                Marshal.WriteInt16(scan0, 3 * col + 0, value);
-                Marshal.WriteInt16(scan0, 3 * col + 1, 0);
-                Marshal.WriteInt16(scan0, 3 * col + 2, 0);
-            }
+            if (min > p0) min = p0;
+            if (max < p0) max = p0;
+
+            // Min = 0x07C4, Max = 0x38F6
+            var d0 = ((double)p0 - 0x07C4) / (0x38F6 - 0x07c4) * 0xFFFF;
+
+            return (ushort)d0;
         }
     }
 }

@@ -40,8 +40,8 @@ namespace PhotoTests.Prototypes
                 Assert.AreEqual(395u, imageHeight);
 
                 var imageFileEntry0102 = image.Entries.Single(e => e.TagId == 0x0102 && e.TagType == 3);
-                Assert.AreEqual(72014u, imageFileEntry0102.ValuePointer);
-                Assert.AreEqual(3u, imageFileEntry0102.NumberOfValue);
+                // Assert.AreEqual(72014u, imageFileEntry0102.ValuePointer);
+                // Assert.AreEqual(3u, imageFileEntry0102.NumberOfValue);
                 var bitsPerSample = RawImage.ReadUInts16(binaryReader, imageFileEntry0102);
                 CollectionAssert.AreEqual(new ushort[] { 16, 16, 16 }, bitsPerSample);
 
@@ -76,7 +76,7 @@ namespace PhotoTests.Prototypes
 
                 var imageFileEntryC6DC = image.Entries.Single(e => e.TagId == 0xC6DC && e.TagType == 4);
                 // Assert.AreEqual(72020u, imageFileEntry011C.ValuePointer);
-                Assert.AreEqual(4u, imageFileEntryC6DC.NumberOfValue);
+                // Assert.AreEqual(4u, imageFileEntryC6DC.NumberOfValue);
                 var stuff = RawImage.ReadUInts(binaryReader, imageFileEntryC6DC);
                 CollectionAssert.AreEqual(new[] { 577u, 386u, 14u, 9u }, stuff);
             }
