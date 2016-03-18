@@ -132,7 +132,7 @@ namespace PhotoTests.Prototypes
                 Assert.AreEqual(1, startOfImage.ImageData.DistFromEnd);
 
                 var outFile = Path.ChangeExtension(fileName, ".2.png");
-                MakeBitmapLockBits(memory, outFile, slices);
+                MakeBitmap(memory, outFile, slices);
 
                 DumpData(memory, fileName);
             }
@@ -177,14 +177,12 @@ namespace PhotoTests.Prototypes
         {
             var startOfFrame = startOfImage.StartOfFrame;
             var width = startOfFrame.Width;
-            var table0 = startOfImage.HuffmanTable.Tables[0x00];
-            var table1 = startOfImage.HuffmanTable.Tables[0x01];
 
             var diff = new short[width];
             for (var x = 0; x < width / 2; x++)
             {
-                diff[2 * x + 0] = ProcessColor(startOfImage, table0);
-                diff[2 * x + 1] = ProcessColor(startOfImage, table1);
+                diff[2 * x + 0] = ProcessColor(startOfImage, startOfImage.HuffmanTable.Tables[0x00]);
+                diff[2 * x + 1] = ProcessColor(startOfImage, startOfImage.HuffmanTable.Tables[0x01]);
 
                 _cc += 2;
             }
@@ -223,36 +221,6 @@ namespace PhotoTests.Prototypes
         }
 
         private static void MakeBitmap(ushort[][] memory, string folder, ushort[] slices)
-        {
-            var y = memory.GetLength(0);
-            var x = memory[0].GetLength(0);
-
-            using (var bitmap = new Bitmap(x, y))
-            {
-                for (var mrow = 0; mrow < y; mrow++)
-                {
-                    var rdata = memory[mrow];
-                    for (var mcol = 0; mcol < x; mcol++)
-                    {
-                        var index = mrow * x + mcol;
-                        var slice = index / (slices[1] * y);
-                        if (slice > slices[0])
-                            slice = slices[0];
-                        var offset = index - slice * slices[1] * y;
-                        var page = slice < slices[0] ? 1 : 2;
-                        var brow = offset / slices[page];
-                        var bcol = offset % slices[page] + slice * slices[1];
-
-                        var val = rdata[mcol];
-                        PixelSet(bitmap, brow, bcol, val);
-                    }
-                }
-
-                bitmap.Save(folder + "0L2A8897-3b.bmp");
-            }
-        }
-
-        private static void MakeBitmapLockBits(ushort[][] memory, string folder, ushort[] slices)
         {
             var y = memory.GetLength(0);
             var x = memory[0].GetLength(0);
@@ -298,6 +266,36 @@ namespace PhotoTests.Prototypes
                 }
 
                 bitmap.Save(folder + "0L2A8897-3.png");
+            }
+        }
+
+        private static void MakeBitmap16Bit(ushort[][] memory, string folder, ushort[] slices)
+        {
+            var y = memory.GetLength(0);
+            var x = memory[0].GetLength(0);
+
+            using (var bitmap = new Bitmap(x, y))
+            {
+                for (var mrow = 0; mrow < y; mrow++)
+                {
+                    var rdata = memory[mrow];
+                    for (var mcol = 0; mcol < x; mcol++)
+                    {
+                        var index = mrow * x + mcol;
+                        var slice = index / (slices[1] * y);
+                        if (slice > slices[0])
+                            slice = slices[0];
+                        var offset = index - slice * slices[1] * y;
+                        var page = slice < slices[0] ? 1 : 2;
+                        var brow = offset / slices[page];
+                        var bcol = offset % slices[page] + slice * slices[1];
+
+                        var val = rdata[mcol];
+                        PixelSet(bitmap, brow, bcol, val);
+                    }
+                }
+
+                bitmap.Save(folder + "0L2A8897-3b.bmp");
             }
         }
 

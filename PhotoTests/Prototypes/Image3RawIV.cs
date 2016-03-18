@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -133,10 +134,11 @@ namespace PhotoTests.Prototypes
                 try
                 {
                     Assert.AreEqual(6 * width, data.Stride);  // 6 bytes * 8 bits == 48 bits per pixel
+                    var pp = new[] { (ushort)0x2000, (ushort)0x2000 };
 
                     for (var slice = 0; slice < slices[0]; slice++) // 0..5
-                        ProcessSlice(startOfImage, slice, slices[1], data);
-                    ProcessSlice(startOfImage, slices[0], slices[2], data);
+                        ProcessSlice(startOfImage, slice, slices[1], data, pp);
+                    ProcessSlice(startOfImage, slices[0], slices[2], data, pp);
                 }
                 finally
                 {
@@ -147,40 +149,34 @@ namespace PhotoTests.Prototypes
             }
         }
 
-        private static readonly ushort[] pp = new[] { (ushort)0x2000, (ushort)0x2000 };
-
-        private static void ProcessSlice(StartOfImage startOfImage, int slice, int width, BitmapData data)
+        private static void ProcessSlice(StartOfImage startOfImage, int slice, int width, BitmapData data, ushort[] pp)
         {
-            var table0 = startOfImage.HuffmanTable.Tables[0x00];
-            var table1 = startOfImage.HuffmanTable.Tables[0x01];
-
             var startOfFrame = startOfImage.StartOfFrame;
             var scanLines = startOfFrame.ScanLines;
+            var memory = new ushort[2];
+
             for (var line = 0; line < scanLines; line++)
             {
                 // 6 bytes * 8 bits == 48 bits per pixel
                 // 3 = 6 bytes * samplesPerLine / (slices[0] * slices[1] + slices[2]);
                 var scan0 = data.Scan0 + data.Stride * line + slice * width * 6;
-                var memory = new ushort[2];
 
                 // read two shorts, for two pixels
                 for (var col = 0; col < width / 2; col++)
                 {
                     var diff = new DiffBuf
                     {
-                        Y1 = ProcessColor(startOfImage, table0),
-                        Y2 = ProcessColor(startOfImage, table1),
+                        Y1 = ProcessColor(startOfImage, startOfImage.HuffmanTable.Tables[0x00]),
+                        Y2 = ProcessColor(startOfImage, startOfImage.HuffmanTable.Tables[0x01]),
                     };
 
-                    if (slice == 0 && line % 2 == 0 && col == 0)
+                    if (line % 2 == 0 && col == 0)
                     {
-                        var pred1 = pp[0];
                         pp[0] += (ushort)diff.Y1;
-                        memory[0] = (ushort)(pred1 + diff.Y1);
+                        memory[0] = pp[0];
 
-                        var pred2 = pp[1];
                         pp[1] += (ushort)diff.Y2;
-                        memory[1] = (ushort)(pred2 + diff.Y2);
+                        memory[1] = pp[1];
                     }
                     else
                     {
