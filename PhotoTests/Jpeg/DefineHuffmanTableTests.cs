@@ -30,8 +30,8 @@ namespace PhotoTests.Jpeg
         {
             var badData = new byte[] { 0x00, 0x00 };
             using (var memory = new MemoryStream(badData))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
             }
         }
@@ -42,8 +42,8 @@ namespace PhotoTests.Jpeg
         {
             var badData = new byte[] { 0xFF, 0x00 };
             using (var memory = new MemoryStream(badData))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
             }
         }
@@ -52,8 +52,8 @@ namespace PhotoTests.Jpeg
         public void Count()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
                 Assert.AreEqual(2, huffmanTable.Tables.Count());
             }
@@ -63,8 +63,8 @@ namespace PhotoTests.Jpeg
         public void DataA1()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
                 var expected = new byte[] { 0x00, 0x01, 0x04, 0x02, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                 CollectionAssert.AreEqual(expected, huffmanTable.Tables.First().Value.Data1);
@@ -75,8 +75,8 @@ namespace PhotoTests.Jpeg
         public void DataA2()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
                 var expected = new byte[] { 0x06, 0x04, 0x08, 0x05, 0x07, 0x03, 0x09, 0x00, 0x0A, 0x02, 0x01, 0x0C, 0x0B, 0x0D, 0x0E };
                 CollectionAssert.AreEqual(expected, huffmanTable.Tables.First().Value.Data2);
@@ -87,8 +87,8 @@ namespace PhotoTests.Jpeg
         public void DataB1()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
                 var expected = new byte[] { 0x00, 0x01, 0x04, 0x02, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                 CollectionAssert.AreEqual(expected, huffmanTable.Tables.Skip(1).Single().Value.Data1);
@@ -99,8 +99,8 @@ namespace PhotoTests.Jpeg
         public void DataB2()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
                 var expected = new byte[] { 0x06, 0x04, 0x08, 0x05, 0x07, 0x03, 0x09, 0x00, 0x0A, 0x02, 0x01, 0x0C, 0x0B, 0x0D, 0x0E };
                 CollectionAssert.AreEqual(expected, huffmanTable.Tables.Skip(1).Single().Value.Data2);
@@ -111,8 +111,8 @@ namespace PhotoTests.Jpeg
         public void Length()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
                 Assert.AreEqual(0x42, huffmanTable.Length);
             }
@@ -125,8 +125,8 @@ namespace PhotoTests.Jpeg
             var badData = new byte[] { 0xFF, 0xC4, 0x00, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
             using (var memory = new MemoryStream(badData))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
             }
         }
@@ -142,8 +142,8 @@ namespace PhotoTests.Jpeg
                 };
 
             using (var memory = new MemoryStream(badData))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
             }
         }
@@ -152,8 +152,8 @@ namespace PhotoTests.Jpeg
         public void Mark()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
                 Assert.AreEqual(0xFF, huffmanTable.Mark);
             }
@@ -166,8 +166,8 @@ namespace PhotoTests.Jpeg
             var badData = new byte[] { 0xFF, 0xC4, 0x00, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
             using (var memory = new MemoryStream(badData))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
             }
         }
@@ -183,8 +183,8 @@ namespace PhotoTests.Jpeg
                 };
 
             using (var memory = new MemoryStream(badData))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
             }
         }
@@ -193,8 +193,8 @@ namespace PhotoTests.Jpeg
         public void Tag()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var huffmanTable = new DefineHuffmanTable(reader);
                 Assert.AreEqual(0xC4, huffmanTable.Tag);
             }

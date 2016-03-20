@@ -32,8 +32,8 @@ namespace PhotoTests.Canon7D
         public void RawImageDumpData()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
                 CollectionAssert.AreEqual(new byte[] { 0x49, 0x49 }, rawImage.Header.ByteOrder);
                 Assert.AreEqual(0x002A, rawImage.Header.TiffMagic);
@@ -51,14 +51,15 @@ namespace PhotoTests.Canon7D
             // 2 Sensor Height                   : 3516
 
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 var directory = rawImage.Directories.Last();
                 var address = directory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
                 var length = directory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
-                var strips = directory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
+                var strips = directory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer;
+                // TIF_CR2_SLICE
 
                 binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
                 var x = binaryReader.ReadUInt16();
@@ -82,8 +83,8 @@ namespace PhotoTests.Canon7D
         public void Bits()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 var directory = rawImage.Directories.Last();
@@ -106,8 +107,8 @@ namespace PhotoTests.Canon7D
         public void Colors()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 var directory = rawImage.Directories.Last();
@@ -121,8 +122,8 @@ namespace PhotoTests.Canon7D
                 Assert.AreEqual(4, lossless.Components.Length); // clrs
                 foreach (var component in lossless.Components)
                 {
-                    Assert.AreEqual(1, component.HFactor);  // sraw
-                    Assert.AreEqual(1, component.VFactor);  // sraw
+                    Assert.AreEqual(1, component.HFactor); // sraw
+                    Assert.AreEqual(1, component.VFactor); // sraw
                 }
 
                 Assert.AreEqual(4, lossless.Components.Sum(comp => comp.HFactor * comp.VFactor));
@@ -133,8 +134,8 @@ namespace PhotoTests.Canon7D
         public void PredictorSelectionValue()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 var directory = rawImage.Directories.Last();
@@ -143,7 +144,7 @@ namespace PhotoTests.Canon7D
 
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
-                Assert.AreEqual(1, startOfImage.StartOfScan.Bb1);   // Do nothing
+                Assert.AreEqual(1, startOfImage.StartOfScan.Bb1); // Do nothing
             }
         }
 
@@ -154,8 +155,8 @@ namespace PhotoTests.Canon7D
             // 2 Sensor Height                   : 3516
 
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 var directory = rawImage.Directories.Last();
@@ -190,8 +191,8 @@ namespace PhotoTests.Canon7D
         public void TestMethod6()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 var imageFileDirectory = rawImage.Directories.Last();
@@ -227,7 +228,7 @@ namespace PhotoTests.Canon7D
                 Assert.AreEqual(1340, lossless.SamplesPerLine);
                 Assert.AreEqual(3516, lossless.ScanLines);
 
-                Assert.AreEqual(5360, lossless.Width);  // Sensor width (bits)
+                Assert.AreEqual(5360, lossless.Width); // Sensor width (bits)
                 Assert.AreEqual(5360, lossless.SamplesPerLine * lossless.Components.Length);
                 Assert.AreEqual(5360, x * y + z);
 

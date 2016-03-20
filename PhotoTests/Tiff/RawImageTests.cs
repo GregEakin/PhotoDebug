@@ -19,8 +19,8 @@
                     0x49, 0x49, 0x2A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x43, 0x52, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00
                 };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var rawImage = new RawImage(reader);
                 var cr2Header = rawImage.Header;
                 Assert.AreEqual(0x5243, cr2Header.CR2Magic);
@@ -36,8 +36,8 @@
                     0x00, 0x00, 0x00, 0x00, 0x00
                 };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var rawImage = new RawImage(reader);
                 var directory = rawImage.Directories.First();
                 Assert.AreEqual(0, directory.Entries.Length);
@@ -55,8 +55,8 @@
                     0x00, 0x10, 0x00, 0x00, 0x00
                 };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var rawImage = new RawImage(reader);
                 var directory = rawImage.Directories.First();
                 Assert.AreEqual(0, directory.Entries.Length);

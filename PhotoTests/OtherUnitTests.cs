@@ -25,9 +25,8 @@ namespace PhotoTests
             const string FileName2 = Directory + "huff_simple0.jpg";
 
             using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
-
                 binaryReader.BaseStream.Seek(0x000000D0u, SeekOrigin.Begin);
                 var huffmanTable = new DefineHuffmanTable(binaryReader);
                 Assert.AreEqual(0xFF, huffmanTable.Mark);
@@ -44,8 +43,8 @@ namespace PhotoTests
             const string FileName2 = Directory + "IMAG0086.jpg";
 
             using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var startOfImage = new StartOfImage(binaryReader, 0x00u, (uint)fileStream.Length);
                 Assert.AreEqual(0xFF, startOfImage.Mark);
                 Assert.AreEqual(0xD8, startOfImage.Tag); // JPG_MARK_SOI
@@ -84,8 +83,8 @@ namespace PhotoTests
             const string FileName2 = Directory + "0L2A8892.CR2";
 
             using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
                 var imageFileDirectory = rawImage.Directories.Last();
 
@@ -164,8 +163,8 @@ namespace PhotoTests
         private static void ProcessFile(string fileName, string bitmap)
         {
             using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
                 var imageFileDirectory = rawImage.Directories.Last();
 
@@ -300,8 +299,8 @@ namespace PhotoTests
             const string fileName = @"..\..\Photos\5DIIIhigh.CR2";
 
             using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 var ifid0 = rawImage.Directories.First();
@@ -372,8 +371,8 @@ namespace PhotoTests
         {
             const string fileName = @"..\..\Photos\5DIIIhigh.CR2";
             using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
                 var ifid0 = rawImage.Directories.First();
                 var exif = ifid0[0x8769];
@@ -402,8 +401,8 @@ namespace PhotoTests
             const string FileName2 = Directory + "5DIIIhigh.CR2";
 
             using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 var ifd0 = rawImage.Directories.First();

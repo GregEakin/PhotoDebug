@@ -8,9 +8,8 @@
         public static void TestMethod5(string fileName)
         {
             using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
-
                 var address = 0x0L;
                 var length = fileStream.Length;
                 const int Width = 16;

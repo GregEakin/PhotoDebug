@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PhotoLib.Jpeg;
 using PhotoLib.Jpeg.JpegTags;
 using PhotoLib.Tiff;
 using System;
@@ -39,8 +38,8 @@ namespace PhotoTests.Prototypes
         private static void DumpImage3Raw(string fileName)
         {
             using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // Image #3 is a raw image compressed in ITU-T81 lossless JPEG

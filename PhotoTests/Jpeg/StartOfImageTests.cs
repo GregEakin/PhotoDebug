@@ -17,8 +17,8 @@ namespace PhotoTests.Jpeg
         {
             var data = new byte[] { 0x00, 0x00 };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var startOfImage = new StartOfImage(reader, 0x0000, (uint)data.Length);
             }
         }
@@ -29,8 +29,8 @@ namespace PhotoTests.Jpeg
         {
             var data = new byte[] { 0xFF, 0x00 };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var startOfImage = new StartOfImage(reader, 0x0000, (uint)data.Length);
             }
         }
@@ -40,8 +40,8 @@ namespace PhotoTests.Jpeg
         {
             var data = new byte[] { 0xFF, 0xD8 };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var startOfImage = new StartOfImage(reader, 0x0000, (uint)data.Length);
                 Assert.AreEqual(0xFF, startOfImage.Mark);
             }
@@ -52,8 +52,8 @@ namespace PhotoTests.Jpeg
         {
             var data = new byte[] { 0xFF, 0xD8 };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var startOfImage = new StartOfImage(reader, 0x0000, (uint)data.Length);
                 Assert.AreEqual(0xD8, startOfImage.Tag);
             }

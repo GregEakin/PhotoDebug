@@ -32,8 +32,8 @@ namespace PhotoTests.Canon5D3
         public void RawImageDumpData()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
                 CollectionAssert.AreEqual(new byte[] { 0x49, 0x49 }, rawImage.Header.ByteOrder);
                 Assert.AreEqual(0x002A, rawImage.Header.TiffMagic);
@@ -51,8 +51,8 @@ namespace PhotoTests.Canon5D3
             // 2 Sensor Height                   : 3950
 
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 var directory = rawImage.Directories.Last();
@@ -82,8 +82,8 @@ namespace PhotoTests.Canon5D3
         public void Bits()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 var directory = rawImage.Directories.Last();
@@ -106,8 +106,8 @@ namespace PhotoTests.Canon5D3
         public void Colors()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 var directory = rawImage.Directories.Last();
@@ -121,8 +121,8 @@ namespace PhotoTests.Canon5D3
                 Assert.AreEqual(2, lossless.Components.Length); // clrs
                 foreach (var component in lossless.Components)
                 {
-                    Assert.AreEqual(1, component.HFactor);  // sraw
-                    Assert.AreEqual(1, component.VFactor);  // sraw
+                    Assert.AreEqual(1, component.HFactor); // sraw
+                    Assert.AreEqual(1, component.VFactor); // sraw
                 }
 
                 Assert.AreEqual(2, lossless.Components.Sum(comp => comp.HFactor * comp.VFactor));
@@ -133,8 +133,8 @@ namespace PhotoTests.Canon5D3
         public void PredictorSelectionValue()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 var directory = rawImage.Directories.Last();
@@ -143,7 +143,7 @@ namespace PhotoTests.Canon5D3
 
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
-                Assert.AreEqual(1, startOfImage.StartOfScan.Bb1);   // Do nothing
+                Assert.AreEqual(1, startOfImage.StartOfScan.Bb1); // Do nothing
             }
         }
 
@@ -154,8 +154,8 @@ namespace PhotoTests.Canon5D3
             // 2 Sensor Height                   : 3840
 
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 var directory = rawImage.Directories.Last();
@@ -190,8 +190,8 @@ namespace PhotoTests.Canon5D3
         public void TestMethod6()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 var imageFileDirectory = rawImage.Directories.Last();
@@ -227,7 +227,7 @@ namespace PhotoTests.Canon5D3
                 Assert.AreEqual(2960, lossless.SamplesPerLine);
                 Assert.AreEqual(3950, lossless.ScanLines);
 
-                Assert.AreEqual(5920, lossless.Width);  // Sensor width (bits)
+                Assert.AreEqual(5920, lossless.Width); // Sensor width (bits)
                 Assert.AreEqual(5920, lossless.SamplesPerLine * lossless.Components.Length);
                 Assert.AreEqual(5920, x * y + z);
 
@@ -256,8 +256,8 @@ namespace PhotoTests.Canon5D3
         public void Test1()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // The first IFD contains a small RGB version of the picture (one fourth the size) compressed in Jpeg, the EXIF part, and the Makernotes part. 
@@ -280,8 +280,8 @@ namespace PhotoTests.Canon5D3
         public void Test2()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // The first IFD contains a small RGB version of the picture (one fourth the size) compressed in Jpeg, the EXIF part, and the Makernotes part. 

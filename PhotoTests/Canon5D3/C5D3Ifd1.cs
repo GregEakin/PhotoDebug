@@ -29,8 +29,8 @@ namespace PhotoTests.Canon5D3
         public void TestMethod1()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
                 CollectionAssert.AreEqual(new byte[] { 0x49, 0x49 }, rawImage.Header.ByteOrder);
                 Assert.AreEqual(0x002A, rawImage.Header.TiffMagic);
@@ -45,8 +45,8 @@ namespace PhotoTests.Canon5D3
         public void ImageWidth()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x0100 UShort 16-bit: 5760
@@ -62,8 +62,8 @@ namespace PhotoTests.Canon5D3
         public void ImageLength()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x0101 UShort 16-bit: 3840
@@ -79,8 +79,8 @@ namespace PhotoTests.Canon5D3
         public void BitsPerSample()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x0102 UShort 16-bit: [0x000000EE] (3): 8, 8, 8, 
@@ -90,7 +90,8 @@ namespace PhotoTests.Canon5D3
                 Assert.AreEqual(238u, imageFileEntry.ValuePointer);
                 Assert.AreEqual(3u, imageFileEntry.NumberOfValue);
 
-                CollectionAssert.AreEqual(new[] { (ushort)8, (ushort)8, (ushort)8 }, RawImage.ReadUInts16(binaryReader, imageFileEntry));
+                CollectionAssert.AreEqual(new[] { (ushort)8, (ushort)8, (ushort)8 },
+                    RawImage.ReadUInts16(binaryReader, imageFileEntry));
             }
         }
 
@@ -98,8 +99,8 @@ namespace PhotoTests.Canon5D3
         public void Compression()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x0103 UShort 16-bit: 6
@@ -115,8 +116,8 @@ namespace PhotoTests.Canon5D3
         public void Maker()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x010F Ascii 8-bit: [0x000000F4] (6): Canon
@@ -134,8 +135,8 @@ namespace PhotoTests.Canon5D3
         public void Model()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x0110 Ascii 8-bit: [0x000000FA] (22): Canon EOS 5D Mark III
@@ -162,8 +163,8 @@ namespace PhotoTests.Canon5D3
         public void XmpMetadata()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x02BC Byte 8-bit: [0x000119C4] (8192): // XML packet containing XMP metadata
@@ -175,7 +176,8 @@ namespace PhotoTests.Canon5D3
 
                 var readChars = RawImage.ReadChars(binaryReader, imageFileEntry);
 
-                const string Expected1 = "<?xpacket begin='ï»¿' id='W5M0MpCehiHzreSzNTczkc9d'?><x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\" xmlns:xmp=\"http://ns.adobe.com/xap/1.0/\"><xmp:Rating>0</xmp:Rating></rdf:Description></rdf:RDF></x:xmpmeta>";
+                const string Expected1 =
+                    "<?xpacket begin='ï»¿' id='W5M0MpCehiHzreSzNTczkc9d'?><x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\" xmlns:xmp=\"http://ns.adobe.com/xap/1.0/\"><xmp:Rating>0</xmp:Rating></rdf:Description></rdf:RDF></x:xmpmeta>";
                 Assert.AreEqual(Expected1, readChars.Substring(0, 291));
                 // lots of white space between these two substrings.
                 const string Expected2 = "<?xpacket end='w'?>";
@@ -189,8 +191,8 @@ namespace PhotoTests.Canon5D3
         public void ExifTags()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x8769 Image File Directory: [0x000001BE] (1): 

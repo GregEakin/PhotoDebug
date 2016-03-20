@@ -51,8 +51,8 @@ namespace PhotoTests
         private static void DumpBitmap(string fileName2, string bitmap)
         {
             using (var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
                 var imageFileDirectory = rawImage.Directories.Last();
 
@@ -76,7 +76,10 @@ namespace PhotoTests
                 var address = imageFileDirectory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
                 var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-                var startOfImage = new StartOfImage(binaryReader, address, length) { ImageData = new ImageData(binaryReader, length) };
+                var startOfImage = new StartOfImage(binaryReader, address, length)
+                {
+                    ImageData = new ImageData(binaryReader, length)
+                };
 
                 // Step 1: Huffman Table
                 var huffmanTable = startOfImage.HuffmanTable;
@@ -95,10 +98,12 @@ namespace PhotoTests
                 DumpStartOfScan(startOfScan);
 
                 var predictor = new[]
-                    {
-                        (short)(1 << (startOfFrame.Precision - 1)), (short)(1 << (startOfFrame.Precision - 1)), (short)(1 << (startOfFrame.Precision - 1)),
-                        (short)(1 << (startOfFrame.Precision - 1))
-                    };
+                {
+                    (short) (1 << (startOfFrame.Precision - 1)),
+                    (short) (1 << (startOfFrame.Precision - 1)),
+                    (short) (1 << (startOfFrame.Precision - 1)),
+                    (short) (1 << (startOfFrame.Precision - 1))
+                };
 
                 using (var image1 = new Bitmap(startOfFrame.SamplesPerLine, startOfFrame.ScanLines))
                 {

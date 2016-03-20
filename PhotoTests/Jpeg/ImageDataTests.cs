@@ -14,8 +14,8 @@
         {
             var data = new byte[] { 0xA5, 0x5A };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
                 Assert.AreEqual(0, imageData.Index);
             }
@@ -26,8 +26,8 @@
         {
             var data = new byte[] { 0xA5, 0x5A };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
                 Assert.IsTrue(imageData.GetNextBit());
                 Assert.AreEqual(0, imageData.Index);
@@ -39,8 +39,8 @@
         {
             var data = new byte[] { 0xA5, 0x5A };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
                 Assert.AreEqual(165, imageData.GetSetOfBits(8));
                 Assert.AreEqual(1, imageData.Index);
@@ -52,8 +52,8 @@
         {
             var data = new byte[] { 0xA5, 0x5A };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
                 Assert.AreEqual(165, imageData.GetSetOfBits(8));
                 Assert.AreEqual(90, imageData.GetSetOfBits(8));
@@ -66,8 +66,8 @@
         {
             var data = new byte[] { 0xA5, 0x5A };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
                 Assert.IsFalse(imageData.EndOfFile);
             }
@@ -78,8 +78,8 @@
         {
             var data = new byte[] { 0xA5, 0x5A };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
                 Assert.IsTrue(imageData.GetNextBit());
                 Assert.IsFalse(imageData.EndOfFile);
@@ -91,8 +91,8 @@
         {
             var data = new byte[] { 0xA5, 0x5A };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
                 Assert.AreEqual(165, imageData.GetSetOfBits(8));
                 Assert.IsFalse(imageData.EndOfFile);
@@ -104,8 +104,8 @@
         {
             var data = new byte[] { 0xA5, 0x5A };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
                 Assert.AreEqual(165, imageData.GetSetOfBits(8));
                 Assert.AreEqual(90, imageData.GetSetOfBits(8));
@@ -118,8 +118,8 @@
         {
             var data = new byte[] { 0xA5, 0x5A };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
                 CollectionAssert.AreEqual(data, imageData.RawData);
             }
@@ -130,8 +130,8 @@
         {
             var data = new byte[] { 0xA5 };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
                 Assert.IsTrue(imageData.GetNextBit());
                 Assert.IsFalse(imageData.GetNextBit());
@@ -149,8 +149,8 @@
         {
             var data = new byte[] { 0xA5, 0x5A };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
                 Assert.IsTrue(imageData.GetNextBit());
                 Assert.IsFalse(imageData.GetNextBit());
@@ -165,8 +165,8 @@
         {
             var data = new byte[] { 0xA5, 0x5A };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
                 Assert.AreEqual(0x000A, imageData.GetSetOfBits(4));
                 Assert.AreEqual(0x0055, imageData.GetSetOfBits(8));
@@ -177,20 +177,20 @@
         [TestMethod]
         public void GetValuesTest()
         {
-            var table0 = new HuffmanTable(0, 
-                new byte[] { 0x00, 0x01, 0x05, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00 }, 
+            var table0 = new HuffmanTable(0,
+                new byte[] { 0x00, 0x01, 0x05, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00 },
                 new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F });
             Console.WriteLine("Table 0 {0}", table0.ToString());
 
-            var table1 = new HuffmanTable(1, 
+            var table1 = new HuffmanTable(1,
                 new byte[] { 0x00, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00 },
                 new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F });
             Console.WriteLine("Table 1 {0}", table0.ToString());
 
             var data = new byte[] { 0xff, 0x00, 0xe0, 0x0b, 0xa2, 0x89, 0x68, 0xc7, 0x00, 0xb0 };
             using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageData = new ImageData(reader, (uint)data.Length);
                 var prevY = 0x4000u;
                 var prevCb = 0x0000;

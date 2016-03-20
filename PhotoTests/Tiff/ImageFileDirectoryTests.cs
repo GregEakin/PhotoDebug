@@ -22,8 +22,8 @@
         public void EntriesCount()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageFileDirectory = new ImageFileDirectory(reader);
                 Assert.AreEqual(1, imageFileDirectory.Entries.Length);
             }
@@ -33,8 +33,8 @@
         public void Entry()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageFileDirectory = new ImageFileDirectory(reader);
                 var entry = imageFileDirectory.Entries.First();
                 Assert.AreEqual(0x0012, entry.TagId);
@@ -45,8 +45,8 @@
         public void NextEntry()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageFileDirectory = new ImageFileDirectory(reader);
                 Assert.AreEqual(0x00000000u, imageFileDirectory.NextEntry);
             }

@@ -51,15 +51,15 @@ namespace PhotoTests
             0x78, 0x88, 0x98, 0xA8, 0xB8, 0xC8, 0xD8, 0xE8, 0xF8, 0x39, 0x49, 0x59, 0x69, 0x79, 0x89, 0x99,
             0xA9, 0xB9, 0xC9, 0xD9, 0xE9, 0xF9, 0x2A, 0x3A, 0x4A, 0x5A, 0x6A, 0x7A, 0x8A, 0x9A, 0xAA, 0xBA,
             0xCA, 0xDA, 0xEA, 0xFA, 0xFF, 0xDA, 0x00, 0x0C, 0x03, 0x01, 0x00, 0x02, 0x11, 0x03, 0x11, 0x00,
-            0x3F, 0x00, 0xFC, 0xFF, 0x00, 0xE2, 0xAF, 0xEF, 0xF3, 0x15, 0x7F, 0xFF, 0xD9                
+            0x3F, 0x00, 0xFC, 0xFF, 0x00, 0xE2, 0xAF, 0xEF, 0xF3, 0x15, 0x7F, 0xFF, 0xD9
         };
 
         [TestMethod]
         public void SimpleImage()
         {
             using (var memory = new MemoryStream(SimpleData))
+            using (var binaryReader = new BinaryReader(memory))
             {
-                var binaryReader = new BinaryReader(memory);
                 var length = (uint)SimpleData.Length;
                 var startOfImage = new StartOfImage(binaryReader, 0x0000u, length);
                 Assert.AreEqual(0xFF, startOfImage.Mark);
@@ -74,7 +74,8 @@ namespace PhotoTests
                 Assert.AreEqual(0xDA, startOfScan.Tag);
 
                 var imageData = startOfImage.ImageData;
-                CollectionAssert.AreEqual(new Byte[] { 0xFC, 0xFF, 0x00, 0xE2, 0xAF, 0xEF, 0xF3, 0x15, 0x7F, 0xFF, 0xD9 }, imageData.RawData);
+                CollectionAssert.AreEqual(
+                    new Byte[] { 0xFC, 0xFF, 0x00, 0xE2, 0xAF, 0xEF, 0xF3, 0x15, 0x7F, 0xFF, 0xD9 }, imageData.RawData);
             }
         }
 
@@ -83,8 +84,8 @@ namespace PhotoTests
         {
             // Huffman - Luminance (Y) - DC
             using (var memory = new MemoryStream(SimpleData))
+            using (var binaryReader = new BinaryReader(memory))
             {
-                var binaryReader = new BinaryReader(memory);
                 var length = (uint)SimpleData.Length;
                 var startOfImage = new StartOfImage(binaryReader, 0x0000u, length);
                 var table = startOfImage.HuffmanTable.Tables[0x00];
@@ -97,8 +98,8 @@ namespace PhotoTests
         {
             // Huffman - Luminance (Y) - AC
             using (var memory = new MemoryStream(SimpleData))
+            using (var binaryReader = new BinaryReader(memory))
             {
-                var binaryReader = new BinaryReader(memory);
                 var length = (uint)SimpleData.Length;
                 var startOfImage = new StartOfImage(binaryReader, 0x0000u, length);
                 var table = startOfImage.HuffmanTable.Tables[0x10];
@@ -111,8 +112,8 @@ namespace PhotoTests
         {
             // Huffman -  Chrominance (Cb & Cr) - DC
             using (var memory = new MemoryStream(SimpleData))
+            using (var binaryReader = new BinaryReader(memory))
             {
-                var binaryReader = new BinaryReader(memory);
                 var length = (uint)SimpleData.Length;
                 var startOfImage = new StartOfImage(binaryReader, 0x0000u, length);
                 var table = startOfImage.HuffmanTable.Tables[0x01];
@@ -125,8 +126,8 @@ namespace PhotoTests
         {
             // Huffman -  Chrominance (Cb & Cr) - AC
             using (var memory = new MemoryStream(SimpleData))
+            using (var binaryReader = new BinaryReader(memory))
             {
-                var binaryReader = new BinaryReader(memory);
                 var length = (uint)SimpleData.Length;
                 var startOfImage = new StartOfImage(binaryReader, 0x0000u, length);
                 var table = startOfImage.HuffmanTable.Tables[0x11];

@@ -41,8 +41,8 @@ namespace PhotoTests.Prototypes
         private static void DumpImage3SRaw(string fileName)
         {
             using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // Image #3 is a raw image compressed in ITU-T81 lossless JPEG
@@ -70,7 +70,7 @@ namespace PhotoTests.Prototypes
                 // Assert.AreEqual(0x000119BEu, imageFileEntry.ValuePointer);
                 // Assert.AreEqual(3u, imageFileEntry.NumberOfValue);
                 var slices = RawImage.ReadUInts16(binaryReader, imageFileEntry);
-                CollectionAssert.AreEqual(new ushort[] {8, 1296, 1296}, slices);
+                CollectionAssert.AreEqual(new ushort[] { 8, 1296, 1296 }, slices);
 
                 var item6 = image.Entries.Single(e => e.TagId == 0xC6C5 && e.TagType == 4).ValuePointer;
                 Assert.AreEqual(0x4u, item6);

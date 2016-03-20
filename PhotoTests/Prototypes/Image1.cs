@@ -19,8 +19,8 @@ namespace PhotoTests.Prototypes
         {
             var fileName2 = folder + file;
             using (var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // Images #0 and #1 are compressed in lossy (classic) JPEG

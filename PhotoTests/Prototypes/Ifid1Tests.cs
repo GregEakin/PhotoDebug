@@ -18,14 +18,14 @@ namespace PhotoTests.Prototypes
         private static void DumpImage1(string fileName)
         {
             using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 var image = rawImage.Directories.Skip(1).First();
                 Assert.AreEqual(2, image.Entries.Length);
                 CollectionAssert.AreEqual(
-                    new ushort[] {0x0201, 0x0202}, 
+                    new ushort[] {0x0201, 0x0202},
                     image.Entries.Select(e => e.TagId).ToArray());
 
                 var offset = image.Entries.Single(e => e.TagId == 0x0201 && e.TagType == 4).ValuePointer;

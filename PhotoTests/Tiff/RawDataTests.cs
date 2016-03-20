@@ -28,9 +28,8 @@
                 };
 
             using (var memoryStream = new MemoryStream(data))
+            using (var binaryReader = new BinaryReader(memoryStream))
             {
-                var binaryReader = new BinaryReader(memoryStream);
-
                 const int Height = 3;
                 const int Width = 10;
                 const int X = 3;

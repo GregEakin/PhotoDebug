@@ -18,18 +18,19 @@ namespace PhotoTests.Prototypes
         private static void DumpImage2(string fileName)
         {
             using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // Images #0 and #1 are compressed in lossy (classic) JPEG
                 var image = rawImage.Directories.Skip(2).First();
-                
+
                 Assert.AreEqual(13, image.Entries.Length);
                 CollectionAssert.AreEqual(
                     new ushort[]
                     {
-                        0x0100, 0x0101, 0x0102, 0x0103, 0x0106, 0x0111, 0x0115, 0x0116, 0x0117, 0x011C, 0xC5D9, 0xC6C5, 0xC6DC
+                        0x0100, 0x0101, 0x0102, 0x0103, 0x0106, 0x0111, 0x0115, 0x0116, 0x0117, 0x011C, 0xC5D9,
+                        0xC6C5, 0xC6DC
                     },
                     image.Entries.Select(e => e.TagId).ToArray());
 

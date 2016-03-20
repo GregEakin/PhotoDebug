@@ -21,8 +21,8 @@
         public void ByteOrder()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var cr2Header = new CR2Header(reader);
                 CollectionAssert.AreEqual(new byte[] { 0x49, 0x49 }, cr2Header.ByteOrder);
             }
@@ -32,10 +32,10 @@
         public void CR2Magic()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var cr2Header = new CR2Header(reader);
-                Assert.AreEqual(0x5243, cr2Header.CR2Magic);  // "CR2\0"
+                Assert.AreEqual(0x5243, cr2Header.CR2Magic); // "CR2\0"
             }
         }
 
@@ -43,8 +43,8 @@
         public void CR2Version()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var cr2Header = new CR2Header(reader);
                 CollectionAssert.AreEqual(new byte[] { 0x02, 0x00 }, cr2Header.CR2Version);
             }
@@ -54,8 +54,8 @@
         public void RawIfdOffset()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var cr2Header = new CR2Header(reader);
                 Assert.AreEqual(0x0000BF46u, cr2Header.RawIfdOffset);
             }
@@ -65,8 +65,8 @@
         public void TiffMagic()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var cr2Header = new CR2Header(reader);
                 Assert.AreEqual(0x002A, cr2Header.TiffMagic);
             }
@@ -76,8 +76,8 @@
         public void TiffOffset()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var cr2Header = new CR2Header(reader);
                 Assert.AreEqual(0x00000010u, cr2Header.TiffOffset);
             }

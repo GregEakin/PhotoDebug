@@ -29,8 +29,8 @@
         public void TestMethod1()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
                 CollectionAssert.AreEqual(new byte[] { 0x49, 0x49 }, rawImage.Header.ByteOrder);
                 Assert.AreEqual(0x002A, rawImage.Header.TiffMagic);
@@ -54,8 +54,8 @@
         public void Compression()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x0103 UShort 16-bit: 6
@@ -71,8 +71,8 @@
         public void StipOffset()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x0111 ULong 32-bit: 3213024
@@ -82,7 +82,6 @@
                 Assert.AreEqual(4, imageFileEntry.TagType);
                 // Assert.AreEqual(3213024u, imageFileEntry.ValuePointer);
                 Assert.AreEqual(1u, imageFileEntry.NumberOfValue);
-
             }
         }
 
@@ -90,8 +89,8 @@
         public void StripByteCounts()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x0117 ULong 32-bit: 22286138 
@@ -108,8 +107,8 @@
         public void Cr2Slice()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // 0xC640 UShort 16-bit: [0x0000BFA0] (3): 2, 1728, 1904, 
@@ -119,7 +118,8 @@
                 Assert.AreEqual(0x0000BFA0u, imageFileEntry.ValuePointer);
                 Assert.AreEqual(3u, imageFileEntry.NumberOfValue);
 
-                CollectionAssert.AreEqual(new[] { (ushort)2, (ushort)1728, (ushort)1904 }, RawImage.ReadUInts16(binaryReader, imageFileEntry));
+                CollectionAssert.AreEqual(new[] { (ushort)2, (ushort)1728, (ushort)1904 },
+                    RawImage.ReadUInts16(binaryReader, imageFileEntry));
             }
         }
 

@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DumpImageSlices.cs" />
     <Compile Include="Jpeg\JpegBnf.cs" />
     <Compile Include="Jpeg\JpegTags\Comment.cs" />
     <Compile Include="Jpeg\JpegTags\DefineQuantizationTable.cs" />

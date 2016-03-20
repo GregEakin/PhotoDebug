@@ -21,8 +21,8 @@
         public void NumberOfValue()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageFileEntry = new ImageFileEntry(reader);
                 Assert.AreEqual(0x00010003u, imageFileEntry.NumberOfValue);
             }
@@ -32,8 +32,8 @@
         public void TagId()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageFileEntry = new ImageFileEntry(reader);
                 Assert.AreEqual(0x0012, imageFileEntry.TagId);
             }
@@ -43,8 +43,8 @@
         public void TagType()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageFileEntry = new ImageFileEntry(reader);
                 Assert.AreEqual(0x0100, imageFileEntry.TagType);
             }
@@ -54,8 +54,8 @@
         public void ValuePointer()
         {
             using (var memory = new MemoryStream(Data))
+            using (var reader = new BinaryReader(memory))
             {
-                var reader = new BinaryReader(memory);
                 var imageFileEntry = new ImageFileEntry(reader);
                 Assert.AreEqual(0x14400000u, imageFileEntry.ValuePointer);
             }

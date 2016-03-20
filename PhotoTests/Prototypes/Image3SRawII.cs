@@ -39,8 +39,8 @@ namespace PhotoTests.Prototypes
         private static void DumpImage3SRaw(string fileName)
         {
             using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // Image #3 is a raw image compressed in ITU-T81 lossless JPEG
@@ -79,7 +79,7 @@ namespace PhotoTests.Prototypes
 
                     // J:a:b = 4:2:2, h/v = 2/1
                     Assert.AreEqual(1, startOfFrame.Components[0].ComponentId);
-                    Assert.AreEqual(2, startOfFrame.Components[0].HFactor);         // SRAW
+                    Assert.AreEqual(2, startOfFrame.Components[0].HFactor); // SRAW
                     Assert.AreEqual(1, startOfFrame.Components[0].VFactor);
                     Assert.AreEqual(0, startOfFrame.Components[0].TableId);
 
@@ -101,10 +101,10 @@ namespace PhotoTests.Prototypes
                     var startOfScan = startOfImage.StartOfScan;
                     // DumpStartOfScan(startOfScan);
 
-                    Assert.AreEqual(1, startOfScan.Bb1);    // Start of spectral or predictor selection
-                    Assert.AreEqual(0, startOfScan.Bb2);    // end of spectral selection
-                    Assert.AreEqual(0, startOfScan.Bb3);    // successive approximation bit positions
-                    Assert.AreEqual(3, startOfScan.Components.Length);   // sraw/sraw2
+                    Assert.AreEqual(1, startOfScan.Bb1); // Start of spectral or predictor selection
+                    Assert.AreEqual(0, startOfScan.Bb2); // end of spectral selection
+                    Assert.AreEqual(0, startOfScan.Bb3); // successive approximation bit positions
+                    Assert.AreEqual(3, startOfScan.Components.Length); // sraw/sraw2
 
                     Assert.AreEqual(1, startOfScan.Components[0].Id);
                     Assert.AreEqual(0, startOfScan.Components[0].Dc);
@@ -124,12 +124,12 @@ namespace PhotoTests.Prototypes
                     startOfImage.ImageData.Reset();
 
                     var prev = new DataBuf { Y = 0x4000, Cb = 0, Cr = 0 };
-                    var memory = new DataBuf[startOfFrame.ScanLines][];          // [1728][]
-                    for (var line = 0; line < startOfFrame.ScanLines; line++)   // 0 .. 1728
+                    var memory = new DataBuf[startOfFrame.ScanLines][]; // [1728][]
+                    for (var line = 0; line < startOfFrame.ScanLines; line++) // 0 .. 1728
                     {
                         var diff = ReadDiffRow(startOfImage);
                         // VerifyDiff(diff, line);
-                        var memory1 = ProcessDiff(diff, prev);  // 2592
+                        var memory1 = ProcessDiff(diff, prev); // 2592
                         memory[line] = memory1;
                     }
 

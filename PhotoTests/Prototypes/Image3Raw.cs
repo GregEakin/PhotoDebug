@@ -26,8 +26,8 @@ namespace PhotoTests.Prototypes
         private static void DumpImage3(string fileName)
         {
             using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // Image #3 is a raw image compressed in ITU-T81 lossless JPEG
@@ -36,7 +36,7 @@ namespace PhotoTests.Prototypes
                 Assert.AreEqual(7, image.Entries.Length);
 
                 var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;
-                Assert.AreEqual(6u, compression);       // 6 == old jpeg
+                Assert.AreEqual(6u, compression); // 6 == old jpeg
 
                 var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
                 // Assert.AreEqual(0x2D42DCu, offset);

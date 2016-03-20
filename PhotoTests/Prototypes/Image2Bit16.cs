@@ -22,8 +22,8 @@ namespace PhotoTests.Prototypes
         private static void DumpImage2(string fileName)
         {
             using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
                 // Image #2 is RGB, 16 bits per color, little endian.
@@ -44,7 +44,7 @@ namespace PhotoTests.Prototypes
                 CollectionAssert.AreEqual(new[] { (ushort)16, (ushort)16, (ushort)16 }, bitsPerSample);
 
                 var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;
-                Assert.AreEqual(1u, compression);               // 1 == uncompressed
+                Assert.AreEqual(1u, compression); // 1 == uncompressed
 
                 var photometricInterpretation =
                     image.Entries.Single(e => e.TagId == 0x0106 && e.TagType == 3).ValuePointer;
@@ -64,7 +64,7 @@ namespace PhotoTests.Prototypes
                 Assert.AreEqual(stripByteCounts, imageWidth * imageHeight * samplesPerPixel * 2);
 
                 var planarConfiguration = image.Entries.Single(e => e.TagId == 0x011C && e.TagType == 3).ValuePointer;
-                Assert.AreEqual(1u, planarConfiguration);       // 1 == chunky
+                Assert.AreEqual(1u, planarConfiguration); // 1 == chunky
 
                 // unknown
                 var table1 = image.Entries.Single(e => e.TagId == 0xC5D9 && e.TagType == 4).ValuePointer;

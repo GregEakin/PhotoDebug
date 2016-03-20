@@ -32,8 +32,8 @@ namespace PhotoTests
         private static void DumpBitmap(string fileName2, string bitmap)
         {
             using (var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
             {
-                var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
                 var imageFileDirectory = rawImage.Directories.Last();
 
@@ -50,9 +50,13 @@ namespace PhotoTests
                 var address = imageFileDirectory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
                 var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-                var startOfImage = new StartOfImage(binaryReader, address, length) { ImageData = new ImageData(binaryReader, length) };
+                var startOfImage = new StartOfImage(binaryReader, address, length)
+                {
+                    ImageData = new ImageData(binaryReader, length)
+                };
                 var lossless = startOfImage.StartOfFrame;
-                Console.WriteLine("lines {0}, samples per line {1} * {2} = {3}", lossless.ScanLines, lossless.SamplesPerLine, lossless.Components.Length, lossless.Width);
+                Console.WriteLine("lines {0}, samples per line {1} * {2} = {3}", lossless.ScanLines,
+                    lossless.SamplesPerLine, lossless.Components.Length, lossless.Width);
                 Assert.AreEqual(x * y + z, lossless.Width); // Sensor width (bits)
                 Assert.AreEqual(x * y + z, lossless.SamplesPerLine * lossless.Components.Length);
 
@@ -73,7 +77,8 @@ namespace PhotoTests
 
                     image1.Save(bitmap);
 
-                    Console.WriteLine("EOF {0}", startOfImage.ImageData.RawData.Length - startOfImage.ImageData.Index);
+                    Console.WriteLine("EOF {0}",
+                        startOfImage.ImageData.RawData.Length - startOfImage.ImageData.Index);
                 }
             }
         }
