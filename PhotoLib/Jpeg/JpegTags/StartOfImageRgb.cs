@@ -26,14 +26,12 @@ namespace PhotoLib.Jpeg.JpegTags
         public short[] ReadDiffRow()
         {
             int samplesPerLine = StartOfFrame.SamplesPerLine;
-            var table0 = HuffmanTable.Tables[0x00];
-            var table1 = HuffmanTable.Tables[0x01];
 
             var diff = new short[2 * samplesPerLine];
             for (var x = 0; x < samplesPerLine; x++)
             {
-                diff[2 * x + 0] = ProcessColor(table0);
-                diff[2 * x + 1] = ProcessColor(table1);
+                diff[2 * x + 0] = ProcessColor(0x00);
+                diff[2 * x + 1] = ProcessColor(0x01);
             }
 
             return diff;

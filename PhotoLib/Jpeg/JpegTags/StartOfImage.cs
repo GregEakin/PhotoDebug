@@ -400,8 +400,9 @@ namespace PhotoLib.Jpeg.JpegTags
             return value;
         }
 
-        public short ProcessColor(HuffmanTable table)
+        public short ProcessColor(byte index)
         {
+            var table = HuffmanTable.Tables[index];
             var hufBits = ImageData.GetValue(table);
             var difCode = ImageData.GetValue(hufBits);
             var difValue = Jpeg.HuffmanTable.DecodeDifBits(hufBits, difCode);

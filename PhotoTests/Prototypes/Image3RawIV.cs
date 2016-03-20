@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PhotoLib.Jpeg;
+using PhotoLib.Jpeg.JpegTags;
+using PhotoLib.Tiff;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PhotoLib.Jpeg;
-using PhotoLib.Jpeg.JpegTags;
-using PhotoLib.Tiff;
 
 namespace PhotoTests.Prototypes
 {
@@ -166,16 +165,17 @@ namespace PhotoTests.Prototypes
                 {
                     var diff = new DiffBuf
                     {
-                        Y1 = ProcessColor(startOfImage, startOfImage.HuffmanTable.Tables[0x00]),
-                        Y2 = ProcessColor(startOfImage, startOfImage.HuffmanTable.Tables[0x01]),
+                        Y1 = startOfImage.ProcessColor(0x00),
+                        Y2 = startOfImage.ProcessColor(0x01),
                     };
+                    cc += 2;
 
                     if (line % 2 == 0 && col == 0)
                     {
-                        pp[0] += (ushort)diff.Y1;
+                        pp[0] = (ushort)(pp[0] + diff.Y1);
                         memory[0] = pp[0];
 
-                        pp[1] += (ushort)diff.Y2;
+                        pp[1] = (ushort)(pp[1] + diff.Y2);
                         memory[1] = pp[1];
                     }
                     else
@@ -238,15 +238,6 @@ namespace PhotoTests.Prototypes
                 Marshal.WriteInt16(scan0, 12 * col + 8, (short)green);
                 Marshal.WriteInt16(scan0, 12 * col + 6, (short)blue);
             }
-        }
-
-        private static short ProcessColor(StartOfImage startOfImage, HuffmanTable table)
-        {
-            cc++;
-            var hufBits = startOfImage.ImageData.GetValue(table);
-            var difCode = startOfImage.ImageData.GetValue(hufBits);
-            var difValue = HuffmanTable.DecodeDifBits(hufBits, difCode);
-            return difValue;
         }
     }
 }

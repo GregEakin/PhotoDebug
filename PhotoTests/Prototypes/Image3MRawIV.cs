@@ -212,12 +212,12 @@ namespace PhotoTests.Prototypes
                 {
                     var diff = new DiffBuf
                     {
-                        Y1 = ProcessColor(startOfImage, table0),
-                        Y2 = ProcessColor(startOfImage, table0),
-                        Y3 = ProcessColor(startOfImage, table0),
-                        Y4 = ProcessColor(startOfImage, table0),
-                        Cb = ProcessColor(startOfImage, table1),
-                        Cr = ProcessColor(startOfImage, table1),
+                        Y1 = startOfImage.ProcessColor(0x00),
+                        Y2 = startOfImage.ProcessColor(0x00),
+                        Y3 = startOfImage.ProcessColor(0x00),
+                        Y4 = startOfImage.ProcessColor(0x00),
+                        Cb = startOfImage.ProcessColor(0x01),
+                        Cr = startOfImage.ProcessColor(0x01),
                     };
 
                     var pixel0 = new DataBuf
@@ -294,15 +294,6 @@ namespace PhotoTests.Prototypes
                 Marshal.WriteInt16(scan1, 12 * col + 8, (short)green);
                 Marshal.WriteInt16(scan1, 12 * col + 6, (short)blue);
             }
-        }
-
-        private static short ProcessColor(StartOfImage startOfImage, HuffmanTable table)
-        {
-            cc++;
-            var hufBits = startOfImage.ImageData.GetValue(table);
-            var difCode = startOfImage.ImageData.GetValue(hufBits);
-            var difValue = HuffmanTable.DecodeDifBits(hufBits, difCode);
-            return difValue;
         }
     }
 }

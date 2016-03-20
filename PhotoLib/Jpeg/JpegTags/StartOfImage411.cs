@@ -44,18 +44,16 @@ namespace PhotoLib.Jpeg.JpegTags
         public DiffBuf[] ReadDiffRow()
         {
             int samplesPerLine = StartOfFrame.SamplesPerLine;
-            var table0 = HuffmanTable.Tables[0x00];
-            var table1 = HuffmanTable.Tables[0x01];
 
             var diff = new DiffBuf[samplesPerLine / 4];         // 648
             for (var x = 0; x < samplesPerLine / 4; x++)        // 0..648
             {
-                diff[x].Y1 = ProcessColor(table0);
-                diff[x].Y2 = ProcessColor(table0);
-                diff[x].Y3 = ProcessColor(table0);
-                diff[x].Y4 = ProcessColor(table0);
-                diff[x].Cb = ProcessColor(table1);
-                diff[x].Cr = ProcessColor(table1);
+                diff[x].Y1 = ProcessColor(0x00);
+                diff[x].Y2 = ProcessColor(0x00);
+                diff[x].Y3 = ProcessColor(0x00);
+                diff[x].Y4 = ProcessColor(0x00);
+                diff[x].Cb = ProcessColor(0x01);
+                diff[x].Cr = ProcessColor(0x01);
             }
 
             return diff;

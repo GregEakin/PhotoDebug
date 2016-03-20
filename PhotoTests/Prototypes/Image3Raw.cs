@@ -181,21 +181,13 @@ namespace PhotoTests.Prototypes
             var diff = new short[width];
             for (var x = 0; x < width / 2; x++)
             {
-                diff[2 * x + 0] = ProcessColor(startOfImage, startOfImage.HuffmanTable.Tables[0x00]);
-                diff[2 * x + 1] = ProcessColor(startOfImage, startOfImage.HuffmanTable.Tables[0x01]);
+                diff[2 * x + 0] = startOfImage.ProcessColor(0x00);
+                diff[2 * x + 1] = startOfImage.ProcessColor(0x01);
 
                 _cc += 2;
             }
 
             return diff;
-        }
-
-        private static short ProcessColor(StartOfImage startOfImage, HuffmanTable table)
-        {
-            var hufBits = startOfImage.ImageData.GetValue(table);
-            var difCode = startOfImage.ImageData.GetValue(hufBits);
-            var difValue = HuffmanTable.DecodeDifBits(hufBits, difCode);
-            return difValue;
         }
 
         private static ushort[] ProcessDiff(short[] diff, ushort[] pp)

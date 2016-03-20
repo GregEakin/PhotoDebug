@@ -146,10 +146,11 @@ namespace PhotoTests.Prototypes
                 try
                 {
                     Assert.AreEqual(6 * samplesPerLine, data.Stride);  // 6 bytes * 8 bits == 48 bits per pixel
+                    var pp = new DataBuf { Y = 0x4000 };
 
                     for (var slice = 0; slice < slices[0]; slice++) // 0..5
-                        ProcessSlice(startOfImage, slice, slices[1], data);
-                    ProcessSlice(startOfImage, slices[0], slices[2], data);
+                        ProcessSlice(startOfImage, slice, slices[1], data, pp);
+                    ProcessSlice(startOfImage, slices[0], slices[2], data, pp);
                 }
                 finally
                 {
@@ -160,17 +161,13 @@ namespace PhotoTests.Prototypes
             }
         }
 
-        private static readonly DataBuf[] lastCol = new DataBuf[1728];
-
-        private static void ProcessSlice(StartOfImage startOfImage, int slice, int samples, BitmapData data)
+        private static void ProcessSlice(StartOfImage startOfImage, int slice, int samples, BitmapData data, DataBuf pp)
         {
             var startOfFrame = startOfImage.StartOfFrame;
-            var table0 = startOfImage.HuffmanTable.Tables[0x00];
-            var table1 = startOfImage.HuffmanTable.Tables[0x01];
+            var scanLines = startOfFrame.ScanLines;
+            var memory = new DataBuf[2];                 // 0x4000
 
-            var lastRow = new DataBuf { Y = 0x0000 };       // 0x4000
-
-            for (var line = 0; line < startOfFrame.ScanLines; line++) // 0..1728
+            for (var line = 0; line < scanLines; line++) // 0..1728
             {
                 // 6 bytes * 8 bits == 48 bits per pixel
                 // 3 = 6 bytes * samplesPerLine / (slices[0] * slices[1] + slices[2]);
@@ -181,60 +178,38 @@ namespace PhotoTests.Prototypes
                 {
                     var diff = new DiffBuf
                     {
-                        Y1 = ProcessColor(startOfImage, table0),
-                        Y2 = ProcessColor(startOfImage, table0),
-                        Cb = ProcessColor(startOfImage, table1),
-                        Cr = ProcessColor(startOfImage, table1)
+                        Y1 = startOfImage.ProcessColor(0x00),
+                        Y2 = startOfImage.ProcessColor(0x00),
+                        Cb = startOfImage.ProcessColor(0x01),
+                        Cr = startOfImage.ProcessColor(0x01)
                     };
 
-                    if (slice == 0 && col == 0)
+                    if (line % 6 == 0 && col == 0)
                     {
-                        var pixel0 = new DataBuf
-                        {
-                            Y = (ushort)(lastRow.Y + diff.Y1),
-                            Cb = (short)(lastRow.Cb + diff.Cb),
-                            Cr = (short)(lastRow.Cr + diff.Cr)
-                        };
+                        pp.Y = (ushort)(pp.Y + diff.Y1);
+                        pp.Cb += diff.Cb;
+                        pp.Cr += diff.Cr;
+                        memory[0].Y = pp.Y;
+                        memory[0].Cb = pp.Cb;
+                        memory[0].Cr = pp.Cr;
 
-                        var pixel1 = new DataBuf
-                        {
-                            Y = (ushort)(lastRow.Y + diff.Y1 + diff.Y2),
-                            Cb = (short)(lastRow.Cb + diff.Cb),
-                            Cr = (short)(lastRow.Cr + diff.Cr)
-                        };
-
-                        PokePixels(scan0, col, pixel0, pixel1);
-
-                        //lastRow.Y = pixel0.Y;
-                        //lastRow.Cb = pixel0.Cb;
-                        //lastRow.Cr = pixel0.Cr;
-
-                        //lastCol[line].Y = pixel1.Y;
-                        //lastCol[line].Cb = pixel1.Cb;
-                        //lastCol[line].Cr = pixel1.Cr;
+                        pp.Y = (ushort)(pp.Y + diff.Y2);
+                        memory[1].Y = pp.Y;
+                        memory[1].Cb = pp.Cb;
+                        memory[1].Cr = pp.Cr;
                     }
                     else
                     {
-                        var pixel0 = new DataBuf
-                        {
-                            Y = (ushort)(lastCol[line].Y + diff.Y1),
-                            Cb = (short)(lastCol[line].Cb + diff.Cb),
-                            Cr = (short)(lastCol[line].Cr + diff.Cr)
-                        };
+                        memory[0].Y = (ushort)(memory[0].Y + diff.Y1);
+                        memory[0].Cb = (short)(memory[0].Cb + diff.Cb);
+                        memory[0].Cr = (short)(memory[0].Cr + diff.Cr);
 
-                        var pixel1 = new DataBuf
-                        {
-                            Y = (ushort)(lastCol[line].Y + diff.Y1 + diff.Y2),
-                            Cb = (short)(lastCol[line].Cb + diff.Cb),
-                            Cr = (short)(lastCol[line].Cr + diff.Cr)
-                        };
-
-                        PokePixels(scan0, col, pixel0, pixel1);
-
-                        //lastCol[line].Y = pixel1.Y;
-                        //lastCol[line].Cb = pixel1.Cb;
-                        //lastCol[line].Cr = pixel1.Cr;
+                        memory[1].Y = (ushort)(memory[1].Y + diff.Y2);
+                        memory[1].Cb = memory[0].Cb;
+                        memory[1].Cr = memory[0].Cr;
                     }
+
+                    PokePixels(scan0, col, memory[0], memory[1]);
                 }
             }
         }
@@ -260,15 +235,6 @@ namespace PhotoTests.Prototypes
                 Marshal.WriteInt16(scan0, 12 * col + 8, (short)green);
                 Marshal.WriteInt16(scan0, 12 * col + 6, (short)blue);
             }
-        }
-
-        private static short ProcessColor(StartOfImage startOfImage, HuffmanTable table)
-        {
-            cc++;
-            var hufBits = startOfImage.ImageData.GetValue(table);
-            var difCode = startOfImage.ImageData.GetValue(hufBits);
-            var difValue = HuffmanTable.DecodeDifBits(hufBits, difCode);
-            return difValue;
         }
     }
 }

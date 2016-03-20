@@ -162,30 +162,20 @@ namespace PhotoTests.Prototypes
         {
             var startOfFrame = startOfImage.StartOfFrame;
             int samplesPerLine = startOfFrame.SamplesPerLine;
-            var table0 = startOfImage.HuffmanTable.Tables[0x00];
-            var table1 = startOfImage.HuffmanTable.Tables[0x01];
 
             var diff = new DiffBuf[samplesPerLine / 4];         // 648
             for (var x = 0; x < samplesPerLine / 4; x++)        // 0..648
             {
-                diff[x].Y1 = ProcessColor(startOfImage, table0);
-                diff[x].Y2 = ProcessColor(startOfImage, table0);
-                diff[x].Y3 = ProcessColor(startOfImage, table0);
-                diff[x].Y4 = ProcessColor(startOfImage, table0);
-                diff[x].Cb = ProcessColor(startOfImage, table1);
-                diff[x].Cr = ProcessColor(startOfImage, table1);
+                diff[x].Y1 = startOfImage.ProcessColor(0x00);
+                diff[x].Y2 = startOfImage.ProcessColor(0x00);
+                diff[x].Y3 = startOfImage.ProcessColor(0x00);
+                diff[x].Y4 = startOfImage.ProcessColor(0x00);
+                diff[x].Cb = startOfImage.ProcessColor(0x01);
+                diff[x].Cr = startOfImage.ProcessColor(0x01);
                 cc += 4;
             }
 
             return diff;
-        }
-
-        private static short ProcessColor(StartOfImage startOfImage, HuffmanTable table)
-        {
-            var hufBits = startOfImage.ImageData.GetValue(table);
-            var difCode = startOfImage.ImageData.GetValue(hufBits);
-            var difValue = HuffmanTable.DecodeDifBits(hufBits, difCode);
-            return difValue;
         }
 
         private static void VerifyDiff(DiffBuf[] diff, int line)
