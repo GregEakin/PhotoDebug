@@ -123,18 +123,34 @@ namespace PhotoLib.Tiff
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Ascii 8-bit, null terminated");
                             Console.Write(ReferencedItem, entry.ValuePointer.ToString("X8"), entry.NumberOfValue);
 
-                            if (binaryReader.BaseStream.Position != entry.ValuePointer)
+                            if (entry.NumberOfValue < 5)
                             {
-                                binaryReader.BaseStream.Seek(entry.ValuePointer, SeekOrigin.Begin);
+                                var bytes = new[]
+                                {
+                                    (byte)(entry.ValuePointer >>  0 & 0xFF),
+                                    (byte)(entry.ValuePointer >>  8 & 0xFF),
+                                    (byte)(entry.ValuePointer >> 16 & 0xFF),
+                                    (byte)(entry.ValuePointer >> 24 & 0xFF),
+                                };
+                                var str = Encoding.ASCII.GetString(bytes, 0, (int)entry.NumberOfValue - 1);
+                                Console.WriteLine("\"{0}\"", str);
+                            }
+                            else
+                            {
+                                if (binaryReader.BaseStream.Position != entry.ValuePointer)
+                                {
+                                    binaryReader.BaseStream.Seek(entry.ValuePointer, SeekOrigin.Begin);
+                                }
+
+                                var len = entry.NumberOfValue;
+                                var bytes = binaryReader.ReadBytes((int)len);
+                                var str = Encoding.ASCII.GetString(bytes);
+                                var zero = str.IndexOf('\0');
+                                if (zero >= 0)
+                                    str = str.Substring(0, zero);
+                                Console.WriteLine("\"{0}\"", str);
                             }
 
-                            var len = entry.NumberOfValue;
-                            var bytes = binaryReader.ReadBytes((int)len);
-                            var str = Encoding.ASCII.GetString(bytes);
-                            var zero = str.IndexOf('\0');
-                            if (zero >= 0)
-                                str = str.Substring(0, zero);
-                            Console.WriteLine("\"{0}\"",str);
                             break;
 
                         case 0x03:  // ushort
@@ -185,7 +201,7 @@ namespace PhotoLib.Tiff
 
                         case 0x05:  // urational, numeration & demoninator ulongs
                             Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "URational 2x32-bit");
-                            Console.Write(ReferencedItem, entry.ValuePointer.ToString("X8"), 2);
+                            Console.Write(ReferencedItem, entry.ValuePointer.ToString("X8"), entry.NumberOfValue);
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
                             {
                                 binaryReader.BaseStream.Seek(entry.ValuePointer, SeekOrigin.Begin);
