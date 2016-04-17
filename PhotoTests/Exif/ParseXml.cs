@@ -1,10 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.IO;
 using System.Xml;
 using System.Xml.Linq;
-using System.Xml.XPath;
-using System.Xml.Xsl;
 
 namespace PhotoTests.Exif
 {

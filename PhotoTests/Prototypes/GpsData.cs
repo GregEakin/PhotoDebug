@@ -4,8 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoLib.Tiff;
 using System.IO;
 using System.Linq;
-using System.Text;
-using PhotoLib.Jpeg;
 
 namespace PhotoTests.Prototypes
 {

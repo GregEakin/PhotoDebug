@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PhotoLib.Jpeg;
 using PhotoLib.Jpeg.JpegTags;
 using PhotoLib.Tiff;
 
