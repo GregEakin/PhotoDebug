@@ -31,14 +31,14 @@ namespace PhotoLib.Tiff
                 {
                     var b = binaryReader.ReadBytes(y);
                     var b1 = row * width + block * y;
-                    Array.Copy(b, 0L, this.data, b1, y);
+                    Array.Copy(b, 0L, data, b1, y);
                 }
             }
             for (var row = 0; row < height; row++)
             {
                 var c = binaryReader.ReadBytes(z);
                 var c1 = row * width + x * y;
-                Array.Copy(c, 0L, this.data, c1, z);
+                Array.Copy(c, 0L, data, c1, z);
             }
         }
 

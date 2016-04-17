@@ -59,13 +59,13 @@ namespace PhotoLib.Jpeg.JpegTags
                     {
                         case 0xC0: // SOF0, Start of Frame 0, Baseline DCT
                         case 0xC3: // SOF3, Start of Frame 3, Lossless (sequential)
-                            this.startOfFrame = new StartOfFrame(binaryReader);
+                            startOfFrame = new StartOfFrame(binaryReader);
                             var image = startOfFrame.SamplesPerLine * startOfFrame.ScanLines;
                             Console.WriteLine("Image = {0} * {1} = {2}", startOfFrame.ScanLines, startOfFrame.SamplesPerLine, image);
                             break;
 
                         case 0xC4: // DHT, Define Huffman Table
-                            this.huffmanTable = new DefineHuffmanTable(binaryReader);
+                            huffmanTable = new DefineHuffmanTable(binaryReader);
                             break;
 
                         case 0xD9: // EOI, End of Image
@@ -73,18 +73,18 @@ namespace PhotoLib.Jpeg.JpegTags
                             break;
 
                         case 0xDA: // SOS, Start of Scan
-                            this.startOfScan = new StartOfScan(binaryReader);
+                            startOfScan = new StartOfScan(binaryReader);
                             var rawSize = address + length - binaryReader.BaseStream.Position;
-                            this.imageData = new ImageData(binaryReader, (uint)rawSize);
-                            this.DecodeHuffmanData();
+                            imageData = new ImageData(binaryReader, (uint)rawSize);
+                            DecodeHuffmanData();
                             break;
 
                         case 0xDB: // DQT, Define Quantization Table
-                            this.quantizationTable = new DefineQuantizationTable(binaryReader);
+                            quantizationTable = new DefineQuantizationTable(binaryReader);
                             break;
 
                         case 0xE0: // APP0, Application Segment 0, JFIF - JFIF JPEG image, AVI1 - Motion JPEG (MJPG)
-                            this.jfifMarker = new JfifMarker(binaryReader);
+                            jfifMarker = new JfifMarker(binaryReader);
                             break;
 
                         case 0xE1: // APP1, Application Segment 1, EXIF Metadata, TIFF IFD format,JPEG Thumbnail (160x120), Adobe XMP
@@ -131,11 +131,11 @@ namespace PhotoLib.Jpeg.JpegTags
         {
             get
             {
-                return this.imageData;
+                return imageData;
             }
             set
             {
-                this.imageData = value;
+                imageData = value;
             }
         }
 
@@ -143,7 +143,7 @@ namespace PhotoLib.Jpeg.JpegTags
         {
             get
             {
-                return this.startOfFrame;
+                return startOfFrame;
             }
         }
 
@@ -169,7 +169,7 @@ namespace PhotoLib.Jpeg.JpegTags
                 var component = startOfFrame.Components[i];
                 Console.WriteLine("  {0}: id {1}, HF {2}, VF {3}", i, component.TableId, component.HFactor, component.VFactor);
             }
-            var tables = this.startOfFrame.Components.Select(component => component.TableId).Distinct().Count();
+            var tables = startOfFrame.Components.Select(component => component.TableId).Distinct().Count();
             Console.WriteLine("Tables: rows {0}, unique entries {1}", startOfFrame.Components.Length, tables);
 
             Console.WriteLine("Huffman Tables");
@@ -212,11 +212,11 @@ namespace PhotoLib.Jpeg.JpegTags
                         //   4, 0, 1, 1
 
                         HuffmanTable luminanceDc;
-                        var table1 = this.huffmanTable.Tables.TryGetValue(0x00, out luminanceDc);
+                        var table1 = huffmanTable.Tables.TryGetValue(0x00, out luminanceDc);
                         HuffmanTable chrominanceDc;
-                        var table3 = this.huffmanTable.Tables.TryGetValue(0x01, out chrominanceDc);
+                        var table3 = huffmanTable.Tables.TryGetValue(0x01, out chrominanceDc);
 
-                        this.TableTwo(startOfFrame.Components, luminanceDc, chrominanceDc);
+                        TableTwo(startOfFrame.Components, luminanceDc, chrominanceDc);
                     }
                     break;
 
@@ -228,21 +228,21 @@ namespace PhotoLib.Jpeg.JpegTags
                         //   3, 1, 1, 1
 
                         HuffmanTable luminanceDc;
-                        var table1 = this.huffmanTable.Tables.TryGetValue(0x00, out luminanceDc);
+                        var table1 = huffmanTable.Tables.TryGetValue(0x00, out luminanceDc);
                         HuffmanTable chrominanceDc;
-                        var table3 = this.huffmanTable.Tables.TryGetValue(0x01, out chrominanceDc);
+                        var table3 = huffmanTable.Tables.TryGetValue(0x01, out chrominanceDc);
                         HuffmanTable luminanceAc;
-                        var table2 = this.huffmanTable.Tables.TryGetValue(0x10, out luminanceAc);
+                        var table2 = huffmanTable.Tables.TryGetValue(0x10, out luminanceAc);
                         HuffmanTable chrominanceAc;
-                        var table4 = this.huffmanTable.Tables.TryGetValue(0x11, out chrominanceAc);
+                        var table4 = huffmanTable.Tables.TryGetValue(0x11, out chrominanceAc);
 
-                        this.TableFour(startOfFrame.Components, luminanceDc, luminanceAc, chrominanceDc, chrominanceAc);
+                        TableFour(startOfFrame.Components, luminanceDc, luminanceAc, chrominanceDc, chrominanceAc);
                     }
                     break;
 
                 default:
                     Console.WriteLine("Frame Components: ");
-                    for (var i = 0; i < this.startOfFrame.Components.Length; i++)
+                    for (var i = 0; i < startOfFrame.Components.Length; i++)
                     {
                         var component = startOfFrame.Components[i];
                         Console.WriteLine(" {0}, {1}, {2}, {3}", i, component.TableId, component.HFactor, component.VFactor);
@@ -255,7 +255,7 @@ namespace PhotoLib.Jpeg.JpegTags
                     }
                     Console.WriteLine("Tables: {0}", huffmanTable.Tables.Count);
 
-                    throw new NotImplementedException("Subsampling not implemented {0}".FormatWith(this.startOfFrame.Components.Length));
+                    throw new NotImplementedException("Subsampling not implemented {0}".FormatWith(startOfFrame.Components.Length));
             }
         }
 
@@ -267,10 +267,10 @@ namespace PhotoLib.Jpeg.JpegTags
                 try
                 {
                     // Luminance (Y) - DC
-                    var dc = this.ReadDcComponent(luminanceDc.Dictionary);
+                    var dc = ReadDcComponent(luminanceDc.Dictionary);
 
                     // Luminance (Y) - AC
-                    var ac = this.ReadAcComponent(luminanceAc.Dictionary);
+                    var ac = ReadAcComponent(luminanceAc.Dictionary);
 
                     i++;
                 }
@@ -288,8 +288,8 @@ namespace PhotoLib.Jpeg.JpegTags
             var lastYdc = 0;
 
             // read 8x8 blocks
-            var width = this.startOfFrame.SamplesPerLine / 8;
-            var length = this.startOfFrame.ScanLines / 8;
+            var width = startOfFrame.SamplesPerLine / 8;
+            var length = startOfFrame.ScanLines / 8;
             var size = width * length;
             // for (var i = 0; i < size; i++)
             while (!imageData.EndOfFile)
@@ -297,23 +297,23 @@ namespace PhotoLib.Jpeg.JpegTags
                 try
                 {
                     // Luminance (Y) - DC
-                    var ydc = lastYdc + this.ReadDcComponent(luminanceDc.Dictionary);
+                    var ydc = lastYdc + ReadDcComponent(luminanceDc.Dictionary);
                     lastYdc = ydc;
 
                     // Luminance (Y) - AC
-                    var yac = this.ReadAcComponent(luminanceAc.Dictionary);
+                    var yac = ReadAcComponent(luminanceAc.Dictionary);
 
                     // Chrominance (Cb) - DC
-                    var cbdc = this.ReadDcComponent(chrominanceDc.Dictionary);
+                    var cbdc = ReadDcComponent(chrominanceDc.Dictionary);
 
                     // Chrominance (Cb) - AC
-                    var cbac = this.ReadAcComponent(chrominanceAc.Dictionary);
+                    var cbac = ReadAcComponent(chrominanceAc.Dictionary);
 
                     // Chrominance (Cr) - DC
-                    var crdc = this.ReadDcComponent(chrominanceDc.Dictionary);
+                    var crdc = ReadDcComponent(chrominanceDc.Dictionary);
 
                     // Chrominance (Cr) - AC
-                    var crac = this.ReadAcComponent(chrominanceAc.Dictionary);
+                    var crac = ReadAcComponent(chrominanceAc.Dictionary);
                 }
                 catch (Exception exception)
                 {
@@ -334,7 +334,7 @@ namespace PhotoLib.Jpeg.JpegTags
 
             while (!imageData.EndOfFile)
             {
-                bits = this.imageData.GetNextShort(bits);
+                bits = imageData.GetNextShort(bits);
                 len++;
 
                 HuffmanTable.HCode hCode;
@@ -348,7 +348,7 @@ namespace PhotoLib.Jpeg.JpegTags
                     break;
                 }
 
-                var z = this.imageData.GetSetOfBits(hCode.Code);
+                var z = imageData.GetSetOfBits(hCode.Code);
                 value = Jpeg.HuffmanTable.DcValueEncoding(hCode.Code, z);
                 break;
             }
@@ -366,7 +366,7 @@ namespace PhotoLib.Jpeg.JpegTags
 
             while (true)
             {
-                bits = this.imageData.GetNextShort(bits);
+                bits = imageData.GetNextShort(bits);
                 len++;
 
                 if (len > 16)
@@ -385,7 +385,7 @@ namespace PhotoLib.Jpeg.JpegTags
                     break;
                 }
 
-                var z = this.imageData.GetSetOfBits(hCode.Code);
+                var z = imageData.GetSetOfBits(hCode.Code);
                 value[count] = Jpeg.HuffmanTable.DcValueEncoding(hCode.Code, z);
 
                 if (++count >= 63)

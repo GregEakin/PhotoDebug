@@ -16,11 +16,11 @@ namespace PhotoLib.Jpeg
     {
         public void Reset()
         {
-            this.EndOfFile = false;
+            EndOfFile = false;
             currentByte = 0xFF;
             index = -1;
             nextBit = -1;
-            this.CheckByte();
+            CheckByte();
         }
 
         #region Fields
@@ -40,7 +40,7 @@ namespace PhotoLib.Jpeg
         public ImageData(BinaryReader binaryReader, uint rawSize)
         {
             rawData = binaryReader.ReadBytes((int)rawSize);
-            this.CheckByte();
+            CheckByte();
         }
 
         #endregion
@@ -88,15 +88,15 @@ namespace PhotoLib.Jpeg
 
         public bool GetNextBit()
         {
-            var bit = (this.currentByte & (0x01 << this.nextBit)) != 0;
+            var bit = (currentByte & (0x01 << nextBit)) != 0;
             nextBit--;
-            this.CheckByte();
+            CheckByte();
             return bit;
         }
 
         public ushort GetNextShort(ushort lastShort)
         {
-            var bit = this.GetNextBit() ? 0x01 : 0x00;
+            var bit = GetNextBit() ? 0x01 : 0x00;
             var retval = (lastShort << 1) | bit;
             return (ushort)retval;
         }
@@ -105,7 +105,7 @@ namespace PhotoLib.Jpeg
         {
             byte retval;
 
-            if (this.EndOfFile)
+            if (EndOfFile)
             {
                 throw new Exception("Reading past EOF is bad!");
             }
@@ -118,7 +118,7 @@ namespace PhotoLib.Jpeg
                     return retval;
                 }
 
-                var code = this.rawData[++this.index];
+                var code = rawData[++index];
                 switch (code)
                 {
                     case 0x00:
@@ -126,19 +126,19 @@ namespace PhotoLib.Jpeg
                         break;
 
                     case 0xD9:
-                        this.EndOfFile = true;
+                        EndOfFile = true;
                         Console.WriteLine("Found 0xD9 EOI marker");
                         break;
 
                     default:
                         throw new Exception(
-                            "Not supposed to happen 0xFF 0x{0}: Position: {1}".FormatWith(code.ToString("X2"), (this.rawData.Length - this.index)));
+                            "Not supposed to happen 0xFF 0x{0}: Position: {1}".FormatWith(code.ToString("X2"), (rawData.Length - index)));
                 }
             }
             else
             {
                 index++;
-                this.EndOfFile = true;
+                EndOfFile = true;
                 retval = 0xFF;
 
                 Console.WriteLine("Read to EOF");
@@ -161,7 +161,7 @@ namespace PhotoLib.Jpeg
                 retval |= (ushort)(next & mask);
 
                 nextBit -= length;
-                this.CheckByte();
+                CheckByte();
                 total -= length;
                 length = (ushort)Math.Min(total, nextBit + 1);
             }
@@ -175,10 +175,10 @@ namespace PhotoLib.Jpeg
 
         private void CheckByte()
         {
-            if (this.nextBit < 0)
+            if (nextBit < 0)
             {
-                this.nextBit = 7;
-                this.currentByte = this.GetNextByte();
+                nextBit = 7;
+                currentByte = GetNextByte();
             }
         }
 
@@ -191,7 +191,7 @@ namespace PhotoLib.Jpeg
             HuffmanTable.HCode hCode;
             do
             {
-                hufIndex = this.GetNextShort(hufIndex);
+                hufIndex = GetNextShort(hufIndex);
                 hufBits++;
             }
             while (!table.Dictionary.TryGetValue(hufIndex, out hCode) || hCode.Length != hufBits);
@@ -203,7 +203,7 @@ namespace PhotoLib.Jpeg
         {
             var hufIndex = (ushort)0;
             for (var i = 0; i < bits; i++)
-                hufIndex = this.GetNextShort(hufIndex);
+                hufIndex = GetNextShort(hufIndex);
 
             return hufIndex;
         }

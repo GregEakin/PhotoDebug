@@ -26,23 +26,23 @@ namespace PhotoLib.Tiff
 
         public RawImage(BinaryReader binaryReader)
         {
-            this.header = new CR2Header(binaryReader);
+            header = new CR2Header(binaryReader);
 
-            var next = this.header.TiffOffset;
+            var next = header.TiffOffset;
             while (next > 0)
             {
                 binaryReader.BaseStream.Seek(next, SeekOrigin.Begin);
                 var dir = new ImageFileDirectory(binaryReader);
-                this.directoryList.Add(next, dir);
+                directoryList.Add(next, dir);
                 next = dir.NextEntry;
             }
 
-            next = this.header.RawIfdOffset;
-            while (next > 0 && !this.directoryList.ContainsKey(next))
+            next = header.RawIfdOffset;
+            while (next > 0 && !directoryList.ContainsKey(next))
             {
                 binaryReader.BaseStream.Seek(next, SeekOrigin.Begin);
                 var dir = new ImageFileDirectory(binaryReader);
-                this.directoryList.Add(next, dir);
+                directoryList.Add(next, dir);
                 next = dir.NextEntry;
             }
         }
@@ -55,7 +55,7 @@ namespace PhotoLib.Tiff
         {
             get
             {
-                return this.directoryList.Values;
+                return directoryList.Values;
             }
         }
 
@@ -63,7 +63,7 @@ namespace PhotoLib.Tiff
         {
             get
             {
-                return this.header;
+                return header;
             }
         }
 

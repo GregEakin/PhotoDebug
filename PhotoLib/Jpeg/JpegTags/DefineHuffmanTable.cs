@@ -46,7 +46,7 @@ namespace PhotoLib.Jpeg.JpegTags
                 var data1 = binaryReader.ReadBytes(16);
                 var sum = data1.Sum(b => b);
                 var data2 = binaryReader.ReadBytes(sum);
-                this.tables.Add(index, new HuffmanTable(index, data1, data2));
+                tables.Add(index, new HuffmanTable(index, data1, data2));
                 size += 1 + data1.Length + data2.Length;
             }
 

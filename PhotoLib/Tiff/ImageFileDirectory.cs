@@ -29,7 +29,7 @@ namespace PhotoLib.Tiff
 
         public ImageFileDirectory(ushort length)
         {
-            this.entries = new ImageFileEntry[length];
+            entries = new ImageFileEntry[length];
         }
 
         public ImageFileDirectory(BinaryReader binaryReader)
@@ -37,13 +37,13 @@ namespace PhotoLib.Tiff
             var dirStart = binaryReader.BaseStream.Position;
 
             var length = binaryReader.ReadUInt16();
-            this.entries = new ImageFileEntry[length];
+            entries = new ImageFileEntry[length];
             for (var i = 0; i < length; i++)
             {
-                this.entries[i] = new ImageFileEntry(binaryReader);
+                entries[i] = new ImageFileEntry(binaryReader);
             }
             var next = binaryReader.ReadUInt32();
-            this.nextEntry = next;
+            nextEntry = next;
 
             // if (next == 0) next = (uint)(binaryReader.BaseStream.Length + 1);
             // Console.WriteLine("### Directory {0}, [0x{1} - 0x{2}]", length, dirStart.ToString("X8"), (next - 1).ToString("X8"));
@@ -59,7 +59,7 @@ namespace PhotoLib.Tiff
         {
             get
             {
-                return this.entries;
+                return entries;
             }
         }
 
@@ -67,7 +67,7 @@ namespace PhotoLib.Tiff
         {
             get
             {
-                return this.nextEntry;
+                return nextEntry;
             }
         }
 
@@ -75,7 +75,7 @@ namespace PhotoLib.Tiff
         {
             get
             {
-                return this.entries.FirstOrDefault(imageFileEntry => imageFileEntry.TagId == key);
+                return entries.FirstOrDefault(imageFileEntry => imageFileEntry.TagId == key);
             }
         }
 
@@ -90,7 +90,7 @@ namespace PhotoLib.Tiff
             const string RationalItem = "{0}/{1} = {2}";
 
             var count = -1;
-            foreach (var entry in this.Entries)
+            foreach (var entry in Entries)
             {
                 count++;
 

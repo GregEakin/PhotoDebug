@@ -33,7 +33,7 @@ namespace PhotoLib.Jpeg
             this.index = index;
             this.data1 = data1;
             this.data2 = data2;
-            this.dictionary = BuildTree(data1, data2);
+            dictionary = BuildTree(data1, data2);
         }
 
         #endregion
@@ -44,7 +44,7 @@ namespace PhotoLib.Jpeg
         {
             get
             {
-                return this.data1;
+                return data1;
             }
         }
 
@@ -52,7 +52,7 @@ namespace PhotoLib.Jpeg
         {
             get
             {
-                return this.data2;
+                return data2;
             }
         }
 
@@ -60,7 +60,7 @@ namespace PhotoLib.Jpeg
         {
             get
             {
-                return this.dictionary;
+                return dictionary;
             }
         }
 
@@ -71,7 +71,7 @@ namespace PhotoLib.Jpeg
         {
             get
             {
-                return this.index;
+                return index;
             }
         }
 
@@ -178,8 +178,8 @@ namespace PhotoLib.Jpeg
         public override string ToString()
         {
             var retval = new StringBuilder();
-            var tableNumber = this.index & 0x0F;
-            var tableType = (this.index & 0x10) == 0 ? "DC" : "AC";
+            var tableNumber = index & 0x0F;
+            var tableType = (index & 0x10) == 0 ? "DC" : "AC";
 
             retval.AppendLine("HuffmanTable {0} {1}".FormatWith(tableType, tableNumber));
             var bits = ToTextTree(data1, data2);
@@ -187,15 +187,15 @@ namespace PhotoLib.Jpeg
             var offset = 0;
             for (byte i = 0; i < 16; i++)
             {
-                if (this.data1[i] <= 0)
+                if (data1[i] <= 0)
                 {
                     continue;
                 }
 
                 retval.Append("{0,2} : ".FormatWith(i + 1));
-                for (var j = 0; j < this.data1[i]; j++)
+                for (var j = 0; j < data1[i]; j++)
                 {
-                    retval.Append("{0} ({1}) ".FormatWith(this.data2[offset].ToString("X2"), bits[offset]));
+                    retval.Append("{0} ({1}) ".FormatWith(data2[offset].ToString("X2"), bits[offset]));
                     offset++;
                 }
                 retval.AppendLine();
@@ -218,8 +218,8 @@ namespace PhotoLib.Jpeg
 
             public HCode(byte code, byte length)
             {
-                this.Code = code;
-                this.Length = length;
+                Code = code;
+                Length = length;
             }
         }
 

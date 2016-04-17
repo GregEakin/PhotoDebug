@@ -59,7 +59,7 @@ namespace PhotoLib.Tiff
         {
             get
             {
-                return this.byteOrder;
+                return byteOrder;
             }
         }
 
@@ -70,7 +70,7 @@ namespace PhotoLib.Tiff
         {
             get
             {
-                return this.cr2Magic;
+                return cr2Magic;
             }
         }
 
@@ -78,7 +78,7 @@ namespace PhotoLib.Tiff
         {
             get
             {
-                return this.cr2Version;
+                return cr2Version;
             }
         }
 
@@ -86,7 +86,7 @@ namespace PhotoLib.Tiff
         {
             get
             {
-                return this.rawIfdOffset;
+                return rawIfdOffset;
             }
         }
 
@@ -97,7 +97,7 @@ namespace PhotoLib.Tiff
         {
             get
             {
-                return this.tiffMagic;
+                return tiffMagic;
             }
         }
 
@@ -105,7 +105,7 @@ namespace PhotoLib.Tiff
         {
             get
             {
-                return this.tiffOffset;
+                return tiffOffset;
             }
         }
 

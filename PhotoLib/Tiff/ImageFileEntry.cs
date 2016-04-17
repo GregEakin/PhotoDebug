@@ -55,7 +55,7 @@ namespace PhotoLib.Tiff
         {
             get
             {
-                return this.numberOfValue;
+                return numberOfValue;
             }
         }
 
@@ -63,7 +63,7 @@ namespace PhotoLib.Tiff
         {
             get
             {
-                return this.tagId;
+                return tagId;
             }
         }
 
@@ -71,7 +71,7 @@ namespace PhotoLib.Tiff
         {
             get
             {
-                return this.tagType;
+                return tagType;
             }
         }
 
@@ -79,7 +79,7 @@ namespace PhotoLib.Tiff
         {
             get
             {
-                return this.valuePointer;
+                return valuePointer;
             }
         }
 
