@@ -21,10 +21,10 @@ namespace PhotoTests
         [TestMethod]
         public void DumpHuffmanTable()
         {
-            const string Directory = @"..\..\..\Samples\";
-            const string FileName2 = Directory + "huff_simple0.jpg";
+            const string directory = @"..\..\..\Samples\";
+            const string fileName2 = directory + "huff_simple0.jpg";
 
-            using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
+            using (var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read))
             using (var binaryReader = new BinaryReader(fileStream))
             {
                 binaryReader.BaseStream.Seek(0x000000D0u, SeekOrigin.Begin);
@@ -39,10 +39,10 @@ namespace PhotoTests
         [TestMethod]
         public void TestMethod8()
         {
-            const string Directory = @"..\..\..\Samples\";
-            const string FileName2 = Directory + "IMAG0086.jpg";
+            const string directory = @"..\..\..\Samples\";
+            const string fileName2 = directory + "IMAG0086.jpg";
 
-            using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
+            using (var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read))
             using (var binaryReader = new BinaryReader(fileStream))
             {
                 var startOfImage = new StartOfImage(binaryReader, 0x00u, (uint)fileStream.Length);
@@ -79,10 +79,10 @@ namespace PhotoTests
         {
             // const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
             // const string FileName2 = Directory + "IMG_0503.CR2";
-            const string Directory = @"D:\Users\Greg\Pictures\2013-10-06 001\";
-            const string FileName2 = Directory + "0L2A8892.CR2";
+            const string directory = @"D:\Users\Greg\Pictures\2013-10-06 001\";
+            const string fileName2 = directory + "0L2A8892.CR2";
 
-            using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
+            using (var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read))
             using (var binaryReader = new BinaryReader(fileStream))
             {
                 var rawImage = new RawImage(binaryReader);
@@ -104,7 +104,7 @@ namespace PhotoTests
                 var rawSize = address + length - binaryReader.BaseStream.Position - 2;
                 // Assert.AreEqual(23852856, rawSize); // RawSize (Raw = new byte[RawSize]
                 startOfImage.ImageData = new ImageData(binaryReader, (uint)rawSize);
-                var table0 = startOfImage.HuffmanTable.Tables[0x00];
+                // var table0 = startOfImage.HuffmanTable.Tables[0x00];
 
                 var buffer = new byte[rawSize];
 
@@ -149,15 +149,15 @@ namespace PhotoTests
             // const string Folder = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
             // const string FileName2 = Folder + "IMG_0503.CR2";
 
-            const string Folder = @"D:\Users\Greg\Pictures\2013-10-06 001\";
-            const string FileName2 = Folder + "0L2A8892.CR2";
-            const string Bitmap = Folder + "0L2A8892 B6.BMP";
+            const string folder = @"D:\Users\Greg\Pictures\2013-10-06 001\";
+            const string fileName2 = folder + "0L2A8892.CR2";
+            const string bitmap = folder + "0L2A8892 B6.BMP";
 
             //const string Folder = @"C:\Users\Greg\Pictures\2013_06_02\";
             //const string FileName2 = Folder + "IMG_3559.CR2";
             //const string Bitmap = Folder + "IMG_3559.BMP";
 
-            ProcessFile(FileName2, Bitmap);
+            ProcessFile(fileName2, bitmap);
         }
 
         private static void ProcessFile(string fileName, string bitmap)
@@ -226,10 +226,10 @@ namespace PhotoTests
 
         private static void DumpPixelDebug(int row, IList<short> rowBuf0, IList<short> rowBuf1)
         {
-            const int X = 122; // 2116;
-            const int Y = 40; // 1416 / 2;
+            const int x = 122; // 2116;
+            const int y = 40; // 1416 / 2;
 
-            var q = row - Y;
+            var q = row - y;
             if (q < 0 || q >= 5)
             {
                 return;
@@ -237,10 +237,10 @@ namespace PhotoTests
 
             for (var p = 0; p < 5; p++)
             {
-                var red = rowBuf0[2 * p + X + 0] - 2047;
-                var green = rowBuf0[2 * p + X + 1] - 2047;
-                var blue = rowBuf1[2 * p + X + 1] - 2047;
-                var green2 = rowBuf1[2 * p + X + 0] - 2047;
+                var red = rowBuf0[2 * p + x + 0] - 2047;
+                var green = rowBuf0[2 * p + x + 1] - 2047;
+                var blue = rowBuf1[2 * p + x + 1] - 2047;
+                var green2 = rowBuf1[2 * p + x + 0] - 2047;
 
                 Console.WriteLine("{4}, {5}: {0}, {1}, {2}, {3}", red, green, blue, green2, p + 1, q + 1);
             }
@@ -286,10 +286,10 @@ namespace PhotoTests
         [TestMethod]
         public void SerialNums()
         {
-            const uint Cam1 = 3071201378;
-            const uint Cam1H = Cam1 & 0xFFFF0000 >> 8;
-            const uint Cam1L = Cam1 & 0x0000FFFF;
-            Assert.AreEqual("ED00053346", "{0}{1}".FormatWith(Cam1H.ToString("X4"), Cam1L.ToString("D5")));
+            const uint cam1 = 3071201378;
+            const uint cam1H = cam1 & 0xFFFF0000 >> 8;
+            const uint cam1L = cam1 & 0x0000FFFF;
+            Assert.AreEqual("ED00053346", "{0}{1}".FormatWith(cam1H.ToString("X4"), cam1L.ToString("D5")));
             // var cam2 = "%04X%05d";
         }
 
@@ -397,10 +397,10 @@ namespace PhotoTests
         [TestMethod]
         public void TestMethodTags()
         {
-            const string Directory = @"..\..\Photos\";
-            const string FileName2 = Directory + "5DIIIhigh.CR2";
+            const string directory = @"..\..\Photos\";
+            const string fileName2 = directory + "5DIIIhigh.CR2";
 
-            using (var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read))
+            using (var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read))
             using (var binaryReader = new BinaryReader(fileStream))
             {
                 var rawImage = new RawImage(binaryReader);

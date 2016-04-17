@@ -176,6 +176,7 @@ namespace PhotoTests.Prototypes
                 // read four shorts, for two pixels
                 for (var col = 0; col < samples / 4; col++)       // 0..216  ==> 0/6 .. 2592/6  --> 0 .. 432
                 {
+                    cc += 4;
                     var diff = new DiffBuf
                     {
                         Y1 = startOfImage.ProcessColor(0x00),

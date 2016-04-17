@@ -25,7 +25,7 @@ namespace PhotoTests.Prototypes
                 var image = rawImage.Directories.First();
 
                 var imageFileEntry02BC = image.Entries.Single(e => e.TagId == 0x02BC && e.TagType == 1);
-                Assert.AreEqual(8192u, imageFileEntry02BC.NumberOfValue);
+                // Assert.AreEqual(8192u, imageFileEntry02BC.NumberOfValue);
                 // Assert.AreEqual(72132u, imageFileEntry02BC.ValuePointer);
                 var xmpData = RawImage.ReadBytes(binaryReader, imageFileEntry02BC);
                 var xmp = System.Text.Encoding.UTF8.GetString(xmpData);

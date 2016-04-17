@@ -113,14 +113,37 @@ namespace PhotoLib.Tiff
 
         public static string ReadChars(BinaryReader binaryReader, ImageFileEntry imageFileEntry)
         {
-            var retval = new StringBuilder();
+            if (imageFileEntry.NumberOfValue <= 4)
+            {
+                var bytes = new[]
+                {
+                    (byte)(imageFileEntry.ValuePointer >>  0 & 0xFF),
+                    (byte)(imageFileEntry.ValuePointer >>  8 & 0xFF),
+                    (byte)(imageFileEntry.ValuePointer >> 16 & 0xFF),
+                    (byte)(imageFileEntry.ValuePointer >> 24 & 0xFF),
+                };
+
+                return imageFileEntry.NumberOfValue == 4u && bytes[3] != 0
+                    ? Encoding.ASCII.GetString(bytes, 0, (int)imageFileEntry.NumberOfValue)
+                    : Encoding.ASCII.GetString(bytes, 0, (int)imageFileEntry.NumberOfValue - 1);
+            }
 
             if (binaryReader.BaseStream.Position != imageFileEntry.ValuePointer)
             {
                 binaryReader.BaseStream.Seek(imageFileEntry.ValuePointer, SeekOrigin.Begin);
             }
 
-            for (var j = 0; j < imageFileEntry.NumberOfValue; j++)
+            //var data = new byte[imageFileEntry.NumberOfValue];
+            //for (var i = 0; i < imageFileEntry.NumberOfValue; i++)
+            //    data[i] = binaryReader.ReadByte();
+
+            //return data[imageFileEntry.NumberOfValue - 1] != 0
+            //    ? Encoding.ASCII.GetString(data, 0, (int)imageFileEntry.NumberOfValue)
+            //    : Encoding.ASCII.GetString(data, 0, (int)imageFileEntry.NumberOfValue - 1);
+
+            var retval = new StringBuilder();
+
+            for (var i = 0; i < imageFileEntry.NumberOfValue; i++)
             {
                 var us = binaryReader.ReadByte();
                 retval.Append((char)us);

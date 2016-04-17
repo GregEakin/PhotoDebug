@@ -68,7 +68,6 @@ namespace PhotoTests.Prototypes
                 var planarConfiguration = image.Entries.Single(e => e.TagId == 0x011C && e.TagType == 3).ValuePointer;
                 Assert.AreEqual(1u, planarConfiguration);
 
-                // unknown
                 var table1 = image.Entries.Single(e => e.TagId == 0xC5D9 && e.TagType == 4).ValuePointer;
                 Assert.AreEqual(2u, table1);
 

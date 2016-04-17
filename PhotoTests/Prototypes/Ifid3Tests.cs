@@ -2,7 +2,6 @@
 using PhotoLib.Tiff;
 using System.IO;
 using System.Linq;
-using PhotoLib.Jpeg;
 
 namespace PhotoTests.Prototypes
 {
@@ -48,9 +47,8 @@ namespace PhotoTests.Prototypes
                 var item4 = image.Entries.Single(e => e.TagId == 0xC5E0 && e.TagType == 4).ValuePointer;
                 Assert.AreEqual(0x01u, item4);
 
-                // 0xC640 UShort 16-bit: [0x000119BE] (3): 1, 2960, 2960, 
                 var imageFileEntry = image.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3);
-                Assert.AreEqual(3u, imageFileEntry.NumberOfValue);
+                // Assert.AreEqual(3u, imageFileEntry.NumberOfValue);
                 // Assert.AreEqual(0x000119BEu, imageFileEntry.ValuePointer);
                 var slices = RawImage.ReadUInts16(binaryReader, imageFileEntry);
                 CollectionAssert.AreEqual(new ushort[] {1, 2960, 2960}, slices);

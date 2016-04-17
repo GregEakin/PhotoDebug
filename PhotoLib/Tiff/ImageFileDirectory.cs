@@ -102,7 +102,7 @@ namespace PhotoLib.Tiff
                     var tags = new ImageFileDirectory(binaryReader);
                     tags.DumpDirectory(binaryReader);
                 }
-                if (entry.TagType == 0x07 && entry.TagId == 0x927c) // Makernote.
+                else if (entry.TagType == 0x07 && entry.TagId == 0x927c) // Makernote.
                 {
                     Console.Write(BlockHeader, count, entry.TagId.ToString("X4"), "Maker note");
                     Console.WriteLine(ReferencedItem, entry.ValuePointer.ToString("X8"), entry.NumberOfValue);

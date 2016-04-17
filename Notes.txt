@@ -1,4 +1,15 @@
-The conversion separates the RGB image to monochrome ( luminance Y) and colour (chrominance Cr Cb) channels so that different levels of compression can be applied to the monochrome and colour components.
+Memory Data
+	Data Descriptor
+		What's in the data?
+		What does the data means?
+		How is it organized?
+	Data block
+		Read from file.
+		Save changes in loal cache.
+		Write to new file.
+
+=============================
+The conversion separates the RGB image to monochrome (luminance Y) and color (chrominance Cr Cb) channels so that different levels of compression can be applied to the monochrome and color components.
 
 YCbCr (256 levels) can be computed directly from 8-bit RGB as follows:
 	Y = 0.299 R + 0.587 G + 0.114 B
@@ -18,17 +29,3 @@ http://www.ams.org/samplings/feature-column/fcarc-image-compression
 [Cb] = [ -0.16874 -0.33126  0.50000 ] [ G ]
 [Cr] = [  0.50000 -0.41869 -0.08131 ] [ B ]
 
-
-===================================
-Tag 0x0097 (Dust Delete Data, DDD)
-
-Example of jpeg analysis (exifprobe):
-
-===== Start of JPEG data for IFD 0, data length 524974
-    JPEG_SOI
-      JPEG_DHT length 418 table class = 0 table id = 0
-      JPEG_DQT length 132
-      JPEG_SOF_0 length 17, 8 bits/sample, components=3, width=2256, height=1504
-      JPEG_SOS length 12  start of JPEG data, 3 components 3393024 pixels
-    JPEG_EOI JPEG length 524974
-===== End of JPEG data ====

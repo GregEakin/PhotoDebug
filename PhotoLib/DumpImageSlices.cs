@@ -32,9 +32,9 @@ namespace PhotoLib
                 // Image #3 is a raw image compressed in ITU-T81 lossless JPEG
                 var image = rawImage.Directories.Skip(3).First();
 
-                var offset = image.Entries[0x0111].ValuePointer;
-                var count = image.Entries[0x0117].ValuePointer;
-                var slices = RawImage.ReadUInts16(binaryReader, image.Entries[0xC640]);
+                var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
+                var count = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
+                var slices = RawImage.ReadUInts16(binaryReader, image.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3));
 
                 binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, offset, count);

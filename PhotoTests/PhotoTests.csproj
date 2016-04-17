@@ -39,8 +39,10 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -58,6 +60,7 @@
     <Compile Include="Canon7D\C7DIfd1.cs" />
     <Compile Include="BeforeUnitTests.cs" />
     <Compile Include="DualReaderTests.cs" />
+    <Compile Include="Exif\ParseXml.cs" />
     <Compile Include="Jpeg\JiffMarkerTests.cs" />
     <Compile Include="OtherUnitTests.cs" />
     <Compile Include="JpegFileTests.cs" />
@@ -69,9 +72,12 @@
     <Compile Include="Jpeg\StartOfImageTests.cs" />
     <Compile Include="Jpeg\StartOfScanTests.cs" />
     <Compile Include="Jpeg\StripedImageDataTests.cs" />
+    <Compile Include="Prototypes\Canon80D.cs" />
+    <Compile Include="Prototypes\ColorData.cs" />
     <Compile Include="Prototypes\Ifid3Tests.cs" />
     <Compile Include="Prototypes\Ifid2Tests.cs" />
     <Compile Include="Prototypes\Ifid1Tests.cs" />
+    <Compile Include="Prototypes\Image3RawIV.cs" />
     <Compile Include="Prototypes\Image3SRawI.cs" />
     <Compile Include="Prototypes\Image3SRawII.cs" />
     <Compile Include="Prototypes\Image3Raw.cs" />
@@ -83,7 +89,12 @@
     <Compile Include="Prototypes\GpsData.cs" />
     <Compile Include="Prototypes\Ifid0Tests.cs" />
     <Compile Include="Prototypes\ExifData.cs" />
+    <Compile Include="Prototypes\Image3SRawIII.cs" />
+    <Compile Include="Prototypes\Image3SRawIV.cs" />
+    <Compile Include="Prototypes\Image3MRawIV.cs" />
+    <Compile Include="Prototypes\KeyInformation.cs" />
     <Compile Include="Prototypes\MakerNoteTests.cs" />
+    <Compile Include="Prototypes\SensorInfo.cs" />
     <Compile Include="Prototypes\XmpData.cs" />
     <Compile Include="Tiff\RawDataTests.cs" />
     <Compile Include="Tiff\RawImageTests.cs" />
@@ -101,6 +112,7 @@
       <Name>PhotoLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

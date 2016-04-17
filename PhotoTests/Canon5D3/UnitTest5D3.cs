@@ -47,7 +47,7 @@ namespace PhotoTests.Canon5D3
         [TestMethod]
         public void RawImageSize()
         {
-            // 1 Sensor Width                    : 5920 = 2960 * 2 = 1 * 2960 + 2960
+            // 1 Sensor Width                    : 5920 = 1 * 2960 + 2960
             // 2 Sensor Height                   : 3950
 
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
