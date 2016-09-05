@@ -56,6 +56,12 @@
     <Compile Include="Canon5D3\C5D3Ifd1.cs" />
     <Compile Include="Canon5D3\C5D3Ifd3.cs" />
     <Compile Include="Canon5D3\UnitTest5D3.cs" />
+    <Compile Include="Canon5D4\C5D4Ifd1.cs" />
+    <Compile Include="Canon5D4\C5D4Ifd3.cs" />
+    <Compile Include="Canon5D4\UnitTest5D4.cs" />
+    <Compile Include="Canon7D2\C72DIfd1.cs" />
+    <Compile Include="Canon7D2\C72DIfd3.cs" />
+    <Compile Include="Canon7D2\UnitTest7D2.cs" />
     <Compile Include="Canon7D\C7DIfd3.cs" />
     <Compile Include="Canon7D\C7DIfd1.cs" />
     <Compile Include="BeforeUnitTests.cs" />
@@ -72,11 +78,14 @@
     <Compile Include="Jpeg\StartOfImageTests.cs" />
     <Compile Include="Jpeg\StartOfScanTests.cs" />
     <Compile Include="Jpeg\StripedImageDataTests.cs" />
+    <Compile Include="Prototypes\Canon5d4.cs" />
     <Compile Include="Prototypes\Canon80D.cs" />
     <Compile Include="Prototypes\ColorData.cs" />
+    <Compile Include="Prototypes\GpsData2.cs" />
     <Compile Include="Prototypes\Ifid3Tests.cs" />
     <Compile Include="Prototypes\Ifid2Tests.cs" />
     <Compile Include="Prototypes\Ifid1Tests.cs" />
+    <Compile Include="Prototypes\CanonM3.cs" />
     <Compile Include="Prototypes\Image3RawIV.cs" />
     <Compile Include="Prototypes\Image3SRawI.cs" />
     <Compile Include="Prototypes\Image3SRawII.cs" />
@@ -95,6 +104,7 @@
     <Compile Include="Prototypes\KeyInformation.cs" />
     <Compile Include="Prototypes\MakerNoteTests.cs" />
     <Compile Include="Prototypes\SensorInfo.cs" />
+    <Compile Include="Prototypes\Canon7d2.cs" />
     <Compile Include="Prototypes\XmpData.cs" />
     <Compile Include="Tiff\RawDataTests.cs" />
     <Compile Include="Tiff\RawImageTests.cs" />
@@ -105,6 +115,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="UnitTests.cs" />
+    <Compile Include="Utilities\ExpectedException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PhotoLib\PhotoLib.csproj">

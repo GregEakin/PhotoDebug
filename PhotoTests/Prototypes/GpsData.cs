@@ -13,13 +13,15 @@ namespace PhotoTests.Prototypes
         [TestMethod]
         public void DumpGpsData()
         {
-            //const string fileName = @"D:\Users\Greg\Pictures\2016-03-20 GPS\0L2A2368.CR2";
+            const string fileName = @"D:\Users\Greg\Pictures\2016-03-20 GPS\0L2A2368.CR2";
             //const string fileName = @"D:\Users\Greg\Pictures\2016_03_21\0L2A2373.CR2";
-            //DumpGpsInfo(fileName);
+            //const string fileName = @"D:\Users\Greg\Pictures\2016-05-20\IMG_0008.CR2";
+            DumpGpsInfo(fileName);
 
-            var fileEntries = Directory.GetFiles(@"D:\Users\Greg\Pictures\2016-03-28");
-            foreach (var fileName in fileEntries.Where(file => file.EndsWith(".CR2")))
-                DumpGpsInfo(fileName);
+
+            //var fileEntries = Directory.GetFiles(@"D:\Users\Greg\Pictures\2016-03-28");
+            //foreach (var fileName in fileEntries.Where(file => file.EndsWith(".CR2")))
+            //    DumpGpsInfo(fileName);
         }
 
         private static void DumpGpsInfo(string fileName)
@@ -33,8 +35,6 @@ namespace PhotoTests.Prototypes
                 var rawImage = new RawImage(binaryReader);
                 var image = rawImage.Directories.First();
                 var gps = image.Entries.Single(e => e.TagId == 0x8825 && e.TagType == 4).ValuePointer;
-                // Assert.AreEqual(70028u, gps);
-
                 DumpGpsInfo(binaryReader, gps);
             }
         }
@@ -64,12 +64,15 @@ namespace PhotoTests.Prototypes
 
             var date = RawImage.ReadChars(binaryReader, tags.Entries.Single(e => e.TagId == 0x001D && e.TagType == 2));
             var timeData = RawImage.ReadRational(binaryReader, tags.Entries.Single(e => e.TagId == 0x0007 && e.TagType == 5));
+            Assert.AreEqual(6, timeData.Length);
             var time1 = (double)timeData[0] / timeData[1];
             var time2 = (double)timeData[2] / timeData[3];
             var time3 = (double)timeData[4] / timeData[5];
-            Console.WriteLine("Date / Time {0}, {1} {2} {3} UTC", date, time1, time2, time3);
+            var localTime = GpsData2.ConvertDateTime(date, time1, time2, time3);
+            Console.WriteLine("Date / Time {0}", localTime);
 
             var latitudeData = RawImage.ReadRational(binaryReader, tags.Entries.Single(e => e.TagId == 0x0002 && e.TagType == 5));
+            Assert.AreEqual(6, latitudeData.Length);
             var latitude1 = (double)latitudeData[0] / latitudeData[1];
             var latitude2 = (double)latitudeData[2] / latitudeData[3];
             var latitude3 = (double)latitudeData[4] / latitudeData[5];
@@ -77,6 +80,7 @@ namespace PhotoTests.Prototypes
             Console.WriteLine("Latitude {0} {1} {2} {3}", latitude1, latitude2, latitude3, latitudeDirection);
 
             var longitudeData = RawImage.ReadRational(binaryReader, tags.Entries.Single(e => e.TagId == 0x0004 && e.TagType == 5));
+            Assert.AreEqual(6, longitudeData.Length);
             var longitude1 = (double)longitudeData[0] / longitudeData[1];
             var longitude2 = (double)longitudeData[2] / longitudeData[3];
             var longitude3 = (double)longitudeData[4] / longitudeData[5];
@@ -84,6 +88,7 @@ namespace PhotoTests.Prototypes
             Console.WriteLine("Longitude {0} {1} {2} {3}", longitude1, longitude2, longitude3, longitudeDirection);
             
             var altitudeData = RawImage.ReadRational(binaryReader, tags.Entries.Single(e => e.TagId == 0x0006 && e.TagType == 5));
+            Assert.AreEqual(2, altitudeData.Length);
             var altitude = (double)altitudeData[0] / altitudeData[1];
             Console.WriteLine("Altitude {0:0.00} m", altitude);
             Assert.AreEqual(0x00000000u, tags.Entries.Single(e => e.TagId == 0x0005 && e.TagType == 1).ValuePointer);
@@ -92,23 +97,17 @@ namespace PhotoTests.Prototypes
 
             Assert.AreEqual("M", RawImage.ReadChars(binaryReader, tags.Entries.Single(e => e.TagId == 0x0010 && e.TagType == 2)));     // Magnetic Direction
             var directionData = RawImage.ReadRational(binaryReader, tags.Entries.Single(e => e.TagId == 0x0011 && e.TagType == 5));
+            Assert.AreEqual(2, directionData.Length);
             var direction = (double)directionData[0] / directionData[1];
-            Console.WriteLine("direction {0}", direction);
+            Console.WriteLine("Direction {0}°", direction);
 
             var dopData = RawImage.ReadRational(binaryReader, tags.Entries.Single(e => e.TagId == 0x000B && e.TagType == 5));
+            Assert.AreEqual(2, dopData.Length);
             var dop = (double)dopData[0] / dopData[1];
             Console.WriteLine("Dilution of Position {0}", dop);
 
-            //Fix quality: 0 = invalid
-            //             1 = GPS fix(SPS)
-            //             2 = DGPS fix
-            //             3 = PPS fix
-            //             4 = Real Time Kinematic
-            //             5 = Float RTK
-            //             6 = estimated(dead reckoning)(2.3 feature)
-            //             7 = Manual input mode
-            //             8 = Simulation mode
-            Console.WriteLine("Fix quality = {0}", RawImage.ReadChars(binaryReader, tags.Entries.Single(e => e.TagId == 0x000A && e.TagType == 2)));
+            var quality = RawImage.ReadChars(binaryReader, tags.Entries.Single(e => e.TagId == 0x000A && e.TagType == 2));
+            Console.WriteLine("Fix quality = {0}", GpsData2.DumpFixQuality(quality));
             Console.WriteLine("Number of satellites = {0}", RawImage.ReadChars(binaryReader, tags.Entries.Single(e => e.TagId == 0x0008 && e.TagType == 2)));
 
             // Speed
@@ -143,9 +142,9 @@ namespace PhotoTests.Prototypes
 
             // Area Information
             var data1C = RawImage.ReadBytes(binaryReader, tags.Entries.Single(e => e.TagId == 0x001C && e.TagType == 7));
+            Assert.AreEqual(256, data1C.Length);
             foreach (var b in data1C)
                 Assert.AreEqual(0x00, b);
-            Assert.AreEqual(256, data1C.Length);
 
             // Differential
             Assert.AreEqual(0x0000u, tags.Entries.Single(e => e.TagId == 0x001E && e.TagType == 3).ValuePointer);

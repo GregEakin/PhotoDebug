@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 namespace PhotoTests.Prototypes
 {
     [TestClass]
-    public class Image3RawIV
+    public class CanonM3
     {
         private static int cc;
 
@@ -31,7 +31,7 @@ namespace PhotoTests.Prototypes
         [TestMethod]
         public void DumpImage3RawTest()
         {
-            const string fileName = @"D:\Users\Greg\Pictures\2016-02-21 Studio\Studio 015.CR2";
+            const string fileName = @"D:\Users\Greg\Pictures\2016-05-20\IMG_0008.CR2";
             DumpImage3Raw(fileName);
         }
 
@@ -54,15 +54,15 @@ namespace PhotoTests.Prototypes
 
                 var imageFileEntry = image.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3);
                 var slices = RawImage.ReadUInts16(binaryReader, imageFileEntry);
-                CollectionAssert.AreEqual(new[] { (ushort)1, (ushort)2960, (ushort)2960 }, slices);
+                CollectionAssert.AreEqual(new[] { (ushort)0, (ushort)0, (ushort)6096 }, slices);
 
                 binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, offset, count);
 
                 var startOfFrame = startOfImage.StartOfFrame;
-                Assert.AreEqual(3950u, startOfFrame.ScanLines); // = 3840 + 110
-                Assert.AreEqual(2960u, startOfFrame.SamplesPerLine); // = 5920 / 2
-                Assert.AreEqual(5920, startOfFrame.Width); // = 5760 + 160
+                Assert.AreEqual(4056u, startOfFrame.ScanLines); // = 3840 + 110
+                Assert.AreEqual(3048u, startOfFrame.SamplesPerLine); // = 5920 / 2
+                Assert.AreEqual(6096, startOfFrame.Width); // = 5760 + 160
 
                 Assert.AreEqual(14, startOfFrame.Precision); // RGGB
 
@@ -102,8 +102,8 @@ namespace PhotoTests.Prototypes
                 var outFile = Path.ChangeExtension(fileName, ".png");
                 CreateBitmap(binaryReader, startOfImage, outFile, offset, slices);
 
-                Assert.AreEqual(23384000, cc);
-                Assert.AreEqual(1, startOfImage.ImageData.DistFromEnd);
+                Assert.AreEqual(24725376, cc);
+                Assert.AreEqual(3, startOfImage.ImageData.DistFromEnd);
             }
         }
 
@@ -114,13 +114,13 @@ namespace PhotoTests.Prototypes
             // 3840 x 5760 
             var startOfFrame = startOfImage.StartOfFrame;
             var height = startOfFrame.ScanLines;
-            Assert.AreEqual(3950u, height);                         // image height
+            Assert.AreEqual(4056u, height);                         // image height
 
             var samplesPerLine = startOfFrame.SamplesPerLine;
-            Assert.AreEqual(2960u, startOfFrame.SamplesPerLine);    // image width
+            Assert.AreEqual(3048u, startOfFrame.SamplesPerLine);    // image width
 
             var width = startOfFrame.Width;
-            Assert.AreEqual(5920, startOfFrame.Width);
+            Assert.AreEqual(6096, startOfFrame.Width);
             Assert.AreEqual(samplesPerLine * 2, slices[0] * slices[1] + slices[2]);
             Assert.AreEqual(width, samplesPerLine * 2);
             Assert.AreEqual(3, 6 * samplesPerLine / (slices[0] * slices[1] + slices[2]));

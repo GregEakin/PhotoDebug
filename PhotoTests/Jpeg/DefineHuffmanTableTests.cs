@@ -1,12 +1,12 @@
-﻿using PhotoLib.Jpeg.JpegTags;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PhotoLib.Jpeg.JpegTags;
+using System;
+using System.IO;
+using System.Linq;
+using static PhotoTests.Utilities.ExpectedException;
 
 namespace PhotoTests.Jpeg
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System;
-    using System.IO;
-    using System.Linq;
-
     [TestClass]
     public class DefineHuffmanTableTests
     {
@@ -25,14 +25,13 @@ namespace PhotoTests.Jpeg
         #region Public Methods and Operators
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void BadMark()
         {
             var badData = new byte[] { 0x00, 0x00 };
             using (var memory = new MemoryStream(badData))
             using (var reader = new BinaryReader(memory))
             {
-                var huffmanTable = new DefineHuffmanTable(reader);
+                AssertThrows<ArgumentException>(() => new DefineHuffmanTable(reader) );
             }
         }
 

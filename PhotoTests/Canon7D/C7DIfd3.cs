@@ -1,4 +1,4 @@
-﻿namespace PhotoTests.Canon5D3
+﻿namespace PhotoTests.Canon7D
 {
     using System;
     using System.IO;
