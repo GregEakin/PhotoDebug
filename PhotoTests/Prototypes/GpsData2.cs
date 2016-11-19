@@ -64,8 +64,8 @@ namespace PhotoTests.Prototypes
             var time1 = (double)timeData[0] / timeData[1];
             var time2 = (double)timeData[2] / timeData[3];
             var time3 = (double)timeData[4] / timeData[5];
-            var localTime = ConvertDateTime(date, time1, time2, time3);
-            Console.WriteLine("Date / Time {0}", localTime);
+            var dateTime = ConvertDateTime(date, time1, time2, time3);
+            Console.WriteLine("Timestamp {0:M\'/\'d\'/\'yyyy\' \'h\':\'mm\':\'ss\' \'tt}", dateTime.ToLocalTime());
 
             var latitudeData = RawImage.ReadRational(binaryReader, tags.Entries.Single(e => e.TagId == 0x0002 && e.TagType == 5));
             Assert.AreEqual(6, latitudeData.Length);
@@ -73,7 +73,7 @@ namespace PhotoTests.Prototypes
             var latitude2 = (double)latitudeData[2] / latitudeData[3];
             var latitude3 = (double)latitudeData[4] / latitudeData[5];
             var latitudeDirection = RawImage.ReadChars(binaryReader, tags.Entries.Single(e => e.TagId == 0x0001 && e.TagType == 2));
-            Console.WriteLine("Latitude {0} {1} {2} {3}", latitude1, latitude2, latitude3, latitudeDirection);
+            Console.WriteLine("Latitude {0}° {1}\' {2}\" {3}", latitude1, latitude2, latitude3, latitudeDirection);
 
             var longitudeData = RawImage.ReadRational(binaryReader, tags.Entries.Single(e => e.TagId == 0x0004 && e.TagType == 5));
             Assert.AreEqual(6, longitudeData.Length);
@@ -81,7 +81,7 @@ namespace PhotoTests.Prototypes
             var longitude2 = (double)longitudeData[2] / longitudeData[3];
             var longitude3 = (double)longitudeData[4] / longitudeData[5];
             var longitudeDirection = RawImage.ReadChars(binaryReader, tags.Entries.Single(e => e.TagId == 0x0003 && e.TagType == 2));
-            Console.WriteLine("Longitude {0} {1} {2} {3}", longitude1, longitude2, longitude3, longitudeDirection);
+            Console.WriteLine("Longitude {0}° {1}\' {2}\" {3}", longitude1, longitude2, longitude3, longitudeDirection);
 
             var altitudeData = RawImage.ReadRational(binaryReader, tags.Entries.Single(e => e.TagId == 0x0006 && e.TagType == 5));
             Assert.AreEqual(2, altitudeData.Length);
@@ -113,9 +113,8 @@ namespace PhotoTests.Prototypes
             var year = Convert.ToInt32(dmy[0]);
             var month = Convert.ToInt32(dmy[1]);
             var day = Convert.ToInt32(dmy[2]);
-            var dateTime = new DateTime(year, month, day, (int)time1, (int)time2, (int)time3, DateTimeKind.Utc);
-            dateTime = dateTime.AddMilliseconds((time3 - (int)time3) * 1000.0);
-            return dateTime.ToLocalTime();
+            var dateTime = new DateTime(year, month, day, (int)time1, (int)time2, (int)Math.Truncate(time3), DateTimeKind.Utc);
+            return dateTime.AddMilliseconds((time3 - Math.Truncate(time3)) * 1000.0);
         }
 
         public static string DumpFixQuality(string quality)
