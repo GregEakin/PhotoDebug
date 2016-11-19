@@ -1,4 +1,6 @@
-﻿namespace HexDump
+﻿// Greg Eakin
+
+namespace HexDump
 {
     using System;
     using System.IO;
