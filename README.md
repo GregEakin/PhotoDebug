@@ -2,6 +2,8 @@
 This is a .NET C# project that reads the raw CR2 files from CANON cameras.
 
 For the image compression, this book was helpful: [*JPEG: Still Image Data Compression Standard*](http://www.springer.com/us/book/9780442012724)
+by Pennebaker, William B., Mitchell, Joan L. 
+
 [![JPEG: Still Image Data Compression Standard](http://gdbtech.info/wp-content/uploads/2016/12/jpegbook-150x150.jpg)](http://www.springer.com/us/book/9780442012724)
 
 ##Information:
@@ -17,11 +19,8 @@ For the image compression, this book was helpful: [*JPEG: Still Image Data Compr
 - [Amazon](https://www.amazon.com/JPEG-Compression-Standard-Multimedia-Standards/dp/0442012721)
 - [Google Books](https://books.google.com/books/about/JPEG.html?id=AepB_PZ_WMkC)
 
-## Author
-:fire: [Greg Eakin](https://www.linkedin.com/in/gregeakin)
-
 ##Sample Code
-Here's sample code to read an image from a Canon 7D:
+Here's sample test code to verify the raw image size, from my Canon 7D:
 * Sensor Width:  5360 = 1340 * 4 = 2 * 1728 + 1904
 * Sensor Height: 3516
 
@@ -32,7 +31,7 @@ using (var binaryReader = new BinaryReader(fileStream))
     var rawImage = new RawImage(binaryReader);
 
     var directory = rawImage.Directories.Last();
-    var address = directory.Entries.Single(e => e.TagId == 0x0111).ValuePointer;
+    var data = directory.Entries.Single(e => e.TagId == 0x0111).ValuePointer;
     var length = directory.Entries.Single(e => e.TagId == 0x0117).ValuePointer;
     var strips = directory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer;
 
@@ -44,8 +43,8 @@ using (var binaryReader = new BinaryReader(fileStream))
     Assert.AreEqual(1728, y);
     Assert.AreEqual(1904, z);
 
-    binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-    var startOfImage = new StartOfImage(binaryReader, address, length);
+    binaryReader.BaseStream.Seek(data, SeekOrigin.Begin);
+    var startOfImage = new StartOfImage(binaryReader, data, length);
     var lossless = startOfImage.StartOfFrame;
     Assert.AreEqual(14, lossless.Precision);
     Assert.AreEqual(4, lossless.Components.Length);
@@ -53,3 +52,6 @@ using (var binaryReader = new BinaryReader(fileStream))
     Assert.AreEqual(3516, lossless.ScanLines);
 }
 ```
+
+## Author
+:fire: [Greg Eakin](https://www.linkedin.com/in/gregeakin)
