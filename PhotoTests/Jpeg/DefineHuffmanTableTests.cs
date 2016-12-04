@@ -1,4 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoTests
+// FILE:		DefineHuffmanTests.cs
+// AUTHOR:		Greg Eakin
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoLib.Jpeg.JpegTags;
 using System;
 using System.IO;

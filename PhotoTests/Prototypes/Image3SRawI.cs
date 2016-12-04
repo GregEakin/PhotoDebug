@@ -1,4 +1,10 @@
-﻿using System;
+﻿// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoTests
+// FILE:		Image3SRawI.cs
+// AUTHOR:		Greg Eakin
+
+using System;
 using System.Drawing;
 using System.IO;
 using System.Linq;

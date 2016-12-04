@@ -1,4 +1,10 @@
-﻿using PhotoLib.Jpeg.JpegTags;
+﻿// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoTests
+// FILE:		UnitTests.cs
+// AUTHOR:		Greg Eakin
+
+using PhotoLib.Jpeg.JpegTags;
 
 namespace PhotoTests
 {

@@ -1,4 +1,10 @@
-﻿using System.Drawing;
+﻿// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoTests
+// FILE:		Image2.cs
+// AUTHOR:		Greg Eakin
+
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

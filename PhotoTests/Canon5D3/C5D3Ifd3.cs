@@ -1,4 +1,10 @@
-﻿namespace PhotoTests.Canon5D3
+﻿// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoTests
+// FILE:		C5D3Ifd3.cs
+// AUTHOR:		Greg Eakin
+
+namespace PhotoTests.Canon5D3
 {
     using System;
     using System.IO;

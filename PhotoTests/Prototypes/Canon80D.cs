@@ -1,4 +1,10 @@
-﻿using System;
+﻿// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoTests
+// FILE:		Canon80D.cs
+// AUTHOR:		Greg Eakin
+
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;

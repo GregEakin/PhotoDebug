@@ -2,7 +2,7 @@
 // Copyright © 2013-2014. All Rights Reserved.
 // 
 // SUBSYSTEM:	PhotoDebug
-// FILE:		DumpImageSlices.cs
+// FILE:		PhotoStuff.cs
 // AUTHOR:		Greg Eakin
 
 using PhotoLib.Jpeg.JpegTags;

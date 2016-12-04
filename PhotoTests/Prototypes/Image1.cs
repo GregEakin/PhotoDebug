@@ -1,4 +1,10 @@
-﻿using System.IO;
+﻿// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoTests
+// FILE:		Image1.cs
+// AUTHOR:		Greg Eakin
+
+using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoLib.Tiff;

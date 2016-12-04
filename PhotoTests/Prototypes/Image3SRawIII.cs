@@ -1,4 +1,10 @@
-﻿using System.IO;
+﻿// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoTests
+// FILE:		Image3SRawIII.cs
+// AUTHOR:		Greg Eakin
+
+using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoLib.Jpeg.JpegTags;

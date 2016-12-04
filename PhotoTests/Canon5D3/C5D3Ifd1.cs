@@ -1,4 +1,10 @@
-﻿using System;
+﻿// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoTests
+// FILE:		C5D3Ifd1.cs
+// AUTHOR:		Greg Eakin
+
+using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoLib.Tiff;

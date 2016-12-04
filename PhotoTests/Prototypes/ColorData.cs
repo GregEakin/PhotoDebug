@@ -1,4 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoTests
+// FILE:		ColorData.cs
+// AUTHOR:		Greg Eakin
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoLib.Tiff;
 using System.IO;
 using System.Linq;

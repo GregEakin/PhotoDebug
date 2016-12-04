@@ -1,4 +1,10 @@
-﻿using System;
+﻿// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoTests
+// FILE:		BeforeUnitTests.cs
+// AUTHOR:		Greg Eakin
+
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Drawing;
 using System.Drawing.Imaging;

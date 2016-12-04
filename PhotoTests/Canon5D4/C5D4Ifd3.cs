@@ -1,4 +1,10 @@
-﻿using System.Linq;
+﻿// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoTests
+// FILE:		C5D4Ifd3.cs
+// AUTHOR:		Greg Eakin
+
+using System.Linq;
 
 namespace PhotoTests.Canon5D4
 {

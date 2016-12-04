@@ -1,4 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoTests
+// FILE:		AATest1.cs
+// AUTHOR:		Greg Eakin
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Xml;
 using System.Xml.Linq;

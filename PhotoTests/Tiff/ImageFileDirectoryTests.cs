@@ -1,4 +1,10 @@
-﻿namespace PhotoTests.Tiff
+﻿// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoTests
+// FILE:		ImageFileDirectoryTests.cs
+// AUTHOR:		Greg Eakin
+
+namespace PhotoTests.Tiff
 {
     using System.IO;
     using System.Linq;

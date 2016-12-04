@@ -1,4 +1,10 @@
-﻿using System;
+﻿// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	JpegParserTests
+// FILE:		UnitTest1.cs
+// AUTHOR:		Greg Eakin
+
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using JpegParser;

@@ -1,7 +1,7 @@
 ﻿// Project Photo Library 0.1
 // Copyright © 2013-2015. All Rights Reserved.
 // 
-// SUBSYSTEM:	PhotoDebug
+// SUBSYSTEM:	PhotoLib
 // FILE:		Comment.cs
 // AUTHOR:		Greg Eakin
 

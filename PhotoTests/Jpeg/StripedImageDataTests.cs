@@ -1,4 +1,10 @@
-﻿namespace PhotoTests.Jpeg
+﻿// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoTests
+// FILE:		StripedImageDataTests.cs
+// AUTHOR:		Greg Eakin
+
+namespace PhotoTests.Jpeg
 {
     using System;
     using Microsoft.VisualStudio.TestTools.UnitTesting;

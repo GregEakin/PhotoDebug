@@ -1,4 +1,10 @@
-﻿namespace PhotoTests.Canon7D
+﻿// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoTests
+// FILE:		C7DIfd3.cs
+// AUTHOR:		Greg Eakin
+
+namespace PhotoTests.Canon7D
 {
     using System;
     using System.IO;

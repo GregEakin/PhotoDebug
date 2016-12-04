@@ -1,7 +1,7 @@
 ﻿// Project Photo Library 0.1
 // Copyright © 2013-2014. All Rights Reserved.
 // 
-// SUBSYSTEM:	PhotoDebug
+// SUBSYSTEM:	PhotoLib
 // FILE:		WhiteBalance.cs
 // AUTHOR:		Greg Eakin
 
