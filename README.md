@@ -22,9 +22,9 @@ For the image compression, this book was helpful: [*JPEG: Still Image Data Compr
 :fire: [Greg Eakin](https://www.linkedin.com/in/gregeakin)
 
 ##Sample Code
-Here's sample code to read an image from a Canon 7D
-> Sensor Width:  5360 = 1340 * 4 = 2 * 1728 + 1904
-> Sensor Height: 3516
+Here's sample code to read an image from a Canon 7D:
+* Sensor Width:  5360 = 1340 * 4 = 2 * 1728 + 1904
+* Sensor Height: 3516
 
 ```C#
 using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
