@@ -17,4 +17,4 @@ For the image compression, this book was helpful: [JPEG: Still Image Data Compre
 - [Google Books](https://books.google.com/books/about/JPEG.html?id=AepB_PZ_WMkC)
 
 ## Author
-[Greg Eakin](http://gdbtech.info)
+[Greg Eakin](https://www.linkedin.com/in/gregeakin)
