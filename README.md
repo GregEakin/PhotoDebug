@@ -2,6 +2,8 @@
 This is a .NET C# project that reads the raw CR2 files from CANON cameras.
 
 For the image compression, this book was helpful: [JPEG: Still Image Data Compression Standard](http://www.springer.com/us/book/9780442012724)
+[![JPEG: Still Image Data Compression Standard](http://gdbtech.info/wp-content/uploads/2016/12/jpegbook-210x300.jpg)](http://www.springer.com/us/book/9780442012724)
+
 
 ##Information:
 - [The Canon RAW (CRW) File Format](http://www.sno.phy.queensu.ca/~phil/exiftool/canon_raw.html)
