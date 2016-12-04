@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
-
-// Project Photo Library 0.1
+﻿// Project Photo Library 0.1
 // Copyright © 2013-2015. All Rights Reserved.
 // 
 // SUBSYSTEM:	PhotoDebug
 // FILE:		Comment.cs
 // AUTHOR:		Greg Eakin
+
+using System;
+using System.IO;
 
 namespace PhotoLib.Jpeg.JpegTags
 {

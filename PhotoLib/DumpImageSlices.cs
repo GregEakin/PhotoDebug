@@ -1,4 +1,11 @@
-﻿using System;
+﻿// Project Photo Library 0.1
+// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoDebug
+// FILE:		DumpImageSlices.cs
+// AUTHOR:		Greg Eakin
+
+using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
