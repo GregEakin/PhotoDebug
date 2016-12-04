@@ -1,4 +1,11 @@
-﻿using PhotoLib.Jpeg.JpegTags;
+﻿// Project Photo Library 0.1
+// Copyright © 2013-2014. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoDebug
+// FILE:		DumpImageSlices.cs
+// AUTHOR:		Greg Eakin
+
+using PhotoLib.Jpeg.JpegTags;
 using PhotoLib.Tiff;
 using System;
 using System.Drawing;
