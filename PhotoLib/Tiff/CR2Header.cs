@@ -1,5 +1,5 @@
 ﻿// Project Photo Library 0.1
-// Copyright © 2013-2014. All Rights Reserved.
+// Copyright © 2013-2016. All Rights Reserved.
 // 
 // SUBSYSTEM:	PhotoLib
 // FILE:		CR2Header.cs

@@ -1,4 +1,4 @@
-﻿// Copyright © 2013-2014. All Rights Reserved.
+﻿// Copyright © 2013-2016. All Rights Reserved.
 // 
 // SUBSYSTEM:	PhotoTests
 // FILE:		C5D4Ifd3.cs
