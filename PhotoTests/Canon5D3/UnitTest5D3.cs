@@ -174,12 +174,12 @@ namespace PhotoTests.Canon5D3
             binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
             for (var i = 0; i < size; i += Width)
             {
-                Console.Write("0x{0}: ", (address + i).ToString("X8"));
+                Console.Write("0x{0:X8}: ", (address + i));
                 var nextStep = (int)Math.Min(Width, length - i);
                 var data = binaryReader.ReadBytes(nextStep);
                 foreach (var b in data)
                 {
-                    Console.Write("{0} ", b.ToString("X2"));
+                    Console.Write("{0:X2} ", b);
                 }
                 Console.WriteLine();
             }

@@ -425,16 +425,16 @@ namespace PhotoTests
                 var notes = new ImageFileDirectory(binaryReader);
 
                 var white = notes[0x4001];
-                Console.WriteLine("0x{0}, {1}, {2}, {3}", white.TagId.ToString("X4"), white.TagType, white.NumberOfValue, white.ValuePointer);
+                Console.WriteLine("0x{0:X4}, {1}, {2}, {3}", white.TagId, white.TagType, white.NumberOfValue, white.ValuePointer);
                 // var wb = new WhiteBalance(binaryReader, white);
                 ReadSomeData(binaryReader, white.ValuePointer);
 
                 var size2 = notes[0x4002];
-                Console.WriteLine("0x{0}, {1}, {2}, {3}", size2.TagId.ToString("X4"), size2.TagType, size2.NumberOfValue, size2.ValuePointer);
+                Console.WriteLine("0x{0:X4}, {1}, {2}, {3}", size2.TagId, size2.TagType, size2.NumberOfValue, size2.ValuePointer);
                 ReadSomeData(binaryReader, size2.ValuePointer);
 
                 var size5 = notes[0x4005];
-                Console.WriteLine("0x{0}, {1}, {2}, {3}", size5.TagId.ToString("X4"), size5.TagType, size5.NumberOfValue, size5.ValuePointer);
+                Console.WriteLine("0x{0:X4}, {1}, {2}, {3}", size5.TagId, size5.TagType, size5.NumberOfValue, size5.ValuePointer);
                 ReadSomeData(binaryReader, size5.ValuePointer);
             }
         }
@@ -448,7 +448,7 @@ namespace PhotoTests
 
             var ar = 0;
             var length = binaryReader.ReadUInt16();
-            Console.WriteLine("0x{0} Len = {1} Length", ar.ToString("X4"), length);
+            Console.WriteLine("0x{0:X4} Len = {1} Length", ar, length);
             ar += 2;
         }
 

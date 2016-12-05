@@ -42,7 +42,7 @@ namespace PhotoLib.Jpeg.JpegTags
                 var data = binaryReader.ReadBytes(64);
                 Dictionary.Add(index, data);
 
-                Console.WriteLine("DQT Table found 0x{0}", index.ToString("X2"));
+                Console.WriteLine("DQT Table found 0x{0:X2}", index);
 
                 size += 1 + data.Length;
             }

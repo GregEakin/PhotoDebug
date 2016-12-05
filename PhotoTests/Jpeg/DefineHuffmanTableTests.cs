@@ -54,7 +54,7 @@ namespace PhotoTests.Jpeg
             using (var reader = new BinaryReader(memory))
             {
                 var huffmanTable = new DefineHuffmanTable(reader);
-                Assert.AreEqual(2, huffmanTable.Tables.Count());
+                Assert.AreEqual(2, huffmanTable.Tables.Count);
             }
         }
 

@@ -36,12 +36,8 @@ namespace JpegParserTests
                     {
                         var token = y.Trim();
                         if (token.StartsWith("<") && token.EndsWith(">"))
-                        {
-                            Assert.IsTrue(dict.ContainsKey(token), string.Format("Token {0} not found", token));
-                        }
-                        else if (token.StartsWith("BY"))
-                            continue;
-                        else
+                            Assert.IsTrue(dict.ContainsKey(token), $"Token {token} not found");
+                        else if (!token.StartsWith("BY"))
                             Console.WriteLine("{0} → {1}", pair.Key, line);
                     }
                 }

@@ -84,7 +84,7 @@ namespace PhotoTests.Jpeg
 
                 // buffer[index] = val;
 
-                Console.WriteLine("Index = {0}, i={1}, j={2}, i1={3}, j1={4}, j2={5}", index, i, j, i1, j1, j2.ToString("X2"));
+                Console.WriteLine("Index = {0}, i={1}, j={2}, i1={3}, j1={4}, j2={5:X2}", index, i, j, i1, j1, j2);
             }
 
             // CollectionAssert.AreEqual(Expected, buffer);
