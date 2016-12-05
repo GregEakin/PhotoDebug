@@ -21,7 +21,7 @@ namespace PhotoLib.Tiff
 
             var ar = 0;
             var length = binaryReader.ReadUInt16();
-            Console.WriteLine("0x{0} Len = {1} Length", ar.ToString("X4"), length);
+            Console.WriteLine("0x{0:X4} Len = {1} Length", ar, length);
             ar += 2;
             for (var i = 0; i < 6; i++)
             {
@@ -29,12 +29,12 @@ namespace PhotoLib.Tiff
                 var v2 = binaryReader.ReadUInt16();
                 var v3 = binaryReader.ReadUInt16();
                 var v4 = binaryReader.ReadUInt16();
-                Console.WriteLine("0x{0} {1}: [{2}, {3}, {4}, {5}]", ar.ToString("X4"), i, v1, v2, v3, v4);
+                Console.WriteLine("0x{0:X4} {1}: [{2}, {3}, {4}, {5}]", ar, i, v1, v2, v3, v4);
                 ar += 8;
             }
 
             //var eob = binaryReader.ReadUInt16();
-            //Console.WriteLine("0x{0} EOB = {1}", ar.ToString("X4"), eob);
+            //Console.WriteLine("0x{0:X4} EOB = {1}", ar, eob);
             //ar += 2;
             //for (var i = 0; i < 10; i++)
             //{
@@ -45,13 +45,13 @@ namespace PhotoLib.Tiff
             //    var v3 = binaryReader.ReadUInt16();
             //    var v4 = binaryReader.ReadUInt16();
 
-            //    Console.WriteLine("0x{0} {1}: [{2}, {3}, {4}, {5}]", ar.ToString("X4"), x1, v1, v2, v3, v4);
+            //    Console.WriteLine("0x{0:X4} {1}: [{2}, {3}, {4}, {5}]", ar, x1, v1, v2, v3, v4);
             //    ar += 10;
             //}
 
             for (var i = ar; i < imageFileEntry.NumberOfValue; i++)
             {
-                Console.WriteLine("0x{0} : {1}, ", ar.ToString("X4"), binaryReader.ReadUInt16());
+                Console.WriteLine("0x{0:X4} : {1}, ", ar, binaryReader.ReadUInt16());
                 ar += 2;
             }
 

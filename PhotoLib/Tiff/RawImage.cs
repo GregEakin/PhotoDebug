@@ -14,81 +14,46 @@ namespace PhotoLib.Tiff
 {
     public class RawImage
     {
-        #region Fields
-
-        private readonly Dictionary<uint, ImageFileDirectory> directoryList = new Dictionary<uint, ImageFileDirectory>();
-
-        private readonly CR2Header header;
-
-        #endregion
-
-        #region Constructors and Destructors
+        private readonly Dictionary<uint, ImageFileDirectory> _directoryList = new Dictionary<uint, ImageFileDirectory>();
 
         public RawImage(BinaryReader binaryReader)
         {
-            header = new CR2Header(binaryReader);
+            Header = new CR2Header(binaryReader);
 
-            var next = header.TiffOffset;
+            var next = Header.TiffOffset;
             while (next > 0)
             {
                 binaryReader.BaseStream.Seek(next, SeekOrigin.Begin);
                 var dir = new ImageFileDirectory(binaryReader);
-                directoryList.Add(next, dir);
+                _directoryList.Add(next, dir);
                 next = dir.NextEntry;
             }
 
-            next = header.RawIfdOffset;
-            while (next > 0 && !directoryList.ContainsKey(next))
+            next = Header.RawIfdOffset;
+            while (next > 0 && !_directoryList.ContainsKey(next))
             {
                 binaryReader.BaseStream.Seek(next, SeekOrigin.Begin);
                 var dir = new ImageFileDirectory(binaryReader);
-                directoryList.Add(next, dir);
+                _directoryList.Add(next, dir);
                 next = dir.NextEntry;
             }
         }
 
-        #endregion
+        public IEnumerable<ImageFileDirectory> Directories => _directoryList.Values;
 
-        #region Public Properties
-
-        public IEnumerable<ImageFileDirectory> Directories
-        {
-            get
-            {
-                return directoryList.Values;
-            }
-        }
-
-        public CR2Header Header
-        {
-            get
-            {
-                return header;
-            }
-        }
+        public CR2Header Header { get; }
 
         public ImageFileDirectory this[uint key]
         {
-            get
-            {
-                return directoryList[key];
-            }
-
-            set
-            {
-                directoryList[key] = value;
-            }
+            get { return _directoryList[key]; }
+            set { _directoryList[key] = value; }
         }
-
-        #endregion
-
-        #region Public Methods and Operators
 
         public void DumpHeader(BinaryReader binaryReader)
         {
-            foreach (var item in directoryList)
+            foreach (var item in _directoryList)
             {
-                Console.WriteLine("== Tiff Direcotry [0x{0}]:", item.Key.ToString("X8"));
+                Console.WriteLine("== Tiff Direcotry [0x{0:X8}]:", item.Key);
                 item.Value.DumpDirectory(binaryReader);
             }
         }
@@ -211,7 +176,5 @@ namespace PhotoLib.Tiff
 
             return retval;
         }
-
-        #endregion
     }
 }

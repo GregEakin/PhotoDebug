@@ -15,21 +15,11 @@ namespace PhotoLib.Tiff
 {
     public class ImageFileDirectory
     {
-        #region Fields
-
-        private readonly ImageFileEntry[] entries;
-
-        private readonly uint nextEntry;
-
         // private readonly byte[] heap;
-
-        #endregion
-
-        #region Constructors and Destructors
 
         public ImageFileDirectory(ushort length)
         {
-            entries = new ImageFileEntry[length];
+            Entries = new ImageFileEntry[length];
         }
 
         public ImageFileDirectory(BinaryReader binaryReader)
@@ -37,13 +27,13 @@ namespace PhotoLib.Tiff
             var dirStart = binaryReader.BaseStream.Position;
 
             var length = binaryReader.ReadUInt16();
-            entries = new ImageFileEntry[length];
+            Entries = new ImageFileEntry[length];
             for (var i = 0; i < length; i++)
             {
-                entries[i] = new ImageFileEntry(binaryReader);
+                Entries[i] = new ImageFileEntry(binaryReader);
             }
             var next = binaryReader.ReadUInt32();
-            nextEntry = next;
+            NextEntry = next;
 
             // if (next == 0) next = (uint)(binaryReader.BaseStream.Length + 1);
             // Console.WriteLine("### Directory {0}, [0x{1} - 0x{2}]", length, dirStart.ToString("X8"), (next - 1).ToString("X8"));
@@ -51,37 +41,17 @@ namespace PhotoLib.Tiff
             // Console.WriteLine("    Heap [0x{0} - 0x{1}]", heapStart.ToString("X8"), (next - 1).ToString("X8"));
         }
 
-        #endregion
+        public ImageFileEntry[] Entries { get; }
 
-        #region Public Properties
-
-        public ImageFileEntry[] Entries
-        {
-            get
-            {
-                return entries;
-            }
-        }
-
-        public uint NextEntry
-        {
-            get
-            {
-                return nextEntry;
-            }
-        }
+        public uint NextEntry { get; }
 
         public ImageFileEntry this[ushort key]
         {
             get
             {
-                return entries.FirstOrDefault(imageFileEntry => imageFileEntry.TagId == key);
+                return Entries.FirstOrDefault(imageFileEntry => imageFileEntry.TagId == key);
             }
         }
-
-        #endregion
-
-        #region Public Methods and Operators
 
         public void DumpDirectory(BinaryReader binaryReader)
         {
@@ -193,7 +163,7 @@ namespace PhotoLib.Tiff
                                 for (var j = 0; j < entry.NumberOfValue; j++)
                                 {
                                     var long1 = binaryReader.ReadUInt32();
-                                    Console.Write("{0} ", long1.ToString("X4"));
+                                    Console.Write("{0:X4} ", long1);
                                 }
                             }
                             Console.WriteLine();
@@ -284,7 +254,5 @@ namespace PhotoLib.Tiff
                 }
             }
         }
-
-        #endregion
     }
 }

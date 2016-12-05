@@ -11,8 +11,6 @@ namespace PhotoLib.Tiff
 {
     public class ImageFileEntry
     {
-        #region Fields
-
         // TagTypes
         // 1 BYTE       8-bit unsigned integer
         // 2 ASCII      8-bit, NULL-terminated string
@@ -27,62 +25,20 @@ namespace PhotoLib.Tiff
         // 11 FLOAT     4-byte single-precision IEEE floating-point value
         // 12 DOUBLE    8-byte double-precision IEEE floating-point value
 
-        private readonly uint numberOfValue;
-
-        private readonly ushort tagId;
-
-        private readonly ushort tagType;
-
-        private readonly uint valuePointer;
-
-        #endregion
-
-        #region Constructors and Destructors
-
         public ImageFileEntry(BinaryReader binaryReader)
         {
-            tagId = binaryReader.ReadUInt16();
-            tagType = binaryReader.ReadUInt16();
-            numberOfValue = binaryReader.ReadUInt32();
-            valuePointer = binaryReader.ReadUInt32();
+            TagId = binaryReader.ReadUInt16();
+            TagType = binaryReader.ReadUInt16();
+            NumberOfValue = binaryReader.ReadUInt32();
+            ValuePointer = binaryReader.ReadUInt32();
         }
 
-        #endregion
+        public uint NumberOfValue { get; }
 
-        #region Public Properties
+        public ushort TagId { get; }
 
-        public uint NumberOfValue
-        {
-            get
-            {
-                return numberOfValue;
-            }
-        }
+        public ushort TagType { get; }
 
-        public ushort TagId
-        {
-            get
-            {
-                return tagId;
-            }
-        }
-
-        public ushort TagType
-        {
-            get
-            {
-                return tagType;
-            }
-        }
-
-        public uint ValuePointer
-        {
-            get
-            {
-                return valuePointer;
-            }
-        }
-
-        #endregion
+        public uint ValuePointer { get; }
     }
 }
