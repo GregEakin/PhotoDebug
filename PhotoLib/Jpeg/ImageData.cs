@@ -57,17 +57,13 @@ namespace PhotoLib.Jpeg
             byte retval;
 
             if (EndOfFile)
-            {
                 throw new Exception("Reading past EOF is bad!");
-            }
 
             if (Index < RawData.Length - 1)
             {
                 retval = RawData[++Index];
                 if (retval != 0xFF)
-                {
                     return retval;
-                }
 
                 var code = RawData[++Index];
                 switch (code)
@@ -151,14 +147,6 @@ namespace PhotoLib.Jpeg
             return hufIndex;
         }
 
-        public int DistFromEnd
-        {
-            get
-            {
-                if (Index < 0)
-                    return -1;
-                return RawData.Length - Index;
-            }
-        }
+        public int DistFromEnd => Index < 0 ? -1 : RawData.Length - Index;
     }
 }

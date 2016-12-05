@@ -20,9 +20,7 @@ namespace PhotoLib.Jpeg.JpegTags
             : base(binaryReader)
         {
             if (Mark != 0xFF || Tag != 0xE0)
-            {
                 throw new ArgumentException();
-            }
 
             Length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
 
@@ -30,24 +28,36 @@ namespace PhotoLib.Jpeg.JpegTags
             if (Encoding.ASCII.GetString(identifer) != "JFIF\0")
                 throw new ArgumentException();
 
-            var version = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
-            var units = binaryReader.ReadByte();
-            var xDensity = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
-            var yDensity = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
-            var xThumb = binaryReader.ReadByte();
-            var yThumb = binaryReader.ReadByte();
+            Version = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+            Units = binaryReader.ReadByte();
+            DensityX = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+            DensityY = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+            ThumbX = binaryReader.ReadByte();
+            ThumbY = binaryReader.ReadByte();
 
-            var thumbLen = 3 * xThumb * yThumb;
-            var thumb = binaryReader.ReadBytes(thumbLen);
+            var thumbLen = 3 * ThumbX * ThumbY;
+            Thumb = binaryReader.ReadBytes(thumbLen);
 
             var size = 16 + thumbLen;
 
             if (size != Length)
-            {
                 throw new ArgumentException();
-            }
         }
 
         public ushort Length { get; }
+
+        public ushort Version { get; }
+
+        public byte Units { get; }
+
+        public ushort DensityX { get; }
+
+        public ushort DensityY { get; }
+
+        public byte ThumbX { get; }
+
+        public byte ThumbY { get; }
+
+        public byte[] Thumb { get; }
     }
 }

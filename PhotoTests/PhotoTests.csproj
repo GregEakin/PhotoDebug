@@ -68,6 +68,7 @@
     <Compile Include="DualReaderTests.cs" />
     <Compile Include="Exif\ParseXml.cs" />
     <Compile Include="Jpeg\JiffMarkerTests.cs" />
+    <Compile Include="Jpeg\JpegTags\JfifMarkerTests.cs" />
     <Compile Include="OtherUnitTests.cs" />
     <Compile Include="JpegFileTests.cs" />
     <Compile Include="Jpeg\DefineHuffmanTableTests.cs" />

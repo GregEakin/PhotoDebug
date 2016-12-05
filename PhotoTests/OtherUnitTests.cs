@@ -120,14 +120,10 @@ namespace PhotoTests
                         if (val == 0xFF)
                         {
                             var code = startOfImage.ImageData.RawData[rp];
-                            if (code == 0)
-                            {
-                                rp++;
-                            }
-                            else
-                            {
-                                Assert.Fail("Invalid code found {0}, {1}", rp, startOfImage.ImageData.RawData[rp]);
-                            }
+                            if (code != 0)
+                                Assert.Fail($"Invalid code found {rp}, {startOfImage.ImageData.RawData[rp]}");
+
+                            rp++;
                         }
 
                         var jidx = jrow * lossless.SamplesPerLine + jcol;
@@ -254,21 +250,15 @@ namespace PhotoTests
             var p = jcol - 50;
             var q = jrow - 30;
             if (p < 0 || p >= 500 || q < 0 || q >= 500)
-            {
                 return;
-            }
 
             var bits1 = rowBuf[jcol * colors + 0] >> 2;
             if (bits1 > 0xFF)
-            {
                 bits1 = 0xFF;
-            }
 
             var bits2 = rowBuf[jcol * colors + 1] >> 2;
             if (bits2 > 0xFF)
-            {
                 bits2 = 0xFF;
-            }
 
             if (jrow % 2 == 0)
             {
