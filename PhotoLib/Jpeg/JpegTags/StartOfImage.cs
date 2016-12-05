@@ -25,68 +25,68 @@ namespace PhotoLib.Jpeg.JpegTags
             : base(binaryReader)
         {
             if (Mark != 0xFF || Tag != 0xD8)
-            {
                 throw new ArgumentException();
-            }
 
             var start = binaryReader.BaseStream.Position;
             while (binaryReader.BaseStream.Position < start + length - 2)
             {
                 var pos = binaryReader.BaseStream.Position;
                 var nextMark = binaryReader.ReadByte();
-                if (nextMark == 0xFF)
+                if (nextMark != 0xFF)
+                    throw new NotImplementedException($"Tag 0x{nextMark:X2} is not implemented");
+
+                var nextTag = binaryReader.ReadByte();
+                binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
+                Console.WriteLine("NextMark {0:X2}: 0x{1:X8}", nextTag, binaryReader.BaseStream.Position);
+                switch (nextTag)
                 {
-                    var nextTag = binaryReader.ReadByte();
-                    binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
-                    Console.WriteLine("NextMark {0:X2}: 0x{1:X8}", nextTag, binaryReader.BaseStream.Position);
-                    switch (nextTag)
-                    {
-                        case 0xC0: // SOF0, Start of Frame 0, Baseline DCT
-                        case 0xC3: // SOF3, Start of Frame 3, Lossless (sequential)
-                            StartOfFrame = new StartOfFrame(binaryReader);
-                            var image = StartOfFrame.SamplesPerLine * StartOfFrame.ScanLines;
-                            Console.WriteLine("Image = {0} * {1} = {2}", StartOfFrame.ScanLines, StartOfFrame.SamplesPerLine, image);
-                            break;
+                    case 0xC0: // SOF0, Start of Frame 0, Baseline DCT
+                    case 0xC3: // SOF3, Start of Frame 3, Lossless (sequential)
+                        StartOfFrame = new StartOfFrame(binaryReader);
+                        var image = StartOfFrame.SamplesPerLine * StartOfFrame.ScanLines;
+                        Console.WriteLine("Image = {0} * {1} = {2}", StartOfFrame.ScanLines,
+                            StartOfFrame.SamplesPerLine, image);
+                        break;
 
-                        case 0xC4: // DHT, Define Huffman Table
-                            HuffmanTable = new DefineHuffmanTable(binaryReader);
-                            break;
+                    case 0xC4: // DHT, Define Huffman Table
+                        HuffmanTable = new DefineHuffmanTable(binaryReader);
+                        break;
 
-                        case 0xD9: // EOI, End of Image
-                            var x3 = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
-                            break;
+                    case 0xD9: // EOI, End of Image
+                        var x3 = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+                        break;
 
-                        case 0xDA: // SOS, Start of Scan
-                            StartOfScan = new StartOfScan(binaryReader);
-                            var rawSize = address + length - binaryReader.BaseStream.Position;
-                            ImageData = new ImageData(binaryReader, (uint)rawSize);
-                            DecodeHuffmanData();
-                            break;
+                    case 0xDA: // SOS, Start of Scan
+                        StartOfScan = new StartOfScan(binaryReader);
+                        var rawSize = address + length - binaryReader.BaseStream.Position;
+                        ImageData = new ImageData(binaryReader, (uint)rawSize);
+                        DecodeHuffmanData();
+                        break;
 
-                        case 0xDB: // DQT, Define Quantization Table
-                            QuantizationTable = new DefineQuantizationTable(binaryReader);
-                            break;
+                    case 0xDB: // DQT, Define Quantization Table
+                        QuantizationTable = new DefineQuantizationTable(binaryReader);
+                        break;
 
-                        case 0xE0: // APP0, Application Segment 0, JFIF - JFIF JPEG image, AVI1 - Motion JPEG (MJPG)
-                            _jfifMarker = new JfifMarker(binaryReader);
-                            break;
+                    case 0xE0: // APP0, Application Segment 0, JFIF - JFIF JPEG image, AVI1 - Motion JPEG (MJPG)
+                        _jfifMarker = new JfifMarker(binaryReader);
+                        break;
 
-                        case 0xE1: // APP1, Application Segment 1, EXIF Metadata, TIFF IFD format,JPEG Thumbnail (160x120), Adobe XMP
-                        case 0xE4: // APP4, Application Segment 4, (Not common)
-                        case 0xEC: // APP12, Application Segment 12, Picture Info (older digicams), Photoshop Save for Web: Ducky
-                        case 0xEE: // APP14, Application Segment 14, (Not common)
-                            var x1 = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
-                            var length1 = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
-                            var data = binaryReader.ReadBytes(length1 - 2);
-                            break;
+                    case 0xE1: // APP1, Application Segment 1, EXIF Metadata, TIFF IFD format,JPEG Thumbnail (160x120), Adobe XMP
+                    case 0xE4: // APP4, Application Segment 4, (Not common)
+                    case 0xEC: // APP12, Application Segment 12, Picture Info (older digicams), Photoshop Save for Web: Ducky
+                    case 0xEE: // APP14, Application Segment 14, (Not common)
+                        var x1 = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+                        var length1 = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+                        var data = binaryReader.ReadBytes(length1 - 2);
+                        break;
 
-                        default:
-                            throw new NotImplementedException("Tag 0xFF 0x{0} is not implemented".FormatWith(nextTag.ToString("X2")));
-                    }
-                }
-                else
-                {
-                    throw new NotImplementedException("Tag 0x{0} is not implemented".FormatWith(nextMark.ToString("X2")));
+                    case 0xFE:
+                        var comment = new Comment(binaryReader);
+                        break;
+
+                    default:
+                        throw new NotImplementedException(
+                            "Tag 0xFF 0x{0} is not implemented".FormatWith(nextTag.ToString("X2")));
                 }
             }
         }
