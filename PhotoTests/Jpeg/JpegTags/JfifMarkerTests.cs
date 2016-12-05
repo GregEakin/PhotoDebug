@@ -28,16 +28,16 @@ namespace PhotoTests.Jpeg.JpegTags
             using (var memory = new MemoryStream(data))
             using (var reader = new BinaryReader(memory))
             {
-                var startOfImage = new JfifMarker(reader);
-                Assert.AreEqual(0x16, startOfImage.Length);
+                var jfifMarker = new JfifMarker(reader);
+                Assert.AreEqual(0x16, jfifMarker.Length);
 
-                Assert.AreEqual(0x1234, startOfImage.Version);
-                Assert.AreEqual(0x03, startOfImage.Units);
-                Assert.AreEqual(0x0005, startOfImage.DensityX);
-                Assert.AreEqual(0x0006, startOfImage.DensityY);
-                Assert.AreEqual(0x01, startOfImage.ThumbX);
-                Assert.AreEqual(0x02, startOfImage.ThumbY);
-                CollectionAssert.AreEqual(new byte[] { 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F }, startOfImage.Thumb);
+                Assert.AreEqual(0x1234, jfifMarker.Version);
+                Assert.AreEqual(0x03, jfifMarker.Units);
+                Assert.AreEqual(0x0005, jfifMarker.DensityX);
+                Assert.AreEqual(0x0006, jfifMarker.DensityY);
+                Assert.AreEqual(0x01, jfifMarker.ThumbX);
+                Assert.AreEqual(0x02, jfifMarker.ThumbY);
+                CollectionAssert.AreEqual(new byte[] { 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F }, jfifMarker.Thumb);
             }
         }
     }
