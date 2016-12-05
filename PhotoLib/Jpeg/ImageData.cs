@@ -8,8 +8,6 @@
 using System;
 using System.IO;
 
-using PhotoLib.Utilities;
-
 namespace PhotoLib.Jpeg
 {
     public class ImageData
@@ -84,8 +82,7 @@ namespace PhotoLib.Jpeg
                         break;
 
                     default:
-                        throw new Exception(
-                            "Not supposed to happen 0xFF 0x{0}: Position: {1}".FormatWith(code.ToString("X2"), (RawData.Length - Index)));
+                        throw new Exception($"Not supposed to happen 0xFF 0x{code:X2}: Position: {RawData.Length - Index}");
                 }
             }
             else

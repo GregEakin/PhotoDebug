@@ -11,7 +11,6 @@ namespace PhotoTests
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using PhotoLib.Jpeg;
     using PhotoLib.Tiff;
-    using PhotoLib.Utilities;
     using System;
     using System.Collections.Generic;
     using System.Drawing;
@@ -293,8 +292,7 @@ namespace PhotoTests
             const uint cam1 = 3071201378;
             const uint cam1H = cam1 & 0xFFFF0000 >> 8;
             const uint cam1L = cam1 & 0x0000FFFF;
-            Assert.AreEqual("ED00053346", "{0}{1}".FormatWith(cam1H.ToString("X4"), cam1L.ToString("D5")));
-            // var cam2 = "%04X%05d";
+            Assert.AreEqual("ED00053346", $"{cam1H:X4}{cam1L:D5}");
         }
 
         [TestMethod]

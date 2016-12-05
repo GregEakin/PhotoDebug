@@ -8,8 +8,6 @@
 using System.Collections.Generic;
 using System.Text;
 
-using PhotoLib.Utilities;
-
 namespace PhotoLib.Jpeg
 {
     public class HuffmanTable
@@ -129,7 +127,7 @@ namespace PhotoLib.Jpeg
             var tableNumber = Index & 0x0F;
             var tableType = (Index & 0x10) == 0 ? "DC" : "AC";
 
-            retval.AppendLine("HuffmanTable {0} {1}".FormatWith(tableType, tableNumber));
+            retval.AppendLine($"HuffmanTable {tableType} {tableNumber}");
             var bits = ToTextTree(Data1, Data2);
 
             var offset = 0;
@@ -140,10 +138,10 @@ namespace PhotoLib.Jpeg
                     continue;
                 }
 
-                retval.Append("{0,2} : ".FormatWith(i + 1));
+                retval.Append($"{i + 1,2} : ");
                 for (var j = 0; j < Data1[i]; j++)
                 {
-                    retval.Append("{0} ({1}) ".FormatWith(Data2[offset].ToString("X2"), bits[offset]));
+                    retval.Append($"{Data2[offset]:X2} ({bits[offset]}) ");
                     offset++;
                 }
                 retval.AppendLine();

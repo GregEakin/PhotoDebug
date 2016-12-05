@@ -5,13 +5,11 @@
 // FILE:		StartOfImage.cs
 // AUTHOR:		Greg Eakin
 
-using PhotoLib.Utilities;
-using System;
-using System.IO;
-
 namespace PhotoLib.Jpeg.JpegTags
 {
+    using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
 
     /// <summary>
@@ -85,8 +83,7 @@ namespace PhotoLib.Jpeg.JpegTags
                         break;
 
                     default:
-                        throw new NotImplementedException(
-                            "Tag 0xFF 0x{0} is not implemented".FormatWith(nextTag.ToString("X2")));
+                        throw new NotImplementedException($"Tag 0xFF 0x{nextTag:X2} is not implemented");
                 }
             }
         }
@@ -197,7 +194,7 @@ namespace PhotoLib.Jpeg.JpegTags
                     }
                     Console.WriteLine("Tables: {0}", HuffmanTable.Tables.Count);
 
-                    throw new NotImplementedException("Subsampling not implemented {0}".FormatWith(StartOfFrame.Components.Length));
+                    throw new NotImplementedException($"Subsampling not implemented {StartOfFrame.Components.Length}");
             }
         }
 
@@ -312,28 +309,20 @@ namespace PhotoLib.Jpeg.JpegTags
                 len++;
 
                 if (len > 16)
-                {
-                    throw new Exception("Didn't find the code! len: {0}, bits: 0x{1}".FormatWith(len, bits.ToString("X8")));
-                }
+                    throw new Exception($"Didn't find the code! len: {len}, bits: 0x{bits:X8}");
 
                 HuffmanTable.HCode hCode;
                 if (!dict.TryGetValue(bits, out hCode) || hCode.Length != len)
-                {
                     continue;
-                }
 
                 if (hCode.Code == 0x00)
-                {
                     break;
-                }
 
                 var z = ImageData.GetSetOfBits(hCode.Code);
                 value[count] = Jpeg.HuffmanTable.DcValueEncoding(hCode.Code, z);
 
                 if (++count >= 63)
-                {
                     break;
-                }
 
                 len = 0;
                 bits = 0;
