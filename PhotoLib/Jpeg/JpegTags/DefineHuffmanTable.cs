@@ -18,16 +18,6 @@ namespace PhotoLib.Jpeg.JpegTags
     /// </summary>
     public class DefineHuffmanTable : JpegTag
     {
-        #region Fields
-
-        private readonly ushort length;
-
-        private readonly Dictionary<byte, HuffmanTable> tables = new Dictionary<byte, HuffmanTable>();
-
-        #endregion
-
-        #region Constructors and Destructors
-
         public DefineHuffmanTable(BinaryReader binaryReader)
             : base(binaryReader)
         {
@@ -36,61 +26,39 @@ namespace PhotoLib.Jpeg.JpegTags
                 throw new ArgumentException();
             }
 
-            length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+            Length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
 
             var size = 2;
-            while (size + 17 <= length)
+            while (size + 17 <= Length)
             {
                 // 0 for DC, 1 for AC; 0 for the Y component and 1 for the colour components
                 var index = binaryReader.ReadByte();
                 var data1 = binaryReader.ReadBytes(16);
                 var sum = data1.Sum(b => b);
                 var data2 = binaryReader.ReadBytes(sum);
-                tables.Add(index, new HuffmanTable(index, data1, data2));
+                Tables.Add(index, new HuffmanTable(index, data1, data2));
                 size += 1 + data1.Length + data2.Length;
             }
 
-            if (size != length)
+            if (size != Length)
             {
                 throw new ArgumentException();
             }
         }
 
-        #endregion
+        public ushort Length { get; }
 
-        #region Public Properties
-
-        public ushort Length
-        {
-            get
-            {
-                return length;
-            }
-        }
-
-        public Dictionary<byte, HuffmanTable> Tables
-        {
-            get
-            {
-                return tables;
-            }
-        }
-
-        #endregion
-
-        #region Public Methods and Operators
+        public Dictionary<byte, HuffmanTable> Tables { get; } = new Dictionary<byte, HuffmanTable>();
 
         public override string ToString()
         {
             var retval = new StringBuilder();
-            foreach (var table in tables.Values)
+            foreach (var table in Tables.Values)
             {
                 retval.AppendLine(table.ToString());
                 retval.AppendLine();
             }
             return retval.ToString();
         }
-
-        #endregion
     }
 }

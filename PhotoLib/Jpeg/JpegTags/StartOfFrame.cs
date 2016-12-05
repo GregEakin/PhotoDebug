@@ -12,22 +12,6 @@ namespace PhotoLib.Jpeg
 {
     public class StartOfFrame : JpegTag
     {
-        #region Fields
-
-        private readonly Component[] components;
-
-        private readonly ushort length;
-
-        private readonly byte precision;
-
-        private readonly ushort samplesPerLine;
-
-        private readonly ushort scanLines;
-
-        #endregion
-
-        #region Constructors and Destructors
-
         public StartOfFrame(BinaryReader binaryReader)
             : base(binaryReader)
         {
@@ -63,154 +47,69 @@ namespace PhotoLib.Jpeg
 
             // Console.WriteLine("SoF {0}: {1}", Tag.ToString("X2"), (binaryReader.BaseStream.Position - 2).ToString("X8"));
 
-            length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
-            precision = binaryReader.ReadByte();    // bits
-            scanLines = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());   // high
-            samplesPerLine = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());  // wide
+            Length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+            Precision = binaryReader.ReadByte();    // bits
+            ScanLines = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());   // high
+            SamplesPerLine = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());  // wide
 
             var componentCount = binaryReader.ReadByte();
-            components = new Component[componentCount];
+            Components = new Component[componentCount];
             for (var i = 0; i < componentCount; i++)
             {
-                components[i] = new Component(binaryReader);
+                Components[i] = new Component(binaryReader);
             }
 
             // var clrs = components.Sum(comp => comp.HFactor * comp.VFactor);
 
-            if (3 * componentCount + 8 != length)
+            if (3 * componentCount + 8 != Length)
             {
                 throw new ArgumentException();
             }
         }
 
-        #endregion
+        public Component[] Components { get; }
 
-        #region Public Properties
+        public ushort Length { get; }
 
-        public Component[] Components
-        {
-            get
-            {
-                return components;
-            }
-        }
+        public byte Precision { get; }
 
-        public ushort Length
-        {
-            get
-            {
-                return length;
-            }
-        }
+        public ushort SamplesPerLine { get; }
 
-        public byte Precision
-        {
-            get
-            {
-                return precision;
-            }
-        }
+        public ushort ScanLines { get; }
 
-        public ushort SamplesPerLine
-        {
-            get
-            {
-                return samplesPerLine;
-            }
-        }
-
-        public ushort ScanLines
-        {
-            get
-            {
-                return scanLines;
-            }
-        }
-
-        public int Width
-        {
-            get
-            {
-                return samplesPerLine * components.Length;
-            }
-        }
-
-        #endregion
+        public int Width => SamplesPerLine * Components.Length;
 
         public struct Component
         {
-            #region Fields
-
             // 0, 1, 2 for the YCbCr
-            private readonly byte componentId;
-
             // 1 for the colour components, 1 or 2 for the Y component
-            private readonly byte hFactor;
-
             // 1 for the colour components, 1 or 2 for the Y component
-            private readonly byte tableId;
-
             // 0 for the Y component and 1 for the colour components
-            private readonly byte vFactor;
-
-            #endregion
-
-            #region Constructors and Destructors
 
             public Component(byte componentId, byte tableId, byte hFactor, byte vFactor)
             {
-                this.componentId = componentId;
-                this.tableId = tableId;
-                this.hFactor = hFactor;
-                this.vFactor = vFactor;
+                ComponentId = componentId;
+                TableId = tableId;
+                HFactor = hFactor;
+                VFactor = vFactor;
             }
 
             public Component(BinaryReader binaryReader)
             {
-                componentId = binaryReader.ReadByte();
+                ComponentId = binaryReader.ReadByte();
                 var sampleFactors = binaryReader.ReadByte();
-                tableId = binaryReader.ReadByte();
-                hFactor = (byte)(sampleFactors >> 4);
-                vFactor = (byte)(sampleFactors & 0x0f);
+                TableId = binaryReader.ReadByte();
+                HFactor = (byte)(sampleFactors >> 4);
+                VFactor = (byte)(sampleFactors & 0x0f);
             }
 
-            #endregion
+            public byte ComponentId { get; }
 
-            #region Public Properties
+            public byte HFactor { get; }
 
-            public byte ComponentId
-            {
-                get
-                {
-                    return componentId;
-                }
-            }
+            public byte TableId { get; }
 
-            public byte HFactor
-            {
-                get
-                {
-                    return hFactor;
-                }
-            }
-
-            public byte TableId
-            {
-                get
-                {
-                    return tableId;
-                }
-            }
-
-            public byte VFactor
-            {
-                get
-                {
-                    return vFactor;
-                }
-            }
-
-            #endregion
+            public byte VFactor { get; }
         }
     }
 }

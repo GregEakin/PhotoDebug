@@ -15,16 +15,6 @@ namespace PhotoLib.Jpeg.JpegTags
     /// </summary>
     public class Comment : JpegTag
     {
-        #region Fields
-
-        private readonly ushort length;
-
-        private readonly byte[] data;
-
-        #endregion
-
-        #region Constructors and Destructors
-
         public Comment(BinaryReader binaryReader)
             : base(binaryReader)
         {
@@ -33,24 +23,12 @@ namespace PhotoLib.Jpeg.JpegTags
                 throw new ArgumentException();
             }
 
-            length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
-            data = binaryReader.ReadBytes(length - 2);
+            Length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+            Data = binaryReader.ReadBytes(Length - 2);
         }
 
-        #endregion
+        public ushort Length { get; }
 
-        #region Public Properties
-
-        public ushort Length
-        {
-            get { return length; }
-        }
-
-        public byte[] Data
-        {
-            get { return data; }
-        }
-
-        #endregion
+        public byte[] Data { get; }
     }
 }

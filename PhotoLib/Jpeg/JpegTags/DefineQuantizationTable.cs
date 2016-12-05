@@ -17,17 +17,7 @@ namespace PhotoLib.Jpeg.JpegTags
     /// </summary>
     public class DefineQuantizationTable : JpegTag
     {
-        #region Fields
-
-        private readonly ushort length;
-
-        private readonly Dictionary<byte, byte[]> dictionary = new Dictionary<byte, byte[]>();
-
-        #endregion
-
         // DHT: Define Huffman HuffmanTable
-
-        #region Constructors and Destructors
 
         public DefineQuantizationTable(BinaryReader binaryReader)
             : base(binaryReader)
@@ -37,10 +27,10 @@ namespace PhotoLib.Jpeg.JpegTags
                 throw new ArgumentException();
             }
 
-            length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+            Length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
 
             var size = 2;
-            while (size < length)
+            while (size < Length)
             {
                 // until the length is exhausted (loads two quantization tables for baseline JPEG)
                 // the precision and the quantization table index -- one byte: precision is specified by the higher four bits and index is specified by the lower four bits
@@ -50,39 +40,21 @@ namespace PhotoLib.Jpeg.JpegTags
 
                 var index = binaryReader.ReadByte();
                 var data = binaryReader.ReadBytes(64);
-                dictionary.Add(index, data);
+                Dictionary.Add(index, data);
 
                 Console.WriteLine("DQT Table found 0x{0}", index.ToString("X2"));
 
                 size += 1 + data.Length;
             }
 
-            if (size != length)
+            if (size != Length)
             {
                 throw new ArgumentException();
             }
         }
 
-        #endregion
+        public ushort Length { get; }
 
-        #region Public Properties
-
-        public ushort Length
-        {
-            get
-            {
-                return length;
-            }
-        }
-
-        public Dictionary<byte, byte[]> Dictionary
-        {
-            get
-            {
-                return dictionary;
-            }
-        }
-
-        #endregion
+        public Dictionary<byte, byte[]> Dictionary { get; } = new Dictionary<byte, byte[]>();
     }
 }

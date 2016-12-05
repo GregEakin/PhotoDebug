@@ -14,85 +14,33 @@ namespace PhotoLib.Jpeg
 {
     public class HuffmanTable
     {
-        #region Fields
-
-        private readonly byte[] data1;
-
-        private readonly byte[] data2;
-
-        private readonly Dictionary<int, HCode> dictionary;
-
-        private readonly byte index;
-
-        #endregion
-
-        #region Constructors and Destructors
-
         public HuffmanTable(byte index, byte[] data1, byte[] data2)
         {
-            this.index = index;
-            this.data1 = data1;
-            this.data2 = data2;
-            dictionary = BuildTree(data1, data2);
+            Index = index;
+            Data1 = data1;
+            Data2 = data2;
+            Dictionary = BuildTree(data1, data2);
         }
 
-        #endregion
+        public byte[] Data1 { get; }
 
-        #region Public Properties
+        public byte[] Data2 { get; }
 
-        public byte[] Data1
-        {
-            get
-            {
-                return data1;
-            }
-        }
-
-        public byte[] Data2
-        {
-            get
-            {
-                return data2;
-            }
-        }
-
-        public Dictionary<int, HCode> Dictionary
-        {
-            get
-            {
-                return dictionary;
-            }
-        }
+        public Dictionary<int, HCode> Dictionary { get; }
 
         /// <summary>
         /// HT Info, bits 0..3 is number, bit 4 is 0 = DC, 1 = AC, bits 5..7 must be zero
         /// </summary>
-        public byte Index
-        {
-            get
-            {
-                return index;
-            }
-        }
-
-        #endregion
-
-        #region Public Methods and Operators
+        public byte Index { get; }
 
         public static int DcValueEncoding(int dcCode, int bits)
         {
-            int retval;
             if (dcCode <= 0)
-            {
-                retval = 0;
-            }
-            else
-            {
-                var sign = bits & (1u << (dcCode - 1));
-                var num = bits & ((1u << dcCode) - 1);
-                retval = sign != 0 ? (int)num : (int)num - (int)((1u << dcCode) - 1);
-            }
-            return retval;
+                return 0;
+
+            var sign = bits & (1u << (dcCode - 1));
+            var num = bits & ((1u << dcCode) - 1);
+            return sign != 0 ? (int) num : (int) num - (int) ((1u << dcCode) - 1);
         }
 
         public static void DecodeD()
@@ -178,24 +126,24 @@ namespace PhotoLib.Jpeg
         public override string ToString()
         {
             var retval = new StringBuilder();
-            var tableNumber = index & 0x0F;
-            var tableType = (index & 0x10) == 0 ? "DC" : "AC";
+            var tableNumber = Index & 0x0F;
+            var tableType = (Index & 0x10) == 0 ? "DC" : "AC";
 
             retval.AppendLine("HuffmanTable {0} {1}".FormatWith(tableType, tableNumber));
-            var bits = ToTextTree(data1, data2);
+            var bits = ToTextTree(Data1, Data2);
 
             var offset = 0;
             for (byte i = 0; i < 16; i++)
             {
-                if (data1[i] <= 0)
+                if (Data1[i] <= 0)
                 {
                     continue;
                 }
 
                 retval.Append("{0,2} : ".FormatWith(i + 1));
-                for (var j = 0; j < data1[i]; j++)
+                for (var j = 0; j < Data1[i]; j++)
                 {
-                    retval.Append("{0} ({1}) ".FormatWith(data2[offset].ToString("X2"), bits[offset]));
+                    retval.Append("{0} ({1}) ".FormatWith(Data2[offset].ToString("X2"), bits[offset]));
                     offset++;
                 }
                 retval.AppendLine();
@@ -203,8 +151,6 @@ namespace PhotoLib.Jpeg
 
             return retval.ToString();
         }
-
-        #endregion
 
         public struct HCode
         {

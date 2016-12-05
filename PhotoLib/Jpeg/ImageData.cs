@@ -17,79 +17,32 @@ namespace PhotoLib.Jpeg
         public void Reset()
         {
             EndOfFile = false;
-            currentByte = 0xFF;
-            index = -1;
-            nextBit = -1;
+            _currentByte = 0xFF;
+            Index = -1;
+            BitsLeft = -1;
             CheckByte();
         }
 
-        #region Fields
-
-        private readonly byte[] rawData;
-
-        private byte currentByte;
-
-        private int index = -1;
-
-        private int nextBit = -1;
-
-        #endregion
-
-        #region Constructors and Destructors
+        private byte _currentByte;
 
         public ImageData(BinaryReader binaryReader, uint rawSize)
         {
-            rawData = binaryReader.ReadBytes((int)rawSize);
+            RawData = binaryReader.ReadBytes((int)rawSize);
             CheckByte();
         }
 
-        #endregion
-
-        #region Public Properties
-
-        public int BitsLeft
-        {
-            get
-            {
-                return nextBit;
-            }
-        }
+        public int BitsLeft { get; private set; } = -1;
 
         public bool EndOfFile { get; private set; }
 
-        public int Index
-        {
-            get
-            {
-                //Console.WriteLine("Length = 0x{0}", rawData.Length.ToString("X8"));
-                //Console.WriteLine("Index = 0x{0}, nextBit = {1}, currentByte = 0x{2}", index.ToString("X8"), nextBit, currentByte.ToString("X2"));
-                //Console.WriteLine("Diff = {0}", rawData.Length - index);
-                ////Console.WriteLine("Val = 0x{0}", this.GetNextByte());
-                ////Console.WriteLine("Val = 0x{0}", this.GetNextByte());
+        public int Index { get; private set; } = -1;
 
-                //for (var i = rawData.Length - 16; i < rawData.Length; i++)
-                //    Console.Write("{0} ", rawData[i].ToString("X2"));
-                //Console.WriteLine();
-                return index;
-            }
-        }
-
-        public byte[] RawData
-        {
-            get
-            {
-                return rawData;
-            }
-        }
-
-        #endregion
-
-        #region Public Methods and Operators
+        public byte[] RawData { get; }
 
         public bool GetNextBit()
         {
-            var bit = (currentByte & (0x01 << nextBit)) != 0;
-            nextBit--;
+            var bit = (_currentByte & (0x01 << BitsLeft)) != 0;
+            BitsLeft--;
             CheckByte();
             return bit;
         }
@@ -110,15 +63,15 @@ namespace PhotoLib.Jpeg
                 throw new Exception("Reading past EOF is bad!");
             }
 
-            if (index < rawData.Length - 1)
+            if (Index < RawData.Length - 1)
             {
-                retval = rawData[++index];
+                retval = RawData[++Index];
                 if (retval != 0xFF)
                 {
                     return retval;
                 }
 
-                var code = rawData[++index];
+                var code = RawData[++Index];
                 switch (code)
                 {
                     case 0x00:
@@ -132,12 +85,12 @@ namespace PhotoLib.Jpeg
 
                     default:
                         throw new Exception(
-                            "Not supposed to happen 0xFF 0x{0}: Position: {1}".FormatWith(code.ToString("X2"), (rawData.Length - index)));
+                            "Not supposed to happen 0xFF 0x{0}: Position: {1}".FormatWith(code.ToString("X2"), (RawData.Length - Index)));
                 }
             }
             else
             {
-                index++;
+                Index++;
                 EndOfFile = true;
                 retval = 0xFF;
 
@@ -151,38 +104,31 @@ namespace PhotoLib.Jpeg
         {
             var retval = (ushort)0u;
 
-            var length = (ushort)Math.Min(total, nextBit + 1);
+            var length = (ushort)Math.Min(total, BitsLeft + 1);
             while (length > 0)
             {
-                var shift = nextBit + 1 - length;
+                var shift = BitsLeft + 1 - length;
                 var mask = (0x0001 << length) - 1;
-                var next = currentByte >> shift;
+                var next = _currentByte >> shift;
                 retval <<= length;
                 retval |= (ushort)(next & mask);
 
-                nextBit -= length;
+                BitsLeft -= length;
                 CheckByte();
                 total -= length;
-                length = (ushort)Math.Min(total, nextBit + 1);
+                length = (ushort)Math.Min(total, BitsLeft + 1);
             }
 
             return retval;
         }
 
-        #endregion
-
-        #region Methods
-
         private void CheckByte()
         {
-            if (nextBit < 0)
-            {
-                nextBit = 7;
-                currentByte = GetNextByte();
-            }
+            if (BitsLeft >= 0)
+                return;
+            BitsLeft = 7;
+            _currentByte = GetNextByte();
         }
-
-        #endregion
 
         public byte GetValue(HuffmanTable table)
         {
@@ -212,9 +158,9 @@ namespace PhotoLib.Jpeg
         {
             get
             {
-                if (index < 0)
+                if (Index < 0)
                     return -1;
-                return rawData.Length - index;
+                return RawData.Length - Index;
             }
         }
     }

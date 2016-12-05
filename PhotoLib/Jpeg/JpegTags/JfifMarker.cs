@@ -16,14 +16,6 @@ namespace PhotoLib.Jpeg.JpegTags
     /// </summary>
     public class JfifMarker : JpegTag
     {
-        #region Fields
-
-        private readonly ushort length;
-
-        #endregion
-
-        #region Constructors and Destructors
-
         public JfifMarker(BinaryReader binaryReader)
             : base(binaryReader)
         {
@@ -32,7 +24,7 @@ namespace PhotoLib.Jpeg.JpegTags
                 throw new ArgumentException();
             }
 
-            length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+            Length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
 
             var identifer = binaryReader.ReadBytes(5);
             if (Encoding.ASCII.GetString(identifer) != "JFIF\0")
@@ -50,24 +42,12 @@ namespace PhotoLib.Jpeg.JpegTags
 
             var size = 16 + thumbLen;
 
-            if (size != length)
+            if (size != Length)
             {
                 throw new ArgumentException();
             }
         }
 
-        #endregion
-
-        #region Public Properties
-
-        public ushort Length
-        {
-            get
-            {
-                return length;
-            }
-        }
-
-        #endregion
+        public ushort Length { get; }
     }
 }

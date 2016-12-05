@@ -19,23 +19,7 @@ namespace PhotoLib.Jpeg.JpegTags
     /// </summary>
     public class StartOfImage : JpegTag
     {
-        #region Fields
-
-        private readonly DefineHuffmanTable huffmanTable;
-
-        private readonly DefineQuantizationTable quantizationTable;
-
-        private ImageData imageData;
-
-        private readonly JfifMarker jfifMarker;
-
-        private readonly StartOfFrame startOfFrame;
-
-        private readonly StartOfScan startOfScan;
-
-        #endregion
-
-        #region Constructors and Destructors
+        private readonly JfifMarker _jfifMarker;
 
         public StartOfImage(BinaryReader binaryReader, uint address, uint length)
             : base(binaryReader)
@@ -54,18 +38,18 @@ namespace PhotoLib.Jpeg.JpegTags
                 {
                     var nextTag = binaryReader.ReadByte();
                     binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
-                    Console.WriteLine("NextMark {0}: 0x{1}", nextTag.ToString("X2"), binaryReader.BaseStream.Position.ToString("X8"));
+                    Console.WriteLine("NextMark {0:X2}: 0x{1:X8}", nextTag, binaryReader.BaseStream.Position);
                     switch (nextTag)
                     {
                         case 0xC0: // SOF0, Start of Frame 0, Baseline DCT
                         case 0xC3: // SOF3, Start of Frame 3, Lossless (sequential)
-                            startOfFrame = new StartOfFrame(binaryReader);
-                            var image = startOfFrame.SamplesPerLine * startOfFrame.ScanLines;
-                            Console.WriteLine("Image = {0} * {1} = {2}", startOfFrame.ScanLines, startOfFrame.SamplesPerLine, image);
+                            StartOfFrame = new StartOfFrame(binaryReader);
+                            var image = StartOfFrame.SamplesPerLine * StartOfFrame.ScanLines;
+                            Console.WriteLine("Image = {0} * {1} = {2}", StartOfFrame.ScanLines, StartOfFrame.SamplesPerLine, image);
                             break;
 
                         case 0xC4: // DHT, Define Huffman Table
-                            huffmanTable = new DefineHuffmanTable(binaryReader);
+                            HuffmanTable = new DefineHuffmanTable(binaryReader);
                             break;
 
                         case 0xD9: // EOI, End of Image
@@ -73,18 +57,18 @@ namespace PhotoLib.Jpeg.JpegTags
                             break;
 
                         case 0xDA: // SOS, Start of Scan
-                            startOfScan = new StartOfScan(binaryReader);
+                            StartOfScan = new StartOfScan(binaryReader);
                             var rawSize = address + length - binaryReader.BaseStream.Position;
-                            imageData = new ImageData(binaryReader, (uint)rawSize);
+                            ImageData = new ImageData(binaryReader, (uint)rawSize);
                             DecodeHuffmanData();
                             break;
 
                         case 0xDB: // DQT, Define Quantization Table
-                            quantizationTable = new DefineQuantizationTable(binaryReader);
+                            QuantizationTable = new DefineQuantizationTable(binaryReader);
                             break;
 
                         case 0xE0: // APP0, Application Segment 0, JFIF - JFIF JPEG image, AVI1 - Motion JPEG (MJPG)
-                            jfifMarker = new JfifMarker(binaryReader);
+                            _jfifMarker = new JfifMarker(binaryReader);
                             break;
 
                         case 0xE1: // APP1, Application Segment 1, EXIF Metadata, TIFF IFD format,JPEG Thumbnail (160x120), Adobe XMP
@@ -107,81 +91,39 @@ namespace PhotoLib.Jpeg.JpegTags
             }
         }
 
-        #endregion
+        public DefineHuffmanTable HuffmanTable { get; }
 
-        #region Public Properties
+        public DefineQuantizationTable QuantizationTable { get; }
 
-        public DefineHuffmanTable HuffmanTable
-        {
-            get
-            {
-                return huffmanTable;
-            }
-        }
+        public ImageData ImageData { get; set; }
 
-        public DefineQuantizationTable QuantizationTable
-        {
-            get
-            {
-                return quantizationTable;
-            }
-        }
+        public StartOfFrame StartOfFrame { get; }
 
-        public ImageData ImageData
-        {
-            get
-            {
-                return imageData;
-            }
-            set
-            {
-                imageData = value;
-            }
-        }
-
-        public StartOfFrame StartOfFrame
-        {
-            get
-            {
-                return startOfFrame;
-            }
-        }
-
-        public StartOfScan StartOfScan
-        {
-            get
-            {
-                return startOfScan;
-            }
-        }
-
-        #endregion
-
-        #region Methods
+        public StartOfScan StartOfScan { get; }
 
         public void DecodeHuffmanData()
         {
             Console.WriteLine("cr2_slice: ");
 
             Console.WriteLine("Frame Components: ");
-            for (var i = 0; i < startOfFrame.Components.Length; i++)
+            for (var i = 0; i < StartOfFrame.Components.Length; i++)
             {
-                var component = startOfFrame.Components[i];
+                var component = StartOfFrame.Components[i];
                 Console.WriteLine("  {0}: id {1}, HF {2}, VF {3}", i, component.TableId, component.HFactor, component.VFactor);
             }
-            var tables = startOfFrame.Components.Select(component => component.TableId).Distinct().Count();
-            Console.WriteLine("Tables: rows {0}, unique entries {1}", startOfFrame.Components.Length, tables);
+            var tables = StartOfFrame.Components.Select(component => component.TableId).Distinct().Count();
+            Console.WriteLine("Tables: rows {0}, unique entries {1}", StartOfFrame.Components.Length, tables);
 
             Console.WriteLine("Huffman Tables");
-            foreach (var table in huffmanTable.Tables)
+            foreach (var table in HuffmanTable.Tables)
             {
                 var type = (table.Value.Index >> 4) == 0 ? "DC" : "AC";
                 var id = (table.Value.Index & 0x0F) == 0 ? "Y Component" : "Color Components";
 
-                Console.WriteLine("    0x{0}, {1}, {2}", table.Key.ToString("X2"), type, id);
+                Console.WriteLine("    0x{0:X2}, {1}, {2}", table.Key, type, id);
             }
 
-            if (tables * 2 != huffmanTable.Tables.Count)
+            if (tables * 2 != HuffmanTable.Tables.Count)
             {
                 throw new ArgumentException();
             }
@@ -212,11 +154,11 @@ namespace PhotoLib.Jpeg.JpegTags
                         //   4, 0, 1, 1
 
                         HuffmanTable luminanceDc;
-                        var table1 = huffmanTable.Tables.TryGetValue(0x00, out luminanceDc);
+                        var table1 = HuffmanTable.Tables.TryGetValue(0x00, out luminanceDc);
                         HuffmanTable chrominanceDc;
-                        var table3 = huffmanTable.Tables.TryGetValue(0x01, out chrominanceDc);
+                        var table3 = HuffmanTable.Tables.TryGetValue(0x01, out chrominanceDc);
 
-                        TableTwo(startOfFrame.Components, luminanceDc, chrominanceDc);
+                        TableTwo(StartOfFrame.Components, luminanceDc, chrominanceDc);
                     }
                     break;
 
@@ -228,34 +170,34 @@ namespace PhotoLib.Jpeg.JpegTags
                         //   3, 1, 1, 1
 
                         HuffmanTable luminanceDc;
-                        var table1 = huffmanTable.Tables.TryGetValue(0x00, out luminanceDc);
+                        var table1 = HuffmanTable.Tables.TryGetValue(0x00, out luminanceDc);
                         HuffmanTable chrominanceDc;
-                        var table3 = huffmanTable.Tables.TryGetValue(0x01, out chrominanceDc);
+                        var table3 = HuffmanTable.Tables.TryGetValue(0x01, out chrominanceDc);
                         HuffmanTable luminanceAc;
-                        var table2 = huffmanTable.Tables.TryGetValue(0x10, out luminanceAc);
+                        var table2 = HuffmanTable.Tables.TryGetValue(0x10, out luminanceAc);
                         HuffmanTable chrominanceAc;
-                        var table4 = huffmanTable.Tables.TryGetValue(0x11, out chrominanceAc);
+                        var table4 = HuffmanTable.Tables.TryGetValue(0x11, out chrominanceAc);
 
-                        TableFour(startOfFrame.Components, luminanceDc, luminanceAc, chrominanceDc, chrominanceAc);
+                        TableFour(StartOfFrame.Components, luminanceDc, luminanceAc, chrominanceDc, chrominanceAc);
                     }
                     break;
 
                 default:
                     Console.WriteLine("Frame Components: ");
-                    for (var i = 0; i < startOfFrame.Components.Length; i++)
+                    for (var i = 0; i < StartOfFrame.Components.Length; i++)
                     {
-                        var component = startOfFrame.Components[i];
+                        var component = StartOfFrame.Components[i];
                         Console.WriteLine(" {0}, {1}, {2}, {3}", i, component.TableId, component.HFactor, component.VFactor);
                     }
                     Console.WriteLine("Scan Components: ");
-                    for (var i = 0; i < startOfScan.Components.Length; i++)
+                    for (var i = 0; i < StartOfScan.Components.Length; i++)
                     {
-                        var component = startOfScan.Components[i];
+                        var component = StartOfScan.Components[i];
                         Console.WriteLine(" {0}, {1}, {2}, {3}", i, component.Id, component.Dc, component.Ac);
                     }
-                    Console.WriteLine("Tables: {0}", huffmanTable.Tables.Count);
+                    Console.WriteLine("Tables: {0}", HuffmanTable.Tables.Count);
 
-                    throw new NotImplementedException("Subsampling not implemented {0}".FormatWith(startOfFrame.Components.Length));
+                    throw new NotImplementedException("Subsampling not implemented {0}".FormatWith(StartOfFrame.Components.Length));
             }
         }
 
@@ -288,11 +230,11 @@ namespace PhotoLib.Jpeg.JpegTags
             var lastYdc = 0;
 
             // read 8x8 blocks
-            var width = startOfFrame.SamplesPerLine / 8;
-            var length = startOfFrame.ScanLines / 8;
+            var width = StartOfFrame.SamplesPerLine / 8;
+            var length = StartOfFrame.ScanLines / 8;
             var size = width * length;
             // for (var i = 0; i < size; i++)
-            while (!imageData.EndOfFile)
+            while (!ImageData.EndOfFile)
             {
                 try
                 {
@@ -332,9 +274,9 @@ namespace PhotoLib.Jpeg.JpegTags
             var bits = (ushort)0;
             var len = 0;
 
-            while (!imageData.EndOfFile)
+            while (!ImageData.EndOfFile)
             {
-                bits = imageData.GetNextShort(bits);
+                bits = ImageData.GetNextShort(bits);
                 len++;
 
                 HuffmanTable.HCode hCode;
@@ -348,7 +290,7 @@ namespace PhotoLib.Jpeg.JpegTags
                     break;
                 }
 
-                var z = imageData.GetSetOfBits(hCode.Code);
+                var z = ImageData.GetSetOfBits(hCode.Code);
                 value = Jpeg.HuffmanTable.DcValueEncoding(hCode.Code, z);
                 break;
             }
@@ -366,7 +308,7 @@ namespace PhotoLib.Jpeg.JpegTags
 
             while (true)
             {
-                bits = imageData.GetNextShort(bits);
+                bits = ImageData.GetNextShort(bits);
                 len++;
 
                 if (len > 16)
@@ -385,7 +327,7 @@ namespace PhotoLib.Jpeg.JpegTags
                     break;
                 }
 
-                var z = imageData.GetSetOfBits(hCode.Code);
+                var z = ImageData.GetSetOfBits(hCode.Code);
                 value[count] = Jpeg.HuffmanTable.DcValueEncoding(hCode.Code, z);
 
                 if (++count >= 63)
@@ -408,7 +350,5 @@ namespace PhotoLib.Jpeg.JpegTags
             var difValue = Jpeg.HuffmanTable.DecodeDifBits(hufBits, difCode);
             return difValue;
         }
-
-        #endregion
     }
 }
