@@ -16,13 +16,7 @@ namespace PhotoTests.Canon7D2
     [TestClass]
     public class C7D2Ifd3
     {
-        #region Constants
-
         private const string FileName = @"C:..\..\Photos\7D2high.CR2";
-
-        #endregion
-
-        #region Public Methods and Operators
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -134,7 +128,5 @@ namespace PhotoTests.Canon7D2
                     RawImage.ReadUInts16(binaryReader, imageFileEntry));
             }
         }
-
-        #endregion
     }
 }

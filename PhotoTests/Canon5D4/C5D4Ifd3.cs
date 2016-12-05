@@ -16,13 +16,7 @@ namespace PhotoTests.Canon5D4
     [TestClass]
     public class C5D4Ifd3
     {
-        #region Constants
-
         const string FileName = @"D:\Users\Greg\Pictures\Canon 5D IV\Y_DReggie_03.CR2";
-
-        #endregion
-
-        #region Public Methods and Operators
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -134,7 +128,5 @@ namespace PhotoTests.Canon5D4
                     RawImage.ReadUInts16(binaryReader, imageFileEntry));
             }
         }
-
-        #endregion
     }
 }

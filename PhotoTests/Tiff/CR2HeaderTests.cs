@@ -15,13 +15,7 @@ namespace PhotoTests.Tiff
     [TestClass]
     public class CR2HeaderTests
     {
-        #region Static Fields
-
         private static readonly byte[] Data = { 0x49, 0x49, 0x2A, 0x00, 0x10, 0x00, 0x00, 0x00, 0x43, 0x52, 0x02, 0x00, 0x46, 0xBF, 0x00, 0x00 };
-
-        #endregion
-
-        #region Public Methods and Operators
 
         [TestMethod]
         public void ByteOrder()
@@ -88,7 +82,5 @@ namespace PhotoTests.Tiff
                 Assert.AreEqual(0x00000010u, cr2Header.TiffOffset);
             }
         }
-
-        #endregion
     }
 }

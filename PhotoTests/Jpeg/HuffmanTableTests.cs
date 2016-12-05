@@ -16,8 +16,6 @@ namespace PhotoTests.Jpeg
     [TestClass]
     public class HuffmanTableTests
     {
-        #region Public Methods and Operators
-
         [TestMethod]
         public void BuildTreeDataTest()
         {
@@ -157,8 +155,6 @@ namespace PhotoTests.Jpeg
 
             CollectionAssert.AreEqual(treeBits, HuffmanTable.ToTextTree(data1, data2));
         }
-
-        #endregion
 
         [TestMethod]
         public void DecodeDifBitsTest()

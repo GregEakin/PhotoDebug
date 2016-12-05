@@ -17,13 +17,7 @@ namespace PhotoTests.Canon5D4
     [TestClass]
     public class UnitTest5D4
     {
-        #region Constants
-
         private const string FileName = @"D:\Users\Greg\Pictures\Canon 5D IV\Y_DReggie_03.CR2";
-
-        #endregion
-
-        #region Public Methods and Operators
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -313,7 +307,5 @@ namespace PhotoTests.Canon5D4
                 // Assert.AreEqual(0, startOfImage.);
             }
         }
-
-        #endregion
     }
 }

@@ -14,13 +14,7 @@ namespace PhotoTests.Canon5D3
     [TestClass]
     public class C5D3Ifd1
     {
-        #region Constants
-
         private const string FileName = @"C:..\..\Photos\5DIIIhigh.CR2";
-
-        #endregion
-
-        #region Public Methods and Operators
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -212,7 +206,5 @@ namespace PhotoTests.Canon5D3
                 CollectionAssert.AreEqual(new[] { 0x829a0026 }, readULongs);
             }
         }
-
-        #endregion
     }
 }

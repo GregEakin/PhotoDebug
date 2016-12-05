@@ -154,13 +154,9 @@ namespace PhotoLib.Jpeg
 
         public struct HCode
         {
-            #region Fields
-
             public readonly byte Code;
 
             public readonly byte Length;
-
-            #endregion
 
             public HCode(byte code, byte length)
             {

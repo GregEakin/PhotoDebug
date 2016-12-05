@@ -21,8 +21,6 @@ namespace PhotoTests
     [TestClass]
     public class OtherUnitTests
     {
-        #region Public Methods and Operators
-
         [Ignore]
         [TestMethod]
         public void DumpHuffmanTable()
@@ -486,7 +484,5 @@ namespace PhotoTests
 
             return hCode.Code;
         }
-
-        #endregion
     }
 }

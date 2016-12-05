@@ -14,13 +14,7 @@ namespace PhotoTests.Canon5D3
     [TestClass]
     public class C5D3Ifd3
     {
-        #region Constants
-
         private const string FileName = @"C:..\..\Photos\5DIIIhigh.CR2";
-
-        #endregion
-
-        #region Public Methods and Operators
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -128,7 +122,5 @@ namespace PhotoTests.Canon5D3
                     RawImage.ReadUInts16(binaryReader, imageFileEntry));
             }
         }
-
-        #endregion
     }
 }

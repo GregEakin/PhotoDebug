@@ -16,13 +16,7 @@ namespace PhotoTests.Tiff
     [TestClass]
     public class ImageFileDirectoryTests
     {
-        #region Static Fields
-
         private static readonly byte[] Data = { 0x01, 0x00, 0x12, 0x00, 0x00, 0x01, 0x03, 0x00, 0x01, 0x00, 0x00, 0x00, 0x40, 0x14, 0x00, 0x00, 0x00, 0x00 };
-
-        #endregion
-
-        #region Public Methods and Operators
 
         [TestMethod]
         public void EntriesCount()
@@ -57,7 +51,5 @@ namespace PhotoTests.Tiff
                 Assert.AreEqual(0x00000000u, imageFileDirectory.NextEntry);
             }
         }
-
-        #endregion
     }
 }

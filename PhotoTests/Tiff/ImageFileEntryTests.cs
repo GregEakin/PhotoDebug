@@ -15,13 +15,7 @@ namespace PhotoTests.Tiff
     [TestClass]
     public class ImageFileEntryTests
     {
-        #region Static Fields
-
         private static readonly byte[] Data = { 0x12, 0x00, 0x00, 0x01, 0x03, 0x00, 0x01, 0x00, 0x00, 0x00, 0x40, 0x14 };
-
-        #endregion
-
-        #region Public Methods and Operators
 
         [TestMethod]
         public void NumberOfValue()
@@ -66,7 +60,5 @@ namespace PhotoTests.Tiff
                 Assert.AreEqual(0x14400000u, imageFileEntry.ValuePointer);
             }
         }
-
-        #endregion
     }
 }

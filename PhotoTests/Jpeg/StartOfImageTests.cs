@@ -15,8 +15,6 @@ namespace PhotoTests.Jpeg
     [TestClass]
     public class StartOfImageTests
     {
-        #region Public Methods and Operators
-
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void BadMark()
@@ -64,7 +62,5 @@ namespace PhotoTests.Jpeg
                 Assert.AreEqual(0xD8, startOfImage.Tag);
             }
         }
-
-        #endregion
     }
 }

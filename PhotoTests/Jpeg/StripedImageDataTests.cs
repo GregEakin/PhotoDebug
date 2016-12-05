@@ -12,8 +12,6 @@ namespace PhotoTests.Jpeg
     [TestClass]
     public class StripedImageDataTests
     {
-        #region Constants
-
         private const int Height = 3;
 
         private const int Width = 11;  // one byte for each color
@@ -23,10 +21,6 @@ namespace PhotoTests.Jpeg
         private const int Y = 3;
 
         private const int Z = 2;
-
-        #endregion
-
-        #region Static Fields
 
         private static readonly byte[] Data = new byte[]
             {
@@ -42,10 +36,6 @@ namespace PhotoTests.Jpeg
                 0x13, 0x14, 0x15, 0x23, 0x24, 0x25, 0x33, 0x34, 0x35, 0x42, 0x43,
                 0x16, 0x17, 0x18, 0x26, 0x27, 0x28, 0x36, 0x37, 0x38, 0x44, 0x45
             };
-
-        #endregion
-
-        #region Public Methods and Operators
 
         [TestMethod]
         public void TestMethodB7()
@@ -191,7 +181,5 @@ namespace PhotoTests.Jpeg
                 }
             }
         }
-
-        #endregion
     }
 }

@@ -13,8 +13,6 @@ namespace PhotoLib.Utilities
 {
     public static class StringUtilities
     {
-        #region Public Methods and Operators
-
         public static string FormatWith(this string mask, params object[] parameters)
         {
             return string.Format(CultureInfo.InvariantCulture, mask, parameters);
@@ -35,7 +33,5 @@ namespace PhotoLib.Utilities
             sb.Append("]");
             return sb.ToString();
         }
-
-        #endregion
     }
 }

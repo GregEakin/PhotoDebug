@@ -76,8 +76,6 @@ namespace HexDump
             }
         }
 
-        #region Methods
-
         private static void Main(string[] args)
         {
             const string Directory = @"..\..\..\Samples\";
@@ -89,7 +87,5 @@ namespace HexDump
 
             TestMethod5(FileName);
         }
-
-        #endregion
     }
 }
