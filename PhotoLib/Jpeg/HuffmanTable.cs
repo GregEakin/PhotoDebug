@@ -6,6 +6,7 @@
 // AUTHOR:		Greg Eakin
 
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace PhotoLib.Jpeg
@@ -24,7 +25,7 @@ namespace PhotoLib.Jpeg
 
         public byte[] Data2 { get; }
 
-        public Dictionary<int, HCode> Dictionary { get; }
+        public ReadOnlyDictionary<int, HCode> Dictionary { get; }
 
         /// <summary>
         /// HT Info, bits 0..3 is number, bit 4 is 0 = DC, 1 = AC, bits 5..7 must be zero
@@ -101,7 +102,7 @@ namespace PhotoLib.Jpeg
         /// Assert.AreEqual(data2.Length, data1.Sum(b => b));
         /// Assert.IsTrue(data2.Length <= 256);
         /// </summary>
-        public static Dictionary<int, HCode> BuildTree(IList<byte> data1, IList<byte> data2)
+        public static ReadOnlyDictionary<int, HCode> BuildTree(IList<byte> data1, IList<byte> data2)
         {
             var retval = new Dictionary<int, HCode>();
 
@@ -118,7 +119,7 @@ namespace PhotoLib.Jpeg
                     offset++;
                 }
             }
-            return retval;
+            return new ReadOnlyDictionary<int, HCode>(retval);
         }
 
         public override string ToString()

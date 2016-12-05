@@ -6,6 +6,7 @@
 // AUTHOR:		Greg Eakin
 
 using System;
+using System.Collections.ObjectModel;
 using System.IO;
 
 namespace PhotoLib.Jpeg.JpegTags
@@ -23,13 +24,12 @@ namespace PhotoLib.Jpeg.JpegTags
             : base(binaryReader)
         {
             if (Mark != 0xFF || Tag != 0xDB)
-            {
                 throw new ArgumentException();
-            }
 
             Length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
 
             var size = 2;
+            var dictionary = new Dictionary<byte, byte[]>();
             while (size < Length)
             {
                 // until the length is exhausted (loads two quantization tables for baseline JPEG)
@@ -40,7 +40,7 @@ namespace PhotoLib.Jpeg.JpegTags
 
                 var index = binaryReader.ReadByte();
                 var data = binaryReader.ReadBytes(64);
-                Dictionary.Add(index, data);
+                dictionary.Add(index, data);
 
                 Console.WriteLine("DQT Table found 0x{0:X2}", index);
 
@@ -48,13 +48,13 @@ namespace PhotoLib.Jpeg.JpegTags
             }
 
             if (size != Length)
-            {
                 throw new ArgumentException();
-            }
+
+            Dictionary = new ReadOnlyDictionary<byte, byte[]>(dictionary);
         }
 
         public ushort Length { get; }
 
-        public Dictionary<byte, byte[]> Dictionary { get; } = new Dictionary<byte, byte[]>();
+        public ReadOnlyDictionary<byte, byte[]> Dictionary { get; }
     }
 }

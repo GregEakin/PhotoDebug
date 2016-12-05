@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -22,12 +23,11 @@ namespace PhotoLib.Jpeg.JpegTags
             : base(binaryReader)
         {
             if (Mark != 0xFF || Tag != 0xC4)
-            {
                 throw new ArgumentException();
-            }
 
             Length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
 
+            var tables = new Dictionary<byte, HuffmanTable>();
             var size = 2;
             while (size + 17 <= Length)
             {
@@ -36,19 +36,19 @@ namespace PhotoLib.Jpeg.JpegTags
                 var data1 = binaryReader.ReadBytes(16);
                 var sum = data1.Sum(b => b);
                 var data2 = binaryReader.ReadBytes(sum);
-                Tables.Add(index, new HuffmanTable(index, data1, data2));
+                tables.Add(index, new HuffmanTable(index, data1, data2));
                 size += 1 + data1.Length + data2.Length;
             }
 
             if (size != Length)
-            {
                 throw new ArgumentException();
-            }
+
+            Tables = new ReadOnlyDictionary<byte, HuffmanTable>(tables);
         }
 
         public ushort Length { get; }
 
-        public Dictionary<byte, HuffmanTable> Tables { get; } = new Dictionary<byte, HuffmanTable>();
+        public ReadOnlyDictionary<byte, HuffmanTable> Tables { get; }
 
         public override string ToString()
         {
