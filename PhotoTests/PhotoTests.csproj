@@ -70,7 +70,6 @@
     <Compile Include="Jpeg\JpegTags\CommentTests.cs" />
     <Compile Include="Jpeg\JpegTags\DefineQuantizationTableTests.cs" />
     <Compile Include="Jpeg\JpegTags\JfifMarkerTests.cs" />
-    <Compile Include="Jpeg\JpegTags\StartOfImageTests.cs" />
     <Compile Include="OtherUnitTests.cs" />
     <Compile Include="JpegFileTests.cs" />
     <Compile Include="Jpeg\JpegTags\DefineHuffmanTableTests.cs" />
