@@ -41,9 +41,7 @@ namespace PhotoLib.Jpeg
             //   break;
 
             if (Mark != 0xFF || (Tag & 0xF0) != 0xC0 || Tag == 0xC4 || Tag == 0xC8 || Tag == 0xCC)
-            {
                 throw new ArgumentException();
-            }
 
             // Console.WriteLine("SoF {0}: {1}", Tag.ToString("X2"), (binaryReader.BaseStream.Position - 2).ToString("X8"));
 
@@ -55,16 +53,12 @@ namespace PhotoLib.Jpeg
             var componentCount = binaryReader.ReadByte();
             Components = new Component[componentCount];
             for (var i = 0; i < componentCount; i++)
-            {
                 Components[i] = new Component(binaryReader);
-            }
 
             // var clrs = components.Sum(comp => comp.HFactor * comp.VFactor);
 
             if (3 * componentCount + 8 != Length)
-            {
                 throw new ArgumentException();
-            }
         }
 
         public Component[] Components { get; }

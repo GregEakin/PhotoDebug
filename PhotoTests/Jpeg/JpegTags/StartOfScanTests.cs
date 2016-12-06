@@ -27,7 +27,7 @@ namespace PhotoTests.Jpeg.JpegTags
             {
                 var startOfScan = new StartOfScan(reader);
 
-                Assert.AreEqual(0x0A, startOfScan.Length);
+                Assert.AreEqual(0x000A, startOfScan.Length);
 
                 var components = startOfScan.Components;
                 Assert.AreEqual(2, components.Length);

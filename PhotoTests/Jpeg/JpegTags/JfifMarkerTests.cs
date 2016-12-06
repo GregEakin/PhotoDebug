@@ -29,7 +29,7 @@ namespace PhotoTests.Jpeg.JpegTags
             using (var reader = new BinaryReader(memory))
             {
                 var jfifMarker = new JfifMarker(reader);
-                Assert.AreEqual(0x16, jfifMarker.Length);
+                Assert.AreEqual(0x0016, jfifMarker.Length);
 
                 Assert.AreEqual(0x1234, jfifMarker.Version);
                 Assert.AreEqual(0x03, jfifMarker.Units);

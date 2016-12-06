@@ -5,10 +5,8 @@
 // AUTHOR:		Greg Eakin
 
 using System.IO;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoLib.Jpeg.JpegTags;
-using PhotoLib.Tiff;
 
 namespace PhotoTests.Jpeg.JpegTags
 {
@@ -27,7 +25,7 @@ namespace PhotoTests.Jpeg.JpegTags
             using (var reader = new BinaryReader(memory))
             {
                 var comment = new Comment(reader);
-                Assert.AreEqual(0x08, comment.Length);
+                Assert.AreEqual(0x0008, comment.Length);
                 CollectionAssert.AreEqual(new byte[] { 0x01, 0x02, 0x03, 0x04 }, comment.Data);
             }
         }
