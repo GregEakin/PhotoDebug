@@ -26,14 +26,10 @@ namespace HexDump
                 {
                     var data = binaryReader.ReadByte();
                     if (data != 0xFE)
-                    {
                         continue;
-                    }
                     var next = binaryReader.ReadByte();
                     if (next != 0xD4)
-                    {
                         continue;
-                    }
                     address = binaryReader.BaseStream.Position - 2;
                     break;
                 }
@@ -42,13 +38,11 @@ namespace HexDump
                 var total = (int)Math.Min(1024, length);
                 for (var i = 0; i < total; i += Width)
                 {
-                    Console.Write("0x{0:X8}: ", (address + i));
+                    Console.Write("0x{0:X8}: ", address + i);
                     var nextStep = (int)Math.Min(Width, length - i);
                     var data = binaryReader.ReadBytes(nextStep);
                     foreach (var b in data)
-                    {
                         Console.Write("{0:X2} ", b);
-                    }
                     Console.WriteLine();
                 }
 
@@ -64,13 +58,11 @@ namespace HexDump
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 for (var i = 0; i < 64; i += Width)
                 {
-                    Console.Write("0x{0:X8}: ", (address + i));
+                    Console.Write("0x{0:X8}: ", address + i);
                     var nextStep = (int)Math.Min(Width, length - i);
                     var data = binaryReader.ReadBytes(nextStep);
                     foreach (var b in data)
-                    {
                         Console.Write("{0:X2} ", b);
-                    }
                     Console.WriteLine();
                 }
             }
