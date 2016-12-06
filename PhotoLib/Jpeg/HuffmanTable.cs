@@ -135,9 +135,7 @@ namespace PhotoLib.Jpeg
             for (byte i = 0; i < 16; i++)
             {
                 if (Data1[i] <= 0)
-                {
                     continue;
-                }
 
                 retval.Append($"{i + 1,2} : ");
                 for (var j = 0; j < Data1[i]; j++)
