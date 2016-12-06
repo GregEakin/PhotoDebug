@@ -6,7 +6,7 @@
 
 using PhotoLib.Jpeg.JpegTags;
 
-namespace PhotoTests.Jpeg
+namespace PhotoTests.Jpeg.JpegTags
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;

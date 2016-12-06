@@ -77,7 +77,7 @@
     <Compile Include="Jpeg\ImageDataTests.cs" />
     <Compile Include="Jpeg\SlicesTests.cs" />
     <Compile Include="Jpeg\JpegTags\StartOfFrameTests.cs" />
-    <Compile Include="Jpeg\StartOfImageTests.cs" />
+    <Compile Include="Jpeg\JpegTags\StartOfImageTests.cs" />
     <Compile Include="Jpeg\JpegTags\StartOfScanTests.cs" />
     <Compile Include="Jpeg\StripedImageDataTests.cs" />
     <Compile Include="Prototypes\Canon5d4.cs" />
