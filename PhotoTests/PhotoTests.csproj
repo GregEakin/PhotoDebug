@@ -72,7 +72,6 @@
     <Compile Include="Jpeg\JpegTags\JfifMarkerTests.cs" />
     <Compile Include="Jpeg\JpegTags\StartOfFrameTests.cs" />
     <Compile Include="Jpeg\JpegTags\StartOfImageTests.cs" />
-    <Compile Include="Jpeg\JpegTags\StartOfScanTests.cs" />
     <Compile Include="OtherUnitTests.cs" />
     <Compile Include="JpegFileTests.cs" />
     <Compile Include="Jpeg\JpegTags\DefineHuffmanTableTests.cs" />
@@ -81,7 +80,7 @@
     <Compile Include="Jpeg\SlicesTests.cs" />
     <Compile Include="Jpeg\StartOfFrameTests.cs" />
     <Compile Include="Jpeg\StartOfImageTests.cs" />
-    <Compile Include="Jpeg\StartOfScanTests.cs" />
+    <Compile Include="Jpeg\JpegTags\StartOfScanTests.cs" />
     <Compile Include="Jpeg\StripedImageDataTests.cs" />
     <Compile Include="Prototypes\Canon5d4.cs" />
     <Compile Include="Prototypes\Canon80D.cs" />
