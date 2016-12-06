@@ -35,7 +35,7 @@ namespace PhotoLib.Jpeg.JpegTags
 
                 var nextTag = binaryReader.ReadByte();
                 binaryReader.BaseStream.Seek(pos, SeekOrigin.Begin);
-                Console.WriteLine("NextMark {0:X2}: 0x{1:X8}", nextTag, binaryReader.BaseStream.Position);
+                Console.WriteLine($"NextMark {nextTag:X2}: 0x{binaryReader.BaseStream.Position:X8}");
                 switch (nextTag)
                 {
                     case 0xC0: // SOF0, Start of Frame 0, Baseline DCT
