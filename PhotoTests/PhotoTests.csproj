@@ -69,6 +69,7 @@
     <Compile Include="Exif\ParseXml.cs" />
     <Compile Include="Jpeg\JiffMarkerTests.cs" />
     <Compile Include="Jpeg\JpegTags\CommentTests.cs" />
+    <Compile Include="Jpeg\JpegTags\DefineQuantizationTableTests.cs" />
     <Compile Include="Jpeg\JpegTags\JfifMarkerTests.cs" />
     <Compile Include="Jpeg\JpegTags\StartOfFrameTests.cs" />
     <Compile Include="Jpeg\JpegTags\StartOfScanTests.cs" />
