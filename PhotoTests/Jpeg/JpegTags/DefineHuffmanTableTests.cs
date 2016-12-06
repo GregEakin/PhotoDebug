@@ -11,7 +11,7 @@ using System.IO;
 using System.Linq;
 using static PhotoTests.Utilities.ExpectedException;
 
-namespace PhotoTests.Jpeg
+namespace PhotoTests.Jpeg.JpegTags
 {
     [TestClass]
     public class DefineHuffmanTableTests
