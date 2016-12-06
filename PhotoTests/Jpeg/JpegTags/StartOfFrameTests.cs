@@ -4,7 +4,7 @@
 // FILE:		StartOfFrameTests.cs
 // AUTHOR:		Greg Eakin
 
-namespace PhotoTests.Jpeg
+namespace PhotoTests.Jpeg.JpegTags
 {
     using System;
     using System.IO;
