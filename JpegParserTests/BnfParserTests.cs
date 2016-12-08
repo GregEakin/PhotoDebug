@@ -13,7 +13,7 @@ using System.Collections.Generic;
 namespace JpegParserTests
 {
     [TestClass]
-    public class UnitTest1
+    public class BnfParserTests
     {
         [TestMethod]
         public void FileExists()
@@ -24,7 +24,7 @@ namespace JpegParserTests
         [TestMethod]
         public void CheckFile()
         {
-            var stuff = new Class1("JpegBnf.txt");
+            var stuff = new BnfParser("JpegBnf.txt");
             var dict = stuff.Dict;
 
             foreach (var pair in dict)
@@ -47,7 +47,7 @@ namespace JpegParserTests
         [TestMethod]
         public void DumpFile()
         {
-            var stuff = new Class1("JpegBnf.txt");
+            var stuff = new BnfParser("JpegBnf.txt");
             var dict = stuff.Dict;
 
             foreach (var pair in dict)
@@ -69,7 +69,7 @@ namespace JpegParserTests
         [TestMethod]
         public void DeepDumpFile()
         {
-            var stuff = new Class1("JpegBnf.txt");
+            var stuff = new BnfParser("JpegBnf.txt");
             var dict = stuff.Dict;
 
             var key = "<jpeg_data>";
@@ -94,7 +94,7 @@ namespace JpegParserTests
             }
         }
 
-        private static HashSet<string> DumpBlock(string key, Dictionary<string, Class1.Data> dict)
+        private static HashSet<string> DumpBlock(string key, Dictionary<string, BnfParser.Data> dict)
         {
             var data = new HashSet<string>();
             var index = 0;
@@ -117,7 +117,7 @@ namespace JpegParserTests
             return data;
         }
 
-        private static HashSet<string> DumpLine(Dictionary<string, Class1.Data> dict, string line)
+        private static HashSet<string> DumpLine(Dictionary<string, BnfParser.Data> dict, string line)
         {
             var retval = new HashSet<string>();
 
@@ -159,7 +159,7 @@ namespace JpegParserTests
         [TestMethod]
         public void DumpJpeg()
         {
-            var stuff = new Class1("JpegBnf.txt");
+            var stuff = new BnfParser("JpegBnf.txt");
             var dict = stuff.Dict;
 
             var key = "<jpeg_data>";

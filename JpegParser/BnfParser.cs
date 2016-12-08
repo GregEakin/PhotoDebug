@@ -5,34 +5,25 @@
 // FILE:		Class1.cs
 // AUTHOR:		Greg Eakin
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 
 namespace JpegParser
 {
-    public class Class1
+    public class BnfParser
     {
-        readonly Dictionary<string, Data> dict = new Dictionary<string, Data>();
-
         public class Data
         {
-            readonly List<string> lines = new List<string>();
-
             public void AddLine(string line)
             {
-                lines.Add(line);
+                Lines.Add(line);
             }
 
-            public List<string> Lines
-            {
-                get
-                {
-                    return lines;
-                }
-            }
+            public List<string> Lines { get; } = new List<string>();
         }
 
-        public Class1(string fileName)
+        public BnfParser(string fileName)
         {
             // Read the file and display it line by line.
             using (var file = new StreamReader(fileName))
@@ -54,27 +45,26 @@ namespace JpegParser
                         last = new Data();
                         last.AddLine(data);
 
-                        // Assert.IsFalse(dict.ContainsKey(key));
-                        dict.Add(key, last);
+                        if (Dict.ContainsKey(key))
+                            throw new Exception($"Duplicate entry {key}.");
+
+                        Dict.Add(key, last);
                     }
                     else if (line.StartsWith("|"))
                     {
+                        if (last == null)
+                            throw new Exception("Last is null.");
+
                         var x = line.Split('|');
                         var data = x[1].Trim();
                         last.AddLine(data);
                     }
-                    // else
-                    //    Assert.Fail("bad line");
+                    else
+                        throw new Exception("bad line");
                 }
             }
         }
 
-        public Dictionary<string, Data> Dict
-        {
-            get
-            {
-                return dict;
-            }
-        }
+        public Dictionary<string, Data> Dict { get; } = new Dictionary<string, Data>();
     }
 }
