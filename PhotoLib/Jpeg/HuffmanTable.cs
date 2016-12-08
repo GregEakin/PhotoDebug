@@ -42,26 +42,6 @@ namespace PhotoLib.Jpeg
             return sign != 0 ? (int) num : (int) num - (int) ((1u << dcCode) - 1);
         }
 
-        public static void DecodeD()
-        {
-            // var c = 0;
-            // var j = 0;
-            // while (c > maxcoded[j]) do
-            {
-                //nbit
-                //c = 2 * c + bit
-                //j = j + 1
-            }
-            //val = huffvald[valptrd[j] + c - mincoded[j]]
-        }
-
-        public static void DecodeA()
-        {
-            //  except that the number val (byte) now is divided up in two half-bytes: 
-            // nz = val div 16 
-            // val = val - nz * 16 - the first half-byte nz stating a number of zeros.
-        }
-
         public static string PrintBits(int value, int number)
         {
             var retval = new StringBuilder();

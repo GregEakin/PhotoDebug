@@ -120,6 +120,46 @@ namespace PhotoTests.Jpeg
         }
 
         [TestMethod]
+        public void DistFromEnd0()
+        {
+            var data = new byte[] { 0xA5, 0x5A };
+            using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
+            {
+                var imageData = new ImageData(reader, (uint)data.Length);
+                Assert.IsTrue(imageData.GetNextBit());
+                Assert.AreEqual(2, imageData.DistFromEnd);
+            }
+        }
+
+        [TestMethod]
+        public void DistFromEnd1()
+        {
+            var data = new byte[] { 0xA5, 0x5A };
+            using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
+            {
+                var imageData = new ImageData(reader, (uint)data.Length);
+                Assert.AreEqual(165, imageData.GetSetOfBits(8));
+                Assert.AreEqual(1, imageData.DistFromEnd);
+            }
+        }
+
+        [TestMethod]
+        public void DistFromEnd2()
+        {
+            var data = new byte[] { 0xA5, 0x5A };
+            using (var memory = new MemoryStream(data))
+            using (var reader = new BinaryReader(memory))
+            {
+                var imageData = new ImageData(reader, (uint)data.Length);
+                Assert.AreEqual(165, imageData.GetSetOfBits(8));
+                Assert.AreEqual(90, imageData.GetSetOfBits(8));
+                Assert.AreEqual(0, imageData.DistFromEnd);
+            }
+        }
+
+        [TestMethod]
         public void RawData()
         {
             var data = new byte[] { 0xA5, 0x5A };
@@ -186,12 +226,12 @@ namespace PhotoTests.Jpeg
             var table0 = new HuffmanTable(0,
                 new byte[] { 0x00, 0x01, 0x05, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00 },
                 new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F });
-            Console.WriteLine("Table 0 {0}", table0.ToString());
+            Console.WriteLine("Table 0 {0}", table0);
 
             var table1 = new HuffmanTable(1,
                 new byte[] { 0x00, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00 },
                 new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F });
-            Console.WriteLine("Table 1 {0}", table0.ToString());
+            Console.WriteLine("Table 1 {0}", table1);
 
             var data = new byte[] { 0xff, 0x00, 0xe0, 0x0b, 0xa2, 0x89, 0x68, 0xc7, 0x00, 0xb0 };
             using (var memory = new MemoryStream(data))

@@ -200,5 +200,25 @@ namespace PhotoTests.Jpeg
 
             // Assert.AreEqual(32768, HuffmanTable.DecodeDifBits(16, 0));
         }
+
+        [TestMethod]
+        public void ToStringTest()
+        {
+            var data1 = new byte[] { 0, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 };
+            var data2 = new byte[] { 0, 5, 3, 6, 7, 2, 8, 0, 1, 9, 10, 11, 12, 13, 15 };
+
+            var huffmanTable = new HuffmanTable(0, data1, data2);
+            Assert.AreEqual("HuffmanTable DC 0\r\n" + 
+                            " 2 : 00 (00) 05 (01) \r\n" + 
+                            " 3 : 03 (100) 06 (101) \r\n" + 
+                            " 4 : 07 (1100) 02 (1101) \r\n" + 
+                            " 5 : 08 (11100) 00 (11101) 01 (11110) \r\n" + 
+                            " 6 : 09 (111110) \r\n" + 
+                            " 7 : 0A (1111110) \r\n" + 
+                            " 8 : 0B (11111110) \r\n" + 
+                            " 9 : 0C (111111110) \r\n" + 
+                            "10 : 0D (1111111110) \r\n" + 
+                            "11 : 0F (11111111110) \r\n", huffmanTable.ToString());
+        }
     }
 }

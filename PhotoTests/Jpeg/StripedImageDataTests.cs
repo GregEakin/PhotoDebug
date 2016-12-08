@@ -22,21 +22,20 @@ namespace PhotoTests.Jpeg
 
         private const int Z = 2;
 
-        private static readonly byte[] Data = new byte[]
-            {
+        private static readonly byte[] Data = {
                 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 
                 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 
                 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 
                 0x40, 0x41, 0x42, 0x43, 0x44, 0x45
             };
 
-        private static readonly byte[] Expected = new byte[]
-            {
+        private static readonly byte[] Expected = {
                 0x10, 0x11, 0x12, 0x20, 0x21, 0x22, 0x30, 0x31, 0x32, 0x40, 0x41,
                 0x13, 0x14, 0x15, 0x23, 0x24, 0x25, 0x33, 0x34, 0x35, 0x42, 0x43,
                 0x16, 0x17, 0x18, 0x26, 0x27, 0x28, 0x36, 0x37, 0x38, 0x44, 0x45
             };
 
+        [Ignore]
         [TestMethod]
         public void TestMethodB7()
         {
@@ -64,7 +63,8 @@ namespace PhotoTests.Jpeg
 
             CollectionAssert.AreEqual(Expected, buffer);
         }
-
+        
+        [Ignore]
         [TestMethod]
         public void TestMethodB8()
         {
@@ -90,6 +90,7 @@ namespace PhotoTests.Jpeg
             // CollectionAssert.AreEqual(Expected, buffer);
         }
 
+        [Ignore]
         [TestMethod]
         public void Test1()
         {
@@ -116,6 +117,7 @@ namespace PhotoTests.Jpeg
             }
         }
 
+        [Ignore]
         [TestMethod]
         public void Test2()
         {
@@ -156,7 +158,8 @@ namespace PhotoTests.Jpeg
                 }
             }
         }
-
+        
+        [Ignore]
         [TestMethod]
         public void Test3()
         {

@@ -11,6 +11,7 @@ namespace PhotoTests.Jpeg
     [TestClass]
     public class SlicesTests
     {
+        [Ignore]
         [TestMethod]
         public void TestBoth()
         {

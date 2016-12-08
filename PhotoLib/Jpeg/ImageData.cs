@@ -12,15 +12,6 @@ namespace PhotoLib.Jpeg
 {
     public class ImageData
     {
-        public void Reset()
-        {
-            EndOfFile = false;
-            _currentByte = 0xFF;
-            Index = -1;
-            BitsLeft = -1;
-            CheckByte();
-        }
-
         private byte _currentByte;
 
         public ImageData(BinaryReader binaryReader, uint rawSize)
@@ -36,6 +27,16 @@ namespace PhotoLib.Jpeg
         public int Index { get; private set; } = -1;
 
         public byte[] RawData { get; }
+
+        public int DistFromEnd => Index < 0 ? -1 : RawData.Length - Index;
+
+        private void CheckByte()
+        {
+            if (BitsLeft >= 0)
+                return;
+            BitsLeft = 7;
+            _currentByte = GetNextByte();
+        }
 
         public bool GetNextBit()
         {
@@ -115,14 +116,6 @@ namespace PhotoLib.Jpeg
             return retval;
         }
 
-        private void CheckByte()
-        {
-            if (BitsLeft >= 0)
-                return;
-            BitsLeft = 7;
-            _currentByte = GetNextByte();
-        }
-
         public byte GetValue(HuffmanTable table)
         {
             var hufIndex = (ushort)0;
@@ -133,7 +126,7 @@ namespace PhotoLib.Jpeg
                 hufIndex = GetNextShort(hufIndex);
                 hufBits++;
             }
-            while (!table.Dictionary.TryGetValue(hufIndex, out hCode) || hCode.Length != hufBits);
+            while (!table.Dictionary.TryGetValue(hufIndex, out hCode) || (hCode.Length != hufBits));
 
             return hCode.Code;
         }
@@ -147,6 +140,13 @@ namespace PhotoLib.Jpeg
             return hufIndex;
         }
 
-        public int DistFromEnd => Index < 0 ? -1 : RawData.Length - Index;
+        public void Reset()
+        {
+            EndOfFile = false;
+            _currentByte = 0xFF;
+            Index = -1;
+            BitsLeft = -1;
+            CheckByte();
+        }
     }
 }
