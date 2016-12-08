@@ -35,10 +35,12 @@ namespace JpegParserTests
                     foreach (var y in x)
                     {
                         var token = y.Trim();
+                        if (token == "|" || token == "…" || token == "ϵ" || token.StartsWith("BY") || token.EndsWith("()"))
+                            continue;
                         if (token.StartsWith("<") && token.EndsWith(">"))
                             Assert.IsTrue(dict.ContainsKey(token), $"Token {token} not found");
-                        else if (!token.StartsWith("BY"))
-                            Console.WriteLine("{0} → {1}", pair.Key, line);
+                        else 
+                            Console.WriteLine("{0} → {1}  ==> {2}", pair.Key, line, token);
                     }
                 }
             }
@@ -89,9 +91,7 @@ namespace JpegParserTests
 
             Console.WriteLine("======= =====");
             foreach (var x in procTokens)
-            {
                 Console.WriteLine(x);
-            }
         }
 
         private static HashSet<string> DumpBlock(string key, Dictionary<string, BnfParser.Data> dict)
@@ -101,19 +101,15 @@ namespace JpegParserTests
             foreach (var line in dict[key].Lines)
             {
                 if (index++ == 0)
-                {
                     Console.Write("{0} → ", key);
-                }
                 else
-                {
-                    var blank = "".PadRight(key.Length);
-                    Console.Write("{0} | ", blank);
-                }
+                    Console.Write("{0} | ", "".PadRight(key.Length));
 
                 data.UnionWith(DumpLine(dict, line));
                 Console.WriteLine();
             }
 
+            Console.WriteLine();
             return data;
         }
 
@@ -123,7 +119,9 @@ namespace JpegParserTests
 
             if (line.Contains("|"))
             {
+                Console.Write("{ ");
                 Console.Write(line);
+                Console.Write(" } ");
                 return retval;
             }
 
@@ -136,20 +134,20 @@ namespace JpegParserTests
                     var z = dict[token];
                     if (z.Lines.Count == 1)
                     {
-                        Console.Write(" { ");
                         retval.UnionWith(DumpLine(dict, z.Lines[0]));
-                        Console.Write(" } ");
                     }
                     else
                     {
                         retval.Add(token);
                         Console.Write(token);
+                        Console.Write(" ");
                     }
                 }
                 else
                 {
                     // retval.Add(token);
                     Console.Write(token);
+                    Console.Write(" ");
                 }
             }
 
@@ -167,9 +165,7 @@ namespace JpegParserTests
 
             var index = 0;
             foreach (var line in data.Lines)
-            {
                 Console.WriteLine("{0} : {1}  → {2}", index++, key, line);
-            }
         }
     }
 }
