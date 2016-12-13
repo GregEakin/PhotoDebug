@@ -58,7 +58,7 @@ Result StandardOutput:
 <dac_cond> → { BY00 | BY01 | BY02 | BY03 } { BY00 | … | BYFF } 
            | { BY10 | BY11 | BY12 | BY13 } { BY01 | … | BY3F } 
 
-======= =====
+======= blocks
 <fill>
 <tblsmisc>
 <scanset>
@@ -73,3 +73,12 @@ Result StandardOutput:
 <qt_tbl>
 <tabspec>
 <dac_cond>
+
+======= functions
+fspec()
+comspec()
+appspec()
+sspec()
+huffspec()
+s64chr()
+s64int()

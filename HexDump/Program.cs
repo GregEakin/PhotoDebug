@@ -12,7 +12,7 @@ namespace HexDump
 
     internal class Program
     {
-        public static void TestMethod5(string fileName)
+        public static void DumpHexData(string fileName)
         {
             using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
             using (var binaryReader = new BinaryReader(fileStream))
@@ -77,7 +77,7 @@ namespace HexDump
             // const string FileName = Directory + "IMG_0511.CR2";
             const string FileName = Directory + "huff_simple0.jpg";
 
-            TestMethod5(FileName);
+            DumpHexData(FileName);
         }
     }
 }
