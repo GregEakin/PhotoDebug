@@ -74,8 +74,7 @@ namespace JpegParserTests
             var stuff = new BnfParser("JpegBnf.txt");
             var dict = stuff.Dict;
 
-            var key = "<jpeg_data>";
-            var allTokens = DumpBlock(key, dict);
+            var allTokens = DumpBlock("<jpeg_data>", dict);
             var procTokens = new HashSet<string>();
             while (!allTokens.SetEquals(procTokens))
             {
@@ -89,7 +88,7 @@ namespace JpegParserTests
                 }
             }
 
-            Console.WriteLine("======= =====");
+            Console.WriteLine("======= Proc Tokens");
             foreach (var x in procTokens)
                 Console.WriteLine(x);
         }
@@ -115,14 +114,14 @@ namespace JpegParserTests
 
         private static HashSet<string> DumpLine(Dictionary<string, BnfParser.Data> dict, string line)
         {
-            var retval = new HashSet<string>();
+            var tokens = new HashSet<string>();
 
             if (line.Contains("|"))
             {
                 Console.Write("{ ");
                 Console.Write(line);
                 Console.Write(" } ");
-                return retval;
+                return tokens;
             }
 
             var x = line.Split(' ');
@@ -134,11 +133,11 @@ namespace JpegParserTests
                     var z = dict[token];
                     if (z.Lines.Count == 1)
                     {
-                        retval.UnionWith(DumpLine(dict, z.Lines[0]));
+                        tokens.UnionWith(DumpLine(dict, z.Lines[0]));
                     }
                     else
                     {
-                        retval.Add(token);
+                        tokens.Add(token);
                         Console.Write(token);
                         Console.Write(" ");
                     }
@@ -151,7 +150,7 @@ namespace JpegParserTests
                 }
             }
 
-            return retval;
+            return tokens;
         }
 
         [TestMethod]

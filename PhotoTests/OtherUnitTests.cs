@@ -4,6 +4,8 @@
 // FILE:		OtherUnitTests.cs
 // AUTHOR:		Greg Eakin
 
+using System.Diagnostics;
+using System.Text;
 using PhotoLib.Jpeg.JpegTags;
 
 namespace PhotoTests
@@ -286,7 +288,7 @@ namespace PhotoTests
         }
 
         [TestMethod]
-        public void TestMethodD()
+        public void SearchWhiteBalance()
         {
             const string fileName = @"..\..\Photos\5DIIIhigh.CR2";
 
@@ -296,65 +298,120 @@ namespace PhotoTests
                 var rawImage = new RawImage(binaryReader);
 
                 var ifid0 = rawImage.Directories.First();
-                var make = ifid0[0x010f];
+                var make = ifid0[0x010f];   // Make
                 Assert.AreEqual("Canon", RawImage.ReadChars(binaryReader, make));
 
-                var model = ifid0[0x0110];
+                var model = ifid0[0x0110];  // Model
                 // Assert.AreEqual("Canon EOS 7D", RawImage.ReadChars(binaryReader, model));
                 Assert.AreEqual("Canon EOS 5D Mark III", RawImage.ReadChars(binaryReader, model));
 
-                var exif = ifid0[0x8769];
+                var exif = ifid0[0x8769];   // Exif Offset
                 binaryReader.BaseStream.Seek(exif.ValuePointer, SeekOrigin.Begin);
                 var tags = new ImageFileDirectory(binaryReader);
                 // tags.DumpDirectory(binaryReader);
 
-                var makerNotes = tags[0x927C];
+                var makerNotes = tags[0x927C];  // Maker Notes
                 binaryReader.BaseStream.Seek(makerNotes.ValuePointer, SeekOrigin.Begin);
                 var notes = new ImageFileDirectory(binaryReader);
                 // notes.DumpDirectory(binaryReader);
 
-                Assert.AreEqual(0x2A, notes.Entries.Length);
-                Assert.AreEqual(0u, notes.NextEntry); // last
-
                 // Camera settings
-                //var settings = notes.Entries.Single(e => e.TagId == 0x0001 && e.TagType == 3);
+                var settings = notes.Entries.Single(e => e.TagId == 0x0001 && e.TagType == 3);
                 //Console.WriteLine("Camera Settings id: {0}, type: {1}, count {2}, value {3}", settings.TagId, settings.TagType, settings.NumberOfValue, settings.ValuePointer);
-                //binaryReader.BaseStream.Seek(settings.ValuePointer, SeekOrigin.Begin);
-                //for (var i = 0; i < settings.NumberOfValue; i++)
-                //{
-                //    var x = binaryReader.ReadUInt16();
-                //    Console.WriteLine("{0} : {1}", i, x);
-                //}
+                binaryReader.BaseStream.Seek(settings.ValuePointer, SeekOrigin.Begin);
+                var settingsData = new ushort[settings.NumberOfValue];
+                for (var i = 0; i < settings.NumberOfValue; i++)
+                    settingsData[i] = binaryReader.ReadUInt16();
+                Assert.AreEqual(2, settingsData[1]);    // MacroMode == Normal
+                Assert.AreEqual(4, settingsData[3]);    // Qualtiy == RAW
+                Assert.AreEqual(0, settingsData[4]);    // Flash == Off
+                Assert.AreEqual(6, settingsData[9]);    // RecordMode == CR2
 
                 // focus info
-                //var focalLength = notes.Entries.Single(e => e.TagId == 0x0001 && e.TagType == 3);
+                //var focalLength = notes.Entries.Single(e => e.TagId == 0x0002 && e.TagType == 3);
                 //Console.WriteLine("Focal Length: {0}, type: {1}, count {2}, value {3}", focalLength.TagId, focalLength.TagType, focalLength.NumberOfValue, focalLength.ValuePointer);
                 //binaryReader.BaseStream.Seek(focalLength.ValuePointer, SeekOrigin.Begin);
                 //for (var i = 0; i < focalLength.NumberOfValue; i++)
-                //{
                 //    var x = binaryReader.ReadUInt16();
-                //    Console.WriteLine("{0} : {1}", i, x);
-                //}
 
-                // Color Balance
-                //var colorBalance = notes.Entries.Single(e => e.TagId == 0x4001 && e.TagType == 3);
-                //Console.WriteLine("Color Balance: {0}, type: {1}, count {2}, value {3}", colorBalance.TagId, colorBalance.TagType, colorBalance.NumberOfValue, colorBalance.ValuePointer);
-                //binaryReader.BaseStream.Seek(colorBalance.ValuePointer, SeekOrigin.Begin);
-                //for (var i = 0; i < colorBalance.NumberOfValue; i++)
-                //{
-                //    var x = binaryReader.ReadUInt16();
-                //    if (0x3f <= i && i <= 0x42)
-                //        Console.WriteLine("{0} : {1}", i, x);
-                //}
+                // shot info
+                var shot = notes.Entries.Single(e => e.TagId == 0x0004 && e.TagType == 3);
+                binaryReader.BaseStream.Seek(shot.ValuePointer, SeekOrigin.Begin);
+                var shotData = new ushort[shot.NumberOfValue];
+                for (var i = 0; i < shot.NumberOfValue; i++)
+                    shotData[i] = binaryReader.ReadUInt16();
+                Assert.AreEqual(0x0000, shotData[7]);    //! Auto - White balance
 
-                var white = notes[0x4001];
-                var whiteData = RawImage.ReadUInts16(binaryReader, white);
-                Assert.AreEqual(2032, whiteData[0x003F]);
-                Assert.AreEqual(1024, whiteData[0x0040]);
-                Assert.AreEqual(1024, whiteData[0x0041]);
-                Assert.AreEqual(1702, whiteData[0x0042]);
+                // ProcessingInfo
+                var process = notes.Entries.Single(e => e.TagId == 0x00A0 && e.TagType == 3);
+                binaryReader.BaseStream.Seek(process.ValuePointer, SeekOrigin.Begin);
+                var processData = new ushort[process.NumberOfValue];
+                for (var i = 0; i < process.NumberOfValue; i++)
+                    processData[i] = binaryReader.ReadUInt16();
+                Assert.AreEqual(0x0000, processData[6]);    // White balance - Red
+                Assert.AreEqual(0x0000, processData[7]);    // White balance - Blue
+                Assert.AreEqual(0xFFFF, processData[8]);    // White balance
+                Assert.AreEqual(5200, processData[9]);      // Color Temp
 
-                var wb = new WhiteBalance(binaryReader, white);
+                // Mesaured Color Tags
+                //var colorTags = notes.Entries.Single(e => e.TagId == 0x00aa && e.TagType == 3);
+                //binaryReader.BaseStream.Seek(colorTags.ValuePointer, SeekOrigin.Begin);
+                //var colorTagsData = new ushort[colorTags.NumberOfValue];
+                //for (var i = 0; i < colorTags.NumberOfValue; i++)
+                //    colorTagsData[i] = binaryReader.ReadUInt16();
+
+                // Color Data
+                var colorBalance = notes.Entries.Single(e => e.TagId == 0x4001 && e.TagType == 3);
+                binaryReader.BaseStream.Seek(colorBalance.ValuePointer, SeekOrigin.Begin);
+                var colorBalanceTags = new ushort[colorBalance.NumberOfValue];
+                for (var i = 0; i < colorBalance.NumberOfValue; i++)
+                    colorBalanceTags[i] = binaryReader.ReadUInt16();
+
+                // color data version
+                Assert.AreEqual(10, colorBalanceTags[0]);
+
+                // WB_RGGBLevelsAsShot
+                Assert.AreEqual(0x07F0, colorBalanceTags[63]);
+                Assert.AreEqual(0x0400, colorBalanceTags[64]);
+                Assert.AreEqual(0x0400, colorBalanceTags[65]);
+                Assert.AreEqual(0x06A6, colorBalanceTags[66]);
+
+                // ColorTempAsShot
+                Assert.AreEqual(4997, colorBalanceTags[67]);
+
+                // WB_RGGBLevelsAuto
+                Assert.AreEqual(0x07F0, colorBalanceTags[68]);
+                Assert.AreEqual(0x0400, colorBalanceTags[69]);
+                Assert.AreEqual(0x0400, colorBalanceTags[70]);
+                Assert.AreEqual(0x06A6, colorBalanceTags[71]);
+
+                // ColorTempAuto
+                Assert.AreEqual(4997, colorBalanceTags[72]);
+
+                // WB_RGGBLevelsMeasured
+                Assert.AreEqual(0x07F0, colorBalanceTags[73]);
+                Assert.AreEqual(0x0400, colorBalanceTags[74]);
+                Assert.AreEqual(0x0400, colorBalanceTags[75]);
+                Assert.AreEqual(0x06A6, colorBalanceTags[76]);
+
+                // ColorTempMeasured
+                Assert.AreEqual(4997, colorBalanceTags[77]);
+
+                // 213-275 color clib tags
+
+                // Average Black level
+                Assert.AreEqual(0x0800, colorBalanceTags[276]);
+                Assert.AreEqual(0x0800, colorBalanceTags[277]);
+                Assert.AreEqual(0x0800, colorBalanceTags[278]);
+                Assert.AreEqual(0x0800, colorBalanceTags[279]);
+
+                // Raw masured RGGB
+                Assert.AreEqual(0x000191A3, colorBalanceTags[429] << 16 | colorBalanceTags[430]);
+                Assert.AreEqual(0x00018143, colorBalanceTags[431] << 16 | colorBalanceTags[432]);
+                Assert.AreEqual(0x00017B99, colorBalanceTags[433] << 16 | colorBalanceTags[434]);
+                Assert.AreEqual(0x000090B6, colorBalanceTags[435] << 16 | colorBalanceTags[436]);
+
+                // var wb = new WhiteBalance(binaryReader, colorBalance);
             }
         }
 
@@ -383,6 +440,200 @@ namespace PhotoTests
                     var x = binaryReader.ReadUInt16();
                     Console.WriteLine("{0} : {1}", i, x);
                 }
+            }
+        }
+
+        [TestMethod]
+        public void VrdEndTags5D3()
+        {
+            const string fileName = @"..\..\Photos\003.CR2";
+
+            using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
+            {
+                binaryReader.BaseStream.Seek(-2, SeekOrigin.End);
+                var endTag = binaryReader.ReadByte() << 8 | binaryReader.ReadByte();
+                Assert.AreEqual(0xFFD9, endTag);
+
+                binaryReader.BaseStream.Seek(-42, SeekOrigin.End);
+                var offset = binaryReader.ReadByte() << 8 | binaryReader.ReadByte();
+                // Assert.AreEqual(0x1610, offset);
+
+                binaryReader.BaseStream.Seek(-64, SeekOrigin.End);
+                var endBytes = binaryReader.ReadBytes(20);
+                var end = Encoding.ASCII.GetString(endBytes);
+                Assert.AreEqual("CANON OPTIONAL DATA\0", end);
+
+                binaryReader.BaseStream.Seek(-offset - 92, SeekOrigin.End);
+                var startBytes = binaryReader.ReadBytes(20);
+                var start = Encoding.ASCII.GetString(startBytes);
+                Assert.AreEqual("CANON OPTIONAL DATA\0", start);
+
+                var y1 = SwapBytes(binaryReader.ReadUInt32());  //0x00010000
+                var y2 = SwapBytes(binaryReader.ReadUInt32());  //0x00001610 (0)
+                Assert.AreEqual((uint)offset, y2);
+                var y3 = SwapBytes(binaryReader.ReadUInt32());  //0xFFFF00F7
+                Assert.AreEqual(0xFFFF00F7u, y3);
+                var y4 = SwapBytes(binaryReader.ReadUInt32());  //0x00001608 (-8)
+                var y5 = SwapBytes(binaryReader.ReadUInt32());  //0x00001600 (-16)
+
+                var i1 = binaryReader.ReadUInt32();             // 'IIII'
+                Assert.AreEqual(0x49494949u, i1);
+                var m1 = binaryReader.ReadUInt32();             // 0x00040004
+                Assert.AreEqual(0x00040004u, m1);
+                var m2 = binaryReader.ReadUInt32();             // 0x00000006
+                Assert.AreEqual(0x00000006u, m2);
+                var m3 = binaryReader.ReadUInt32();  // camera model    // 0x80000250
+                var m4 = binaryReader.ReadUInt32();             // 0x00000003
+                Assert.AreEqual(0x00000003u, m4);
+                var m5 = binaryReader.ReadUInt32();             // 0x00000004
+                Assert.AreEqual(0x00000004u, m5);
+                var m6 = binaryReader.ReadUInt32();             // 0x00000005
+                Assert.AreEqual(0x00000005u, m6);
+
+                var x6 = binaryReader.ReadUInt32(); // dir count    // 0x0000004Eu
+                var x7 = binaryReader.ReadUInt32(); // offset       // 0x000015DCu  (-52)
+
+                for (var i = 0; i < x6; i++)
+                {
+                    var x1 = binaryReader.ReadUInt32();
+                    var x2 = binaryReader.ReadUInt32();
+                    var f1 = binaryReader.ReadUInt32();
+                    var f2 = binaryReader.ReadUInt32();
+                    var f3 = binaryReader.ReadUInt32();
+                    var x3 = binaryReader.ReadUInt32();
+                    var x4 = binaryReader.ReadUInt32();
+
+                    var n = i * 28 + 36;
+                    Console.WriteLine($"k:0x{n:X8}: 0x{x1:X8}  f:{x2} a:0x{x3:X8} s:{x4}");
+                    // Console.WriteLine($"        0x{f1:X8}  0x{f2:X8} 0x{f3:X8}");
+
+                    // vrd fromat - X2
+                    // 1: int32u
+                    // 2: string
+                    // 8: int32u
+                    // 9: int32u
+                    // 13: double
+                    // 33: int32u array
+                    // 38: double array
+                }
+
+                var ll = (int)(offset - x6 * 28 - 48);
+                var heap = binaryReader.ReadBytes(ll);
+                for (var i = ll - 40; i < heap.Length; i += 4)
+                {
+                    var s0 = heap[i + 0] << 8 | heap[i + 1];
+                    var s1 = heap[i + 2] << 8 | heap[i + 3];
+
+                    var n = i + x6 * 28 + 36;
+                    Console.WriteLine($"0x{n:X8}: 0x{s0:X4}  0x{s1:X4}");
+
+                }
+
+                var bytes = binaryReader.ReadBytes(20);
+                var tag = Encoding.ASCII.GetString(bytes);
+                Assert.AreEqual("CANON OPTIONAL DATA\0", tag);
+            }
+        }
+
+        private static uint SwapBytes(uint data)
+        {
+            var x1 = (data & 0x000000FF) << 24;
+            var x2 = (data & 0x0000FF00) << 8;
+            var x3 = (data & 0x00FF0000) >> 8;
+            var x4 = (data & 0xFF000000) >> 24;
+            return x1 | x2 | x3 | x4;
+        }
+
+        [TestMethod]
+        public void VrdEndTags7D()
+        {
+            const string fileName = @"..\..\Photos\7Dhigh - Copy.CR2";
+
+            using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
+            {
+                binaryReader.BaseStream.Seek(-2, SeekOrigin.End);
+                var endTag = binaryReader.ReadByte() << 8 | binaryReader.ReadByte();
+                Assert.AreEqual(0xFFD9, endTag);
+
+                binaryReader.BaseStream.Seek(-42, SeekOrigin.End);
+                var offset = binaryReader.ReadByte() << 8 | binaryReader.ReadByte();
+                // Assert.AreEqual(0x1A30, offset);
+
+                binaryReader.BaseStream.Seek(-64, SeekOrigin.End);
+                var endBytes = binaryReader.ReadBytes(20);
+                var end = Encoding.ASCII.GetString(endBytes);
+                Assert.AreEqual("CANON OPTIONAL DATA\0", end);
+
+                binaryReader.BaseStream.Seek(-offset - 92, SeekOrigin.End);
+                var startBytes = binaryReader.ReadBytes(20);
+                var start = Encoding.ASCII.GetString(startBytes);
+                Assert.AreEqual("CANON OPTIONAL DATA\0", start);
+
+                var y1 = SwapBytes(binaryReader.ReadUInt32());  //0x00010000
+                var y2 = SwapBytes(binaryReader.ReadUInt32());  //0x00001A30 (0)
+                Assert.AreEqual((uint)offset, y2);
+                var y3 = SwapBytes(binaryReader.ReadUInt32());  //0xFFFF00F7
+                Assert.AreEqual(0xFFFF00F7u, y3);
+                var y4 = SwapBytes(binaryReader.ReadUInt32());  //0x00001A28 (-8)
+                var y5 = SwapBytes(binaryReader.ReadUInt32());  //0x00001A20 (-16)
+
+                var i1 = binaryReader.ReadUInt32();             // 'IIII'
+                Assert.AreEqual(0x49494949u, i1);
+                var m1 = binaryReader.ReadUInt32();             // 0x00040004
+                Assert.AreEqual(0x00040004u, m1);
+                var m2 = binaryReader.ReadUInt32();             // 0x00000006
+                Assert.AreEqual(0x00000006u, m2);
+                var m3 = binaryReader.ReadUInt32();  // camera model    // 0x80000250
+                var m4 = binaryReader.ReadUInt32();             // 0x00000003
+                Assert.AreEqual(0x00000003u, m4);
+                var m5 = binaryReader.ReadUInt32();             // 0x00000004
+                Assert.AreEqual(0x00000004u, m5);
+                var m6 = binaryReader.ReadUInt32();             // 0x00000005
+                Assert.AreEqual(0x00000005u, m6);
+
+                var x6 = binaryReader.ReadUInt32(); // dir count    // 0x00000051u
+                var x7 = binaryReader.ReadUInt32(); // offset       // 0x000019FCu  (-34)
+
+                for (var i = 0; i < x6; i++)
+                {
+                    var x1 = binaryReader.ReadUInt32();
+                    var x2 = binaryReader.ReadUInt32();
+                    var f1 = binaryReader.ReadUInt32();
+                    var f2 = binaryReader.ReadUInt32();
+                    var f3 = binaryReader.ReadUInt32();
+                    var x3 = binaryReader.ReadUInt32();
+                    var x4 = binaryReader.ReadUInt32();
+
+                    var n = i * 28 + 36;
+                    Console.WriteLine($"k:0x{n:X8}: 0x{x1:X8}  f:{x2} a:0x{x3:X8} s:{x4}");
+                    // Console.WriteLine($"        0x{f1:X8}  0x{f2:X8} 0x{f3:X8}");
+
+                    // vrd fromat - X2
+                    // 1: int32u
+                    // 2: string
+                    // 8: int32u
+                    // 9: int32u
+                    // 13: double
+                    // 33: int32u array
+                    // 38: double array
+                }
+
+                var ll = (int)(offset - x6 * 28 - 48);
+                var heap = binaryReader.ReadBytes(ll);
+                for (var i = ll - 40; i < heap.Length; i += 4)
+                {
+                    var s0 = heap[i + 0] << 8 | heap[i + 1];
+                    var s1 = heap[i + 2] << 8 | heap[i + 3];
+
+                    var n = i + x6 * 28 + 36;
+                    Console.WriteLine($"0x{n:X8}: 0x{s0:X4}  0x{s1:X4}");
+                }
+
+                var bytes = binaryReader.ReadBytes(20);
+                var tag = Encoding.ASCII.GetString(bytes);
+                Assert.AreEqual("CANON OPTIONAL DATA\0", tag);
             }
         }
 

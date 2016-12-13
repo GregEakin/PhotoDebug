@@ -15,9 +15,7 @@ namespace PhotoLib.Tiff
         public WhiteBalance(BinaryReader binaryReader, ImageFileEntry imageFileEntry)
         {
             if (binaryReader.BaseStream.Position != imageFileEntry.ValuePointer)
-            {
                 binaryReader.BaseStream.Seek(imageFileEntry.ValuePointer, SeekOrigin.Begin);
-            }
 
             var ar = 0;
             var length = binaryReader.ReadUInt16();

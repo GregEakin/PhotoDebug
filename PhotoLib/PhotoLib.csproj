@@ -54,6 +54,7 @@
     <Compile Include="Jpeg\JpegTags\StartOfFrame.cs" />
     <Compile Include="Jpeg\JpegTags\StartOfImage.cs" />
     <Compile Include="Jpeg\JpegTags\StartOfScan.cs" />
+    <Compile Include="RecipeData\VrdData.cs" />
     <Compile Include="Tiff\RawData.cs" />
     <Compile Include="Tiff\RawImage.cs" />
     <Compile Include="Tiff\CR2Header.cs" />

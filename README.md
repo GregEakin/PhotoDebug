@@ -7,10 +7,14 @@ by Pennebaker, William B., Mitchell, Joan L.
 [![JPEG: Still Image Data Compression Standard](http://gdbtech.info/wp-content/uploads/2016/12/jpegbook-150x150.jpg)](http://www.springer.com/us/book/9780442012724)
 
 ##Information:
+- [ExifTool by Phil Harvey, Read, Write and Edit Meta Information!](http://www.sno.phy.queensu.ca/~phil/exiftool/)
 - [The Canon RAW (CRW) File Format](http://www.sno.phy.queensu.ca/~phil/exiftool/canon_raw.html)
-- [Raw Digger](http://www.rawdigger.com/)
-- [Understanding What is stored in a Canon RAW .CR2 file, How and Why](http://lclevy.free.fr/cr2/#sraw)
+- [ExifPro is an image browser application](https://github.com/mikekov/ExifPro)
+- [Understanding What is stored in a Canon RAW .CR2 file, How and Why](http://lclevy.free.fr/cr2/)
 - [EXIF MakerNote of Canon](http://www.burren.cx/david/canon.html)
+- [JPEG Snoop, File Decoding Utility](http://www.impulseadventure.com/photo/jpeg-snoop.html)
+- [Raw Digger](http://www.rawdigger.com/)
+- [FastRawViewer is the only WYSIWYG RAW viewer](http://www.fastrawviewer.com/)
 
 ##Links:
 - [Community Edition of Visual Studio (Free)](https://www.visualstudio.com/vs/community/)

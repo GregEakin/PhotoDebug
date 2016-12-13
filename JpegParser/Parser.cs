@@ -6,18 +6,83 @@
 // AUTHOR:		Greg Eakin    
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace JpegParser
 {
+    public class Block
+    {
+        public long Start { get; }
+
+        public long Length { get; }
+
+        public List<Block> Data { get; } = new List<Block>();
+
+        public Block(long start, long length)
+        {
+            Start = start;
+            Length = length;
+        }
+    }
+
     public class Parser
     {
         private readonly BinaryReader _binaryReader;
+        private readonly List<Block> _blocks;
 
         public Parser(BinaryReader binaryReader)
         {
             _binaryReader = binaryReader;
             // binaryReader.BaseStream.Seek(0x000000D0u, SeekOrigin.Begin);
+        }
+
+        public Block JpegData2()
+        {
+            var start = _binaryReader.BaseStream.Position;
+            var jpedData = new Block(start, 0);
+
+            // seak to start
+            ExpectByte(0xD8, FillByff());
+
+
+            var tblsmisc = TblsMisc2();
+            jpedData.Data.Add(tblsmisc);
+
+            var forbid = Forbid2();
+            if (forbid != null)
+            {
+                jpedData.Data.Add(forbid);
+                ExpectByte(0xD9, FillByff());
+                return jpedData;
+            }
+
+            // check for ff c0..cb -> 8-bytes, fspec(), scanset, fill FF D9
+            // check for ff D9
+            // check for ff DE -> 8-bytes, tblsmisc, fill, fill c0..cb 8-bytes, fspec(), scanset, xframes, fill FF D9
+
+            return jpedData;
+        }
+
+        public Block Forbid2()
+        {
+            var start = _binaryReader.BaseStream.Position;
+            var data = FillByff();
+
+            // BY01, BY02 .. BYBF, BYC8, BYF0 .. BYFD
+            if (data != 0x01 && (data < 0x02 || data > 0xBF) && data != 0xC8 && (data < 0xF0 || data > 0xFD))
+            {
+                _binaryReader.BaseStream.Seek(start, SeekOrigin.Begin);
+                return null;
+            }
+
+            var position = _binaryReader.BaseStream.Position;
+            return new Block(start, position - start);
+        }
+
+        public Block TblsMisc2()
+        {
+            throw new NotImplementedException();
         }
 
         public void JpegData()
@@ -75,14 +140,19 @@ namespace JpegParser
         {
             if (expected == actual)
                 Console.WriteLine("0x{0} found", actual);
+            else
+                throw new Exception("Not found");
         }
 
         public byte FillByff()
         {
-            byte next;
+            var next = _binaryReader.ReadByte();
+            if (next != 0xFF)
+                throw new Exception();
             do
                 next = _binaryReader.ReadByte();
             while (next == 0xFF);
+
             return next;
         }
 
