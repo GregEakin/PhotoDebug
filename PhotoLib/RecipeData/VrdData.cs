@@ -93,11 +93,11 @@ namespace PhotoLib.RecipeData
             if (startString != "CANON OPTIONAL DATA\0")
                 throw new Exception();
 
-            var y1 = SwapBytes(binaryReader.ReadUInt32()); 
+            var y1 = SwapBytes(binaryReader.ReadUInt32());
             if (y1 != 0x00010000)
                 throw new Exception();
 
-            var y2 = SwapBytes(binaryReader.ReadUInt32()); 
+            var y2 = SwapBytes(binaryReader.ReadUInt32());
             if (y2 != offset)
                 throw new Exception();
 
@@ -134,7 +134,7 @@ namespace PhotoLib.RecipeData
                 {
                     var exit1 = binaryReader.ReadUInt32();
                     var exit2 = binaryReader.ReadUInt32();
-                    break; 
+                    break;
                 }
                 else
                 {
@@ -165,7 +165,7 @@ namespace PhotoLib.RecipeData
         public VrdDataF4(BinaryReader binaryReader, uint next, uint length)
         {
             D1 = binaryReader.ReadBytes((int)length);
-            D2 = binaryReader.ReadBytes((int) (next - D1.Length) - 4);
+            D2 = binaryReader.ReadBytes((int)(next - D1.Length) - 4);
 
             /////
             //var vrd1 = binaryReader.ReadBytes(0x272);
@@ -184,6 +184,16 @@ namespace PhotoLib.RecipeData
         public override void DumpData()
         {
             Console.WriteLine($"D1.Length = {D1.Length}");
+            //for (var i = 0; i < 20; i++)
+            //{
+            //    Console.Write("0x");
+            //    for (var j = 0; j < 4; j++)
+            //    {
+            //        Console.Write($"{D1[i*4+j]:X2}");
+            //    }
+
+            //    Console.WriteLine();
+            //}
             Console.WriteLine($"D2.Length = {D2.Length}");
         }
     }
@@ -196,34 +206,34 @@ namespace PhotoLib.RecipeData
 
         public VrdDataF7(BinaryReader binaryReader, uint next, uint length)
         {
-            var i1 = binaryReader.ReadInt32();             
+            var i1 = binaryReader.ReadInt32();
             if (i1 != 0x49494949)
                 throw new Exception();
 
-            var m1 = binaryReader.ReadInt32();             
+            var m1 = binaryReader.ReadInt32();
             if (m1 != 0x00040004)
                 throw new Exception();
 
-            var m2 = binaryReader.ReadInt32();             
+            var m2 = binaryReader.ReadInt32();
             if (m2 != 0x00000006)
                 throw new Exception();
 
-            Camera = binaryReader.ReadUInt32();            
+            Camera = binaryReader.ReadUInt32();
 
-            var m4 = binaryReader.ReadInt32();             
+            var m4 = binaryReader.ReadInt32();
             if (m4 != 0x00000003)
                 throw new Exception();
 
-            var m5 = binaryReader.ReadInt32();             
+            var m5 = binaryReader.ReadInt32();
             if (m5 != 0x00000004)
                 throw new Exception();
 
-            var m6 = binaryReader.ReadInt32();             
-            if (m6 != 0x00000005)                                                           
+            var m6 = binaryReader.ReadInt32();
+            if (m6 != 0x00000005)
                 throw new Exception();
 
-            var count = binaryReader.ReadInt32();       
-            var heapAddress = binaryReader.ReadInt32();        
+            var count = binaryReader.ReadInt32();
+            var heapAddress = binaryReader.ReadInt32();
 
             Data = new VrdRow[count];
             for (var i = 0; i < count; i++)
