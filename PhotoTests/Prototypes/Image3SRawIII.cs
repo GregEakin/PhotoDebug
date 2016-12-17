@@ -15,6 +15,7 @@ namespace PhotoTests.Prototypes
     [TestClass]
     public class Image3SRawIII
     {
+        [Ignore]
         [TestMethod]
         public void DumpImage3SRawTest()
         {
