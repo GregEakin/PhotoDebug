@@ -201,7 +201,7 @@ namespace PhotoLib.Jpeg.JpegTags
         private void TableTwo(StartOfFrame.Component[] components, HuffmanTable luminanceDc, HuffmanTable luminanceAc)
         {
             var i = 0;
-            while (true)
+            while (!ImageData.EndOfFile)
             {
                 try
                 {
@@ -213,8 +213,9 @@ namespace PhotoLib.Jpeg.JpegTags
 
                     i++;
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
+                    Console.WriteLine("Crash {0}", exception);
                     break;
                 }
             }
