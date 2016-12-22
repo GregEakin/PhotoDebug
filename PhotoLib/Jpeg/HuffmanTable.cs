@@ -32,6 +32,31 @@ namespace PhotoLib.Jpeg
         /// </summary>
         public byte Index { get; }
 
+        /// <summary>
+        /// Assert.AreEqual(16, data1.Length);
+        /// Assert.AreEqual(data2.Length, data1.Sum(b => b));
+        /// Assert.IsTrue(data2.Length <= 256);
+        /// </summary>
+        public static ReadOnlyDictionary<int, HCode> BuildTree(IList<byte> data1, IList<byte> data2)
+        {
+            var tree = new Dictionary<int, HCode>();
+
+            var offset = 0;
+            var bits = 0;
+            for (var i = 0; i < 16; i++)
+            {
+                bits = bits << 1;
+                for (var j = 0; j < data1[i]; j++)
+                {
+                    var value = new HCode(data2[offset], (byte)(i + 1));
+                    tree.Add(bits, value);
+                    bits++;
+                    offset++;
+                }
+            }
+            return new ReadOnlyDictionary<int, HCode>(tree);
+        }
+
         public static int DcValueEncoding(int dcCode, int bits)
         {
             if (dcCode <= 0)
@@ -44,13 +69,13 @@ namespace PhotoLib.Jpeg
 
         public static string PrintBits(int value, int number)
         {
-            var retval = new StringBuilder();
+            var bits = new StringBuilder();
             for (var i = number; i >= 0; i--)
             {
                 var mask = 0x01 << i;
-                retval.Append((value & mask) != 0 ? '1' : '0');
+                bits.Append((value & mask) != 0 ? '1' : '0');
             }
-            return retval.ToString();
+            return bits.ToString();
         }
 
         /// <summary>
@@ -60,7 +85,7 @@ namespace PhotoLib.Jpeg
         /// </summary>
         public static string[] ToTextTree(IList<byte> data1, IList<byte> data2)
         {
-            var retval = new string[data2.Count];
+            var textTree = new string[data2.Count];
             var offset = 0;
             var bits = 0;
             for (var i = 0; i < 16; i++)
@@ -68,65 +93,38 @@ namespace PhotoLib.Jpeg
                 bits = bits << 1;
                 for (var j = 0; j < data1[i]; j++)
                 {
-                    retval[offset] = PrintBits(bits, i);
+                    textTree[offset] = PrintBits(bits, i);
                     bits++;
                     offset++;
                 }
             }
 
-            return retval;
-        }
-
-        /// <summary>
-        /// Assert.AreEqual(16, data1.Length);
-        /// Assert.AreEqual(data2.Length, data1.Sum(b => b));
-        /// Assert.IsTrue(data2.Length <= 256);
-        /// </summary>
-        public static ReadOnlyDictionary<int, HCode> BuildTree(IList<byte> data1, IList<byte> data2)
-        {
-            var retval = new Dictionary<int, HCode>();
-
-            var offset = 0;
-            var bits = 0;
-            for (var i = 0; i < 16; i++)
-            {
-                bits = bits << 1;
-                for (var j = 0; j < data1[i]; j++)
-                {
-                    var value = new HCode(data2[offset], (byte)(i + 1));
-                    retval.Add(bits, value);
-                    bits++;
-                    offset++;
-                }
-            }
-            return new ReadOnlyDictionary<int, HCode>(retval);
+            return textTree;
         }
 
         public override string ToString()
         {
-            var retval = new StringBuilder();
-            var tableNumber = Index & 0x0F;
+            var builder = new StringBuilder();
             var tableType = (Index & 0x10) == 0 ? "DC" : "AC";
-
-            retval.AppendLine($"HuffmanTable {tableType} {tableNumber}");
+            var tableNumber = Index & 0x0F;
+            builder.AppendLine($"HuffmanTable {tableType} {tableNumber}");
             var bits = ToTextTree(Data1, Data2);
-
             var offset = 0;
             for (byte i = 0; i < 16; i++)
             {
                 if (Data1[i] <= 0)
                     continue;
 
-                retval.Append($"{i + 1,2} : ");
+                builder.Append($"{i + 1,2} : ");
                 for (var j = 0; j < Data1[i]; j++)
                 {
-                    retval.Append($"{Data2[offset]:X2} ({bits[offset]}) ");
+                    builder.Append($"{Data2[offset]:X2} ({bits[offset]}) ");
                     offset++;
                 }
-                retval.AppendLine();
+                builder.AppendLine();
             }
 
-            return retval.ToString();
+            return builder.ToString();
         }
 
         public struct HCode

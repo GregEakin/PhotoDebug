@@ -23,7 +23,7 @@ namespace PhotoLib.Tiff
 
         public ImageFileDirectory(BinaryReader binaryReader)
         {
-            var dirStart = binaryReader.BaseStream.Position;
+            // var dirStart = binaryReader.BaseStream.Position;
 
             var length = binaryReader.ReadUInt16();
             Entries = new ImageFileEntry[length];
@@ -168,7 +168,7 @@ namespace PhotoLib.Tiff
                             Console.WriteLine();
                             break;
 
-                        case 0x05:  // urational, numeration & demoninator ulongs
+                        case 0x05:  // urational, numeration & denominator ulongs
                             Console.Write(BlockHeader, count, entry.TagId, "URational 2x32-bit");
                             Console.Write(ReferencedItem, entry.ValuePointer, entry.NumberOfValue);
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
@@ -223,7 +223,7 @@ namespace PhotoLib.Tiff
                             Console.WriteLine(RationalItem, s1, s2, s1 / (double)s2);
                             break;
 
-                        case 0x0B:  // single persision, 2 bytes IEEE format
+                        case 0x0B:  // single precision, 2 bytes IEEE format
                             Console.Write(BlockHeader, count, entry.TagId, "Float 4-Byte");
                             Console.Write(ReferencedItem, entry.ValuePointer, entry.NumberOfValue);
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
@@ -235,7 +235,7 @@ namespace PhotoLib.Tiff
                             Console.WriteLine("{0}", x1);
                             throw new NotImplementedException($"Undfined message {entry.TagType}");
 
-                        case 0x0C:  // double persision, 4 bytes IEEE format
+                        case 0x0C:  // double precision, 4 bytes IEEE format
                             Console.Write(BlockHeader, count, entry.TagId, "Double 8-Byte");
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
                             {

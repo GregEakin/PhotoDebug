@@ -22,13 +22,13 @@ namespace PhotoLib.Jpeg
 
         public int BitsLeft { get; private set; } = -1;
 
+        public int DistFromEnd => Index < 0 ? -1 : RawData.Length - Index;
+
         public bool EndOfFile { get; private set; }
 
         public int Index { get; private set; } = -1;
 
         public byte[] RawData { get; }
-
-        public int DistFromEnd => Index < 0 ? -1 : RawData.Length - Index;
 
         private void CheckByte()
         {
@@ -40,31 +40,24 @@ namespace PhotoLib.Jpeg
 
         public bool GetNextBit()
         {
-            var bit = (_currentByte & (0x01 << BitsLeft)) != 0;
+            var nextBit = (_currentByte & (0x01 << BitsLeft)) != 0;
             BitsLeft--;
             CheckByte();
-            return bit;
-        }
-
-        public ushort GetNextShort(ushort lastShort)
-        {
-            var bit = GetNextBit() ? 0x01 : 0x00;
-            var retval = (lastShort << 1) | bit;
-            return (ushort)retval;
+            return nextBit;
         }
 
         private byte GetNextByte()
         {
-            byte retval;
-
             if (EndOfFile)
                 throw new Exception("Reading past EOF is bad!");
 
+            byte nextByte;
+
             if (Index < RawData.Length - 1)
             {
-                retval = RawData[++Index];
-                if (retval != 0xFF)
-                    return retval;
+                nextByte = RawData[++Index];
+                if (nextByte != 0xFF)
+                    return nextByte;
 
                 var code = RawData[++Index];
                 switch (code)
@@ -86,17 +79,24 @@ namespace PhotoLib.Jpeg
             {
                 Index++;
                 EndOfFile = true;
-                retval = 0xFF;
+                nextByte = 0xFF;
 
                 Console.WriteLine("Read to EOF");
             }
 
-            return retval;
+            return nextByte;
+        }
+
+        public ushort GetNextShort(ushort lastShort)
+        {
+            var bit = GetNextBit() ? 0x01 : 0x00;
+            var nextShort = (lastShort << 1) | bit;
+            return (ushort)nextShort;
         }
 
         public ushort GetSetOfBits(ushort total)
         {
-            var retval = (ushort)0u;
+            var setOfBits = (ushort)0u;
 
             var length = (ushort)Math.Min(total, BitsLeft + 1);
             while (length > 0)
@@ -104,8 +104,8 @@ namespace PhotoLib.Jpeg
                 var shift = BitsLeft + 1 - length;
                 var mask = (0x0001 << length) - 1;
                 var next = _currentByte >> shift;
-                retval <<= length;
-                retval |= (ushort)(next & mask);
+                setOfBits <<= length;
+                setOfBits |= (ushort)(next & mask);
 
                 BitsLeft -= length;
                 CheckByte();
@@ -113,7 +113,7 @@ namespace PhotoLib.Jpeg
                 length = (ushort)Math.Min(total, BitsLeft + 1);
             }
 
-            return retval;
+            return setOfBits;
         }
 
         public byte GetValue(HuffmanTable table)

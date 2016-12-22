@@ -53,14 +53,14 @@ namespace PhotoLib.Tiff
         {
             foreach (var item in _directoryList)
             {
-                Console.WriteLine("== Tiff Direcotry [0x{0:X8}]:", item.Key);
+                Console.WriteLine("== Tiff Directory [0x{0:X8}]:", item.Key);
                 item.Value.DumpDirectory(binaryReader);
             }
         }
 
         public static byte[] ReadBytes(BinaryReader binaryReader, ImageFileEntry imageFileEntry)
         {
-            var retval = new byte[imageFileEntry.NumberOfValue];
+            var bytes = new byte[imageFileEntry.NumberOfValue];
 
             if (binaryReader.BaseStream.Position != imageFileEntry.ValuePointer)
             {
@@ -70,10 +70,10 @@ namespace PhotoLib.Tiff
             for (var j = 0; j < imageFileEntry.NumberOfValue; j++)
             {
                 var us = binaryReader.ReadByte();
-                retval[j] = us;
+                bytes[j] = us;
             }
 
-            return retval;
+            return bytes;
         }
 
         public static string ReadChars(BinaryReader binaryReader, ImageFileEntry imageFileEntry)
@@ -106,26 +106,26 @@ namespace PhotoLib.Tiff
             //    ? Encoding.ASCII.GetString(data, 0, (int)imageFileEntry.NumberOfValue)
             //    : Encoding.ASCII.GetString(data, 0, (int)imageFileEntry.NumberOfValue - 1);
 
-            var retval = new StringBuilder();
+            var builder = new StringBuilder();
 
             for (var i = 0; i < imageFileEntry.NumberOfValue; i++)
             {
                 var us = binaryReader.ReadByte();
-                retval.Append((char)us);
+                builder.Append((char)us);
             }
 
-            var lastPosition = retval.Length - 1;
-            if (retval[lastPosition] == 0)
+            var lastPosition = builder.Length - 1;
+            if (builder[lastPosition] == 0)
             {
-                retval.Remove(lastPosition, 1);
+                builder.Remove(lastPosition, 1);
             }
 
-            return retval.ToString();
+            return builder.ToString();
         }
 
         public static UInt16[] ReadUInts16(BinaryReader binaryReader, ImageFileEntry imageFileEntry)
         {
-            var retval = new UInt16[imageFileEntry.NumberOfValue];
+            var ushorts = new UInt16[imageFileEntry.NumberOfValue];
 
             if (binaryReader.BaseStream.Position != imageFileEntry.ValuePointer)
             {
@@ -135,15 +135,15 @@ namespace PhotoLib.Tiff
             for (var j = 0; j < imageFileEntry.NumberOfValue; j++)
             {
                 var us = binaryReader.ReadUInt16();
-                retval[j] = us;
+                ushorts[j] = us;
             }
 
-            return retval;
+            return ushorts;
         }
 
         public static UInt32[] ReadRational(BinaryReader binaryReader, ImageFileEntry imageFileEntry)
         {
-            var retval = new UInt32[imageFileEntry.NumberOfValue * 2];
+            var uints = new UInt32[imageFileEntry.NumberOfValue * 2];
 
             if (binaryReader.BaseStream.Position != imageFileEntry.ValuePointer)
             {
@@ -153,15 +153,15 @@ namespace PhotoLib.Tiff
             for (var j = 0; j < imageFileEntry.NumberOfValue * 2; j++)
             {
                 var us = binaryReader.ReadUInt32();
-                retval[j] = us;
+                uints[j] = us;
             }
 
-            return retval;
+            return uints;
         }
 
         public static UInt32[] ReadUInts(BinaryReader binaryReader, ImageFileEntry imageFileEntry)
         {
-            var retval = new UInt32[imageFileEntry.NumberOfValue];
+            var uints = new UInt32[imageFileEntry.NumberOfValue];
 
             if (binaryReader.BaseStream.Position != imageFileEntry.ValuePointer)
             {
@@ -171,10 +171,10 @@ namespace PhotoLib.Tiff
             for (var j = 0; j < imageFileEntry.NumberOfValue; j++)
             {
                 var us = binaryReader.ReadUInt32();
-                retval[j] = us;
+                uints[j] = us;
             }
 
-            return retval;
+            return uints;
         }
     }
 }

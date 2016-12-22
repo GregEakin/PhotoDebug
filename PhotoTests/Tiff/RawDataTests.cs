@@ -16,7 +16,7 @@ namespace PhotoTests.Tiff
     public class RawDataTests
     {
         [TestMethod]
-        public void VeticalSlices()
+        public void VerticalSlices()
         {
             var data = new byte[]
                 {
