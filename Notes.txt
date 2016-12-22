@@ -1,11 +1,11 @@
 Memory Data
 	Data Descriptor
 		What's in the data?
-		What does the data means?
+		What does the data meens?
 		How is it organized?
 	Data block
 		Read from file.
-		Save changes in loal cache.
+		Save changes in local cache.
 		Write to new file.
 
 =============================

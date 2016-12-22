@@ -125,7 +125,7 @@ namespace PhotoTests.Prototypes
 
                     // DumpCompressedData(startOfImage);
 
-                    // horz sampling == 1
+                    // horizontal sampling == 1
                     startOfImage.ImageData.Reset();
 
                     var prev = new DataBuf { Y = 0x4000, Cb = 0, Cr = 0 };

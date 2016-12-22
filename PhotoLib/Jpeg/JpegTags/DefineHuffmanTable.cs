@@ -52,13 +52,13 @@ namespace PhotoLib.Jpeg.JpegTags
 
         public override string ToString()
         {
-            var retval = new StringBuilder();
+            var builder = new StringBuilder();
             foreach (var table in Tables.Values)
             {
-                retval.AppendLine(table.ToString());
-                retval.AppendLine();
+                builder.AppendLine(table.ToString());
+                builder.AppendLine();
             }
-            return retval.ToString();
+            return builder.ToString();
         }
     }
 }

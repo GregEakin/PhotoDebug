@@ -4,11 +4,9 @@
 // FILE:		JfifMarkerTests.cs
 // AUTHOR:		Greg Eakin
 
-using System.IO;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoLib.Jpeg.JpegTags;
-using PhotoLib.Tiff;
+using System.IO;
 
 namespace PhotoTests.Jpeg.JpegTags
 {

@@ -1,4 +1,4 @@
-# PhotoDebug
+# Photo Debug
 This is a .NET C# project that reads the raw CR2 files from CANON cameras.
 
 For the image compression, this book was helpful: [*JPEG: Still Image Data Compression Standard*](http://www.springer.com/us/book/9780442012724)

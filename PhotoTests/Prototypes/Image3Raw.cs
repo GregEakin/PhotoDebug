@@ -105,7 +105,7 @@ namespace PhotoTests.Prototypes
                 Assert.AreEqual(0, startOfScan.Bb3); // successive approximation bit positions
                 Assert.AreEqual(2, startOfScan.Components.Length); // RGGB
 
-                // startOfScan.Bb1 == 1, Ss = Algroithm A
+                // startOfScan.Bb1 == 1, Ss = Algorithm A
                 //     C, B, D
                 //     A, X
 
@@ -121,7 +121,7 @@ namespace PhotoTests.Prototypes
 
                 // @@ Black Substraction
 
-                // horz sampling == 1
+                // horizontal sampling == 1
                 startOfImage.ImageData.Reset();
 
                 var memory = new ushort[startOfFrame.ScanLines][]; // 3950 x 5920

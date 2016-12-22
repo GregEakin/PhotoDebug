@@ -81,7 +81,7 @@ namespace PhotoTests.Prototypes
             Assert.AreEqual(1728, height);
             var jrow = 0;
 
-            var width = slices[1];                          // image widht
+            var width = slices[1];                          // image width
             Assert.AreEqual(864, width);
             var rawWidth = startOfFrame.SamplesPerLine;     // 0x1031
             var jhwide = startOfFrame.SamplesPerLine;       // 0xffc0, data[3] << 8 | data[4]

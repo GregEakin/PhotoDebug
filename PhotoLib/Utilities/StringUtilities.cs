@@ -6,7 +6,6 @@
 // AUTHOR:		Greg Eakin
 
 using System.Collections;
-using System.Globalization;
 using System.Text;
 
 namespace PhotoLib.Utilities

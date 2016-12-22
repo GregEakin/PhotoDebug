@@ -146,7 +146,7 @@ namespace PhotoTests.Prototypes
 
                 // DumpCompressedData(startOfImage);
 
-                // horz sampling == 1
+                // horizontal sampling == 1
                 startOfImage.ImageData.Reset();
 
                 var outFile = Path.ChangeExtension(fileName, ".png");

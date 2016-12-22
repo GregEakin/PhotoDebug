@@ -41,7 +41,7 @@ namespace PhotoTests.Canon7D
             }
         }
 
-        //== Tiff Direcotry [0x0000BF46]:
+        //== Tiff Directory [0x0000BF46]:
         // 0)  0x0103 UShort 16-bit: 6
         // 1)  0x0111 ULong 32-bit: 3213024
         // 2)  0x0117 ULong 32-bit: 22286138
@@ -68,7 +68,7 @@ namespace PhotoTests.Canon7D
         }
 
         [TestMethod]
-        public void StipOffset()
+        public void StripOffset()
         {
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
             using (var binaryReader = new BinaryReader(fileStream))

@@ -31,11 +31,11 @@ namespace PhotoTests.Prototypes
 
                 Assert.AreEqual(38, exif.Entries.Length);
 
-                var exposeure = exif.Entries.Single(e => e.TagId == 0x829A && e.TagType == 5);
+                var exposure = exif.Entries.Single(e => e.TagId == 0x829A && e.TagType == 5);
                 var fStop = exif.Entries.Single(e => e.TagId == 0x829D && e.TagType == 5);
                 var iso = exif.Entries.Single(e => e.TagId == 0x8827 && e.TagType == 3);
 
-                // 0)  0x829A URational 2x32-bit: [0x0000038C] (1): 30/1 = 30   // exposeure time
+                // 0)  0x829A URational 2x32-bit: [0x0000038C] (1): 30/1 = 30   // exposure time
                 // 1)  0x829D URational 2x32-bit: [0x00000394] (1): 32/10 = 3.2 // f number
                 // 2)  0x8822 UShort 16-bit: 3                                  // Exposure program
                 // 3)  0x8827 UShort 16-bit: 100                                // ISO speed 100
@@ -46,7 +46,7 @@ namespace PhotoTests.Prototypes
                 // 8)  0x9004 Ascii 8-bit, null terminated: [0x000003B0] (20): "2014:03:31 06:17:21"    // date time, digitized
                 // 9)  0x9101 UByte[]: 1, 2, 3, 0                                           // Componets configuration YCbCr
                 //10)  0x9201 SRational 2x32-bit: [0x000003C4] (1): -327680/65536 = -5      // Shutter speed (32.00s)
-                //11)  0x9202 URational 2x32-bit: [0x000003CC] (1): 221184/65536 = 3.375    // Appture value (F3.2)
+                //11)  0x9202 URational 2x32-bit: [0x000003CC] (1): 221184/65536 = 3.375    // Aperture value (F3.2)
                 //12)  0x9204 SRational 2x32-bit: [0x000003D4] (1): 0/1 = 0                 // exposure bios
                 //13)  0x9207 UShort 16-bit: 3                                              // metering mode (spot)
                 //14)  0x9209 UShort 16-bit: 16                                             // flash (not fired)
@@ -70,7 +70,7 @@ namespace PhotoTests.Prototypes
                 //32)  0xA406 UShort 16 - bit: 0
                 //33)  0xA430 Ascii 8 - bit, null terminated: [0x000110D6](11): "Greg Eakin"            // author
                 //34)  0xA431 Ascii 8 - bit, null terminated: [0x000110F6](13): "032033000212"          // Camera serial number
-                //35)  0xA432 URational 2x32 - bit: [0x00011116] (4): 24/1 = 24                         // focual length
+                //35)  0xA432 URational 2x32 - bit: [0x00011116] (4): 24/1 = 24                         // focal length
                 //36)  0xA434 Ascii 8-bit, null terminated: [0x00011136] (21): "EF24-70mm f/2.8L USM"   // lens
                 //37)  0xA435 Ascii 8-bit, null terminated: [0x00011180] (11): "0000000000"
 

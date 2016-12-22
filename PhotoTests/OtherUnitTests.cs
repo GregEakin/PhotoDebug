@@ -4,8 +4,6 @@
 // FILE:		OtherUnitTests.cs
 // AUTHOR:		Greg Eakin
 
-using System.Diagnostics;
-using System.Text;
 using PhotoLib.Jpeg.JpegTags;
 using PhotoLib.RecipeData;
 

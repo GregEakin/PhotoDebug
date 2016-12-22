@@ -100,8 +100,7 @@ namespace PhotoTests
 
         public void FastStuff(string filename)
         {
-            byte[] data;
-            data = File.ReadAllBytes(filename);
+            var data = File.ReadAllBytes(filename);
         }
     }
 }

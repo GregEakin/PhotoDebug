@@ -24,8 +24,8 @@ namespace PhotoLib.Jpeg.JpegTags
 
             Length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
 
-            var identifer = binaryReader.ReadBytes(5);
-            if (Encoding.ASCII.GetString(identifer) != "JFIF\0")
+            var identifier = binaryReader.ReadBytes(5);
+            if (Encoding.ASCII.GetString(identifier) != "JFIF\0")
                 throw new ArgumentException();
 
             Version = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
