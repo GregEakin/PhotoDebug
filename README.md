@@ -4,9 +4,9 @@ This is a .NET C# project that reads the raw CR2 files from CANON cameras.
 For the image compression, this book was helpful: [*JPEG: Still Image Data Compression Standard*](http://www.springer.com/us/book/9780442012724)
 by Pennebaker, William B., Mitchell, Joan L. 
 
-[![JPEG: Still Image Data Compression Standard](http://gdbtech.info/wp-content/uploads/2016/12/jpegbook-150x150.jpg)](http://www.springer.com/us/book/9780442012724)
+[![JPEG: Still Image Data Compression Standard](Images/BookCover.jpg)](http://www.springer.com/us/book/9780442012724)
 
-##Information:
+## Information:
 - [ExifTool by Phil Harvey, Read, Write and Edit Meta Information!](http://www.sno.phy.queensu.ca/~phil/exiftool/)
 - [The Canon RAW (CRW) File Format](http://www.sno.phy.queensu.ca/~phil/exiftool/canon_raw.html)
 - [ExifPro is an image browser application](https://github.com/mikekov/ExifPro)
@@ -16,17 +16,18 @@ by Pennebaker, William B., Mitchell, Joan L.
 - [Raw Digger](http://www.rawdigger.com/)
 - [FastRawViewer is the only WYSIWYG RAW viewer](http://www.fastrawviewer.com/)
 
-##Links:
+## Links:
 - [Community Edition of Visual Studio (Free)](https://www.visualstudio.com/vs/community/)
 - [Git Extensions (Free)](http://gitextensions.github.io/)
-- [ReShaper, Extensions for .NET Developers](https://www.jetbrains.com/resharper/)
+- [ReSharper, Extensions for .NET Developers](https://www.jetbrains.com/resharper/)
 - [Amazon](https://www.amazon.com/JPEG-Compression-Standard-Multimedia-Standards/dp/0442012721)
 - [Google Books](https://books.google.com/books/about/JPEG.html?id=AepB_PZ_WMkC)
 
-##Sample Code
+## Sample Code
 Here's sample test code to verify the raw image size, from my Canon 7D:
 * Sensor Width:  5360 = 1340 * 4 = 2 * 1728 + 1904
 * Sensor Height: 3516
+* Sensor Precision: 14
 
 ```C#
 using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
