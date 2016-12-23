@@ -1,11 +1,13 @@
-  ExifToolVersion = 9.04
+  ExifToolVersion = 10.36
   FileName = IMG_0675.CR2
   Directory = .
   FileSize = 21227015
-  FileModifyDate = 1351007226
-  FileAccessDate = 1351007224
+  FileModifyDate = 1351039626.57432
+  FileAccessDate = 1421439915.7988
+  FileCreateDate = 1421439915.7988
   FilePermissions = 33206
   FileType = CR2
+  FileTypeExtension = CR2
   MIMEType = image/x-canon-cr2
   ExifByteOrder = II
   + [IFD0 directory with 18 entries]
@@ -140,6 +142,7 @@
   | | | | FocusDistanceLower = 0
   | | | | WhiteBalance = 0
   | | | | ColorTemperature = 5200
+  | | | | CameraPictureStyle = 133
   | | | | HighISONoiseReduction = 0
   | | | | LensType = 0
   | | | | MinFocalLength = 0
@@ -233,6 +236,7 @@
   | | | | FilterEffect = -1
   | | | | ToningEffect = -1
   | | | | LiveViewShooting = 1
+  | | | | FocusDistanceUpper = 0
   | | | | FlashExposureLock = 0
   | | | 16) LensModel = 
   | | | 17) InternalSerialNumber = S1348777A
@@ -340,11 +344,16 @@
   | | | | | ColorTempKelvin = 5190
   | | | | | WB_RGGBLevelsFlash = 2367 1024 1024 1298
   | | | | | ColorTempFlash = 6152
+  | | | | AverageBlackLevel = 2048 2048 2048 2048
   | | | | RawMeasuredRGGB = 2063597569 3549954050 3579052034 3205562369
+  | | | | PerChannelBlackLevel = 2047 2047 2048 2048
+  | | | | NormalWhiteLevel = 11767
+  | | | | SpecularWhiteLevel = 12279
+  | | | | LinearityUpperMargin = 10000
   | | | 28) CRWParam = .Q. ...............p....r..f..........@@@.}.x......M..xN.g.1...i[snip]
   | | | 29) Flavor = @@. ........D.=B.(?....o..k.|..5o...2...cOE..X...-#.-..M.+..~.....[snip]
-  | | | 30) BlackLevel = 65 129 129
-  | | | 31) Canon_0x4009 = 132 0 0
+  | | | 30) PictureStyleUserDef = 65 129 129
+  | | | 31) PictureStylePC = 132 0 0
   | | | 32) CustomPictureStyleFileName = 
   | | | 33) Canon_0x4011 = 
   | | | 34) Canon_0x4012 = 
@@ -354,19 +363,28 @@
   | | | | AFMicroAdjValue = 0
   | | | 36) VignettingCorr (SubDirectory) -->
   | | | + [BinaryData directory, 116 bytes]
+  | | | | VignettingCorrVersion = 0
   | | | | PeripheralLighting = 0
+  | | | | ChromaticAberrationCorr = 0
+  | | | | ChromaticAberrationCorr = 0
   | | | | PeripheralLightingValue = 0
   | | | | OriginalImageWidth = 5184
   | | | | OriginalImageHeight = 3456
   | | | 37) VignettingCorr2 (SubDirectory) -->
   | | | + [BinaryData directory, 28 bytes]
   | | | | PeripheralLightingSetting = 0
+  | | | | ChromaticAberrationSetting = 0
   | | | 38) Canon_0x4017 = 460551 2323382272
   | | | 39) LightingOpt (SubDirectory) -->
   | | | + [BinaryData directory, 28 bytes]
+  | | | | PeripheralIlluminationCorr = 0
   | | | | AutoLightingOptimizer = 3
+  | | | | HighlightTonePriority = 0
+  | | | | LongExposureNoiseReduction = 0
+  | | | | HighISONoiseReduction = 0
   | | | 40) LensInfo (SubDirectory) -->
   | | | + [BinaryData directory, 30 bytes]
+  | | | | LensSerialNumber = 
   | | 17) UserComment = 
   | | 18) SubSecTime = 94
   | | 19) SubSecTimeOriginal = 94
@@ -408,7 +426,7 @@
   | 8)  StripByteCounts = 1736640
   | 9)  PlanarConfiguration = 1
   | 10) Exif_0xc5d9 = 2
-  | 11) Exif_0xc6c5 = 3
+  | 11) SRawType = 3
   | 12) Exif_0xc6dc = 648 432 21 0
   + [IFD3 directory with 7 entries]
   | 0)  Compression = 6
@@ -417,4 +435,4 @@
   | 3)  Exif_0xc5d8 = 1
   | 4)  Exif_0xc5e0 = 3
   | 5)  RawImageSegmentation = 2 1728 1904
-  | 6)  Exif_0xc6c5 = 1
+  | 6)  SRawType = 1

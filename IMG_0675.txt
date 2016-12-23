@@ -1,314 +1,365 @@
-    - ExifTool Version Number         : 9.04
-    - File Name                       : IMG_0675.CR2
+    - ExifToolVersion                 : 10.36
+    - FileName                        : IMG_0675.CR2
     - Directory                       : .
-    - File Size                       : 20 MB
-    - File Modification Date/Time     : 2012:10:23 16:47:06+01:00
-    - File Access Date/Time           : 2012:10:23 16:47:04+01:00
-    - File Permissions                : rw-rw-rw-
-    - File Type                       : CR2
-    - MIME Type                       : image/x-canon-cr2
-    - Exif Byte Order                 : Little-endian (Intel, II)
-  256 Image Width                     : 5184
-  257 Image Height                    : 3456
-  258 Bits Per Sample                 : 8 8 8
+    - FileSize                        : 20 MB
+    - FileModifyDate                  : 2012:10:23 17:47:06-07:00
+    - FileAccessDate                  : 2015:01:16 12:25:15-08:00
+    - FileCreateDate                  : 2015:01:16 12:25:15-08:00
+    - FilePermissions                 : rw-rw-rw-
+    - FileType                        : CR2
+    - FileTypeExtension               : cr2
+    - MIMEType                        : image/x-canon-cr2
+    - ExifByteOrder                   : Little-endian (Intel, II)
+  256 ImageWidth                      : 5184
+  257 ImageHeight                     : 3456
+  258 BitsPerSample                   : 8 8 8
   259 Compression                     : JPEG (old-style)
   271 Make                            : Canon
-  272 Camera Model Name               : Canon EOS 7D
-  273 Preview Image Start             : 67340
+  272 Model                           : Canon EOS 7D
+  273 PreviewImageStart               : 67340
   274 Orientation                     : Horizontal (normal)
-  279 Preview Image Length            : 1069315
-  282 X Resolution                    : 72
-  283 Y Resolution                    : 72
-  296 Resolution Unit                 : inches
-  306 Modify Date                     : 2012:10:23 17:47:02
+  279 PreviewImageLength              : 1069315
+  282 XResolution                     : 72
+  283 YResolution                     : 72
+  296 ResolutionUnit                  : inches
+  306 ModifyDate                      : 2012:10:23 17:47:02
   315 Artist                          : Greg Eakin
     - Rating                          : 0
 33432 Copyright                       : Copyright (c) 2012, Greg Eakin. All rights reserved.
-33434 Exposure Time                   : 1/100
-33437 F Number                        : 0
-34850 Exposure Program                : Aperture-priority AE
+33434 ExposureTime                    : 1/100
+33437 FNumber                         : 0
+34850 ExposureProgram                 : Aperture-priority AE
 34855 ISO                             : 100
-34864 Sensitivity Type                : Recommended Exposure Index
-34866 Recommended Exposure Index      : 100
-36864 Exif Version                    : 0230
-36867 Date/Time Original              : 2012:10:23 17:47:02
-36868 Create Date                     : 2012:10:23 17:47:02
-37121 Components Configuration        : Y, Cb, Cr, -
-37377 Shutter Speed Value             : 1/99
-37378 Aperture Value                  : 1.$
+34864 SensitivityType                 : Recommended Exposure Index
+34866 RecommendedExposureIndex        : 100
+36864 ExifVersion                     : 0230
+36867 DateTimeOriginal                : 2012:10:23 17:47:02
+36868 CreateDate                      : 2012:10:23 17:47:02
+37121 ComponentsConfiguration         : Y, Cb, Cr, -
+37377 ShutterSpeedValue               : 1/99
+37378 ApertureValue                   : Inf
+37380 ExposureCompensation            : 0
+37383 MeteringMode                    : Multi-segment
 37385 Flash                           : Off, Did not fire
-37386 Focal Length                    : 50.0 mm
-    1 Macro Mode                      : Normal
-    2 Self Timer                      : Off
+37386 FocalLength                     : 50.0 mm
+    1 MacroMode                       : Normal
+    2 SelfTimer                       : Off
     3 Quality                         : RAW
-    4 Canon Flash Mode                : Off
-    5 Continuous Drive                : Single
-    7 Focus Mode                      : Manual Focus (3)
-    9 Record Mode                     : CR2
-   10 Canon Image Size                : Unknown (-1)
-   11 Easy Mode                       : Manual
-   12 Digital Zoom                    : None
+    4 CanonFlashMode                  : Off
+    5 ContinuousDrive                 : Single
+    7 FocusMode                       : Manual Focus (3)
+    9 RecordMode                      : CR2
+   10 CanonImageSize                  : n/a
+   11 EasyMode                        : Manual
+   12 DigitalZoom                     : None
    13 Contrast                        : Normal
    14 Saturation                      : Normal
-   16 Camera ISO                      : Auto
-   17 Metering Mode                   : Evaluative
-   18 Focus Range                     : Not Known
-   20 Canon Exposure Mode             : Aperture-priority AE
-   23 Max Focal Length                : 0 mm
-   24 Min Focal Length                : 0 mm
-   25 Focal Units                     : 1/mm
-   28 Flash Activity                  : 0
-   29 Flash Bits                      : (none)
-   36 Zoom Source Width               : 0
-   37 Zoom Target Width               : 0
-   41 Manual Flash Output             : n/a
-   42 Color Tone                      : Normal
-   46 SRAW Quality                    : n/a
-    1 Auto ISO                        : 100
-    2 Base ISO                        : 100
-    3 Measured EV                     : 8.38
-    5 Target Exposure Time            : 1/102
-    6 Exposure Compensation           : 0
-    7 White Balance                   : Auto
-    8 Slow Shutter                    : None
-    9 Shot Number In Continuous Burst : 0
-   10 Optical Zoom Code               : n/a
-   12 Camera Temperature              : 31 C
-   13 Flash Guide Number              : 0
-   15 Flash Exposure Compensation     : 0
-   16 Auto Exposure Bracketing        : Off
-   17 AEB Bracket Value               : 0
-   18 Control Mode                    : Computer Remote Control
-   23 Measured EV 2                   : 8.25
-   24 Bulb Duration                   : 0
-   26 Camera Type                     : EOS High-end
-   28 ND Filter                       : n/a
-    6 Canon Image Type                : Canon EOS 7D
-    7 Canon Firmware Version          : Firmware Version 2.0.3
-   21 Flash Metering Mode             : Off
-   53 Camera Orientation              : Horizontal (normal)
-   84 Focus Distance Upper            : 0 m
-   86 Focus Distance Lower            : 0 m
-  274 Lens Type                       : Unknown (0)
-  428 Firmware Version                : 2.0.3
-  491 File Index                      : 1235
-  503 Directory Index                 : 100
-    0 Contrast Standard               : 1
-    4 Sharpness Standard              : 0
-    8 Saturation Standard             : 3
-   12 Color Tone Standard             : 0
-   24 Contrast Portrait               : 0
-   28 Sharpness Portrait              : 0
-   32 Saturation Portrait             : 2
-   36 Color Tone Portrait             : 0
-   48 Contrast Landscape              : 0
-   52 Sharpness Landscape             : 0
-   56 Saturation Landscape            : 4
-   60 Color Tone Landscape            : 0
-   72 Contrast Neutral                : 0
-   76 Sharpness Neutral               : 0
-   80 Saturation Neutral              : 0
-   84 Color Tone Neutral              : 0
-   96 Contrast Faithful               : 0
-  100 Sharpness Faithful              : 0
-  104 Saturation Faithful             : 0
-  108 Color Tone Faithful             : 0
-  120 Contrast Monochrome             : 0
-  124 Sharpness Monochrome            : 0
-  136 Filter Effect Monochrome        : None
-  140 Toning Effect Monochrome        : None
-  144 Contrast User Def 1             : 0
-  148 Sharpness User Def 1            : -3
-  152 Saturation User Def 1           : 0
-  156 Color Tone User Def 1           : -2
-  160 Filter Effect User Def 1        : None
-  164 Toning Effect User Def 1        : None
-  168 Contrast User Def 2             : 0
-  172 Sharpness User Def 2            : 0
-  176 Saturation User Def 2           : 3
-  180 Color Tone User Def 2           : 0
-  184 Filter Effect User Def 2        : None
-  188 Toning Effect User Def 2        : None
-  192 Contrast User Def 3             : 0
-  196 Sharpness User Def 3            : 0
-  200 Saturation User Def 3           : 3
-  204 Color Tone User Def 3           : 0
-  208 Filter Effect User Def 3        : None
-  212 Toning Effect User Def 3        : None
-  216 User Def 1 Picture Style        : Unknown (0)
-  218 User Def 2 Picture Style        : Unknown (0)
-  220 User Def 3 Picture Style        : PC 1
-   16 Canon Model ID                  : EOS 7D
-   19 Thumbnail Image Valid Area      : 0 159 7 112
-    1 AF Area Mode                    : Single-point AF
-    2 Num AF Points                   : 19
-    3 Valid AF Points                 : 1
-    4 Canon Image Width               : 5184
-    5 Canon Image Height              : 3456
-    6 AF Image Width                  : 5184
-    7 AF Image Height                 : 3456
-    8 AF Area Widths                  : 344 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    9 AF Area Heights                 : 344 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-   10 AF Area X Positions             : -340 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-   11 AF Area Y Positions             : 810 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-   12 AF Points In Focus              : (none)
-   13 AF Points Selected              : 0
-    1 Time Zone                       : -07:00
-    2 Time Zone City                  : Los Angeles
-    3 Daylight Savings                : On
-  131 Original Decision Data Offset   : 0
-    3 Bracket Mode                    : Off
-    4 Bracket Value                   : 0
-    5 Bracket Shot Number             : 0
-    7 Raw Jpg Size                    : Large
-    9 WB Bracket Mode                 : Off
-   12 WB Bracket Value AB             : 0
-   13 WB Bracket Value GM             : 0
-   19 Live View Shooting              : On
-   25 Flash Exposure Lock             : Off
-  150 Internal Serial Number          : S1348777A
-  151 Dust Removal Data               : (Binary data 1024 bytes, use -b option to extract)
-    0 Crop Left Margin                : 0
-    1 Crop Right Margin               : 0
-    2 Crop Top Margin                 : 0
-    3 Crop Bottom Margin              : 0
-  257 Exposure Level Increments       : 1/3 Stop
-  258 ISO Speed Increments            : 1/3 Stop
-  259 ISO Expansion                   : Off
-  260 AEB Auto Cancel                 : On
-  261 AEB Sequence                    : 0,-,+
-  264 Safety Shift                    : Disable
-  271 Flash Sync Speed Av             : Auto
-  513 Long Exposure Noise Reduction   : Off
-  514 High ISO Noise Reduction        : Standard
-  515 Highlight Tone Priority         : Disable
- 1282 AI Servo Tracking Sensitivity   : Standard
- 1284 AI Servo Tracking Method        : Main focus point priority
- 1283 AI Servo Image Priority         : 1: AF, 2: Tracking
- 1285 Lens Drive No AF                : Focus search off
- 1287 AF Microadjustment              : Adjust by lens; 255; 0; 255; 11
- 1298 Select AF Area Select Mode      : Enable; 31
- 1299 Manual AF Point Select Pattern  : Continuous
- 1296 VF Display Illumination         : Enable
- 1300 Display All AF Points           : Enable
- 1301 Focus Display AI Servo And MF   : Enable
- 1294 AF Assist Beam                  : IR AF assist beam only
- 1302 Orientation Linked AF Point     : Select different AF points
- 1551 Mirror Lockup                   : Enable
- 1804 Custom Controls                 : 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 222 222 222 222
- 1798 Dial Direction Tv Av            : Normal
- 2063 Add Original Decision Data      : Off
- 2062 Add Aspect Ratio Info           : Off
-    0 Aspect Ratio                    : Unknown (256)
-    1 Cropped Image Width             : 5184
-    2 Cropped Image Height            : 3456
-    3 Cropped Image Left              : 0
-    4 Cropped Image Top               : 0
-    1 Tone Curve                      : Standard
+   16 CameraISO                       : Auto
+   17 MeteringMode                    : Evaluative
+   18 FocusRange                      : Not Known
+   20 CanonExposureMode               : Aperture-priority AE
+   23 MaxFocalLength                  : 0 mm
+   24 MinFocalLength                  : 0 mm
+   25 FocalUnits                      : 1/mm
+   28 FlashActivity                   : 0
+   29 FlashBits                       : (none)
+   36 ZoomSourceWidth                 : 0
+   37 ZoomTargetWidth                 : 0
+   41 ManualFlashOutput               : n/a
+   42 ColorTone                       : Normal
+   46 SRAWQuality                     : n/a
+    1 FocalLength                     : 50 mm
+    1 AutoISO                         : 100
+    2 BaseISO                         : 100
+    3 MeasuredEV                      : 8.38
+    5 TargetExposureTime              : 1/102
+    6 ExposureCompensation            : 0
+    7 WhiteBalance                    : Auto
+    8 SlowShutter                     : None
+    9 SequenceNumber                  : 0
+   10 OpticalZoomCode                 : n/a
+   12 CameraTemperature               : 31 C
+   13 FlashGuideNumber                : 0
+   15 FlashExposureComp               : 0
+   16 AutoExposureBracketing          : Off
+   17 AEBBracketValue                 : 0
+   18 ControlMode                     : Computer Remote Control
+   21 FNumber                         : 0.71
+   22 ExposureTime                    : 1/102
+   23 MeasuredEV2                     : 8.25
+   24 BulbDuration                    : 0
+   26 CameraType                      : EOS High-end
+   28 NDFilter                        : n/a
+    6 CanonImageType                  : Canon EOS 7D
+    7 CanonFirmwareVersion            : Firmware Version 2.0.3
+    9 OwnerName                       : Greg Eakin
+   12 SerialNumber                    : 3071201378
+    4 ExposureTime                    : 1/99
+    6 ISO                             : 100
+    7 HighlightTonePriority           : Off
+    8 MeasuredEV2                     : 8.25
+    9 MeasuredEV                      : 8.375
+   21 FlashMeteringMode               : Off
+   25 CameraTemperature               : 31 C
+   30 FocalLength                     : 50 mm
+   53 CameraOrientation               : Horizontal (normal)
+   84 FocusDistanceUpper              : 0 m
+   86 FocusDistanceLower              : 0 m
+  119 WhiteBalance                    : Auto
+  123 ColorTemperature                : 5200
+  175 CameraPictureStyle              : Faithful
+  201 HighISONoiseReduction           : Standard
+  274 LensType                        : Unknown (0)
+  276 MinFocalLength                  : 0 mm
+  278 MaxFocalLength                  : 0 mm
+  428 FirmwareVersion                 : 2.0.3
+  491 FileIndex                       : 1235
+  503 DirectoryIndex                  : 100
+    0 ContrastStandard                : 1
+    4 SharpnessStandard               : 0
+    8 SaturationStandard              : 3
+   12 ColorToneStandard               : 0
+   24 ContrastPortrait                : 0
+   28 SharpnessPortrait               : 0
+   32 SaturationPortrait              : 2
+   36 ColorTonePortrait               : 0
+   48 ContrastLandscape               : 0
+   52 SharpnessLandscape              : 0
+   56 SaturationLandscape             : 4
+   60 ColorToneLandscape              : 0
+   72 ContrastNeutral                 : 0
+   76 SharpnessNeutral                : 0
+   80 SaturationNeutral               : 0
+   84 ColorToneNeutral                : 0
+   96 ContrastFaithful                : 0
+  100 SharpnessFaithful               : 0
+  104 SaturationFaithful              : 0
+  108 ColorToneFaithful               : 0
+  120 ContrastMonochrome              : 0
+  124 SharpnessMonochrome             : 0
+  136 FilterEffectMonochrome          : None
+  140 ToningEffectMonochrome          : None
+  144 ContrastUserDef1                : 0
+  148 SharpnessUserDef1               : -3
+  152 SaturationUserDef1              : 0
+  156 ColorToneUserDef1               : -2
+  160 FilterEffectUserDef1            : None
+  164 ToningEffectUserDef1            : None
+  168 ContrastUserDef2                : 0
+  172 SharpnessUserDef2               : 0
+  176 SaturationUserDef2              : 3
+  180 ColorToneUserDef2               : 0
+  184 FilterEffectUserDef2            : None
+  188 ToningEffectUserDef2            : None
+  192 ContrastUserDef3                : 0
+  196 SharpnessUserDef3               : 0
+  200 SaturationUserDef3              : 3
+  204 ColorToneUserDef3               : 0
+  208 FilterEffectUserDef3            : None
+  212 ToningEffectUserDef3            : None
+  216 UserDef1PictureStyle            : Unknown (0)
+  218 UserDef2PictureStyle            : Unknown (0)
+  220 UserDef3PictureStyle            : PC 1
+   16 CanonModelID                    : EOS 7D
+   19 ThumbnailImageValidArea         : 0 159 7 112
+    1 AFAreaMode                      : Single-point AF
+    2 NumAFPoints                     : 19
+    3 ValidAFPoints                   : 1
+    4 CanonImageWidth                 : 5184
+    5 CanonImageHeight                : 3456
+    6 AFImageWidth                    : 5184
+    7 AFImageHeight                   : 3456
+    8 AFAreaWidths                    : 344 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    9 AFAreaHeights                   : 344 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   10 AFAreaXPositions                : -340 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   11 AFAreaYPositions                : 810 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   12 AFPointsInFocus                 : (none)
+   13 AFPointsSelected                : 0
+    1 TimeZone                        : -07:00
+    2 TimeZoneCity                    : Los Angeles
+    3 DaylightSavings                 : On
+  131 OriginalDecisionDataOffset      : 0
+    3 BracketMode                     : Off
+    4 BracketValue                    : 0
+    5 BracketShotNumber               : 0
+    7 RawJpgSize                      : Large
+    9 WBBracketMode                   : Off
+   12 WBBracketValueAB                : 0
+   13 WBBracketValueGM                : 0
+   19 LiveViewShooting                : On
+   25 FlashExposureLock               : Off
+  149 LensModel                       : 
+  150 InternalSerialNumber            : S1348777A
+  151 DustRemovalData                 : (Binary data 1024 bytes, use -b option to extract)
+    0 CropLeftMargin                  : 0
+    1 CropRightMargin                 : 0
+    2 CropTopMargin                   : 0
+    3 CropBottomMargin                : 0
+  257 ExposureLevelIncrements         : 1/3 Stop
+  258 ISOSpeedIncrements              : 1/3 Stop
+  259 ISOExpansion                    : Off
+  260 AEBAutoCancel                   : On
+  261 AEBSequence                     : 0,-,+
+  264 SafetyShift                     : Disable
+  271 FlashSyncSpeedAv                : Auto
+  513 LongExposureNoiseReduction      : Off
+  514 HighISONoiseReduction           : Standard
+  515 HighlightTonePriority           : Disable
+ 1282 AIServoTrackingSensitivity      : Standard
+ 1284 AIServoTrackingMethod           : Main focus point priority
+ 1283 AIServoImagePriority            : 1: AF, 2: Tracking
+ 1285 LensDriveNoAF                   : Focus search off
+ 1287 AFMicroadjustment               : Adjust by lens; 255; 0; 255; 11
+ 1298 SelectAFAreaSelectMode          : Enable; Flags 0x1f
+ 1299 ManualAFPointSelectPattern      : Continuous
+ 1296 VFDisplayIllumination           : Enable
+ 1300 DisplayAllAFPoints              : Enable
+ 1301 FocusDisplayAIServoAndMF        : Enable
+ 1294 AFAssistBeam                    : IR AF assist beam only
+ 1302 OrientationLinkedAFPoint        : Select different AF points
+ 1551 MirrorLockup                    : Enable
+ 1804 CustomControls                  : 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 222 222 222 222
+ 1798 DialDirectionTvAv               : Normal
+ 2063 AddOriginalDecisionData         : Off
+ 2062 AddAspectRatioInfo              : Off
+    0 AspectRatio                     : Unknown (256)
+    1 CroppedImageWidth               : 5184
+    2 CroppedImageHeight              : 3456
+    3 CroppedImageLeft                : 0
+    4 CroppedImageTop                 : 0
+    1 ToneCurve                       : Standard
     2 Sharpness                       : 0
-    3 Sharpness Frequency             : n/a
-    4 Sensor Red Level                : 0
-    5 Sensor Blue Level               : 0
-    6 White Balance Red               : 0
-    7 White Balance Blue              : 0
-    9 Color Temperature               : 5200
-   10 Picture Style                   : Faithful
-   11 Digital Gain                    : 0
-   12 WB Shift AB                     : 0
-   13 WB Shift GM                     : 0
-    1 Measured RGGB                   : 543 1024 1024 612
-  208 VRD Offset                      : 0
-    1 Sensor Width                    : 5360
-    2 Sensor Height                   : 3516
-    5 Sensor Left Border              : 168
-    6 Sensor Top Border               : 56
-    7 Sensor Right Border             : 5351
-    8 Sensor Bottom Border            : 3511
-    9 Black Mask Left Border          : 0
-   10 Black Mask Top Border           : 0
-   11 Black Mask Right Border         : 0
-   12 Black Mask Bottom Border        : 0
-    0 Color Data Version              : 7 (500D/550D/7D/1DmkIV)
-    0 WB RGGB Levels As Shot          : 2305 1024 1024 1494
-    4 Color Temp As Shot              : 5212
-    5 WB RGGB Levels Auto             : 2305 1024 1024 1494
-    9 Color Temp Auto                 : 5212
-   10 WB RGGB Levels Measured         : 2302 1024 1023 1490
-   14 Color Temp Measured             : 5212
-   20 WB RGGB Levels Daylight         : 2153 1024 1024 1423
-   24 Color Temp Daylight             : 5200
-   25 WB RGGB Levels Shade            : 2497 1024 1024 1202
-   29 Color Temp Shade                : 7000
-   30 WB RGGB Levels Cloudy           : 2315 1024 1024 1304
-   34 Color Temp Cloudy               : 6000
-   35 WB RGGB Levels Tungsten         : 1520 1024 1024 2158
-   39 Color Temp Tungsten             : 3200
-   40 WB RGGB Levels Fluorescent      : 1903 1024 1024 2020
-   44 Color Temp Fluorescent          : 3769
-   45 WB RGGB Levels Kelvin           : 2153 1024 1024 1423
-   49 Color Temp Kelvin               : 5190
-   50 WB RGGB Levels Flash            : 2367 1024 1024 1298
-   54 Color Temp Flash                : 6152
-  640 Raw Measured RGGB               : 97024 185240 185684 114449
-16400 Custom Picture Style File Name  : 
-    1 AF Micro Adj Mode               : Disable
-    2 AF Micro Adj Value              : 0
-    2 Peripheral Lighting             : Off
-    6 Peripheral Lighting Value       : 0
-   11 Original Image Width            : 5184
-   12 Original Image Height           : 3456
-    5 Peripheral Lighting Setting     : Off
-    2 Auto Lighting Optimizer         : Off
-37510 User Comment                    : 
-37520 Sub Sec Time                    : 94
-37521 Sub Sec Time Original           : 94
-37522 Sub Sec Time Digitized          : 94
-40960 Flashpix Version                : 0100
-40961 Color Space                     : sRGB
-40962 Exif Image Width                : 5184
-40963 Exif Image Height               : 3456
-    1 Interoperability Index          : R98 - DCF basic file (sRGB)
-    2 Interoperability Version        : 0100
-41486 Focal Plane X Resolution        : 5715.545755
-41487 Focal Plane Y Resolution        : 5808.403361
-41488 Focal Plane Resolution Unit     : inches
-41985 Custom Rendered                 : Normal
-41986 Exposure Mode                   : Auto
-41990 Scene Capture Type              : Standard
-42032 Owner Name                      : Greg Eakin
-42033 Serial Number                   : 3071201378
-42034 Lens Info                       : 0mm f/0
-42036 Lens Model                      : 
-    0 GPS Version ID                  : 2.3.0.0
-  513 Thumbnail Offset                : 57256
-  514 Thumbnail Length                : 10081
-  262 Photometric Interpretation      : RGB
-  277 Samples Per Pixel               : 3
-  278 Rows Per Strip                  : 432
-  284 Planar Configuration            : Chunky
-  273 Strip Offsets                   : 2873360
-  279 Strip Byte Counts               : 18353655
-50752 Raw Image Segmentation          : 2 1728 1904
-    - Aperture                        : 1.#INF
-    - Drive Mode                      : Single-frame Shooting
-    - File Number                     : 100-1235
-    - Image Size                      : 5184x3456
+    3 SharpnessFrequency              : n/a
+    4 SensorRedLevel                  : 0
+    5 SensorBlueLevel                 : 0
+    6 WhiteBalanceRed                 : 0
+    7 WhiteBalanceBlue                : 0
+    9 ColorTemperature                : 5200
+   10 PictureStyle                    : Faithful
+   11 DigitalGain                     : 0
+   12 WBShiftAB                       : 0
+   13 WBShiftGM                       : 0
+    1 MeasuredRGGB                    : 543 1024 1024 612
+  180 ColorSpace                      : sRGB
+  208 VRDOffset                       : 0
+    1 SensorWidth                     : 5360
+    2 SensorHeight                    : 3516
+    5 SensorLeftBorder                : 168
+    6 SensorTopBorder                 : 56
+    7 SensorRightBorder               : 5351
+    8 SensorBottomBorder              : 3511
+    9 BlackMaskLeftBorder             : 0
+   10 BlackMaskTopBorder              : 0
+   11 BlackMaskRightBorder            : 0
+   12 BlackMaskBottomBorder           : 0
+    0 ColorDataVersion                : 7 (500D/550D/7D/1DmkIV)
+    0 WB_RGGBLevelsAsShot             : 2305 1024 1024 1494
+    4 ColorTempAsShot                 : 5212
+    5 WB_RGGBLevelsAuto               : 2305 1024 1024 1494
+    9 ColorTempAuto                   : 5212
+   10 WB_RGGBLevelsMeasured           : 2302 1024 1023 1490
+   14 ColorTempMeasured               : 5212
+   20 WB_RGGBLevelsDaylight           : 2153 1024 1024 1423
+   24 ColorTempDaylight               : 5200
+   25 WB_RGGBLevelsShade              : 2497 1024 1024 1202
+   29 ColorTempShade                  : 7000
+   30 WB_RGGBLevelsCloudy             : 2315 1024 1024 1304
+   34 ColorTempCloudy                 : 6000
+   35 WB_RGGBLevelsTungsten           : 1520 1024 1024 2158
+   39 ColorTempTungsten               : 3200
+   40 WB_RGGBLevelsFluorescent        : 1903 1024 1024 2020
+   44 ColorTempFluorescent            : 3769
+   45 WB_RGGBLevelsKelvin             : 2153 1024 1024 1423
+   49 ColorTempKelvin                 : 5190
+   50 WB_RGGBLevelsFlash              : 2367 1024 1024 1298
+   54 ColorTempFlash                  : 6152
+  231 AverageBlackLevel               : 2048 2048 2048 2048
+  640 RawMeasuredRGGB                 : 97024 185240 185684 114449
+  715 PerChannelBlackLevel            : 2047 2047 2048 2048
+  719 NormalWhiteLevel                : 11767
+  720 SpecularWhiteLevel              : 12279
+  721 LinearityUpperMargin            : 10000
+16392 PictureStyleUserDef             : PC 1; Standard; Standard
+16393 PictureStylePC                  : Neutral; None; None
+16400 CustomPictureStyleFileName      : 
+    1 AFMicroAdjMode                  : Disable
+    2 AFMicroAdjValue                 : 0
+    0 VignettingCorrVersion           : 0
+    2 PeripheralLighting              : Off
+    4 ChromaticAberrationCorr         : Off
+    5 ChromaticAberrationCorr         : Off
+    6 PeripheralLightingValue         : 0
+   11 OriginalImageWidth              : 5184
+   12 OriginalImageHeight             : 3456
+    5 PeripheralLightingSetting       : Off
+    6 ChromaticAberrationSetting      : Off
+    1 PeripheralIlluminationCorr      : Off
+    2 AutoLightingOptimizer           : Off
+    3 HighlightTonePriority           : Off
+    4 LongExposureNoiseReduction      : Off
+    5 HighISONoiseReduction           : Standard
+37510 UserComment                     : 
+37520 SubSecTime                      : 94
+37521 SubSecTimeOriginal              : 94
+37522 SubSecTimeDigitized             : 94
+40960 FlashpixVersion                 : 0100
+40961 ColorSpace                      : sRGB
+40962 ExifImageWidth                  : 5184
+40963 ExifImageHeight                 : 3456
+    1 InteropIndex                    : R98 - DCF basic file (sRGB)
+    2 InteropVersion                  : 0100
+41486 FocalPlaneXResolution           : 5715.545755
+41487 FocalPlaneYResolution           : 5808.403361
+41488 FocalPlaneResolutionUnit        : inches
+41985 CustomRendered                  : Normal
+41986 ExposureMode                    : Auto
+41987 WhiteBalance                    : Auto
+41990 SceneCaptureType                : Standard
+42032 OwnerName                       : Greg Eakin
+42033 SerialNumber                    : 3071201378
+42034 LensInfo                        : 0mm f/0
+42036 LensModel                       : 
+    0 GPSVersionID                    : 2.3.0.0
+  513 ThumbnailOffset                 : 57256
+  514 ThumbnailLength                 : 10081
+  256 ImageWidth                      : 670
+  257 ImageHeight                     : 432
+  258 BitsPerSample                   : 16 16 16
+  259 Compression                     : Uncompressed
+  262 PhotometricInterpretation       : RGB
+  273 StripOffsets                    : 1136656
+  277 SamplesPerPixel                 : 3
+  278 RowsPerStrip                    : 432
+  279 StripByteCounts                 : 1736640
+  284 PlanarConfiguration             : Chunky
+50885 SRawType                        : 3
+  259 Compression                     : JPEG (old-style)
+  273 StripOffsets                    : 2873360
+  279 StripByteCounts                 : 18353655
+50752 RawImageSegmentation            : 2 1728 1904
+50885 SRawType                        : 1
+    - Aperture                        : Inf
+    - DriveMode                       : Single-frame Shooting
+    - FileNumber                      : 100-1235
+    - ISO                             : 100
+    - ImageSize                       : 5184x3456
     - Lens                            : 0.0 mm
-    - Lens ID                         : Unknown (0)
-    - Preview Image                   : (Binary data 1069315 bytes, use -b option to extract)
-    - Scale Factor To 35 mm Equivalent: 1.6
-    - Shooting Mode                   : Aperture-priority AE
-    - Shutter Speed                   : 1/100
-    - Create Date                     : 2012:10:23 17:47:02.94
-    - Date/Time Original              : 2012:10:23 17:47:02.94
-    - Modify Date                     : 2012:10:23 17:47:02.94
-    - Thumbnail Image                 : (Binary data 10081 bytes, use -b option to extract)
-    - WB RGGB Levels                  : 2305 1024 1024 1494
-    - Blue Balance                    : 1.458984
-    - Circle Of Confusion             : 0.019 mm
-    - Field Of View                   : 25.8 deg
-    - Focal Length                    : 50.0 mm (35 mm equivalent: 78.5 mm)
-    - Hyperfocal Distance             : 130.66 m
-    - Lens                            : 0.0 mm (35 mm equivalent: 0.0 mm)
-    - Light Value                     : 6.6
-    - Red Balance                     : 2.250977
+    - LensID                          : Unknown (0)
+    - Megapixels                      : 17.9
+    - PreviewImage                    : (Binary data 1069315 bytes, use -b option to extract)
+    - ScaleFactor35efl                : 1.6
+    - ShootingMode                    : Aperture-priority AE
+    - ShutterSpeed                    : 1/100
+    - SubSecCreateDate                : 2012:10:23 17:47:02.94
+    - SubSecDateTimeOriginal          : 2012:10:23 17:47:02.94
+    - SubSecModifyDate                : 2012:10:23 17:47:02.94
+    - ThumbnailImage                  : (Binary data 10081 bytes, use -b option to extract)
+    - WB_RGGBLevels                   : 2305 1024 1024 1494
+    - BlueBalance                     : 1.458984
+    - CircleOfConfusion               : 0.019 mm
+    - DOF                             : inf (0.00 m - inf)
+    - FOV                             : 25.8 deg
+    - FocalLength35efl                : 50.0 mm (35 mm equivalent: 78.5 mm)
+    - HyperfocalDistance              : Inf m
+    - Lens35efl                       : 0.0 mm (35 mm equivalent: 0.0 mm)
+    - RedBalance                      : 2.250977
