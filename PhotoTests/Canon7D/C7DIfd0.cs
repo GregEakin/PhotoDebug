@@ -12,7 +12,7 @@ namespace PhotoTests.Canon7D
     using PhotoLib.Tiff;
 
     [TestClass]
-    public class C7DIfd1
+    public class C7DIfd0
     {
         private const string FileName = @"C:..\..\Photos\7Dhigh.CR2";
 

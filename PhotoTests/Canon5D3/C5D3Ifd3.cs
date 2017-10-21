@@ -4,6 +4,8 @@
 // FILE:		C5D3Ifd3.cs
 // AUTHOR:		Greg Eakin
 
+using System.Linq;
+
 namespace PhotoTests.Canon5D3
 {
     using System;
@@ -59,7 +61,7 @@ namespace PhotoTests.Canon5D3
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x0103 UShort 16-bit: 6
-                var imageFileDirectory = rawImage[0x00011964];
+                var imageFileDirectory = rawImage.Directories.Last();
                 var imageFileEntry = imageFileDirectory[0x0103];
                 Assert.AreEqual(3, imageFileEntry.TagType);
                 Assert.AreEqual(6u, imageFileEntry.ValuePointer);
@@ -76,7 +78,7 @@ namespace PhotoTests.Canon5D3
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x0111 ULong 32-bit: 4223344
-                var imageFileDirectory = rawImage[0x00011964];
+                var imageFileDirectory = rawImage.Directories.Last();
                 var imageFileEntry = imageFileDirectory[0x0111];
                 Assert.AreEqual(4, imageFileEntry.TagType);
                 Assert.AreEqual(0x0111, imageFileEntry.TagId);
@@ -94,7 +96,7 @@ namespace PhotoTests.Canon5D3
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x0117 ULong 32-bit: 25591542 
-                var imageFileDirectory = rawImage[0x00011964];
+                var imageFileDirectory = rawImage.Directories.Last();
                 var imageFileEntry = imageFileDirectory[0x0117];
                 Assert.AreEqual(4, imageFileEntry.TagType);
                 Assert.AreEqual(0x0117, imageFileEntry.TagId);
@@ -112,7 +114,7 @@ namespace PhotoTests.Canon5D3
                 var rawImage = new RawImage(binaryReader);
 
                 // 0xC640 UShort 16-bit: [0x000119BE] (3): 1, 2960, 2960, 
-                var imageFileDirectory = rawImage[0x00011964];
+                var imageFileDirectory = rawImage.Directories.Last();
                 var imageFileEntry = imageFileDirectory[0xC640];
                 Assert.AreEqual(3, imageFileEntry.TagType);
                 Assert.AreEqual(0x000119BEu, imageFileEntry.ValuePointer);

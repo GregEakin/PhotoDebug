@@ -12,7 +12,7 @@ using PhotoLib.Tiff;
 namespace PhotoTests.Canon5D4
 {
     [TestClass]
-    public class C5D4Ifd1
+    public class C5D4Ifd0
     {
         const string FileName = @"D:\Users\Greg\Pictures\Canon 5D IV\Y_DReggie_03.CR2";
 

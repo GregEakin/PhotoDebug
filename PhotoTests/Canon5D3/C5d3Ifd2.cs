@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoLib.Jpeg.JpegTags;
 using PhotoLib.Tiff;
 
-namespace PhotoTests.CanonM5
+namespace PhotoTests.Canon5D3
 {
     // The first IFD contains a small RGB version of the picture (one fourth the size) compressed in Jpeg, the EXIF part, and the Makernotes part. 
     // The second IFD contains a small RGB version (160x120 pixels) of the picture, compressed in Jpeg.
@@ -19,9 +19,9 @@ namespace PhotoTests.CanonM5
     // The fourth IFD contains the RAW data compressed in lossless Jpeg. 
 
     [TestClass]
-    public class CM5Ifd2
+    public class C5D3Ifd2
     {
-        private const string FileName = @"C:..\..\..\Samples\IMG_0012.CR2";
+        private const string FileName = @"C:..\..\..\Samples\311A6647.CR2";
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -58,8 +58,8 @@ namespace PhotoTests.CanonM5
             }
         }
 
-        // 5)  0x0111 ULong 32-bit: 6664192u    -- Offset
-        // 8)  0x0117 ULong 32-bit: 1440000u    -- Length
+        // 5)  0x0111 ULong 32-bit: 2794548u   -- Offset
+        // 8)  0x0117 ULong 32-bit: 1403040u   -- Length
         [TestMethod]
         public void DumpImage()
         {
@@ -74,10 +74,10 @@ namespace PhotoTests.CanonM5
                 //    imageFileDirectory.Entries.Select(e => e.TagId).ToArray());
 
                 var offset = imageFileDirectory.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
-                Assert.AreEqual(6664192u, offset);
+                Assert.AreEqual(2794548u, offset);
 
                 var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
-                Assert.AreEqual(1440000u, length);    
+                Assert.AreEqual(1403040u, length);
 
                 binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
                 var name = Path.Combine(Path.GetDirectoryName(FileName) ?? "./", Path.GetFileNameWithoutExtension(FileName) + "-2.rgb");
@@ -89,7 +89,7 @@ namespace PhotoTests.CanonM5
         {
             using (var x = File.Create(output))
             {
-                var bytes = (int) length;
+                var bytes = (int)length;
                 var buffer = new byte[32768];
                 int read;
                 while (bytes > 0 && (read = binaryReader.BaseStream.Read(buffer, 0, Math.Min(buffer.Length, bytes))) > 0)
