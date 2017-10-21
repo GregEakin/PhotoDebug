@@ -6,15 +6,16 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoLib.Tiff;
 
 namespace PhotoTests.Canon5D3
 {
     [TestClass]
-    public class C5D3Ifd1
+    public class C5D3Ifd0
     {
-        private const string FileName = @"C:..\..\..\Samples\311A6648.CR2";
+        private const string FileName = @"C:..\..\..\Samples\311A6647.CR2";
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -67,7 +68,7 @@ namespace PhotoTests.Canon5D3
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x0101 UShort 16-bit: 3840
-                var imageFileDirectory = rawImage[0x00000010];
+                var imageFileDirectory = rawImage.Directories.First();
                 var imageFileEntry = imageFileDirectory[0x0101];
                 Assert.AreEqual(3, imageFileEntry.TagType);
                 Assert.AreEqual(3840u, imageFileEntry.ValuePointer);
@@ -84,7 +85,7 @@ namespace PhotoTests.Canon5D3
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x0102 UShort 16-bit: [0x000000EE] (3): 8, 8, 8, 
-                var imageFileDirectory = rawImage[0x00000010];
+                var imageFileDirectory = rawImage.Directories.First();
                 var imageFileEntry = imageFileDirectory[0x0102];
                 Assert.AreEqual(3, imageFileEntry.TagType);
                 Assert.AreEqual(238u, imageFileEntry.ValuePointer);
@@ -104,7 +105,7 @@ namespace PhotoTests.Canon5D3
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x0103 UShort 16-bit: 6
-                var imageFileDirectory = rawImage[0x00000010];
+                var imageFileDirectory = rawImage.Directories.First();
                 var imageFileEntry = imageFileDirectory[0x0103];
                 Assert.AreEqual(3, imageFileEntry.TagType);
                 Assert.AreEqual(6u, imageFileEntry.ValuePointer);
@@ -121,7 +122,7 @@ namespace PhotoTests.Canon5D3
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x010F Ascii 8-bit: [0x000000F4] (6): Canon
-                var imageFileDirectory = rawImage[0x00000010];
+                var imageFileDirectory = rawImage.Directories.First();
                 var imageFileEntry = imageFileDirectory[0x010F];
                 Assert.AreEqual(2, imageFileEntry.TagType);
                 Assert.AreEqual(0x000000F4u, imageFileEntry.ValuePointer);
@@ -140,7 +141,7 @@ namespace PhotoTests.Canon5D3
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x0110 Ascii 8-bit: [0x000000FA] (22): Canon EOS 5D Mark III
-                var imageFileDirectory = rawImage[0x00000010];
+                var imageFileDirectory = rawImage.Directories.First();
                 var imageFileEntry = imageFileDirectory[0x0110];
                 Assert.AreEqual(2, imageFileEntry.TagType);
                 Assert.AreEqual(0x000000FAu, imageFileEntry.ValuePointer);
@@ -168,7 +169,7 @@ namespace PhotoTests.Canon5D3
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x02BC Byte 8-bit: [0x000119C4] (8192): // XML packet containing XMP metadata
-                var imageFileDirectory = rawImage[0x00000010];
+                var imageFileDirectory = rawImage.Directories.First();
                 var imageFileEntry = imageFileDirectory[0x02BC];
                 Assert.AreEqual(1, imageFileEntry.TagType);
                 Assert.AreEqual(0x000119C4u, imageFileEntry.ValuePointer);
@@ -196,7 +197,7 @@ namespace PhotoTests.Canon5D3
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x8769 Image File Directory: [0x000001BE] (1): 
-                var imageFileDirectory = rawImage[0x00000010];
+                var imageFileDirectory = rawImage.Directories.First();
                 var imageFileEntry = imageFileDirectory[0x8769];
                 Assert.AreEqual(4, imageFileEntry.TagType);
                 Assert.AreEqual(0x000001BEu, imageFileEntry.ValuePointer);
@@ -204,6 +205,44 @@ namespace PhotoTests.Canon5D3
 
                 var readULongs = RawImage.ReadUInts(binaryReader, imageFileEntry);
                 CollectionAssert.AreEqual(new[] { 0x829a0026 }, readULongs);
+            }
+        }
+
+        // 6)  0x0111 ULong 32-bit: 91648u     -- Offset
+        // 8)  0x0117 ULong 32-bit: 2702898u   -- Length
+        [TestMethod]
+        public void DumpImage()
+        {
+            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
+            {
+                var rawImage = new RawImage(binaryReader);
+                var imageFileDirectory = rawImage.Directories.First();
+
+                var offset = imageFileDirectory.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
+                Assert.AreEqual(91648u, offset);
+
+                var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
+                Assert.AreEqual(2702898u, length);
+
+                binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
+                var name = Path.Combine(Path.GetDirectoryName(FileName) ?? "./", Path.GetFileNameWithoutExtension(FileName) + "-0.jpg");
+                DumpImage(name, binaryReader, length);
+            }
+        }
+
+        private static void DumpImage(string output, BinaryReader binaryReader, uint length)
+        {
+            using (var x = File.Create(output))
+            {
+                var bytes = (int)length;
+                var buffer = new byte[32768];
+                int read;
+                while (bytes > 0 && (read = binaryReader.BaseStream.Read(buffer, 0, Math.Min(buffer.Length, bytes))) > 0)
+                {
+                    x.Write(buffer, 0, read);
+                    bytes -= read;
+                }
             }
         }
     }
