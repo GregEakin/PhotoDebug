@@ -45,8 +45,8 @@ namespace PhotoLib.Tiff
 
         public ImageFileDirectory this[uint key]
         {
-            get { return _directoryList[key]; }
-            set { _directoryList[key] = value; }
+            get => _directoryList[key];
+            set => _directoryList[key] = value;
         }
 
         public void DumpHeader(BinaryReader binaryReader)

@@ -65,6 +65,11 @@
     <Compile Include="Canon7D\C7DIfd3.cs" />
     <Compile Include="Canon7D\C7DIfd1.cs" />
     <Compile Include="BeforeUnitTests.cs" />
+    <Compile Include="CanonM5\CM5Ifd0.cs" />
+    <Compile Include="CanonM5\CM5Ifd1.cs" />
+    <Compile Include="CanonM5\CM5Ifd2.cs" />
+    <Compile Include="CanonM5\CM5Ifd3.cs" />
+    <Compile Include="CanonM5\UnitTestM5.cs" />
     <Compile Include="DualReaderTests.cs" />
     <Compile Include="Exif\ParseXml.cs" />
     <Compile Include="Jpeg\JpegTags\CommentTests.cs" />

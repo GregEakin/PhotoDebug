@@ -4,17 +4,24 @@
 // FILE:		C5D3Ifd3.cs
 // AUTHOR:		Greg Eakin
 
-namespace PhotoTests.Canon5D3
+using System.Linq;
+
+namespace PhotoTests.CanonM5
 {
     using System;
     using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using PhotoLib.Tiff;
 
+    // The first IFD contains a small RGB version of the picture (one fourth the size) compressed in Jpeg, the EXIF part, and the Makernotes part. 
+    // The second IFD contains a small RGB version (160x120 pixels) of the picture, compressed in Jpeg.
+    // The third IFD contains a small RGB version of the picture, NOT compressed (even with compression==6), and one which no white balance, correction has been applied.
+    // The fourth IFD contains the RAW data compressed in lossless Jpeg. 
+
     [TestClass]
-    public class C5D3Ifd3
+    public class CM5Ifd3
     {
-        private const string FileName = @"C:..\..\..\Samples\311A6648.CR2";
+        private const string FileName = @"C:..\..\..\Samples\IMG_0012.CR2";
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -41,13 +48,13 @@ namespace PhotoTests.Canon5D3
             }
         }
 
-        //== Tiff Directory [0x00011964]:
+        //== Tiff Directory [0x0000B50C]:
         //0)  0x0103 UShort 16-bit: 6
-        //1)  0x0111 ULong 32-bit: 4223344
-        //2)  0x0117 ULong 32-bit: 25591542
+        //1)  0x0111 ULong 32-bit: 8104448
+        //2)  0x0117 ULong 32-bit: 29690604
         //3)  0xC5D8 ULong 32-bit: 1
         //4)  0xC5E0 ULong 32-bit: 1
-        //5)  0xC640 UShort 16-bit: [0x000119BE] (3): 1, 2960, 2960, 
+        //5)  0xC640 UShort 16-bit: [0x000119BE] (3): 0, 0, 6288, 
         //6)  0xC6C5 ULong 32-bit: 1
 
         [TestMethod]
@@ -59,7 +66,7 @@ namespace PhotoTests.Canon5D3
                 var rawImage = new RawImage(binaryReader);
 
                 // 0x0103 UShort 16-bit: 6
-                var imageFileDirectory = rawImage[0x00011964];
+                var imageFileDirectory = rawImage.Directories.Last();
                 var imageFileEntry = imageFileDirectory[0x0103];
                 Assert.AreEqual(3, imageFileEntry.TagType);
                 Assert.AreEqual(6u, imageFileEntry.ValuePointer);
@@ -75,12 +82,12 @@ namespace PhotoTests.Canon5D3
             {
                 var rawImage = new RawImage(binaryReader);
 
-                // 0x0111 ULong 32-bit: 4223344
-                var imageFileDirectory = rawImage[0x00011964];
+                // 0x0111 ULong 32-bit: 8104448
+                var imageFileDirectory = rawImage.Directories.Last();
                 var imageFileEntry = imageFileDirectory[0x0111];
                 Assert.AreEqual(4, imageFileEntry.TagType);
                 Assert.AreEqual(0x0111, imageFileEntry.TagId);
-                // Assert.AreEqual(4223344u, imageFileEntry.ValuePointer);
+                Assert.AreEqual(8104448u, imageFileEntry.ValuePointer);
                 Assert.AreEqual(1u, imageFileEntry.NumberOfValue);
             }
         }
@@ -93,12 +100,12 @@ namespace PhotoTests.Canon5D3
             {
                 var rawImage = new RawImage(binaryReader);
 
-                // 0x0117 ULong 32-bit: 25591542 
-                var imageFileDirectory = rawImage[0x00011964];
+                // 0x0117 ULong 32-bit: 29690604 
+                var imageFileDirectory = rawImage.Directories.Last();
                 var imageFileEntry = imageFileDirectory[0x0117];
                 Assert.AreEqual(4, imageFileEntry.TagType);
                 Assert.AreEqual(0x0117, imageFileEntry.TagId);
-                // Assert.AreEqual(25591542u, imageFileEntry.ValuePointer);
+                Assert.AreEqual(29690604u, imageFileEntry.ValuePointer);
                 Assert.AreEqual(1u, imageFileEntry.NumberOfValue);
             }
         }
@@ -111,14 +118,14 @@ namespace PhotoTests.Canon5D3
             {
                 var rawImage = new RawImage(binaryReader);
 
-                // 0xC640 UShort 16-bit: [0x000119BE] (3): 1, 2960, 2960, 
-                var imageFileDirectory = rawImage[0x00011964];
+                // 0xC640 UShort 16-bit: [0x0000B566] (3): 0, 0, 6288, 
+                var imageFileDirectory = rawImage.Directories.Last();
                 var imageFileEntry = imageFileDirectory[0xC640];
                 Assert.AreEqual(3, imageFileEntry.TagType);
-                Assert.AreEqual(0x000119BEu, imageFileEntry.ValuePointer);
+                Assert.AreEqual(0x0000B566u, imageFileEntry.ValuePointer);
                 Assert.AreEqual(3u, imageFileEntry.NumberOfValue);
 
-                CollectionAssert.AreEqual(new[] { (ushort)1, (ushort)2960, (ushort)2960 },
+                CollectionAssert.AreEqual(new[] { (ushort)0, (ushort)0, (ushort)6288 },
                     RawImage.ReadUInts16(binaryReader, imageFileEntry));
             }
         }

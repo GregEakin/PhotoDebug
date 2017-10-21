@@ -69,7 +69,9 @@ namespace PhotoLib.Jpeg.JpegTags
                         _jfifMarker = new JfifMarker(binaryReader);
                         break;
 
+
                     case 0xE1: // APP1, Application Segment 1, EXIF Metadata, TIFF IFD format,JPEG Thumbnail (160x120), Adobe XMP
+                    case 0xE2: // APP2, Application Segment 2,
                     case 0xE4: // APP4, Application Segment 4, (Not common)
                     case 0xEC: // APP12, Application Segment 12, Picture Info (older digicams), Photoshop Save for Web: Ducky
                     case 0xEE: // APP14, Application Segment 14, (Not common)

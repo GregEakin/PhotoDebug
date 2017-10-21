@@ -6,7 +6,7 @@
 
 using PhotoLib.Jpeg.JpegTags;
 
-namespace PhotoTests.Canon5D3
+namespace PhotoTests.CanonM5
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using PhotoLib.Tiff;
@@ -15,9 +15,9 @@ namespace PhotoTests.Canon5D3
     using System.Linq;
 
     [TestClass]
-    public class UnitTest5D3
+    public class UnitTestM5
     {
-        private const string FileName = @"C:..\..\..\Samples\311A6648.CR2";
+        private const string FileName = @"C:..\..\..\Samples\IMG_0012.CR2";
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -47,8 +47,8 @@ namespace PhotoTests.Canon5D3
         [TestMethod]
         public void RawImageSize()
         {
-            // 1 Sensor Width                    : 5920 = 1 * 2960 + 2960
-            // 2 Sensor Height                   : 3950
+            // 1 Sensor Width                    : 6288 = 0 * 0 + 6288
+            // 2 Sensor Height                   : 4056
 
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
             using (var binaryReader = new BinaryReader(fileStream))
@@ -64,17 +64,17 @@ namespace PhotoTests.Canon5D3
                 var x = binaryReader.ReadUInt16();
                 var y = binaryReader.ReadUInt16();
                 var z = binaryReader.ReadUInt16();
-                Assert.AreEqual(1, x);
-                Assert.AreEqual(2960, y);
-                Assert.AreEqual(2960, z);
+                Assert.AreEqual(0, x);
+                Assert.AreEqual(0, y);
+                Assert.AreEqual(6288, z);
 
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
                 var lossless = startOfImage.StartOfFrame;
                 Assert.AreEqual(14, lossless.Precision);
                 Assert.AreEqual(2, lossless.Components.Length);
-                Assert.AreEqual(2960, lossless.SamplesPerLine);
-                Assert.AreEqual(3950, lossless.ScanLines);
+                Assert.AreEqual(3144, lossless.SamplesPerLine);
+                Assert.AreEqual(4056, lossless.ScanLines);
             }
         }
 
@@ -224,12 +224,12 @@ namespace PhotoTests.Canon5D3
 
                 Assert.AreEqual(14, lossless.Precision);
                 Assert.AreEqual(2, lossless.Components.Length);
-                Assert.AreEqual(2960, lossless.SamplesPerLine);
-                Assert.AreEqual(3950, lossless.ScanLines);
+                Assert.AreEqual(3144, lossless.SamplesPerLine);
+                Assert.AreEqual(4056, lossless.ScanLines);
 
-                Assert.AreEqual(5920, lossless.Width); // Sensor width (bits)
-                Assert.AreEqual(5920, lossless.SamplesPerLine * lossless.Components.Length);
-                Assert.AreEqual(5920, x * y + z);
+                Assert.AreEqual(6288, lossless.Width); // Sensor width (bits)
+                Assert.AreEqual(6288, lossless.SamplesPerLine * lossless.Components.Length);
+                Assert.AreEqual(6288, x * y + z);
 
                 foreach (var component in lossless.Components)
                 {
@@ -297,8 +297,8 @@ namespace PhotoTests.Canon5D3
                 var orientation = directory.Entries.Single(e => e.TagId == 0x0112).ValuePointer;
                 var length = directory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
 
-                Assert.AreEqual(0x00016F80u, address);
-                Assert.AreEqual(0x00292F71u, length);
+                Assert.AreEqual(0x00012000u, address);
+                Assert.AreEqual(0x00648EE9u, length);
                 Assert.AreEqual(1u, orientation);
 
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
