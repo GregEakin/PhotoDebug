@@ -4,6 +4,7 @@
 // FILE:		Image1.cs
 // AUTHOR:		Greg Eakin
 
+using System;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,8 +18,8 @@ namespace PhotoTests.Prototypes
         [TestMethod]
         public void DumpImage1Test()
         {
-            const string Folder = @"D:\Users\Greg\Pictures\2016-02-21 Studio\";
-            DumpImage1(Folder, "Studio 015.CR2");
+            const string Folder = @"C:\Users\Greg\Source\Repos\PhotoDebug\Samples\";
+            DumpImage1(Folder, "311A6647.CR2");
         }
 
         private static void DumpImage1(string folder, string file)
@@ -40,32 +41,23 @@ namespace PhotoTests.Prototypes
                 var length = image.Entries.Single(e => e.TagId == 0x0202 && e.TagType == 4).ValuePointer;
                 // Assert.AreEqual(10334u, length);
 
-                DumpImage(binaryReader, folder + "0L2A8897-1.JPG", offset, length);
+                binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
+                DumpImage2(folder + "0L2A8897-1.JPG", binaryReader, length);
             }
         }
 
-        private static void DumpImage(BinaryReader binaryReader, string filename, uint offset, uint length)
+        private static void DumpImage2(string output, BinaryReader binaryReader, uint length)
         {
-            using (var fout = File.Open(filename, FileMode.Create, FileAccess.Write))
+            using (var outFile = File.Create(output))
             {
-                binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
-
-                //Create a byte array to act as a buffer
-                var buffer = new byte[32];
-                for (var i = 0; i < length;)
+                var bytes = (int)length;
+                var buffer = new byte[32768];
+                int read;
+                while (bytes > 0 && (read = binaryReader.BaseStream.Read(buffer, 0, Math.Min(buffer.Length, bytes))) > 0)
                 {
-                    //Read from the source file
-                    //The Read method returns the number of bytes read
-                    var n = binaryReader.Read(buffer, 0, buffer.Length);
-
-                    //Write the contents of the buffer to the destination file
-                    fout.Write(buffer, 0, n);
-
-                    i += n;
+                    outFile.Write(buffer, 0, read);
+                    bytes -= read;
                 }
-
-                //Flush the contents of the buffer to the file
-                fout.Flush();
             }
         }
     }

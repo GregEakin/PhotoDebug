@@ -53,7 +53,7 @@ namespace PhotoTests.CanonM5
             using (var binaryReader = new BinaryReader(fileStream))
             {
                 var rawImage = new RawImage(binaryReader);
-                var imageFileDirectory = rawImage.Directories.Skip(1).First();
+                var imageFileDirectory = rawImage.Directories.Skip(2).First();
                 imageFileDirectory.DumpDirectory(binaryReader);
             }
         }
@@ -67,7 +67,7 @@ namespace PhotoTests.CanonM5
             using (var binaryReader = new BinaryReader(fileStream))
             {
                 var rawImage = new RawImage(binaryReader);
-                var imageFileDirectory = rawImage.Directories.Skip(1).First();
+                var imageFileDirectory = rawImage.Directories.Skip(2).First();
                 Assert.AreEqual(2, imageFileDirectory.Entries.Length);
                 CollectionAssert.AreEqual(
                     new ushort[] { 0x0201, 0x0202 },
@@ -80,7 +80,23 @@ namespace PhotoTests.CanonM5
                 Assert.AreEqual(15495u, length);    
 
                 binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
-                var startOfImage = new StartOfImage(binaryReader, offset, length);
+                var name = Path.Combine(Path.GetDirectoryName(FileName) ?? "./", Path.GetFileNameWithoutExtension(FileName) + "-2.jpg");
+                DumpImage(name, binaryReader, length);
+            }
+        }
+
+        private static void DumpImage(string output, BinaryReader binaryReader, uint length)
+        {
+            using (var x = File.Create(output))
+            {
+                var bytes = (int) length;
+                var buffer = new byte[32768];
+                int read;
+                while (bytes > 0 && (read = binaryReader.BaseStream.Read(buffer, 0, Math.Min(buffer.Length, bytes))) > 0)
+                {
+                    x.Write(buffer, 0, read);
+                    bytes -= read;
+                }
             }
         }
     }

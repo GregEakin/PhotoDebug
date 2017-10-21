@@ -57,7 +57,46 @@ namespace PhotoTests.CanonM5
             }
         }
 
-        //  0)  0x0201 ULong 32-bit: 56320
-        //  1)  0x0202 ULong 32-bit: 15495
+        // 0)  0x0201 ULong 32-bit: 56320u   -- Offset
+        // 1)  0x0202 ULong 32-bit: 15495u   -- Length
+        [TestMethod]
+        public void DumpImage()
+        {
+            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
+            {
+                var rawImage = new RawImage(binaryReader);
+                var imageFileDirectory = rawImage.Directories.Skip(1).First();
+                Assert.AreEqual(2, imageFileDirectory.Entries.Length);
+                CollectionAssert.AreEqual(
+                    new ushort[] { 0x0201, 0x0202 },
+                    imageFileDirectory.Entries.Select(e => e.TagId).ToArray());
+
+                var offset = imageFileDirectory.Entries.Single(e => e.TagId == 0x0201 && e.TagType == 4).ValuePointer;
+                Assert.AreEqual(56320u, offset);
+
+                var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0202 && e.TagType == 4).ValuePointer;
+                Assert.AreEqual(15495u, length);
+
+                binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
+                var name = Path.Combine(Path.GetDirectoryName(FileName) ?? "./", Path.GetFileNameWithoutExtension(FileName) + "-1.jpg");
+                DumpImage(name, binaryReader, length);
+            }
+        }
+
+        private static void DumpImage(string output, BinaryReader binaryReader, uint length)
+        {
+            using (var x = File.Create(output))
+            {
+                var bytes = (int)length;
+                var buffer = new byte[32768];
+                int read;
+                while (bytes > 0 && (read = binaryReader.BaseStream.Read(buffer, 0, Math.Min(buffer.Length, bytes))) > 0)
+                {
+                    x.Write(buffer, 0, read);
+                    bytes -= read;
+                }
+            }
+        }
     }
 }

@@ -12,6 +12,11 @@ using PhotoLib.Tiff;
 
 namespace PhotoTests.CanonM5
 {
+    // The first IFD contains a small RGB version of the picture (one fourth the size) compressed in Jpeg, the EXIF part, and the Makernotes part. 
+    // The second IFD contains a small RGB version (160x120 pixels) of the picture, compressed in Jpeg.
+    // The third IFD contains a small RGB version of the picture, NOT compressed (even with compression==6), and one which no white balance, correction has been applied.
+    // The fourth IFD contains the RAW data compressed in lossless Jpeg. 
+
     [TestClass]
     public class CM5Ifd0
     {
@@ -203,6 +208,44 @@ namespace PhotoTests.CanonM5
 
                 var readULongs = RawImage.ReadUInts(binaryReader, imageFileEntry);
                 CollectionAssert.AreEqual(new[] { 0x829a002a }, readULongs);
+            }
+        }
+
+        // 7)  0x0111 ULong 32-bit: 73728u     -- Offset
+        // 9)  0x0117 ULong 32-bit: 6590185u   -- Length
+        [TestMethod]
+        public void DumpImage()
+        {
+            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
+            {
+                var rawImage = new RawImage(binaryReader);
+                var imageFileDirectory = rawImage.Directories.First();
+
+                var offset = imageFileDirectory.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
+                Assert.AreEqual(73728u, offset);
+
+                var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
+                Assert.AreEqual(6590185u, length);
+
+                binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
+                var name = Path.Combine(Path.GetDirectoryName(FileName) ?? "./", Path.GetFileNameWithoutExtension(FileName) + "-0.jpg");
+                DumpImage(name, binaryReader, length);
+            }
+        }
+
+        private static void DumpImage(string output, BinaryReader binaryReader, uint length)
+        {
+            using (var x = File.Create(output))
+            {
+                var bytes = (int)length;
+                var buffer = new byte[32768];
+                int read;
+                while (bytes > 0 && (read = binaryReader.BaseStream.Read(buffer, 0, Math.Min(buffer.Length, bytes))) > 0)
+                {
+                    x.Write(buffer, 0, read);
+                    bytes -= read;
+                }
             }
         }
     }

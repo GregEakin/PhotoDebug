@@ -157,6 +157,9 @@ namespace PhotoLib.Jpeg.JpegTags
                         HuffmanTable chrominanceDc;
                         var table3 = HuffmanTable.Tables.TryGetValue(0x01, out chrominanceDc);
 
+                        if (!table1 || !table3)
+                            throw new Exception("Didn't read the table.");
+
                         TableTwo(StartOfFrame.Components, luminanceDc, chrominanceDc);
                     }
                     break;
@@ -176,6 +179,9 @@ namespace PhotoLib.Jpeg.JpegTags
                         var table2 = HuffmanTable.Tables.TryGetValue(0x10, out luminanceAc);
                         HuffmanTable chrominanceAc;
                         var table4 = HuffmanTable.Tables.TryGetValue(0x11, out chrominanceAc);
+
+                        if (!table1 || !table2 || !table3 || !table4)
+                            throw new Exception("Didn't read the table.");
 
                         TableFour(StartOfFrame.Components, luminanceDc, luminanceAc, chrominanceDc, chrominanceAc);
                     }
@@ -218,7 +224,7 @@ namespace PhotoLib.Jpeg.JpegTags
                 catch (Exception exception)
                 {
                     Console.WriteLine("Crash {0}", exception);
-                    break;
+                    throw;
                 }
             }
 
@@ -233,9 +239,10 @@ namespace PhotoLib.Jpeg.JpegTags
             var width = StartOfFrame.SamplesPerLine / 8;
             var length = StartOfFrame.ScanLines / 8;
             var size = width * length;
-            // for (var i = 0; i < size; i++)
-            while (!ImageData.EndOfFile)
+            for (var i = 0; i < size; i+=12)
+            //while (!ImageData.EndOfFile)
             {
+                Console.WriteLine("Reading {0} {1}", ImageData.Index, i);
                 try
                 {
                     // Luminance (Y) - DC
@@ -262,7 +269,7 @@ namespace PhotoLib.Jpeg.JpegTags
                     Console.WriteLine("Crash {0}", exception);
                     // Console.WriteLine("  i={0}, size={1}", i, size);
 
-                    break;
+                    throw;
                 }
             }
         }
