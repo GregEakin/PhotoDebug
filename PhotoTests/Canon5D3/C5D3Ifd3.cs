@@ -16,31 +16,12 @@ namespace PhotoTests.Canon5D3
     [TestClass]
     public class C5D3Ifd3
     {
-        private const string FileName = @"C:..\..\..\Samples\311A6648.CR2";
+        private const string FileName = @"d:\Users\Greg\Pictures\2018-08-29\0L2A3743.CR2";
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            if (!File.Exists(FileName))
-            {
-                throw new ArgumentException("{0} doesn't exists!", FileName);
-            }
-        }
-
-        [TestMethod]
-        public void TestMethod1()
-        {
-            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
-            using (var binaryReader = new BinaryReader(fileStream))
-            {
-                var rawImage = new RawImage(binaryReader);
-                CollectionAssert.AreEqual(new byte[] { 0x49, 0x49 }, rawImage.Header.ByteOrder);
-                Assert.AreEqual(0x002A, rawImage.Header.TiffMagic);
-                Assert.AreEqual(0x5243, rawImage.Header.CR2Magic);
-                CollectionAssert.AreEqual(new byte[] { 0x02, 0x00 }, rawImage.Header.CR2Version);
-
-                rawImage.DumpHeader(binaryReader);
-            }
+            Assert.IsTrue(File.Exists(FileName), "Image file {0} doesn't exists!", FileName);
         }
 
         //== Tiff Directory [0x00011964]:
@@ -51,6 +32,18 @@ namespace PhotoTests.Canon5D3
         //4)  0xC5E0 ULong 32-bit: 1
         //5)  0xC640 UShort 16-bit: [0x000119BE] (3): 1, 2960, 2960, 
         //6)  0xC6C5 ULong 32-bit: 1
+
+        [TestMethod]
+        public void DumpImageFileDirectory()
+        {
+            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
+            {
+                var rawImage = new RawImage(binaryReader);
+                var imageFileDirectory = rawImage.Directories.Skip(3).First();
+                imageFileDirectory.DumpDirectory(binaryReader);
+            }
+        }
 
         [TestMethod]
         public void Compression()

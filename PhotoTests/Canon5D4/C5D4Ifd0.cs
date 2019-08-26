@@ -176,12 +176,15 @@ namespace PhotoTests.Canon5D4
 
                 var readChars = RawImage.ReadChars(binaryReader, imageFileEntry);
 
-                const string Expected1 =
+                const string expected1 =
                     "<?xpacket begin='ï»¿' id='W5M0MpCehiHzreSzNTczkc9d'?><x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\" xmlns:xmp=\"http://ns.adobe.com/xap/1.0/\"><xmp:Rating>0</xmp:Rating></rdf:Description></rdf:RDF></x:xmpmeta>";
-                Assert.AreEqual(Expected1, readChars.Substring(0, 291));
+                Assert.AreEqual(expected1, readChars.Substring(0, 291));
+
                 // lots of white space between these two substrings.
-                const string Expected2 = "<?xpacket end='w'?>";
-                Assert.AreEqual(Expected2, readChars.Substring(8173));
+                Assert.IsTrue(string.IsNullOrWhiteSpace(readChars.Substring(291, 8173 - 291)));
+
+                const string expected2 = "<?xpacket end='w'?>";
+                Assert.AreEqual(expected2, readChars.Substring(8173));
             }
         }
 

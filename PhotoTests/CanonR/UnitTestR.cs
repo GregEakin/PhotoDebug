@@ -1,12 +1,12 @@
 ﻿// Copyright © 2013-2016. All Rights Reserved.
 // 
 // SUBSYSTEM:	PhotoTests
-// FILE:		UnitTest5D3.cs
+// FILE:		UnitTest7D.cs
 // AUTHOR:		Greg Eakin
 
 using PhotoLib.Jpeg.JpegTags;
 
-namespace PhotoTests.Canon5D3
+namespace PhotoTests.CanonR
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using PhotoLib.Tiff;
@@ -15,14 +15,17 @@ namespace PhotoTests.Canon5D3
     using System.Linq;
 
     [TestClass]
-    public class UnitTest5D3
+    public class UnitTestR
     {
-        private const string FileName = @"d:\Users\Greg\Pictures\2018-08-29\0L2A3743.CR2";
+        private const string FileName = @"D:\Users\Greg\Pictures\EOS R\447A0803.CR3";
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            Assert.IsTrue(File.Exists(FileName), "Image file {0} doesn't exists!", FileName);
+            if (!File.Exists(FileName))
+            {
+                throw new ArgumentException("{0} doesn't exists!", FileName);
+            }
         }
 
         [TestMethod]
@@ -32,20 +35,20 @@ namespace PhotoTests.Canon5D3
             using (var binaryReader = new BinaryReader(fileStream))
             {
                 var rawImage = new RawImage(binaryReader);
-                CollectionAssert.AreEqual(new byte[] { 0x49, 0x49 }, rawImage.Header.ByteOrder);
-                Assert.AreEqual(0x002A, rawImage.Header.TiffMagic);
-                Assert.AreEqual(0x5243, rawImage.Header.CR2Magic);
-                CollectionAssert.AreEqual(new byte[] { 0x02, 0x00 }, rawImage.Header.CR2Version);
+                //CollectionAssert.AreEqual(new byte[] { 0x49, 0x49 }, rawImage.Header.ByteOrder);
+                //Assert.AreEqual(0x002A, rawImage.Header.TiffMagic);
+                //Assert.AreEqual(0x5243, rawImage.Header.CR2Magic);
+                //CollectionAssert.AreEqual(new byte[] { 0x02, 0x00 }, rawImage.Header.CR2Version);
 
-                rawImage.DumpHeader(binaryReader);
+                //rawImage.DumpHeader(binaryReader);
             }
         }
 
         [TestMethod]
         public void RawImageSize()
         {
-            // 1 Sensor Width                    : 5920 = 1 * 2960 + 2960
-            // 2 Sensor Height                   : 3950
+            // 1 Sensor Width                    : 5360 = 1340 * 4 = 2 * 1728 + 1904
+            // 2 Sensor Height                   : 3516
 
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
             using (var binaryReader = new BinaryReader(fileStream))
@@ -55,23 +58,24 @@ namespace PhotoTests.Canon5D3
                 var directory = rawImage.Directories.Last();
                 var address = directory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
                 var length = directory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
-                var strips = directory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
+                var strips = directory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer;
+                // TIF_CR2_SLICE
 
                 binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
                 var x = binaryReader.ReadUInt16();
                 var y = binaryReader.ReadUInt16();
                 var z = binaryReader.ReadUInt16();
-                Assert.AreEqual(1, x);
-                Assert.AreEqual(2960, y);
-                Assert.AreEqual(2960, z);
+                Assert.AreEqual(2, x);
+                Assert.AreEqual(1728, y);
+                Assert.AreEqual(1904, z);
 
                 binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
                 var startOfImage = new StartOfImage(binaryReader, address, length);
                 var lossless = startOfImage.StartOfFrame;
                 Assert.AreEqual(14, lossless.Precision);
-                Assert.AreEqual(2, lossless.Components.Length);
-                Assert.AreEqual(2960, lossless.SamplesPerLine);
-                Assert.AreEqual(3950, lossless.ScanLines);
+                Assert.AreEqual(4, lossless.Components.Length);
+                Assert.AreEqual(1340, lossless.SamplesPerLine);
+                Assert.AreEqual(3516, lossless.ScanLines);
             }
         }
 
@@ -115,14 +119,14 @@ namespace PhotoTests.Canon5D3
                 var startOfImage = new StartOfImage(binaryReader, address, length);
                 var lossless = startOfImage.StartOfFrame;
 
-                Assert.AreEqual(2, lossless.Components.Length); // clrs
+                Assert.AreEqual(4, lossless.Components.Length); // clrs
                 foreach (var component in lossless.Components)
                 {
                     Assert.AreEqual(1, component.HFactor); // sraw
                     Assert.AreEqual(1, component.VFactor); // sraw
                 }
 
-                Assert.AreEqual(2, lossless.Components.Sum(comp => comp.HFactor * comp.VFactor));
+                Assert.AreEqual(4, lossless.Components.Sum(comp => comp.HFactor * comp.VFactor));
             }
         }
 
@@ -147,8 +151,8 @@ namespace PhotoTests.Canon5D3
         [TestMethod]
         public void DumpRawImageHex()
         {
-            // 1 Sensor Width                    : 5760
-            // 2 Sensor Height                   : 3840
+            // 1 Sensor Width                    : 5360
+            // 2 Sensor Height                   : 3516
 
             using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
             using (var binaryReader = new BinaryReader(fileStream))
@@ -220,13 +224,13 @@ namespace PhotoTests.Canon5D3
                 Assert.AreEqual(0xC3, lossless.Tag);
 
                 Assert.AreEqual(14, lossless.Precision);
-                Assert.AreEqual(2, lossless.Components.Length);
-                Assert.AreEqual(2960, lossless.SamplesPerLine);
-                Assert.AreEqual(3950, lossless.ScanLines);
+                Assert.AreEqual(4, lossless.Components.Length);
+                Assert.AreEqual(1340, lossless.SamplesPerLine);
+                Assert.AreEqual(3516, lossless.ScanLines);
 
-                Assert.AreEqual(5920, lossless.Width); // Sensor width (bits)
-                Assert.AreEqual(5920, lossless.SamplesPerLine * lossless.Components.Length);
-                Assert.AreEqual(5920, x * y + z);
+                Assert.AreEqual(5360, lossless.Width); // Sensor width (bits)
+                Assert.AreEqual(5360, lossless.SamplesPerLine * lossless.Components.Length);
+                Assert.AreEqual(5360, x * y + z);
 
                 foreach (var component in lossless.Components)
                 {
@@ -240,68 +244,12 @@ namespace PhotoTests.Canon5D3
                 Assert.AreEqual(0xFF, startOfScan.Mark);
                 Assert.AreEqual(0xDA, startOfScan.Tag);
 
-                //foreach (var scanComponent in startOfScan.Components)
-                //{
-                //    Console.WriteLine("{0}: {1} {2}", scanComponent.Id, scanComponent.Dc, scanComponent.Ac);
-                //}
+                foreach (var scanComponent in startOfScan.Components)
+                {
+                    Console.WriteLine("{0}: {1} {2}", scanComponent.Id, scanComponent.Dc, scanComponent.Ac);
+                }
 
                 var imageData = startOfImage.ImageData;
-            }
-        }
-
-        [TestMethod]
-        public void Test1()
-        {
-            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
-            using (var binaryReader = new BinaryReader(fileStream))
-            {
-                var rawImage = new RawImage(binaryReader);
-
-                // The first IFD contains a small RGB version of the picture (one fourth the size) compressed in Jpeg, the EXIF part, and the Makernotes part. 
-                // The second IFD contains a small RGB version (160x120 pixels) of the picture, compressed in Jpeg.
-                // The third IFD contains a small RGB version of the picture, NOT compressed (even with compression==6), and one which no white balance, correction has been applied.
-                // The fourth IFD contains the RAW data compressed in lossless Jpeg. 
-
-                var directory = rawImage.Directories.Skip(3).First();
-                var address = directory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
-                var length = directory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
-
-                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-                var startOfImage = new StartOfImage(binaryReader, address, length);
-
-                // Assert.AreEqual(0, startOfImage.);
-            }
-        }
-
-        [TestMethod]
-        public void Test2()
-        {
-            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
-            using (var binaryReader = new BinaryReader(fileStream))
-            {
-                var rawImage = new RawImage(binaryReader);
-
-                // The first IFD contains a small RGB version of the picture (one fourth the size) compressed in Jpeg, the EXIF part, and the Makernotes part. 
-                // The second IFD contains a small RGB version (160x120 pixels) of the picture, compressed in Jpeg.
-                // The third IFD contains a small RGB version of the picture, NOT compressed (even with compression==6), and one which no white balance correction has been applied.
-                // The fourth IFD contains the RAW data compressed in lossless Jpeg. 
-
-                var directory = rawImage.Directories.First();
-                // stripOffset 6)  0x0111 ULong 32-bit: 96332
-                // orientation 7)  0x0112 UShort 16-bit: 1
-                // stripByteCounts 8)  0x0117 ULong 32-bit: 2390306
-                var address = directory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
-                var orientation = directory.Entries.Single(e => e.TagId == 0x0112).ValuePointer;
-                var length = directory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
-
-                Assert.AreEqual(0x00016F80u, address);
-                Assert.AreEqual(0x00292F71u, length);
-                Assert.AreEqual(1u, orientation);
-
-                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-                var startOfImage = new StartOfImage(binaryReader, address, length);
-
-                // Assert.AreEqual(0, startOfImage.);
             }
         }
     }

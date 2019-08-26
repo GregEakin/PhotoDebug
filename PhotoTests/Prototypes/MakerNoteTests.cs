@@ -4,6 +4,7 @@
 // FILE:		MakerNoteTests.cs
 // AUTHOR:		Greg Eakin
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoLib.Tiff;
 using System.IO;
@@ -74,6 +75,8 @@ namespace PhotoTests.Prototypes
                 // 5)  0x0007 Ascii 8-bit, null terminated: [0x000006B8] (24): "Firmware Version 1.2.3"
                 // 6)  0x0009 Ascii 8-bit, null terminated: [0x000006D0] (32): "Greg Eakin"
                 // 7)  0x000D UByte[]: [0x000006F0] (1536):                     // camera info
+                //                  File index [0x28c]
+                //                  File index [0x290]
                 // 8)  0x0010 ULong 32-bit: 2147484293                          // camera id
                 // 9)  0x0013 UShort 16-bit: [0x00000CF0] (4): 0, 159, 7, 112,  // thumbnail image valid area
                 //10)  0x0019 UShort 16-bit: 1
@@ -92,11 +95,11 @@ namespace PhotoTests.Prototypes
                 //23)  0x00D0 ULong 32-bit: 0                                   // VRD recipe
                 //24)  0x00E0 UShort 16-bit: [0x00001540] (17): 34, 5920, 3950, 1, 1, 140, 96, 5899, 3935, 0, 0, 0, 0, 0, 0, 0, 0,      // sensor info 
                 //25)  0x4001 UShort 16-bit: [0x00001562] (1312): 10, 819, 1024, 1024, 350, 570, 1024, 1024, 479, 398, 1024, 1024, 671, 1459, 1787, 1787, 609, 1557, 2724, 2725, 1263, 739, 1838, 1837, 1192, 3, 0, 263, 262, 265, 0, 1439, 3054, 3051, 1706, 665, 208, 207, 30, 75, 588, 589, 1011, 1365, 2358, 2358, 441, 1255, 2540, 2539, 1379, 577, 185, 185, 26, 67, 478, 478, 803, 1191, 1965, 1966, 367, 2032, 1024, 1024, 1702, 4997, 2032, 1024, 1024, 1702, 4997, 2032, 1024, 1024, 1702, 4997, 2032, 1024, 1024, 1702, 4997, 1024, 1024, 1024, 1024, 4378, 1024, 1024, 1024, 1024, 4378, 2032, 1024, 1024, 1702, 4997, 2032, 1024, 1024, 1702, 4997, 2032, 1024, 1024, 1702, 4997, 2032, 1024, 1024, 1702, 4997, 2032, 1024, 1024, 1702, 4997, 1370, 1028, 1018, 1952, 3415, 777, 1170, 1170, 529, 3415, 2076, 1024, 1024, 1657, 5200, 2383, 1024, 1024, 1411, 7000, 2231, 1024, 1024, 1524, 6000, 1494, 1024, 1024, 2473, 3200, 1824, 1024, 1024, 2378, 3714, 2076, 1024, 1024, 1657, 5189, 2315, 1024, 1024, 1500, 6320, 2068, 1024, 1024, 1446, 5940, 2076, 1024, 1024, 1657, 5189, 2076, 1024, 1024, 1657, 5189, 2076, 1024, 1024, 1657, 5189, 2076, 1024, 1024, 1657, 5189, 1010, 1024, 1024, 1022, 4325, 1010, 1024, 1024, 1022, 4325, 1010, 1024, 1024, 1022, 4325, 1010, 1024, 1024, 1022, 4325, 1010, 1024, 1024, 1022, 4325, 65228, 383, 881, 10900, 65246, 391, 858, 10000, 65292, 413, 800, 8300, 65343, 440, 743, 7000, 65396, 470, 688, 6000, 65423, 486, 662, 5600, 65453, 505, 633, 5200, 65500, 531, 586, 4700, 20, 570, 539, 4200, 74, 612, 498, 3800, 123, 652, 463, 3500, 180, 702, 424, 3200, 226, 741, 390, 3000, 267, 790, 371, 2800, 372, 920, 322, 2400, 500, 2065, 2081, 2048, 2048, 2048, 2048, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 409, 494, 708, 3748, 1676, 1764, 1587, 932, 5697, 4163, 4172, 2546, 1182, 935, 2342, 200, 64, 17, 18, 669, 49, 20, 37, 10, 399, 469, 1094, 1564, 593, 474, 2860, 597, 0, 1, 2, 8, 1, 2, 4, 0, 8, 6, 8, 4, 6, 1, 40, 31, 5, 7, 11, 46, 8, 7, 11, 3, 14, 8, 15, 16, 9, 5, 114, 47, 0, 0, 0, 32768, 0, 1024, 1024, 1024, 2639, 3807, 6471, 4116, 65511, 51, 4099, 4076, 24, 65485, 4093, 0, 256, 1, 37283, 1, 33091, 1, 31641, 0, 37046, 1024, 1024, 1024, 0, 0, 0, 65533, 0, 8191, 256, 0, 0, 1024, 686, 427, 491, 638, 406, 792, 0, 0, 0, 0, 0, 15, 240, 256, 256, 256, 256, 256, 256, 0, 15, 240, 256, 256, 256, 256, 256, 256, 0, 0, 131, 0, 16, 32, 64, 96, 128, 192, 0, 0, 0, 0, 0, 0, 0, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1160, 0, 2048, 2048, 2048, 2048, 14708, 15220, 10087, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 240, 256, 256, 256, 256, 256, 256, 0, 15, 240, 256, 256, 256, 256, 256, 256, 125, 125, 126, 1, 1, 244, 244, 8, 24, 60, 92, 111, 130, 166, 218, 235, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35, 81, 98, 118, 133, 216, 219, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1391, 1024, 859, 0, 0, 0, 0, 75, 80, 32344, 525, 0, 0, 0, 0, 782, 225, 0, 575, 177, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 516, 1024, 1024, 617, 100, 0, 79, 79, 32331, 598, 0, 0, 0, 0, 100, 44, 72, 16, 33, 230, 255, 21305, 2068, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31, 63, 95, 127, 159, 191, 223, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 126, 1, 244, 0, 0, 0, 0, 0, 0, 0, 31, 63, 95, 127, 159, 191, 223, 255, 48, 51, 55, 56, 54, 49, 46, 48, 54, 60, 68, 74, 82, 87, 90, 92, 94, 94, 91, 89, 86, 85, 88, 92, 94, 93, 94, 99, 104, 112, 113, 112, 111, 113, 118, 121, 124, 129, 132, 144, 154, 164, 189, 217, 240, 238, 235, 226, 212, 197, 168, 138, 97, 73, 64, 53, 47, 45, 46, 48, 47, 90, 85, 0, 255, 4, 44, 72, 21305, 2068, 0, 0, 0, 0, 0, 230, 255, 33, 823, 191, 0, 510, 136, 0, 352, 0, 0, 16, 0, 0, 0, 0, 0, 0, 65535, 0, 65535, 65535, 65535, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 0, 100, 100, 0, 40, 0, 0, 0, 0, 0, 44, 72, 21305, 2068, 0, 0, 0, 0, 0, 230, 255, 33, 32331, 598, 0, 0, 0, 0, 21305, 2068, 4, 44, 0, 0, 0, 0, 0, 0, 0, 0, 31, 63, 95, 127, 159, 191, 223, 255, 0, 0, 516, 1024, 1024, 617, 
-                //26)  0x4002 UByte[]: [0x00001FA2] (43572): 
-                //27)  0x4005 UByte[]: [0x0000C9D6] (16792): 
-                //28)  0x4008 UShort 16-bit: [0x00010B6E] (3): 129, 129, 129,       // black level
-                //29)  0x4009 UShort 16-bit: [0x00010B74] (3): 0, 0, 0, 
-                //30)  0x4010 Ascii 8-bit, null terminated: [0x00010B7A] (32): ""
+                //26)  0x4002 UByte[]: [0x00001FA2] (43572):                    // CRW Param
+                //27)  0x4005 UByte[]: [0x0000C9D6] (16792):                    // Flavor
+                //28)  0x4008 UShort 16-bit: [0x00010B6E] (3): 129, 129, 129,       // Picture Stype User Def
+                //29)  0x4009 UShort 16-bit: [0x00010B74] (3): 0, 0, 0,             // Picture Style PC
+                //30)  0x4010 Ascii 8-bit, null terminated: [0x00010B7A] (32): ""   // Custom picture style file name
                 //31)  0x4011 UByte[]: [0x00010B9A] (252): 
                 //32)  0x4012 Ascii 8-bit, null terminated: [0x00010C96] (32): ""
                 //33)  0x4013 ULong 32-bit: [0x00010CB6] (11): 002C 0000 0000 000A FFFFFFFF 0000 000A 0000 000A 0000 000A       // AF micro adjust
@@ -116,25 +119,32 @@ namespace PhotoTests.Prototypes
                 //var data1B = RawImage.ReadBytes(binaryReader, notes.Entries.Single(e => e.TagId == 0x4015 && e.TagType == 7));
 
                 // CRW Parm
-                var data01 = RawImage.ReadBytes(binaryReader, notes.Entries.Single(e => e.TagId == 0x4002 && e.TagType == 7));
+                var data01 = RawImage.ReadBytes(binaryReader,
+                    notes.Entries.Single(e => e.TagId == 0x4002 && e.TagType == 7));
 
                 // Flavor
-                var data02 = RawImage.ReadBytes(binaryReader, notes.Entries.Single(e => e.TagId == 0x4005 && e.TagType == 7));
+                var data02 = RawImage.ReadBytes(binaryReader,
+                    notes.Entries.Single(e => e.TagId == 0x4005 && e.TagType == 7));
 
-                var data03 = RawImage.ReadBytes(binaryReader, notes.Entries.Single(e => e.TagId == 0x4011 && e.TagType == 7));
+                var data03 = RawImage.ReadBytes(binaryReader,
+                    notes.Entries.Single(e => e.TagId == 0x4011 && e.TagType == 7));
 
                 // Vignetting Correction
-                var data04 = RawImage.ReadBytes(binaryReader, notes.Entries.Single(e => e.TagId == 0x4015 && e.TagType == 7));
+                var data04 = RawImage.ReadBytes(binaryReader,
+                    notes.Entries.Single(e => e.TagId == 0x4015 && e.TagType == 7));
 
                 // Lens info
-                var data05 = RawImage.ReadBytes(binaryReader, notes.Entries.Single(e => e.TagId == 0x4019 && e.TagType == 7));
+                var data05 = RawImage.ReadBytes(binaryReader,
+                    notes.Entries.Single(e => e.TagId == 0x4019 && e.TagType == 7));
             }
         }
 
         [TestMethod]
         public void DumpCameraSettings()
         {
-            const string fileName = @"C:..\..\Photos\5DIIIhigh.CR2";
+            //const string fileName = @"C:..\..\Photos\5DIIIhigh.CR2";
+            //const string fileName = @"d:\Users\Greg\Pictures\2018-08-29\0L2A3743.CR2";
+            const string fileName = @"C:\Users\Greg\Desktop\Photos\5DIIIhigh.CR2";
             using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read))
             using (var binaryReader = new BinaryReader(fileStream))
             {
@@ -145,24 +155,110 @@ namespace PhotoTests.Prototypes
                 binaryReader.BaseStream.Seek(exifEntry.ValuePointer, SeekOrigin.Begin);
                 var exif = new ImageFileDirectory(binaryReader);
 
+
+                var lensInfo = exif.Entries.Single(e => e.TagId == 0xa432 && e.TagType == 5);
+                Console.WriteLine(lensInfo.ValuePointer);
+
+                var lensModel = exif.Entries.Single(e => e.TagId == 0xa434 && e.TagType == 2);
+                Console.WriteLine(lensModel.ValuePointer);
+
                 var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == 7);
                 binaryReader.BaseStream.Seek(notesEntry.ValuePointer, SeekOrigin.Begin);
                 var notes = new ImageFileDirectory(binaryReader);
 
                 // 0)  0x0001 UShort 16-bit: [0x000005E2] (49): 98, 2, 0, 4, 0, 0, 0, 3, 0, 6, 65535, 1, 0, 0, 0, 32767, 32767, 1, 2, 0, 3, 65535, 230, 70, 24, 1, 96, 288, 0, 0, 0, 0, 65535, 65535, 65535, 0, 0, 0, 0, 65535, 65535, 0, 0, 32767, 65535, 65535, 0, 0, 65535, 
-                var data = RawImage.ReadUInts16(binaryReader, notes.Entries.Single(e => e.TagId == 0x0001 && e.TagType == 3));
+                var data = RawImage.ReadUInts16(binaryReader,
+                    notes.Entries.Single(e => e.TagId == 0x0001 && e.TagType == 3));
 
                 Assert.AreEqual(2 * data.Length, data[0]);
-                Assert.AreEqual(2, data[1]);                // 01: Macro mode, 2 == Normal
-                Assert.AreEqual(4, data[3]);                // 03: quality, 4 == RAW
-                Assert.AreEqual(0, data[5]);                // 05: drive single
-                Assert.AreEqual(3, data[7]);                // 07: Focus one shot
-                Assert.AreEqual(6, data[9]);                // 09: Record mode, 6 == CR2
-                Assert.AreEqual(65535, data[10]);           // 0a: image size, -1 == N/A
-                Assert.AreEqual(1, data[11]);               // 0b: Program manual
-                Assert.AreEqual(32767, data[16]);           // 10: ISO 16383
-                Assert.AreEqual(70, data[23]);              // 17: Lens 24-70
+                Assert.AreEqual(2, data[1]); // 01: Macro mode, 2 == Normal
+                Assert.AreEqual(4, data[3]); // 03: quality, 4 == RAW
+                Assert.AreEqual(0, data[5]); // 05: drive single
+                Assert.AreEqual(3, data[7]); // 07: Focus one shot
+                Assert.AreEqual(6, data[9]); // 09: Record mode, 6 == CR2
+                Assert.AreEqual(65535, data[10]); // 0a: image size, -1 == N/A
+                Assert.AreEqual(1, data[11]); // 0b: Program manual
+                Assert.AreEqual(32767, data[16]); // 10: ISO 16383
+
+                // Aperture = exp( raw ) * ln(2) / 64
+                Assert.AreEqual(230, data[22]); // 16: Lens Type, 0 == 24-70
+                Assert.AreEqual(70, data[23]); // 17: Lens Max Focal Length
+                Assert.AreEqual(24, data[24]); // 18: Lens Min Focal Length
+                Assert.AreEqual(1, data[25]); // 19: Lens Focal units
+                Assert.AreEqual(2.828427f, Aperture(data[26]), 0.001); // 1A: Lens Max Aperture
+                Assert.AreEqual(22.62742f, Aperture(data[27]), 0.001); // 1B: Lens Min Aperture
+
+                // MakerNotes 0x0153 Lens Type
+                // MakerNotes 0x0095 Lens Model
+
+                // ./exiftool -G -H -lens* ~/Desktop/test/test1.cr2 
+                // [MakerNotes]    0x0016 Lens Type                       : Canon EF 35-80mm f/4-5.6
+                // [MakerNotes]    0x0153 Lens Type                       : Canon EF 35-80mm f/4-5.6
+                // [MakerNotes]    0x0095 Lens Model                      : 85mm f/1.4 AS IF
+                // [EXIF]          0xa432 Lens Info                       : 85mm f/1.4
+                // [EXIF]          0xa433 Lens Make                       : Rokinon
+                // [EXIF]          0xa434 Lens Model                      : 85mm f/1.4 AS IF
+                // [EXIF]          0xa435 Lens Serial Number              : 0000000000
+                // [Composite]          - Lens                            : 1.0 - 65535.0 mm
+                // [Composite]          - Lens ID                         : Canon EF 35-80mm f/4-5.6
+                // [Composite]          - Lens                            : 1.0 - 65535.0 mm(35 mm equivalent: 1.0 - 63616.0 mm)
+
+                //[MakerNotes]    0x0016 Lens Type                       : Canon EF 24-70mm f/2.8L USM
+                //[MakerNotes]    0x000b Lens Drive When AF Impossible   : Stop Focus Search
+                //[EXIF]          0xa432 Lens Info                       : 24-70mm f/0
+                //[EXIF]          0xa434 Lens Model                      : EF24-70mm f/2.8L USM
+                //[EXIF]          0xa435 Lens Serial Number              : 0000000000
+                //[Composite]          - Lens                            : 24.0 - 70.0 mm
+                //[Composite]          - Lens ID                         : Canon EF 24-70mm f/2.8L USM
+                //[Composite]          - Lens                            : 24.0 - 70.0 mm(35 mm equivalent: 23.3 - 68.0 mm)
             }
+        }
+
+        public float Aperture(ushort raw)
+        {
+            //ValueConv => 'exp(Image::ExifTool::Canon::CanonEv($val) * log(2) / 2)',
+            //ValueConvInv => 'Image::ExifTool::Canon::CanonEvInv(log($val) * 2 / log(2))',
+
+            // 95 :== 2.798
+            // 192 :== 8
+            // 111 :== 3.564
+            var aperture = Math.Exp(CanonEv((short)raw) * Math.Log(2) / 2);
+            return (float) aperture;
+        }
+
+        // Convert Canon hex-based EV (modulo 0x20) to real number
+        // Inputs: 0) value to convert
+        // ie) 0x00 -> 0
+        //     0x0c -> 0.33333
+        //     0x10 -> 0.5
+        //     0x14 -> 0.66666
+        //     0x20 -> 1   ...  etc
+        public double CanonEv(short val)
+        {
+            var sign = 0.0;
+            // temporarily make the number positive
+            if (val < 0)
+            {
+                val = (short) -val;
+                sign = -1.0;
+            }
+            else
+            {
+                sign = 1.0;
+            }
+
+            var frac = (short)(val & 0x1f);
+            val -= frac;
+
+            // Convert 1/3 and 2/3 codes
+            if (frac == 0x0c)
+                frac = 0x20 / 3;
+            else if (frac == 0x14)
+            {
+                frac = 0x40 / 3;
+            }
+
+            return (float)(sign * (val + frac) / 0x20);
         }
 
         [TestMethod]
@@ -184,7 +280,8 @@ namespace PhotoTests.Prototypes
                 var notes = new ImageFileDirectory(binaryReader);
 
                 // 3)  0x0004 UShort 16-bit: [0x00000654] (34): 68, 0, 160, 65324, 108, 65376, 0, 0, 3, 0, 8, 8, 148, 0, 0, 0, 0, 0, 1, 0, 0, 108, 65376, 45, 0, 0, 248, 65535, 65535, 65535, 65535, 0, 0, 0, 
-                var data = RawImage.ReadUInts16(binaryReader, notes.Entries.Single(e => e.TagId == 0x0004 && e.TagType == 3));
+                var data = RawImage.ReadUInts16(binaryReader,
+                    notes.Entries.Single(e => e.TagId == 0x0004 && e.TagType == 3));
 
                 Assert.AreEqual(2 * data.Length, data[0]);
                 Assert.AreEqual(160, data[2]);
@@ -297,7 +394,8 @@ namespace PhotoTests.Prototypes
 
                 // Sensor Info
                 // 24)  0x00E0 UShort 16-bit: [0x00001540] (17): 34, 5920, 3950, 1, 1, 140, 96, 5899, 3935, 0, 0, 0, 0, 0, 0, 0, 0, 
-                var data = RawImage.ReadUInts16(binaryReader, notes.Entries.Single(e => e.TagId == 0x00E0 && e.TagType == 3));
+                var data = RawImage.ReadUInts16(binaryReader,
+                    notes.Entries.Single(e => e.TagId == 0x00E0 && e.TagType == 3));
                 Assert.AreEqual(2 * data.Length, data[0]);
                 //Assert.AreEqual(5920, data[1]);   // sensor width
                 //Assert.AreEqual(3950, data[2]);   // sensor height
@@ -308,10 +406,10 @@ namespace PhotoTests.Prototypes
                 //Assert.AreEqual(5899, data[7]);      // mask right
                 //Assert.AreEqual(3935, data[8]);      // mask bottom
 
-                var imageWidth = (int)image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == 3).ValuePointer;
+                var imageWidth = (int) image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == 3).ValuePointer;
                 Assert.AreEqual(imageWidth, data[7] - data[5] + data[3]);
 
-                var imageLength = (int)image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == 3).ValuePointer;
+                var imageLength = (int) image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == 3).ValuePointer;
                 Assert.AreEqual(imageLength, data[8] - data[6] + data[4]);
             }
         }
@@ -365,13 +463,14 @@ namespace PhotoTests.Prototypes
                 var notes = new ImageFileDirectory(binaryReader);
 
                 // Sensor Info
-                var data = RawImage.ReadUInts16(binaryReader, notes.Entries.Single(e => e.TagId == 0x00E0 && e.TagType == 3));
+                var data = RawImage.ReadUInts16(binaryReader,
+                    notes.Entries.Single(e => e.TagId == 0x00E0 && e.TagType == 3));
                 Assert.AreEqual(2 * data.Length, data[0]);
 
-                var imageWidth = (int)image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == 3).ValuePointer;
+                var imageWidth = (int) image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == 3).ValuePointer;
                 Assert.AreEqual(imageWidth / 2, data[7] - data[5] + data[3]);
 
-                var imageLength = (int)image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == 3).ValuePointer;
+                var imageLength = (int) image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == 3).ValuePointer;
                 Assert.AreEqual(imageLength / 2, data[8] - data[6] + data[4]);
             }
         }
@@ -429,13 +528,14 @@ namespace PhotoTests.Prototypes
                 var notes = new ImageFileDirectory(binaryReader);
 
                 // Sensor Info
-                var data = RawImage.ReadUInts16(binaryReader, notes.Entries.Single(e => e.TagId == 0x00E0 && e.TagType == 3));
+                var data = RawImage.ReadUInts16(binaryReader,
+                    notes.Entries.Single(e => e.TagId == 0x00E0 && e.TagType == 3));
                 Assert.AreEqual(2 * data.Length, data[0]);
 
-                var imageWidth = (int)image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == 3).ValuePointer;
+                var imageWidth = (int) image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == 3).ValuePointer;
                 Assert.AreEqual(imageWidth, data[7] - data[5] + data[3]);
 
-                var imageLength = (int)image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == 3).ValuePointer;
+                var imageLength = (int) image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == 3).ValuePointer;
                 Assert.AreEqual(imageLength, data[8] - data[6] + data[4]);
             }
         }

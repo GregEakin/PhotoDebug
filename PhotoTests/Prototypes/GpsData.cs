@@ -19,7 +19,7 @@ namespace PhotoTests.Prototypes
         [TestMethod]
         public void DumpGpsData()
         {
-            const string fileName = @"D:\Users\Greg\Pictures\2016-03-20 GPS\0L2A2368.CR2";
+            const string fileName = @"D:\Users\Greg\Pictures\2018-10-11\0L2A4224.CR2";
             //const string fileName = @"D:\Users\Greg\Pictures\2016_03_21\0L2A2373.CR2";
             //const string fileName = @"D:\Users\Greg\Pictures\2016-05-20\IMG_0008.CR2";
             DumpGpsInfo(fileName);

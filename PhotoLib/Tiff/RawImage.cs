@@ -51,10 +51,11 @@ namespace PhotoLib.Tiff
 
         public void DumpHeader(BinaryReader binaryReader)
         {
+            var index = 0;
             foreach (var item in _directoryList)
             {
                 Console.WriteLine("== Tiff Directory [0x{0:X8}]:", item.Key);
-                item.Value.DumpDirectory(binaryReader);
+                item.Value.DumpDirectory(binaryReader, $"IFD{index++}");
             }
         }
 

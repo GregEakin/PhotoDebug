@@ -4,6 +4,8 @@
 // FILE:		C7D2Ifd1.cs
 // AUTHOR:		Greg Eakin
 
+using System.Linq;
+
 namespace PhotoTests.Canon7D2
 {
     using System;
@@ -14,7 +16,8 @@ namespace PhotoTests.Canon7D2
     [TestClass]
     public class C7D2Ifd1
     {
-        private const string FileName = @"C:..\..\Photos\7D2high.CR2";
+        // private const string FileName = @"C:..\..\Photos\7D2high.CR2";
+        private const string FileName = @"D:\Users\Greg\Pictures\2018-10-19\B05A1194.CR2";
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -38,6 +41,36 @@ namespace PhotoTests.Canon7D2
                 CollectionAssert.AreEqual(new byte[] { 0x02, 0x00 }, rawImage.Header.CR2Version);
 
                 rawImage.DumpHeader(binaryReader);
+            }
+        }
+
+        [TestMethod]
+        public void ReadImageGuid()
+        {
+            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var binaryReader = new BinaryReader(fileStream))
+            {
+                var rawImage = new RawImage(binaryReader);
+
+                var ifid0 = rawImage.Directories.First();
+                var exif = ifid0[0x8769];       // Exif Offset
+                binaryReader.BaseStream.Seek(exif.ValuePointer, SeekOrigin.Begin);
+                var tags = new ImageFileDirectory(binaryReader);
+
+                var makerNotes = tags[0x927C];  // Maker Notes
+                binaryReader.BaseStream.Seek(makerNotes.ValuePointer, SeekOrigin.Begin);
+                var notes = new ImageFileDirectory(binaryReader);
+
+                var settings = notes[0x0028];   // ImageUniqueID
+                if (settings == null) return;
+
+                binaryReader.BaseStream.Seek(settings.ValuePointer, SeekOrigin.Begin);
+                var settingsData = new byte[settings.NumberOfValue];
+                for (var i = 0; i < settings.NumberOfValue; i++)
+                    settingsData[i] = binaryReader.ReadByte();
+
+                var guid = new Guid(settingsData);
+                Console.WriteLine("Guid = {0}", guid);  // Guid = c261806b-f82c-9003-427a-06be63189acb
             }
         }
 

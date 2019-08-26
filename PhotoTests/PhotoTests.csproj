@@ -38,11 +38,13 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>False</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -53,23 +55,26 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Canon5D3\C5D3Ifd0.cs" />
     <Compile Include="Canon5D3\C5D3Ifd1.cs" />
+    <Compile Include="Canon5D3\C5D3Ifd2.cs" />
     <Compile Include="Canon5D3\C5D3Ifd3.cs" />
     <Compile Include="Canon5D3\UnitTest5D3.cs" />
-    <Compile Include="Canon5D4\C5D4Ifd1.cs" />
+    <Compile Include="Canon5D4\C5D4Ifd0.cs" />
     <Compile Include="Canon5D4\C5D4Ifd3.cs" />
     <Compile Include="Canon5D4\UnitTest5D4.cs" />
-    <Compile Include="Canon7D2\C72DIfd1.cs" />
+    <Compile Include="Canon7D2\C72DIfd0.cs" />
     <Compile Include="Canon7D2\C72DIfd3.cs" />
     <Compile Include="Canon7D2\UnitTest7D2.cs" />
     <Compile Include="Canon7D\C7DIfd3.cs" />
-    <Compile Include="Canon7D\C7DIfd1.cs" />
+    <Compile Include="Canon7D\C7DIfd0.cs" />
     <Compile Include="BeforeUnitTests.cs" />
     <Compile Include="CanonM5\CM5Ifd0.cs" />
     <Compile Include="CanonM5\CM5Ifd1.cs" />
     <Compile Include="CanonM5\CM5Ifd2.cs" />
     <Compile Include="CanonM5\CM5Ifd3.cs" />
     <Compile Include="CanonM5\UnitTestM5.cs" />
+    <Compile Include="CanonR\UnitTestR.cs" />
     <Compile Include="DualReaderTests.cs" />
     <Compile Include="Exif\ParseXml.cs" />
     <Compile Include="Jpeg\JpegTags\CommentTests.cs" />
@@ -85,6 +90,7 @@
     <Compile Include="Jpeg\JpegTags\StartOfImageTests.cs" />
     <Compile Include="Jpeg\JpegTags\StartOfScanTests.cs" />
     <Compile Include="Jpeg\StripedImageDataTests.cs" />
+    <Compile Include="Prototypes\CameraInfoTests.cs" />
     <Compile Include="Prototypes\Canon5d4.cs" />
     <Compile Include="Prototypes\Canon80D.cs" />
     <Compile Include="Prototypes\ColorData.cs" />
