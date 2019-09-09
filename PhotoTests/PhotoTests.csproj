@@ -74,6 +74,7 @@
     <Compile Include="CanonM5\CM5Ifd2.cs" />
     <Compile Include="CanonM5\CM5Ifd3.cs" />
     <Compile Include="CanonM5\UnitTestM5.cs" />
+    <Compile Include="CanonR\MemoryTests.cs" />
     <Compile Include="CanonR\UnitTestR.cs" />
     <Compile Include="DualReaderTests.cs" />
     <Compile Include="Exif\ParseXml.cs" />

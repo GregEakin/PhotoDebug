@@ -16,7 +16,7 @@ namespace PhotoTests.Canon5D3
     public class C5D3Ifd0
     {
         //private const string FileName = @"d:\Users\Greg\Pictures\2018-08-29\0L2A3743.CR2";
-         private const string FileName = @"d:\Users\Greg\Pictures\2019-08-18\0L2A4564.CR2";
+        private const string FileName = @"d:\Users\Greg\Pictures\2019-08-18\0L2A4564.CR2";
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
