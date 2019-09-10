@@ -12,87 +12,8 @@ using PhotoLib.Jpeg.JpegTags;
 namespace PhotoTests.CanonR
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using PhotoLib.Tiff;
     using System;
     using System.IO;
-    using System.Linq;
-
-    class BigEndianBinaryReader : BinaryReader
-    {
-        public BigEndianBinaryReader(Stream input) : base(input)
-        {
-        }
-
-        public override short ReadInt16()
-        {
-            var b = ReadBytes(2);
-            return (short) (b[1] + (b[0] << 8));
-        }
-
-        public override int ReadInt32()
-        {
-            var b = ReadBytes(4);
-            return b[3] + (b[2] << 8) + (b[1] << 16) + (b[0] << 24);
-        }
-
-        public override uint ReadUInt32()
-        {
-            var b = ReadBytes(4);
-            return (uint) b[3] + (uint) (b[2] << 8) + (uint) (b[1] << 16) + (uint) (b[0] << 24);
-        }
-
-//        public override long ReadInt64()
-//        {
-//            this.FillBuffer(8);
-//            return (long)(uint)((int)this.m_buffer[4] | (int)this.m_buffer[5] << 8 | (int)this.m_buffer[6] << 16 | (int)this.m_buffer[7] << 24) << 32 | (long)(uint)((int)this.m_buffer[0] | (int)this.m_buffer[1] << 8 | (int)this.m_buffer[2] << 16 | (int)this.m_buffer[3] << 24);
-//        }
-//
-//        public override ulong ReadUInt64()
-//        {
-//            this.FillBuffer(8);
-//            return (ulong)(uint)((int)this.m_buffer[4] | (int)this.m_buffer[5] << 8 | (int)this.m_buffer[6] << 16 | (int)this.m_buffer[7] << 24) << 32 | (ulong)(uint)((int)this.m_buffer[0] | (int)this.m_buffer[1] << 8 | (int)this.m_buffer[2] << 16 | (int)this.m_buffer[3] << 24);
-//        }
-
-
-        public override long ReadInt64()
-        {
-            var b = ReadBytes(8);
-            return (long) b[7] + (b[6] << 8) + (b[5] << 16) + (b[4] << 24) + ((long) b[3] << 32) + ((long) b[2] << 40) +
-                   ((long) b[1] << 48) + ((long) b[0] << 56);
-        }
-
-        public override ulong ReadUInt64()
-        {
-            var b = ReadBytes(8);
-            return (ulong) b[7] + ((ulong) b[6] << 8) + ((ulong) b[5] << 16) + ((ulong) b[4] << 24) +
-                   ((ulong) b[3] << 32) + ((ulong) b[2] << 40) + ((ulong) b[1] << 48) + ((ulong) b[0] << 56);
-        }
-
-        /// <summary>Returns <c>true</c> if the Int32 read is not zero, otherwise, <c>false</c>.</summary>
-        /// <returns><c>true</c> if the Int32 is not zero, otherwise, <c>false</c>.</returns>
-        public bool ReadInt32AsBool()
-        {
-            var b = ReadBytes(4);
-            return b[0] != 0 && b[1] != 0 && b[2] != 0 && b[3] != 0;
-        }
-
-        /// <summary>
-        /// Reads a string prefixed by a 32-bit integer identifying its length, in chars.
-        /// </summary>
-        public string ReadString32BitPrefix()
-        {
-            var length = ReadInt32();
-            return Encoding.ASCII.GetString(ReadBytes(length));
-        }
-
-        public float ReadFloat()
-        {
-            return (float) ReadDouble();
-        }
-    }
-
-    // Tags
-    //     "ftyp", "moov", "uuid", "stsz", "co64", "PRVW", "CTBO", "CNCV", "CDI1", "IAD1", "CMP1", "CRAW", "THM"
 
     public class FileTypeBox
     {
@@ -148,164 +69,29 @@ namespace PhotoTests.CanonR
         }
 
         [TestMethod]
-        public void RawImageDumpData()
+        public void DirectDumpTest()
         {
-            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var fileStream = File.Open(FileNameRaw, FileMode.Open, FileAccess.Read))
             using (var binaryReader = new BigEndianBinaryReader(fileStream))
             {
                 Console.WriteLine("FileSize {0}", fileStream.Length);
 
-                {
-                    var fileTypeBox = new FileTypeBox(binaryReader);
-                    Console.WriteLine("Tag: {0}, {1} bytes", fileTypeBox.Type, fileTypeBox.Length);
-                    Assert.AreEqual("ftyp", fileTypeBox.Type);
+                // CTBO[1]
+                binaryReader.BaseStream.Seek(0x00007260 + 0x18, SeekOrigin.Begin);
+                var xPacket = binaryReader.ReadBytes(0x00010018 - 0x18);
+                File.WriteAllBytes("xpacket.txt", xPacket);
 
-                    Assert.AreEqual("crx ", fileTypeBox.MajorBrand);
-                    Assert.AreEqual(1, fileTypeBox.Version);
+                // CTBO[2]
+                binaryReader.BaseStream.Seek(0x00017278 + 0x38, SeekOrigin.Begin);
+                var preview = binaryReader.ReadBytes(0x00045E0D - 0x38);
+                File.WriteAllBytes("preview.jpg", preview);
 
-                    CollectionAssert.AreEquivalent(new[] {"crx ", "isom"}, fileTypeBox.CompatibleBrands);
-                }
-
-                {
-                    // Container box whose sub-boxes define the metadata for a presentation
-                    var length = binaryReader.ReadUInt32();
-                    //Assert.AreEqual(0x76D0u, length);
-
-                    var tag = Encoding.ASCII.GetString(binaryReader.ReadBytes(4));
-                    Console.WriteLine("Tag: {0}, {1} bytes", tag, length);
-                    Assert.AreEqual("moov", tag);
-
-                    var data = binaryReader.ReadBytes((int) length - 8);
-                    Console.WriteLine("0x{0:X8}, {0} bytes", fileStream.Position);
-                }
-
-                {
-                    // xpacket data
-                    var length = binaryReader.ReadUInt32();
-                    //Assert.AreEqual(0x10018u, length);
-
-                    var tag = Encoding.ASCII.GetString(binaryReader.ReadBytes(4));
-                    Console.WriteLine("Tag: {0}, {1} bytes", tag, length);
-                    Assert.AreEqual("uuid", tag);
-
-                    var data = binaryReader.ReadBytes((int) length - 8);
-                    // Console.WriteLine("0x{0:X8}, {0} bytes", fileStream.Position);
-                }
-
-
-                {
-                    // preview data
-                    var length = binaryReader.ReadUInt32();
-                    //Assert.AreEqual(0x6AD8Du, length);
-
-                    var tag = Encoding.ASCII.GetString(binaryReader.ReadBytes(4));
-                    Console.WriteLine("Tag: {0}, {1} bytes", tag, length);
-                    Assert.AreEqual("uuid", tag);
-
-                    // PRVW
-                    //   jpeg (1620x1080)
-                    var data = binaryReader.ReadBytes((int) length - 8);
-                    // Console.WriteLine("0x{0:X8}, {0} bytes", fileStream.Position);
-                }
-
-                {
-                    // main data
-                    //   picture #1 (6000x4000, jpeg)
-                    //   picture #2 (1624x1080, crx preview)
-                    //   picture #3 (6888x4056, crx main image)
-                    //   Canon Timed Metadata, CTMD tags below
-                    //   picture #5 (6888x4056, dual pixel delta image)
-
-                    var length = binaryReader.ReadUInt32();
-                    Assert.AreEqual(0x01u, length);
-
-                    var tag = Encoding.ASCII.GetString(binaryReader.ReadBytes(4));
-                    Console.WriteLine("Tag: {0}, {1} bytes", tag, length);
-                    Assert.AreEqual("mdat", tag);
-
-                    //                    var data = binaryReader.ReadBytes((int)length - 8);
-                    Console.WriteLine("0x{0:X8}, {0} bytes", fileStream.Position);
-                }
-
-                //var rawImage = new RawImage(binaryReader);
-                //CollectionAssert.AreEqual(new byte[] { 0x49, 0x49 }, rawImage.Header.ByteOrder);
-                //Assert.AreEqual(0x002A, rawImage.Header.TiffMagic);
-                //Assert.AreEqual(0x5243, rawImage.Header.CR2Magic);
-                //CollectionAssert.AreEqual(new byte[] { 0x02, 0x00 }, rawImage.Header.CR2Version);
-
-                //rawImage.DumpHeader(binaryReader);
+                // mdat (main data)
+                //var fp3 = new byte[0x024EE898];
+                //Buffer.BlockCopy(y21, 0x0005D085, fp3, 0, 0x024EE898); (16 bytes too much)
+                // note: buffer size is: 38725768 bytes 
             }
         }
-
-        public static void ReadFtyp(BinaryReader reader)
-        {
-        }
-
-        public static void ReadMoov(BinaryReader reader)
-        {
-        }
-
-        public static void ReadUuid(BinaryReader reader)
-        {
-        }
-
-        public static void ReadStsz(BinaryReader reader)
-        {
-        }
-
-        public static void ReadCo64(BinaryReader reader)
-        {
-        }
-
-        public static void ReadPrvw(BinaryReader reader)
-        {
-        }
-
-        public static void ReadCtbo(BinaryReader reader)
-        {
-        }
-
-        public static void ReadThmb(BinaryReader reader)
-        {
-        }
-
-        public static void ReadCncv(BinaryReader reader)
-        {
-        }
-
-        public static void ReadCdi1(BinaryReader reader)
-        {
-        }
-
-        public static void ReadIad1(BinaryReader reader)
-        {
-        }
-
-        public static void ReadCmp1(BinaryReader reader)
-        {
-        }
-
-        public static void ReadCraw(BinaryReader reader)
-        {
-        }
-
-        private readonly Dictionary<string, Action<BinaryReader>> _tags = new Dictionary<string, Action<BinaryReader>>()
-        {
-            {"ftyp", ReadFtyp},
-            {"moov", ReadMoov},
-            {"uuid", ReadUuid},
-            {"stsz", ReadStsz},
-            {"co64", ReadCo64},
-            {"prvw", ReadPrvw},
-            {"ctbo", ReadCtbo},
-            {"thmb", ReadThmb},
-            {"cncv", ReadCncv},
-            {"cdi1", ReadCdi1},
-            {"iad1", ReadIad1},
-            {"cmp1", ReadCmp1},
-            {"craw", ReadCraw},
-        };
-
 
         [TestMethod]
         public void ParseCr3Test()
@@ -324,6 +110,9 @@ namespace PhotoTests.CanonR
 
         private static void Parse(BigEndianBinaryReader binaryReader, long start, long size, string depth)
         {
+            var tagCount = new Dictionary<string, int>();
+            var cr3 = new Dictionary<string, Dictionary<string, int>>();
+
             Assert.AreEqual(binaryReader.BaseStream.Position, start);
             // binaryReader.BaseStream.Seek(start, SeekOrigin.Begin);
             while (binaryReader.BaseStream.Position < start + size)
@@ -334,66 +123,306 @@ namespace PhotoTests.CanonR
                 var length = l1 != 1L ? l1 : binaryReader.ReadInt64();
                 var b0 = l1 != 1L ? 8L : 16L;
 
-                Console.WriteLine("{0}CN: {1}, size 0x{2:X08}", depth, chunkName, length);
-
-                // if (chunkName not in count) add it +1
-                // if (chunkName == "track")
-                //   var trackName = "Track {count["trak"]}"
-
                 switch (chunkName)
                 {
-                    case "ftyp":
-                    case "moov":
-                    case "uuid":
-                    case "stsz":
-                    case "co64":
-                    case "PRVW":
-                    case "CTBO":
-                    case "THMB":
-                    case "CNCV":
-                    case "CDI1":
-                    case "IAD1":
-                    case "CMP1":
-                    case "CRAW":
+                    case "free":
+                        var xf = binaryReader.ReadBytes((int) (length - b0));
                         break;
+
+                    case "ftyp": // File Type Box
+                        var majorBrand = Encoding.ASCII.GetString(binaryReader.ReadBytes(4));
+                        var version = binaryReader.ReadInt32();
+
+                        var tags = new List<string>();
+                        for (var i = 16; i < length; i += 4)
+                        {
+                            var tag = Encoding.ASCII.GetString(binaryReader.ReadBytes(4));
+                            tags.Add(tag);
+                        }
+
+                        // var compatibleBrands = tags.ToArray();
+                        Console.Write("{0}ftyp: {1} {2}: ", depth, majorBrand, version);
+                        foreach (var tag in tags) Console.Write("{0}, ", tag);
+                        Console.WriteLine();
+                        break;
+
+                    case "moov": // Container box whose sub-boxes define the metadata for presentation
+                        Console.WriteLine("{0}moov:", depth);
+                        Parse(binaryReader, s1 + b0, length - b0, depth + " ");
+                        break;
+
+                    case "CNCV": // Canon Compressor Version
+                        var y11 = binaryReader.ReadBytes((int) (length - b0));
+                        var x11 = Encoding.ASCII.GetString(y11);
+                        Console.WriteLine("{0}CNCV: {1}", depth, x11);
+                        // if (CRM) 
+                        //   video = data[ cr3["CTBO"][3][0] + 0x50 : cr3['CTBO'][3][0] + cr3['CTBO'][3[1] - 0x50]
+                        // if (CR3) Console.WriteLine("extract JPEG (track1) {0}x{1} from mdat: offset - 0x{2:X}, size = 0x{3:X}", 
+                        //              cr3["trak1"]["CRAW"][0], cr3["trak1"]["CRAW"][1], cr3["trak1"]["co64"], cr3["trak1"]["stsz"]); 
+                        //     jpeg = trakData("trak1")
+                        //     File.WriteAllBytes("trak1.jpg", jpeg);
+                        break;
+
+                    case "CCTP": // Canon CR3 Track Pointers
+                        var cctp0 = binaryReader.ReadInt32();
+                        var cctp1 = binaryReader.ReadInt32();
+                        var cctp2 = binaryReader.ReadInt32(); // number of CCDT lines: 3, or 4 for dual pixel
+                        Console.WriteLine("{0}CCTP: {1}, {2}, {3}", depth, cctp0, cctp1, cctp2);
+                        Parse(binaryReader, s1 + b0 + 12, length - b0 - 12, depth + " ");
+                        break;
+
+                    case "CCDT": // Canon Compressor Data Type
+                        var ccdt0 = binaryReader.ReadInt64();
+                        var ccdt1 = binaryReader.ReadInt32();
+                        var ccdt2 = binaryReader.ReadInt32();
+                        Console.WriteLine("{0}CCDT type {1}, {2}, {3}", depth, ccdt0, ccdt1, ccdt2);
+                        break;
+
+                    case "CTBO": // Canon Trak B Offsets
+                        var l9 = binaryReader.ReadInt32();
+                        Console.WriteLine("{0}CTBO: {1}", depth, l9);
+                        for (var i9 = 0; i9 < l9; i9++)
+                        {
+                            var idx9 = binaryReader.ReadInt32();
+                            var offset9 = binaryReader.ReadInt64();
+                            var size9 = binaryReader.ReadInt64();
+                            Console.WriteLine("{0}  {1}, 0x{2:X8}, 0x{3:X8}", depth, idx9, offset9, size9);
+                        }
+
+                        break;
+
                     case "CMT1":
                     case "CMT2":
                     case "CMT3":
-                    case "cmt4":
+                    case "CMT4":
+                        Console.WriteLine("{0}{1}, {2} bytes", depth, chunkName, length - b0);
+                        var y12 = binaryReader.ReadBytes((int) (length - b0));
                         break;
-                    case "CTMD":
-                        break;
-                    default:
-                        break;
-                }
 
-                switch (chunkName)
-                {
-                    case "moov":
-                    case "trak":
-                    case "mdia":
-                    case "minf":
-                    case "dinf":
-                    case "stbl":
-                        // Assert.AreEqual(s1 + b0, binaryReader.BaseStream.Position);
+                    case "THMB": // Thumbnail
+                        var a8 = binaryReader.ReadInt32(); // 4    == 0x08 - 8 = 0x00
+                        var w8 = binaryReader.ReadInt16(); // 2    == 0x0C - 8 = 0x04
+                        var h8 = binaryReader.ReadInt16(); // 2    == 0x0E - 8 = 0x06
+                        var s8 = binaryReader.ReadInt32(); // 4    == 0x10 - 8 = 0x08
+                        var m8 = binaryReader.ReadInt16(); // 4    == 0x14 - 8 = 0x0C
+                        var n8 = binaryReader.ReadInt16(); // 4    == 0x14 - 8 = 0x0C
+                        var b8 = binaryReader.ReadBytes(s8); // s8 == 0x18 - 8 = 0x10
+                        File.WriteAllBytes("thmb.jpg", b8);
+
+                        var pad8 = length - b0 - 16L - s8;
+                        var p8 = binaryReader.ReadBytes((int) pad8);
+
+                        Console.WriteLine("{0}THMB: {1}, {2}, 0x{3:X}, a={4}, m={5}, n={6}, {7} byte pad", depth, w8,
+                            h8, s8, a8, m8, n8, pad8);
+                        //foreach (var bp in p8) Console.Write("{0:X} ", bp);
+                        //Console.WriteLine();
+                        Assert.AreEqual(length, b0 + 16L + s8 + pad8);
+                        Assert.AreEqual(binaryReader.BaseStream.Position, s1 + b0 + 16L + s8 + pad8);
+                        break;
+
+                    case "mvhd": // Movie Header
+                        Console.WriteLine("{0}{1}, {2} bytes", depth, chunkName, length - b0);
+                        var y15 = binaryReader.ReadBytes((int) (length - b0));
+                        break;
+
+                    case "trak": // Track: Embedded JPEG
+                        var cc = tagCount.TryGetValue(chunkName, out var vv);
+                        tagCount[chunkName] = cc ? vv + 1 : 1;
+
+                        var trakName = $"trak{tagCount["trak"]}";
+                        if (!cr3.ContainsKey(trakName))
+                            cr3[trakName] = new Dictionary<string, int>();
+
+                        string trakType;
+                        switch (trakName)
+                        {
+                            case "trak1":
+                                trakType = "full size jpeg image: 6000x4000";
+                                break;
+                            case "trak2":
+                                trakType = "Small definition raw image: 1624x1080";
+                                break;
+                            case "trak3":
+                                trakType = "High definition raw image: 6888x4546";
+                                break;
+                            case "trak4":
+                                trakType = "Canon Timed Metadata";
+                                break;
+                            case "trak5":
+                                trakType = "Dual pixel delta track: 6888x4546";
+                                break;
+                            default:
+                                trakType = "Unknown";
+                                break;
+                        }
+
+                        Console.WriteLine("{0}{1}: {2}", depth, trakName, trakType);
+                        break;
+
+                    case "tkhd": // Track Header
+                        Console.WriteLine("{0}{1}, {2} bytes", depth, chunkName, length - b0);
+                        var y13 = binaryReader.ReadBytes((int) (length - b0));
+                        break;
+
+                    case "mdia": // Media
+                        Console.WriteLine("{0}{1}, size 0x{2:X08}", depth, chunkName, length);
                         Parse(binaryReader, s1 + b0, length - b0, depth + " ");
                         break;
+
+                    case "mdhd": // Media Header
+                        Console.WriteLine("{0}{1}, {2} bytes", depth, chunkName, length - b0);
+                        var y16 = binaryReader.ReadBytes((int) (length - b0));
+                        break;
+
+                    case "hdlr": // Handler, type = "vide"
+                        Console.WriteLine("{0}{1}, {2} bytes", depth, chunkName, length - b0);
+                        var y14 = binaryReader.ReadBytes((int) (length - b0));
+                        break;
+
+                    case "minf": // Media Information Container
+                        Console.WriteLine("{0}{1}, size 0x{2:X08}", depth, chunkName, length);
+                        Parse(binaryReader, s1 + b0, length - b0, depth + " ");
+                        break;
+
+                    case "vmhd": // Video Media Header
+                        Console.WriteLine("{0}{1}, {2} bytes", depth, chunkName, length - b0);
+                        var y7 = binaryReader.ReadBytes((int) (length - b0));
+                        break;
+
+                    case "dinf": // Data Information Box
+                        Console.WriteLine("{0}{1}, size 0x{2:X08}", depth, chunkName, length);
+                        Parse(binaryReader, s1 + b0, length - b0, depth + " ");
+                        break;
+
+                    case "dref": // Data Reference Box
+                        Console.WriteLine("{0}{1}, size 0x{2:X08}", depth, chunkName, length);
+                        var data4 = binaryReader.ReadBytes(8);
+                        Parse(binaryReader, s1 + b0 + 8, length - b0 - 8, depth + " ");
+                        break;
+
+                    case "stbl": // Sample Table Box
+                        Console.WriteLine("{0}{1}, size 0x{2:X08}", depth, chunkName, length);
+                        Parse(binaryReader, s1 + b0, length - b0, depth + " ");
+                        break;
+
+                    case "stsd": // Samble Descriptions, Codex Types, Init, etc.
+                        Console.WriteLine("{0}{1}, size 0x{2:X08}", depth, chunkName, length);
+                        var data3 = binaryReader.ReadBytes(8);
+                        Parse(binaryReader, s1 + b0 + 8, length - b0 - 8, depth + " ");
+                        break;
+
+                    case "CRAW": // Lossy Compression
+                        Console.WriteLine("{0}{1}, size 0x{2:X08}", depth, chunkName, length);
+                        var data1 = binaryReader.ReadBytes(0x52);
+                        Parse(binaryReader, s1 + b0 + 0x52, length - b0 - 0x52, depth + " ");
+                        break;
+
+                    case "JPEG":
+                        var a5 = binaryReader.ReadInt32();
+                        Console.WriteLine("{0}JPEG: {1}", depth, a5);
+                        break;
+
+                    case "stts": // Decoding, Time To Sample
+                        Console.WriteLine("{0}{1}, {2} bytes", depth, chunkName, length - b0);
+                        var y17 = binaryReader.ReadBytes((int) (length - b0));
+                        break;
+
+                    case "stsc": // Sample To Chuck, partial data offset info
+                        Console.WriteLine("{0}{1}, {2} bytes", depth, chunkName, length - b0);
+                        var y18 = binaryReader.ReadBytes((int) (length - b0));
+                        break;
+
+                    case "stsz": // Sample Size, Framing, size of jpeg picture #1 in mdat
+                        var v2 = binaryReader.ReadInt32();
+                        var s2 = binaryReader.ReadInt32();
+                        var c2 = binaryReader.ReadInt32();
+                        Console.WriteLine("{0}stsz: {1}, {2}, {3}", depth, v2, s2, c2);
+                        break;
+
+                    case "co64": // Pointer to Picture #1 inside mdat
+                        var v3 = binaryReader.ReadInt32();
+                        var s3 = binaryReader.ReadInt32();
+                        var c3 = binaryReader.ReadInt32();
+                        var d3 = binaryReader.ReadInt32();
+                        Console.WriteLine("{0}co64: {1}, {2}, {3}, {4}", depth, v3, s3, c3, d3);
+                        break;
+
+                    case "mdat": // Main Data
+                        Console.WriteLine("{0}{1}, {2} bytes", depth, chunkName, length - b0);
+                        var y21 = binaryReader.ReadBytes((int)(length - b0));
+
+                        // xpacket uuid
+                        //var fp1 = new byte[0x00010018];
+                        //Buffer.BlockCopy(y21, 0x00007260, fp1, 0, 0x00010018);
+
+                        // preview uuid
+                        //var fp2 = new byte[0x00045E0D];
+                        //Buffer.BlockCopy(y21, 0x00017278, fp2, 0, 0x00045E0D);
+                        //File.WriteAllBytes("p2.jpg", fp2);
+
+                        // mdat (main data)
+                        //var fp3 = new byte[0x024EE898];
+                        //Buffer.BlockCopy(y21, 0x0005D085, fp3, 0, 0x024EE898); (16 bytes too much)
+                        // note: buffer size is: 38725768 bytes 
+
+                        break;
+
+
+                    /////////////
+
+
+                    case "PRVW": // Preview
+                        var a7 = binaryReader.ReadInt32(); // 4    == 0x08 - 8 = 0x00
+                        var m7 = binaryReader.ReadInt16(); // 2    == 0x0C - 8 = 0x04
+                        var w7 = binaryReader.ReadInt16(); // 2    == 0x0E - 8 = 0x06
+                        var h7 = binaryReader.ReadInt16(); // 2    == 0x10 - 8 = 0x08
+                        var n7 = binaryReader.ReadInt16(); // 2    == 0x12 - 8 = 0x0A
+                        var s7 = binaryReader.ReadInt32(); // 4    == 0x14 - 8 = 0x0C
+                        var b7 = binaryReader.ReadBytes(s7); // s7   == 0x18 - 8 = 0x10
+                        File.WriteAllBytes("prvw.jpg", b7);
+
+                        Console.WriteLine("{0}PRVW: {1}, {2}, 0x{3:X}, {4}, {5}", depth, w7, h7, s7, m7, n7);
+                        Assert.AreEqual(length, b0 + 16 + s7);
+                        Assert.AreEqual(binaryReader.BaseStream.Position, s1 + b0 + 16L + s7);
+                        break;
+
+                    case "CDI1":
+                        Console.WriteLine("{0}CDI1: {1} bytes", depth, length - b0);
+                        var pad10 = length - b0;
+                        var p10 = binaryReader.ReadBytes((int) pad10);
+                        break;
+
+                    case "url ":
+                        var a4 = binaryReader.ReadInt32();
+                        Console.WriteLine("{0}url : {1}", depth, a4);
+                        break;
+
+                    case "nmhd":
+                        var a6 = binaryReader.ReadInt32();
+                        Console.WriteLine("{0}nmhd: {1}", depth, a6);
+                        break;
+
                     case "uuid":
                         var data = binaryReader.ReadBytes(16);
                         var sb = new StringBuilder();
                         for (var i = 0; i < 16; i++)
                             sb.AppendFormat("{0:x2}", data[i]);
                         var uuid1 = sb.ToString();
-                        Console.WriteLine("{0}{1}", depth, uuid1);
+                        Console.WriteLine("{0}uuid: {1}", depth, uuid1);
                         switch (uuid1)
                         {
                             case "85c0b687820f11e08111f4ce462b6a48":
-                                // Assert.AreEqual(s1 + b0 + 16, binaryReader.BaseStream.Position);
                                 Parse(binaryReader, s1 + b0 + 16, length - b0 - 16, depth + " ");
                                 break;
-                            case "eaf42b5e1c984b88b9fbb7dc406e4d16":
-                                var x = binaryReader.ReadInt64();
-                                // Assert.AreEqual(s1 + b0 + 24, binaryReader.BaseStream.Position);
+                            case "be7acfcb97a942e89c71999491e3afac": // xpacket data
+                                var x4c = binaryReader.ReadBytes((int) (length - b0 - 16));
+                                var x4text = Encoding.ASCII.GetString(x4c);
+                                Assert.IsTrue(x4text.StartsWith("<?xpacket begin="));
+                                Assert.IsTrue(x4text.EndsWith("<?xpacket end='w'?>"));
+                                // Console.WriteLine(x4text);
+                                break;
+                            case "eaf42b5e1c984b88b9fbb7dc406e4d16": // preview data, jpeg 1620x1080
+                                var x3 = binaryReader.ReadInt64();
                                 Parse(binaryReader, s1 + b0 + 24, length - b0 - 24, depth + " ");
                                 break;
                             default:
@@ -403,31 +432,24 @@ namespace PhotoTests.CanonR
                         }
 
                         break;
-                    case "CRAW":
-                        var data1 = binaryReader.ReadBytes(0x52);
-                        // Assert.AreEqual(s1 + b0 + 0x52, binaryReader.BaseStream.Position);
-                        Parse(binaryReader, s1 + b0 + 0x52, length - b0 - 0x52, depth + " ");
-                        break;
-                    case "CCTP":
-                        var data2 = binaryReader.ReadBytes(12);
-                        // Assert.AreEqual(s1 + b0 + 12, binaryReader.BaseStream.Position);
-                        Parse(binaryReader, s1 + b0 + 12, length - b0 - 12, depth + " ");
-                        break;
-                    case "stsd":
-                        var data3 = binaryReader.ReadBytes(8);
-                        // Assert.AreEqual(s1 + b0 + 8, binaryReader.BaseStream.Position);
-                        Parse(binaryReader, s1 + b0 + 8, length - b0 - 8, depth + " ");
-                        break;
-                    case "dref":
-                        var data4 = binaryReader.ReadBytes(8);
-                        // Assert.AreEqual(s1 + b0 + 8, binaryReader.BaseStream.Position);
-                        Parse(binaryReader, s1 + b0 + 8, length - b0 - 8, depth + " ");
-                        break;
+
                     case "CTI1":
+                        Console.WriteLine("{0}CN: {1}, size 0x{2:X08}", depth, chunkName, length);
                         var data5 = binaryReader.ReadBytes(4);
                         // Assert.AreEqual(s1 + b0 + 4, binaryReader.BaseStream.Position);
                         Parse(binaryReader, s1 + b0 + 4, length - b0 - 4, depth + " ");
                         break;
+
+                    case "CTMD": // Canon Timed MetaData
+                        Console.WriteLine("{0}{1}, {2} bytes", depth, chunkName, length - b0);
+                        var y19 = binaryReader.ReadBytes((int) (length - b0));
+                        break;
+
+                    case "CMP1":
+                        Console.WriteLine("{0}{1}, {2} bytes", depth, chunkName, length - b0);
+                        var y20 = binaryReader.ReadBytes((int) (length - b0));
+                        break;
+
                     default:
                         Console.WriteLine("{0}** Unknown Chunk {1}, {2} bytes", depth, chunkName, length - b0);
                         var x2 = binaryReader.ReadBytes((int) (length - b0));
@@ -440,221 +462,6 @@ namespace PhotoTests.CanonR
             }
 
             Console.WriteLine("{0}----", depth);
-        }
-
-
-        [TestMethod]
-        public void RawImageSize()
-        {
-            // 1 Sensor Width                    : 5360 = 1340 * 4 = 2 * 1728 + 1904
-            // 2 Sensor Height                   : 3516
-
-            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
-            using (var binaryReader = new BinaryReader(fileStream))
-            {
-                var rawImage = new RawImage(binaryReader);
-
-                var directory = rawImage.Directories.Last();
-                var address = directory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
-                var length = directory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
-                var strips = directory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer;
-                // TIF_CR2_SLICE
-
-                binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
-                var x = binaryReader.ReadUInt16();
-                var y = binaryReader.ReadUInt16();
-                var z = binaryReader.ReadUInt16();
-                Assert.AreEqual(2, x);
-                Assert.AreEqual(1728, y);
-                Assert.AreEqual(1904, z);
-
-                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-                var startOfImage = new StartOfImage(binaryReader, address, length);
-                var lossless = startOfImage.StartOfFrame;
-                Assert.AreEqual(14, lossless.Precision);
-                Assert.AreEqual(4, lossless.Components.Length);
-                Assert.AreEqual(1340, lossless.SamplesPerLine);
-                Assert.AreEqual(3516, lossless.ScanLines);
-            }
-        }
-
-        [TestMethod]
-        public void Bits()
-        {
-            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
-            using (var binaryReader = new BinaryReader(fileStream))
-            {
-                var rawImage = new RawImage(binaryReader);
-
-                var directory = rawImage.Directories.Last();
-                var address = directory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
-                var length = directory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
-
-                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-                var startOfImage = new StartOfImage(binaryReader, address, length);
-                var lossless = startOfImage.StartOfFrame;
-                Assert.AreEqual(14, lossless.Precision);
-
-                var startOfScan = startOfImage.StartOfScan;
-                Assert.AreEqual(0, startOfScan.Bb3 & 0x0F);
-
-                Assert.AreEqual(14, lossless.Precision - (startOfScan.Bb3 & 0x0f));
-            }
-        }
-
-        [TestMethod]
-        public void Colors()
-        {
-            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
-            using (var binaryReader = new BinaryReader(fileStream))
-            {
-                var rawImage = new RawImage(binaryReader);
-
-                var directory = rawImage.Directories.Last();
-                var address = directory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
-                var length = directory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
-
-                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-                var startOfImage = new StartOfImage(binaryReader, address, length);
-                var lossless = startOfImage.StartOfFrame;
-
-                Assert.AreEqual(4, lossless.Components.Length); // clrs
-                foreach (var component in lossless.Components)
-                {
-                    Assert.AreEqual(1, component.HFactor); // sraw
-                    Assert.AreEqual(1, component.VFactor); // sraw
-                }
-
-                Assert.AreEqual(4, lossless.Components.Sum(comp => comp.HFactor * comp.VFactor));
-            }
-        }
-
-        [TestMethod]
-        public void PredictorSelectionValue()
-        {
-            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
-            using (var binaryReader = new BinaryReader(fileStream))
-            {
-                var rawImage = new RawImage(binaryReader);
-
-                var directory = rawImage.Directories.Last();
-                var address = directory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
-                var length = directory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
-
-                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-                var startOfImage = new StartOfImage(binaryReader, address, length);
-                Assert.AreEqual(1, startOfImage.StartOfScan.Bb1); // Do nothing
-            }
-        }
-
-        [TestMethod]
-        public void DumpRawImageHex()
-        {
-            // 1 Sensor Width                    : 5360
-            // 2 Sensor Height                   : 3516
-
-            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
-            using (var binaryReader = new BinaryReader(fileStream))
-            {
-                var rawImage = new RawImage(binaryReader);
-
-                var directory = rawImage.Directories.Last();
-                var address = directory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
-                var length = directory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
-                DumpBlock(binaryReader, address, length, 256);
-
-                address = address + length - 64;
-                DumpBlock(binaryReader, address, length, 64);
-            }
-        }
-
-        private static void DumpBlock(BinaryReader binaryReader, uint address, uint length, uint size)
-        {
-            const int Width = 16;
-            binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-            for (var i = 0; i < size; i += Width)
-            {
-                Console.Write("0x{0:X8}: ", (address + i));
-                var nextStep = (int) Math.Min(Width, length - i);
-                var data = binaryReader.ReadBytes(nextStep);
-                foreach (var b in data)
-                {
-                    Console.Write("{0:X2} ", b);
-                }
-
-                Console.WriteLine();
-            }
-
-            Console.WriteLine("...");
-        }
-
-        [TestMethod]
-        public void TestMethod6()
-        {
-            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
-            using (var binaryReader = new BinaryReader(fileStream))
-            {
-                var rawImage = new RawImage(binaryReader);
-
-                var imageFileDirectory = rawImage.Directories.Last();
-
-                var strips = imageFileDirectory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3)
-                    .ValuePointer; // TIF_CR2_SLICE
-                binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
-                var x = binaryReader.ReadUInt16();
-                var y = binaryReader.ReadUInt16();
-                var z = binaryReader.ReadUInt16();
-
-                var address =
-                    imageFileDirectory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
-                var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117)
-                    .ValuePointer; // TIF_STRIP_BYTE_COUNTS
-                binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-                var startOfImage = new StartOfImage(binaryReader, address, length);
-                Assert.AreEqual(0xFF, startOfImage.Mark);
-                Assert.AreEqual(0xD8, startOfImage.Tag); // JPG_MARK_SOI
-
-                var huffmanTable = startOfImage.HuffmanTable;
-                Assert.AreEqual(0xFF, huffmanTable.Mark);
-                Assert.AreEqual(0xC4, huffmanTable.Tag);
-
-                // This file has two huffman tables: 0x00 and 0x01
-                Assert.AreEqual(2, huffmanTable.Tables.Count);
-                Assert.IsTrue(huffmanTable.Tables.ContainsKey(0x00));
-                Assert.IsTrue(huffmanTable.Tables.ContainsKey(0x01));
-
-                var lossless = startOfImage.StartOfFrame;
-                Assert.AreEqual(0xFF, lossless.Mark);
-                Assert.AreEqual(0xC3, lossless.Tag);
-
-                Assert.AreEqual(14, lossless.Precision);
-                Assert.AreEqual(4, lossless.Components.Length);
-                Assert.AreEqual(1340, lossless.SamplesPerLine);
-                Assert.AreEqual(3516, lossless.ScanLines);
-
-                Assert.AreEqual(5360, lossless.Width); // Sensor width (bits)
-                Assert.AreEqual(5360, lossless.SamplesPerLine * lossless.Components.Length);
-                Assert.AreEqual(5360, x * y + z);
-
-                foreach (var component in lossless.Components)
-                {
-                    // Console.WriteLine("== {0}: {1} {2} {3}", component.ComponentId, component.HFactor, component.VFactor, component.TableId);
-                    Assert.AreEqual(0x01, component.HFactor);
-                    Assert.AreEqual(0x01, component.VFactor);
-                    Assert.AreEqual(0x00, component.TableId);
-                }
-
-                var startOfScan = startOfImage.StartOfScan;
-                Assert.AreEqual(0xFF, startOfScan.Mark);
-                Assert.AreEqual(0xDA, startOfScan.Tag);
-
-                foreach (var scanComponent in startOfScan.Components)
-                {
-                    Console.WriteLine("{0}: {1} {2}", scanComponent.Id, scanComponent.Dc, scanComponent.Ac);
-                }
-
-                var imageData = startOfImage.ImageData;
-            }
         }
     }
 }
