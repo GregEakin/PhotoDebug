@@ -1,14 +1,14 @@
-﻿// Copyright © 2013-2016. All Rights Reserved.
+﻿// Copyright © 2013-2019. All Rights Reserved.
 // 
-// SUBSYSTEM:	JpegParserTests
-// FILE:		UnitTest1.cs
-// AUTHOR:		Greg Eakin
+// SUBSYSTEM: JpegParserTests
+// FILE:  BnfParserTests.cs
+// AUTHOR:  Greg Eakin
 
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 using System.IO;
 using JpegParser;
-using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JpegParserTests
 {
@@ -28,20 +28,18 @@ namespace JpegParserTests
             var dict = stuff.Dict;
 
             foreach (var pair in dict)
+            foreach (var line in pair.Value.Lines)
             {
-                foreach (var line in pair.Value.Lines)
+                var x = line.Split(' ');
+                foreach (var y in x)
                 {
-                    var x = line.Split(' ');
-                    foreach (var y in x)
-                    {
-                        var token = y.Trim();
-                        if (token == "|" || token == "…" || token == "ϵ" || token.StartsWith("BY") || token.EndsWith("()"))
-                            continue;
-                        if (token.StartsWith("<") && token.EndsWith(">"))
-                            Assert.IsTrue(dict.ContainsKey(token), $"Token {token} not found");
-                        else 
-                            Console.WriteLine("{0} → {1}  ==> {2}", pair.Key, line, token);
-                    }
+                    var token = y.Trim();
+                    if (token == "|" || token == "…" || token == "ϵ" || token.StartsWith("BY") || token.EndsWith("()"))
+                        continue;
+                    if (token.StartsWith("<") && token.EndsWith(">"))
+                        Assert.IsTrue(dict.ContainsKey(token), $"Token {token} not found");
+                    else
+                        Console.WriteLine("{0} → {1}  ==> {2}", pair.Key, line, token);
                 }
             }
         }
@@ -56,15 +54,15 @@ namespace JpegParserTests
             {
                 var index = 0;
                 foreach (var line in pair.Value.Lines)
-                {
                     if (index++ == 0)
+                    {
                         Console.WriteLine("{0} → {1}", pair.Key, line);
+                    }
                     else
                     {
                         var blank = "".PadRight(pair.Key.Length);
                         Console.WriteLine("{0} | {1}", blank, line);
                     }
-                }
             }
         }
 
