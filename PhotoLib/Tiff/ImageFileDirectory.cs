@@ -233,7 +233,7 @@ namespace PhotoLib.Tiff
                         case 0x06:  // sbyte
                             Console.Write(blockHeader, count, entry.TagId, "SByte 8-bit");
                             Console.WriteLine(referencedItem, entry.ValuePointer, entry.NumberOfValue);
-                            throw new NotImplementedException($"Undfined message {entry.TagType}");
+                            throw new NotImplementedException($"Undefined message {entry.TagType}");
 
                         case 0x07:  // ubyte sequence
                             Console.Write(blockHeader, count, entry.TagId, "UByte[]");
@@ -253,11 +253,11 @@ namespace PhotoLib.Tiff
 
                         case 0x08:  // short
                             Console.Write(blockHeader, count, entry.TagId, "SShort 16-bit");
-                            throw new NotImplementedException($"Undfined message {entry.TagType}");
+                            throw new NotImplementedException($"Undefined message {entry.TagType}");
 
                         case 0x09:  // long
                             Console.Write(blockHeader, count, entry.TagId, "SLong 32-bit");
-                            throw new NotImplementedException($"Undfined message {entry.TagType}");
+                            throw new NotImplementedException($"Undefined message {entry.TagType}");
 
                         case 0x0A:  // rational, signed two longs
                             Console.Write(blockHeader, count, entry.TagId, "SRational 2x32-bit");
@@ -282,7 +282,7 @@ namespace PhotoLib.Tiff
 
                             var x1 = binaryReader.ReadSingle();
                             Console.WriteLine("{0}", x1);
-                            throw new NotImplementedException($"Undfined message {entry.TagType}");
+                            throw new NotImplementedException($"Undefined message {entry.TagType}");
 
                         case 0x0C:  // double precision, 4 bytes IEEE format
                             Console.Write(blockHeader, count, entry.TagId, "Double 8-Byte");
@@ -293,11 +293,11 @@ namespace PhotoLib.Tiff
 
                             var x2 = binaryReader.ReadDouble();
                             Console.WriteLine("{0}", x2);
-                            throw new NotImplementedException($"Undfined message {entry.TagType}");
+                            throw new NotImplementedException($"Undefined message {entry.TagType}");
 
                         default:
                             Console.Write(blockHeader, count, entry.TagId, "Undefined");
-                            throw new NotImplementedException($"Undfined message {entry.TagType}");
+                            throw new NotImplementedException($"Undefined message {entry.TagType}");
                     }
                 }
             }
