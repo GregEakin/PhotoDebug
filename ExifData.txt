@@ -1,0 +1,93 @@
+0x8827 ISO
+0x9201 Shutter Speed Valued
+0x9202 Aperture Value
+
+CanonCameraSettings
+0)  0x0001 UShort 16-bit: [0x000006AC] (50): 100, 2, 0, 4, 2, 0, 0, 3, 65535, 7, 65535, 1, 0, 0, 0, 32767, 15, 3, 0, 0, 3, 32767, 0, 0, 0, 1, 65504, 65504, 1, 8200, 0, 0, 8, 65535, 65535, 0, 6000, 6000, 0, 0, 65535, 0, 0, 32767, 0, 0, 0, 210, 65535, 240, 
+0x0000 Size							   : 100 (2x size)
+0x0001 Macro Mode                      : Normal (2)
+0x0002 Self Timer                      : Off (0)
+0x0003 Quality                         : RAW (4)
+0x0004 Canon Flash Mode                : On	(2)
+0x0005 Continuous Drive                : Single (0)
+0x0007 Focus Mode                      : Manual Focus (3)
+0x0009 Record Mode                     : CR2+JPEG
+0x000a Canon Image Size                : n/a (65535)
+0x000b Easy Mode                       : Manual (1)
+0x000c Digital Zoom                    : None (0)
+0x000d Contrast                        : Normal (0)
+0x000e Saturation                      : Normal (0)
+0x000f Sharpness                       : Low (0xFFFF)
+0x0010 Camera ISO                      : Auto (15)
+0x0011 Metering Mode                   : Evaluative (3)
+0x0012 Focus Range                     : Manual (0)
+0x0013 AF Point selected               : (0)
+0x0014 Canon Exposure Mode             : Aperture-priority AE (3)
+0x0017 Max Focal Length                : 0 mm (0)
+0x0018 Min Focal Length                : 0 mm (0)
+0x0019 Focal Units                     : 1/mm (1)
+0x001c Flash Activity                  : 1 (1)
+0x001d Flash Bits                      : E-TTL, Built-in
+0x0020 Focus Continuous                : Manual
+0x0024 Zoom Source Width               : 6000
+0x0025 Zoom Target Width               : 6000
+0x0027 Spot Metering Mode              : Center
+0x0029 Manual Flash Output             : n/a
+0x002a Color Tone                      : Normal
+0x002e SRAW Quality                    : n/a
+
+CanonFocalLength
+1)  0x0003 UShort 16-bit: [0x00000710] (4): 2, 175, 0, 0, 
+0x0000 FocalType					   : Zoom (2)
+0x0001 FocalLength
+0x0002 FocalPlaneXSize 
+0x0003 FocalPlaneYSize 
+
+ ApertureValue (Av) = 2 log 2 (F number)
+ ShutterSpeedValue (Tv) = - log 2 (exposure time)
+ BrightnessValue (Bv) = log2 ( B/NK ) Note that: B:cd/cm2, N,K: constant
+ Film sensitivity (Sv) = log2 ( ASA / 3.125 )
+ Ev = Av + Tv = Bv + Sv  
+
+CanonShotInfo
+2)  0x0004 UShort 16-bit: [0x00000718] (34): 68, 12, 192, 65426, 65504, 189, 0, 0, 0, 0, 0, 0, 0, 38, 0, 65504, 0, 0, 1, 0, 0, 65504, 192, 0, 0, 65509, 250, 0, 65535, 0, 0, 0, 0, 13, 
+0x0000 Size							   : 68 (bytes)
+0x0001 Auto ISO                        : 130 (12) (exp($val/32*log(2))*100) (actual ISO used = BaseISO * AutoISO / 100)
+0x0002 Base ISO                        : 200 (192) (exp($val/32*log(2))*100/32)
+0x0003 Measured EV                     : 1.56 (65426) ($val / 32 + 5) (this is the Canon name for what could better be called MeasuredLV, and should be close to the calculated LightValue for a proper exposure with most models)
+0x0004 TargetAperture				   : (65504) (exp(Image::ExifTool::Canon::CanonEv($val)*log(2)/2))
+0x0005 Target Exposure Time            : 1/60 (189) (exp(-Image::ExifTool::Canon::CanonEv($val)*log(2)))
+0x0006 Exposure Compensation           : 0
+0x0007 White Balance                   : Auto (0)
+0x0008 Slow Shutter                    : Off
+0x0009 Shot Number In Continuous Burst : 0
+0x000a Optical Zoom Code               : 0
+0x000d Flash Guide Number              : 1.1875  (= 38 / 32)
+0x000f Flash Exposure Compensation     : -1 (65,504)
+0x0010 Auto Exposure Bracketing        : Off (0)
+0x0011 AEB Bracket Value               : 0 (0)
+0x0012 Control Mode                    : Camera Local Control (1)
+0x0013 Subject Distance                : 0 (0)
+0x0018 Bulb Duration                   : 0
+0x001a Camera Type                     : Compact
+0x001b Auto Rotate                     : None
+0x001c ND Filter                       : n/a
+0x001d Self Timer 2                    : 0
+0x0021 Flash Output                    : 13
+
+
+0x0010 Camer Model ID
+0x001e Firmware Revision
+0x0028 Image Unique ID
+
+CanonImageType
+ 3)  0x0006 Ascii 8-bit, null terminated: [0x0000075C] (26): "IMG:High definition image"
+
+CanonFirmwareVersion
+ 4)  0x0007 Ascii 8-bit, null terminated: [0x00000776] (22): "Firmware Version 1.01"
+
+File Number
+ 5)  0x0008 ULong 32-bit: 1000002
+
+CanonCameraInfoUnknown32 value
+ 6)  0x000D ULong 32-bit: [0x0000078C] (2893): 2D34 0014 0010 0002 0004 014C 00AC 0002 0003 0004 01F8 0024 0001 0004 0004 021C 00EC 0001 0005 0004 0308 04C8 0002 0006 0004 07D0 0554 0001 0007 0004 0D24 002C 0003 0008 0004 0D50 003C 0001 0009 0004 0D8C 0114 0001 000C 0003 0EA0 052C 0001 000D 0003 13CC 00A0 0003 000E 0004 146C 0028 0001 000F 
