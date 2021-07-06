@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<RawImage>
+  <CR2Header />
+  <ImageFileDirectory Name="IFD0">
+    <ImageFileEntry Tag="0x010F"></ImageFileEntry>
+    <ImageFileEntry Tag="0x0110"></ImageFileEntry>
+    <ImageFileEntry Tag="0x8769">
+      <ImageFileDirectory Name="EXIF">
+        <ImageFileEntry Tag="0x927C">
+          <ImageFileDirectory Name="MakerNotes">
+            <ImageFileEntry Tag="0x0001">Camera settings 1</ImageFileEntry>
+            <ImageFileEntry Tag="0x0004">Camera settings 2</ImageFileEntry>
+            <ImageFileEntry Tag="0x0006">Camera model (string)</ImageFileEntry>
+            <ImageFileEntry Tag="0x0007">Camera F/W version (string)</ImageFileEntry>
+            <ImageFileEntry Tag="0x0008">Image number ???</ImageFileEntry>
+            <ImageFileEntry Tag="0x0009">Owner name (string)</ImageFileEntry>
+            <ImageFileEntry Tag="0x000C">Camera serial number (immediate data number)</ImageFileEntry>
+            <ImageFileEntry Tag="0x000F">Custom functions</ImageFileEntry>
+            <ImageFileEntry Tag="0x0095">Lens model (string)</ImageFileEntry>
+            <ImageFileEntry Tag="0x4001">
+              <WhiteBalance />
+            </ImageFileEntry>
+          </ImageFileDirectory>
+        </ImageFileEntry>
+      </ImageFileDirectory>
+    </ImageFileEntry>
+  </ImageFileDirectory>
+  <ImageFileDirectory Name="IFD1"></ImageFileDirectory>
+  <ImageFileDirectory Name="IFD2"></ImageFileDirectory>
+  <ImageFileDirectory Name="IFD3">
+    <ImageFileEntry Tag="0x0111"></ImageFileEntry>
+    <ImageFileEntry Tag="0x0117"></ImageFileEntry>
+    <ImageFileEntry Tag="0xC640"></ImageFileEntry>
+    <ImageFileEntry Tag="0xFFC3"></ImageFileEntry>
+  </ImageFileDirectory>
+</RawImage>
