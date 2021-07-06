@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JpegParserTests", "JpegPars
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoLib", "PhotoLib\PhotoLib.csproj", "{63C21A80-4C35-40D3-B0EB-8C68F146A9FA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoTests", "PhotoTests\PhotoTests.csproj", "{09DDAB03-EDFD-4CB4-9FEF-6E4FE30F3B6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagDatabase", "TagDatabase\TagDatabase.csproj", "{0B51EA63-2764-4A6E-89E8-72055A2F887D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{63C21A80-4C35-40D3-B0EB-8C68F146A9FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63C21A80-4C35-40D3-B0EB-8C68F146A9FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63C21A80-4C35-40D3-B0EB-8C68F146A9FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09DDAB03-EDFD-4CB4-9FEF-6E4FE30F3B6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09DDAB03-EDFD-4CB4-9FEF-6E4FE30F3B6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09DDAB03-EDFD-4CB4-9FEF-6E4FE30F3B6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09DDAB03-EDFD-4CB4-9FEF-6E4FE30F3B6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B51EA63-2764-4A6E-89E8-72055A2F887D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B51EA63-2764-4A6E-89E8-72055A2F887D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B51EA63-2764-4A6E-89E8-72055A2F887D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B51EA63-2764-4A6E-89E8-72055A2F887D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

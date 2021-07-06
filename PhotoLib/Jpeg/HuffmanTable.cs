@@ -33,9 +33,9 @@ namespace PhotoLib.Jpeg
         public byte Index { get; }
 
         /// <summary>
-        /// Assert.AreEqual(16, data1.Length);
-        /// Assert.AreEqual(data2.Length, data1.Sum(b => b));
-        /// Assert.IsTrue(data2.Length <= 256);
+        /// Assert.Equal(16, data1.Length);
+        /// Assert.Equal(data2.Length, data1.Sum(b => b));
+        /// Assert.True(data2.Length <= 256);
         /// </summary>
         public static ReadOnlyDictionary<int, HCode> BuildTree(IList<byte> data1, IList<byte> data2)
         {
@@ -79,9 +79,9 @@ namespace PhotoLib.Jpeg
         }
 
         /// <summary>
-        /// Assert.AreEqual(16, data1.Length);
-        /// Assert.AreEqual(data2.Length, data1.Sum(b => b));
-        /// Assert.IsTrue(data2.Length <= 256);
+        /// Assert.Equal(16, data1.Length);
+        /// Assert.Equal(data2.Length, data1.Sum(b => b));
+        /// Assert.True(data2.Length <= 256);
         /// </summary>
         public static string[] ToTextTree(IList<byte> data1, IList<byte> data2)
         {

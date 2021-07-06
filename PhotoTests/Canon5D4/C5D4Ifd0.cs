@@ -1,0 +1,194 @@
+﻿// Copyright © 2013-2016. All Rights Reserved.
+// 
+// SUBSYSTEM:	PhotoTests
+// FILE:		C5D4Ifd1.cs
+// AUTHOR:		Greg Eakin
+
+using System;
+using System.IO;
+using Xunit;
+using PhotoLib.Tiff;
+
+namespace PhotoTests.Canon5D4
+{
+    
+    public class C5D4Ifd0
+    {
+        const string FileName = @"D:\Users\Greg\Pictures\Canon 5D IV\Y_DReggie_03.CR2";
+
+        public C5D4Ifd0()
+        {
+            if (!File.Exists(FileName))
+            {
+                throw new ArgumentException("{0} doesn't exists!", FileName);
+            }
+        }
+
+        [Fact]
+        public void TestMethod1()
+        {
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var binaryReader = new BinaryReader(fileStream);
+            var rawImage = new RawImage(binaryReader);
+            Assert.Equal(new byte[] { 0x49, 0x49 }, rawImage.Header.ByteOrder);
+            Assert.Equal(0x002A, rawImage.Header.TiffMagic);
+            Assert.Equal(0x5243, rawImage.Header.CR2Magic);
+            Assert.Equal(new byte[] { 0x02, 0x00 }, rawImage.Header.CR2Version);
+
+            rawImage.DumpHeader(binaryReader);
+        }
+
+        [Fact]
+        public void ImageWidth()
+        {
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var binaryReader = new BinaryReader(fileStream);
+            var rawImage = new RawImage(binaryReader);
+
+            // 0x0100 UShort 16-bit: 5760
+            var imageFileDirectory = rawImage[0x00000010];
+            var imageFileEntry = imageFileDirectory[0x0100];
+            Assert.Equal(3, imageFileEntry.TagType);
+            Assert.Equal(6720u, imageFileEntry.ValuePointer);
+            Assert.Equal(1u, imageFileEntry.NumberOfValue);
+        }
+
+        [Fact]
+        public void ImageLength()
+        {
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var binaryReader = new BinaryReader(fileStream);
+            var rawImage = new RawImage(binaryReader);
+
+            // 0x0101 UShort 16-bit: 3840
+            var imageFileDirectory = rawImage[0x00000010];
+            var imageFileEntry = imageFileDirectory[0x0101];
+            Assert.Equal(3, imageFileEntry.TagType);
+            Assert.Equal(4480u, imageFileEntry.ValuePointer);
+            Assert.Equal(1u, imageFileEntry.NumberOfValue);
+        }
+
+        [Fact]
+        public void BitsPerSample()
+        {
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var binaryReader = new BinaryReader(fileStream);
+            var rawImage = new RawImage(binaryReader);
+
+            // 0x0102 UShort 16-bit: [0x000000EE] (3): 8, 8, 8, 
+            var imageFileDirectory = rawImage[0x00000010];
+            var imageFileEntry = imageFileDirectory[0x0102];
+            Assert.Equal(3, imageFileEntry.TagType);
+            Assert.Equal(238u, imageFileEntry.ValuePointer);
+            Assert.Equal(3u, imageFileEntry.NumberOfValue);
+
+            Assert.Equal(new[] { (ushort)8, (ushort)8, (ushort)8 },
+                RawImage.ReadUInts16(binaryReader, imageFileEntry));
+        }
+
+        [Fact]
+        public void Compression()
+        {
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var binaryReader = new BinaryReader(fileStream);
+            var rawImage = new RawImage(binaryReader);
+
+            // 0x0103 UShort 16-bit: 6
+            var imageFileDirectory = rawImage[0x00000010];
+            var imageFileEntry = imageFileDirectory[0x0103];
+            Assert.Equal(3, imageFileEntry.TagType);
+            Assert.Equal(6u, imageFileEntry.ValuePointer);
+            Assert.Equal(1u, imageFileEntry.NumberOfValue);
+        }
+
+        [Fact]
+        public void Maker()
+        {
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var binaryReader = new BinaryReader(fileStream);
+            var rawImage = new RawImage(binaryReader);
+
+            // 0x010F Ascii 8-bit: [0x000000F4] (6): Canon
+            var imageFileDirectory = rawImage[0x00000010];
+            var imageFileEntry = imageFileDirectory[0x010F];
+            Assert.Equal(2, imageFileEntry.TagType);
+            Assert.Equal(0x000000F4u, imageFileEntry.ValuePointer);
+            Assert.Equal(6u, imageFileEntry.NumberOfValue);
+
+            Assert.Equal("Canon", RawImage.ReadChars(binaryReader, imageFileEntry));
+        }
+
+        [Fact]
+        public void Model()
+        {
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var binaryReader = new BinaryReader(fileStream);
+            var rawImage = new RawImage(binaryReader);
+
+            // 0x0110 Ascii 8-bit: [0x000000FA] (22): Canon EOS 5D Mark III
+            var imageFileDirectory = rawImage[0x00000010];
+            var imageFileEntry = imageFileDirectory[0x0110];
+            Assert.Equal(2, imageFileEntry.TagType);
+            Assert.Equal(0x000000FAu, imageFileEntry.ValuePointer);
+            Assert.Equal(21u, imageFileEntry.NumberOfValue);
+
+            Assert.Equal("Canon EOS 5D Mark IV", RawImage.ReadChars(binaryReader, imageFileEntry));
+        }
+
+        // stripOffset 6)  0x0111 ULong 32-bit: 96332
+        // orientation 7)  0x0112 UShort 16-bit: 1
+        // stripByteCounts 8)  0x0117 ULong 32-bit: 2390306
+        // xResolution 9)  0x011A Rational 2x32-bit: [0x0000011A] (2): 72/1 = 72
+        // yResolution 10)  0x011B Rational 2x32-bit: [0x00000122] (2): 72/1 = 72
+        // resolutionUnit 11)  0x0128 UShort 16-bit: 2, pixels per inch
+        // dateTime 12)  0x0132 Ascii 8-bit: [0x0000012A] (20): 2013:07:13 01:10:00
+        // 13)  0x013B Ascii 8-bit: [0x0000013E] (11): Greg Eakin
+
+        [Fact]
+        public void XmpMetadata()
+        {
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var binaryReader = new BinaryReader(fileStream);
+            var rawImage = new RawImage(binaryReader);
+
+            // 0x02BC Byte 8-bit: [0x000119C4] (8192): // XML packet containing XMP metadata
+            var imageFileDirectory = rawImage[0x00000010];
+            var imageFileEntry = imageFileDirectory[0x02BC];
+            Assert.Equal(1, imageFileEntry.TagType);
+            Assert.Equal(0x0000B608u, imageFileEntry.ValuePointer);
+            Assert.Equal(8192u, imageFileEntry.NumberOfValue);
+
+            var readChars = RawImage.ReadChars(binaryReader, imageFileEntry);
+
+            const string expected1 =
+                "<?xpacket begin='ï»¿' id='W5M0MpCehiHzreSzNTczkc9d'?><x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\" xmlns:xmp=\"http://ns.adobe.com/xap/1.0/\"><xmp:Rating>0</xmp:Rating></rdf:Description></rdf:RDF></x:xmpmeta>";
+            Assert.Equal(expected1, readChars.Substring(0, 291));
+
+            // lots of white space between these two substrings.
+            Assert.True(string.IsNullOrWhiteSpace(readChars.Substring(291, 8173 - 291)));
+
+            const string expected2 = "<?xpacket end='w'?>";
+            Assert.Equal(expected2, readChars.Substring(8173));
+        }
+
+        // 15)  0x8298 Ascii 8-bit: [0x0000017E] (11): Greg Eakin
+
+        [Fact]
+        public void ExifTags()
+        {
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var binaryReader = new BinaryReader(fileStream);
+            var rawImage = new RawImage(binaryReader);
+
+            // 0x8769 Image File Directory: [0x000001BE] (1): 
+            var imageFileDirectory = rawImage[0x00000010];
+            var imageFileEntry = imageFileDirectory[0x8769];
+            Assert.Equal(4, imageFileEntry.TagType);
+            Assert.Equal(0x000001BEu, imageFileEntry.ValuePointer);
+            Assert.Equal(1u, imageFileEntry.NumberOfValue);
+
+            var readULongs = RawImage.ReadUInts(binaryReader, imageFileEntry);
+            Assert.Equal(new[] { 0x829a0026 }, readULongs);
+        }
+    }
+}
