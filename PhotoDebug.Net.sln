@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexDump", "HexDump\HexDump.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JpegParser", "JpegParser\JpegParser.csproj", "{36CF0571-3716-42D4-AF60-E043E22065F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JpegParserTests", "JpegParserTests\JpegParserTests.csproj", "{799B639E-29E0-402B-92E8-79DC370C98AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{36CF0571-3716-42D4-AF60-E043E22065F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36CF0571-3716-42D4-AF60-E043E22065F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36CF0571-3716-42D4-AF60-E043E22065F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{799B639E-29E0-402B-92E8-79DC370C98AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{799B639E-29E0-402B-92E8-79DC370C98AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{799B639E-29E0-402B-92E8-79DC370C98AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{799B639E-29E0-402B-92E8-79DC370C98AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
