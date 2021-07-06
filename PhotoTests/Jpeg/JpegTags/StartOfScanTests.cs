@@ -5,34 +5,30 @@
 // AUTHOR:		Greg Eakin
 
 using PhotoLib.Jpeg.JpegTags;
+using System;
+using System.IO;
+using Xunit;
 
 namespace PhotoTests.Jpeg.JpegTags
 {
-    using Xunit;
-    using System;
-    using System.IO;
-
-    
     public class StartOfScanTests
     {
         [Fact]
-        [ExpectedException(typeof(ArgumentException))]
         public void BadMarkTest()
         {
             var data = new byte[] { 0x00, 0x00 };
             using var memory = new MemoryStream(data);
             using var reader = new BinaryReader(memory);
-            var startOfScan = new StartOfScan(reader);
+            Assert.Throws<ArgumentException>(() => new StartOfScan(reader));
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentException))]
         public void BadTagTest()
         {
             var data = new byte[] { 0xFF, 0x00 };
             using var memory = new MemoryStream(data);
             using var reader = new BinaryReader(memory);
-            var startOfScan = new StartOfScan(reader);
+            Assert.Throws<ArgumentException>(() => new StartOfScan(reader));
         }
 
         [Fact]
@@ -56,7 +52,7 @@ namespace PhotoTests.Jpeg.JpegTags
         }
 
         [Fact]
-        public void ComponetTest()
+        public void ComponentTest()
         {
             var data = new byte[]
             {

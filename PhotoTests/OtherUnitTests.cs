@@ -7,18 +7,17 @@
 using PhotoLib.Jpeg.JpegTags;
 using PhotoLib.RecipeData;
 
+using Xunit;
+using PhotoLib.Jpeg;
+using PhotoLib.Tiff;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+
 namespace PhotoTests
 {
-    using Xunit;
-    using PhotoLib.Jpeg;
-    using PhotoLib.Tiff;
-    using System;
-    using System.Collections.Generic;
-    using System.Drawing;
-    using System.IO;
-    using System.Linq;
-
-    
     public class OtherUnitTests
     {
         // [Fact]
@@ -113,8 +112,7 @@ namespace PhotoTests
                     if (val == 0xFF)
                     {
                         var code = startOfImage.ImageData.RawData[rp];
-                        if (code != 0)
-                            Assert.Fail($"Invalid code found {rp}, {startOfImage.ImageData.RawData[rp]}");
+                        Assert.True(0 == code, $"Invalid code found {rp}, {startOfImage.ImageData.RawData[rp]}");
 
                         rp++;
                     }
@@ -434,7 +432,7 @@ namespace PhotoTests
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var data = VrdData.ParseFile(binaryReader);
-            Assert.IsInstanceOfType(data[0], typeof(VrdDataF7));
+            Assert.IsType<VrdDataF7>(data[0]);
             foreach (var vrdData in data)
                 vrdData.DumpData();
         }
@@ -447,7 +445,7 @@ namespace PhotoTests
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var data = VrdData.ParseFile(binaryReader);
-            Assert.IsInstanceOfType(data[0], typeof(VrdDataF7));
+            Assert.IsType<VrdDataF7>(data[0]);
             foreach (var vrdData in data)
                 vrdData.DumpData();
         }
@@ -460,8 +458,8 @@ namespace PhotoTests
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var data = VrdData.ParseFile(binaryReader);
-            Assert.IsInstanceOfType(data[0], typeof(VrdDataF4));
-            Assert.IsInstanceOfType(data[1], typeof(VrdDataF7));
+            Assert.IsType<VrdDataF4>(data[0]);
+            Assert.IsType<VrdDataF7>(data[1]);
             foreach (var vrdData in data)
                 vrdData.DumpData();
         }
@@ -474,7 +472,7 @@ namespace PhotoTests
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var data = VrdData.ParseFile(binaryReader);
-            Assert.IsInstanceOfType(data[0], typeof(VrdDataF4));
+            Assert.IsType<VrdDataF4>(data[0]);
             foreach (var vrdData in data)
                 vrdData.DumpData();
         }

@@ -16,23 +16,21 @@ namespace PhotoTests.Jpeg.JpegTags
     public class StartOfImageTests
     {
         [Fact]
-        [ExpectedException(typeof(ArgumentException))]
         public void BadMarkTest()
         {
             var data = new byte[] { 0x00, 0x00 };
             using var memory = new MemoryStream(data);
             using var reader = new BinaryReader(memory);
-            var startOfImage = new StartOfImage(reader, 0x0000, (uint)data.Length);
+            Assert.Throws<ArgumentException>(() => new StartOfImage(reader, 0x0000, (uint)data.Length));
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentException))]
         public void BadTagTest()
         {
             var data = new byte[] { 0xFF, 0x00 };
             using var memory = new MemoryStream(data);
             using var reader = new BinaryReader(memory);
-            var startOfImage = new StartOfImage(reader, 0x0000, (uint)data.Length);
+            Assert.Throws<ArgumentException>(() => new StartOfImage(reader, 0x0000, (uint)data.Length));
         }
 
         [Fact]

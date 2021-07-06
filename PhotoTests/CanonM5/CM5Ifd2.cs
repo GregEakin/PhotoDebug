@@ -56,7 +56,7 @@ namespace PhotoTests.CanonM5
         // 5)  0x0111 ULong 32-bit: 6664192u    -- Offset
         // 8)  0x0117 ULong 32-bit: 1440000u    -- Length
         [Fact]
-        public void DumpImage()
+        public void DumpImage1()
         {
             using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);

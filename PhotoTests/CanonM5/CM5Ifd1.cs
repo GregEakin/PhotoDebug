@@ -55,7 +55,7 @@ namespace PhotoTests.CanonM5
         // 0)  0x0201 ULong 32-bit: 56320u   -- Offset
         // 1)  0x0202 ULong 32-bit: 15495u   -- Length
         [Fact]
-        public void DumpImage()
+        public void DumpImage5()
         {
             using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
@@ -74,10 +74,10 @@ namespace PhotoTests.CanonM5
 
             binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
             var name = Path.Combine(Path.GetDirectoryName(FileName) ?? "./", Path.GetFileNameWithoutExtension(FileName) + "-1.jpg");
-            DumpImage(name, binaryReader, length);
+            DumpImage6(name, binaryReader, length);
         }
 
-        private static void DumpImage(string output, BinaryReader binaryReader, uint length)
+        private static void DumpImage6(string output, BinaryReader binaryReader, uint length)
         {
             using var x = File.Create(output);
             var bytes = (int)length;

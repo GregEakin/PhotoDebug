@@ -40,12 +40,11 @@ namespace PhotoTests.Tiff
             using var reader = new BinaryReader(memory);
             var rawImage = new RawImage(reader);
             var directory = rawImage.Directories.First();
-            Assert.Equal(0, directory.Entries.Length);
+            Assert.Empty(directory.Entries); 
             Assert.Equal(0x00000000u, directory.NextEntry);
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentException))]
         public void DirectoryDuplicate()
         {
             var data = new byte[]
@@ -57,8 +56,8 @@ namespace PhotoTests.Tiff
             using var reader = new BinaryReader(memory);
             var rawImage = new RawImage(reader);
             var directory = rawImage.Directories.First();
-            Assert.Equal(0, directory.Entries.Length);
-            Assert.Equal(0x00000000u, directory.NextEntry);
+            Assert.Empty(directory.Entries);
+            Assert.Throws<ArgumentException>(() => directory.NextEntry);
         }
     }
 }

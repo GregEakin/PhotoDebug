@@ -69,8 +69,7 @@ namespace PhotoTests.CanonM5
             Console.WriteLine("Guid = {0}", guid);  // Guid = c261806b-f82c-9003-427a-06be63189acb
         }
         
-        [Ignore]
-        [Fact]
+        // [Fact]
         public void DumpGuids()
         {
             var d = new DirectoryInfo(@"D:\Users\Greg\Pictures\2017-11-21");
@@ -258,7 +257,7 @@ namespace PhotoTests.CanonM5
         // 7)  0x0111 ULong 32-bit: 73728u     -- Offset
         // 9)  0x0117 ULong 32-bit: 6590185u   -- Length
         [Fact]
-        public void DumpImage()
+        public void DumpImage3()
         {
             using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
@@ -273,10 +272,10 @@ namespace PhotoTests.CanonM5
 
             binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
             var name = Path.Combine(Path.GetDirectoryName(FileName) ?? "./", Path.GetFileNameWithoutExtension(FileName) + "-0.jpg");
-            DumpImage(name, binaryReader, length);
+            DumpImage4(name, binaryReader, length);
         }
 
-        private static void DumpImage(string output, BinaryReader binaryReader, uint length)
+        private static void DumpImage4(string output, BinaryReader binaryReader, uint length)
         {
             using var x = File.Create(output);
             var bytes = (int)length;

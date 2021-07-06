@@ -4,15 +4,11 @@
 // FILE:		C5D3Ifd1.cs
 // AUTHOR:		Greg Eakin
 
-using System;
+using PhotoLib.Tiff;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Windows.Media.Imaging;
 using Xunit;
-using PhotoLib.Jpeg.JpegTags;
-using PhotoLib.Tiff;
 
 namespace PhotoTests.Canon5D3
 {
@@ -21,7 +17,6 @@ namespace PhotoTests.Canon5D3
     // The third IFD contains a small RGB version of the picture, NOT compressed (even with compression==6), and one which no white balance, correction has been applied.
     // The fourth IFD contains the RAW data compressed in lossless Jpeg. 
 
-    
     public class C5D3Ifd2
     {
         private const string FileName = @"d:\Users\Greg\Pictures\2018-08-29\0L2A3743.CR2";
@@ -33,7 +28,7 @@ namespace PhotoTests.Canon5D3
 
         // == Tiff Directory[0x000118AC]:
         // 0)   0x0100 UShort 16-bit: 592                                        -- Image width
-        // 1)   0x0101 UShort 16-bit: 395                                        -- Image heigth
+        // 1)   0x0101 UShort 16-bit: 395                                        -- Image height
         // 2)   0x0102 UShort 16-bit: [0x0001194E] (3): 16, 16, 16,              -- bits per sample
         // 3)   0x0103 UShort 16-bit: 1                                          -- compression, 1== uncompressed, 6 == old jpeg
         // 4)   0x0106 UShort 16-bit: 2                                          -- photometric interpretation, 2 == RGB
@@ -105,10 +100,10 @@ namespace PhotoTests.Canon5D3
             var dir = Path.GetDirectoryName(FileName) ?? ".";
             var name = Path.GetFileNameWithoutExtension(FileName) + "-2.jpg";
             var path = Path.Combine(dir, name);
-            DumpImage(path, binaryReader, width, height);
+            DumpImage2(path, binaryReader, width, height);
         }
 
-        private static void DumpImage(string filename, BinaryReader binaryReader, int width, int height)
+        private static void DumpImage2(string filename, BinaryReader binaryReader, int width, int height)
         {
             var bmp = new Bitmap(width, height);
             for (var y = 0; y < height; ++y)

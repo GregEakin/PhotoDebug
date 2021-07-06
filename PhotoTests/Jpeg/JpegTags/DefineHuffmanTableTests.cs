@@ -9,11 +9,9 @@ using PhotoLib.Jpeg.JpegTags;
 using System;
 using System.IO;
 using System.Linq;
-using static PhotoTests.Utilities.ExpectedException;
 
 namespace PhotoTests.Jpeg.JpegTags
 {
-    
     public class DefineHuffmanTableTests
     {
         private static readonly byte[] Data =
@@ -30,17 +28,16 @@ namespace PhotoTests.Jpeg.JpegTags
             var badData = new byte[] { 0x00, 0x00 };
             using var memory = new MemoryStream(badData);
             using var reader = new BinaryReader(memory);
-            AssertThrows<ArgumentException>(() => new DefineHuffmanTable(reader) );
+            Assert.Throws<ArgumentException>(() => new DefineHuffmanTable(reader));
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentException))]
         public void BadTag()
         {
             var badData = new byte[] { 0xFF, 0x00 };
             using var memory = new MemoryStream(badData);
             using var reader = new BinaryReader(memory);
-            var huffmanTable = new DefineHuffmanTable(reader);
+            Assert.Throws<ArgumentException>(() => new DefineHuffmanTable(reader));
         }
 
         [Fact]
@@ -102,18 +99,16 @@ namespace PhotoTests.Jpeg.JpegTags
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentException))]
         public void LongLengthA()
         {
             var badData = new byte[] { 0xFF, 0xC4, 0x00, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
             using var memory = new MemoryStream(badData);
             using var reader = new BinaryReader(memory);
-            var huffmanTable = new DefineHuffmanTable(reader);
+            Assert.Throws<ArgumentException>(() => new DefineHuffmanTable(reader));
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void LongLengthB()
         {
             var badData = new byte[]
@@ -124,7 +119,7 @@ namespace PhotoTests.Jpeg.JpegTags
 
             using var memory = new MemoryStream(badData);
             using var reader = new BinaryReader(memory);
-            var huffmanTable = new DefineHuffmanTable(reader);
+            Assert.Throws<ArgumentOutOfRangeException>(() => new DefineHuffmanTable(reader));
         }
 
         [Fact]
@@ -137,18 +132,16 @@ namespace PhotoTests.Jpeg.JpegTags
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentException))]
         public void ShortLengthA()
         {
             var badData = new byte[] { 0xFF, 0xC4, 0x00, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
             using var memory = new MemoryStream(badData);
             using var reader = new BinaryReader(memory);
-            var huffmanTable = new DefineHuffmanTable(reader);
+            Assert.Throws<ArgumentException>(() => new DefineHuffmanTable(reader));
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ShortLengthB()
         {
             var badData = new byte[]
@@ -159,7 +152,7 @@ namespace PhotoTests.Jpeg.JpegTags
 
             using var memory = new MemoryStream(badData);
             using var reader = new BinaryReader(memory);
-            var huffmanTable = new DefineHuffmanTable(reader);
+            Assert.Throws<ArgumentOutOfRangeException>(() => new DefineHuffmanTable(reader));
         }
 
         [Fact]

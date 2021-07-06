@@ -35,8 +35,8 @@ namespace PhotoTests.Jpeg
 
             var huffmanTable = new HuffmanTable(0, data1, data2);
             Assert.Equal(0, huffmanTable.Index);
-            Assert.AreSame(data1, huffmanTable.Data1);
-            Assert.AreSame(data2, huffmanTable.Data2);
+            Assert.Same(data1, huffmanTable.Data1);
+            Assert.Same(data2, huffmanTable.Data2);
             Assert.Equal(15, huffmanTable.Dictionary.Count);
         }
 

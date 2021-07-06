@@ -55,8 +55,7 @@ namespace PhotoTests.CanonR
         private const string FileNameDualSraw = @"D:\Users\Greg\Pictures\2019-09-02\IMG_0004.CR3";
         private const string FileName = FileNameRaw;
 
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext context)
+        public UnitTestR()
         {
             if (!File.Exists(FileName))
                 throw new ArgumentException("{0} doesn't exists!", FileName);

@@ -4,14 +4,13 @@
 // FILE:		StartOfFrameTests.cs
 // AUTHOR:		Greg Eakin
 
+using System;
+using System.IO;
+using Xunit;
+using PhotoLib.Jpeg;
+
 namespace PhotoTests.Jpeg.JpegTags
 {
-    using System;
-    using System.IO;
-    using Xunit;
-    using PhotoLib.Jpeg;
-
-    
     public class StartOfFrameTests
     {
         private static readonly byte[] Data =
@@ -22,13 +21,12 @@ namespace PhotoTests.Jpeg.JpegTags
         };
 
         [Fact]
-        [ExpectedException(typeof(ArgumentException))]
         public void BadMark()
         {
             var badData = new byte[] { 0x00, 0x00 };
             using var memory = new MemoryStream(badData);
             using var reader = new BinaryReader(memory);
-            var lossless = new StartOfFrame(reader);
+            Assert.Throws<ArgumentException>(() => new StartOfFrame(reader));
         }
 
         [Fact]
@@ -41,13 +39,12 @@ namespace PhotoTests.Jpeg.JpegTags
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentException))]
         public void BadTag()
         {
             var badData = new byte[] { 0xFF, 0x00 };
             using var memory = new MemoryStream(badData);
             using var reader = new BinaryReader(memory);
-            var lossless = new StartOfFrame(reader);
+            Assert.Throws<ArgumentException>(() => new StartOfFrame(reader));
         }
 
         [Fact]
@@ -105,7 +102,6 @@ namespace PhotoTests.Jpeg.JpegTags
         }
 
         [Fact]
-        [ExpectedException(typeof(EndOfStreamException))]
         public void ShortLength()
         {
             var badData = new byte[]
@@ -115,11 +111,10 @@ namespace PhotoTests.Jpeg.JpegTags
 
             using var memory = new MemoryStream(badData);
             using var reader = new BinaryReader(memory);
-            var lossless = new StartOfFrame(reader);
+            Assert.Throws<EndOfStreamException>(() => new StartOfFrame(reader));
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentException))]
         public void LongLength()
         {
             var badData = new byte[]
@@ -129,11 +124,10 @@ namespace PhotoTests.Jpeg.JpegTags
 
             using var memory = new MemoryStream(badData);
             using var reader = new BinaryReader(memory);
-            var lossless = new StartOfFrame(reader);
+            Assert.Throws<ArgumentException>(() => new StartOfFrame(reader));
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentException))]
         public void ShortComponentCount()
         {
             var badData = new byte[]
@@ -143,11 +137,10 @@ namespace PhotoTests.Jpeg.JpegTags
 
             using var memory = new MemoryStream(badData);
             using var reader = new BinaryReader(memory);
-            var lossless = new StartOfFrame(reader);
+            Assert.Throws<ArgumentException>(() => new StartOfFrame(reader));
         }
 
         [Fact]
-        [ExpectedException(typeof(EndOfStreamException))]
         public void LongComponentCount()
         {
             var badData = new byte[]
@@ -157,7 +150,7 @@ namespace PhotoTests.Jpeg.JpegTags
 
             using var memory = new MemoryStream(badData);
             using var reader = new BinaryReader(memory);
-            var lossless = new StartOfFrame(reader);
+            Assert.Throws<EndOfStreamException>(() => new StartOfFrame(reader));
         }
 
         [Fact]
