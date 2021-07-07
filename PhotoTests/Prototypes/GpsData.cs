@@ -19,13 +19,13 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpGpsData()
         {
-            const string fileName = @"D:\Users\Greg\Pictures\2018-10-11\0L2A4224.CR2";
-            //const string fileName = @"D:\Users\Greg\Pictures\2016_03_21\0L2A2373.CR2";
-            //const string fileName = @"D:\Users\Greg\Pictures\2016-05-20\IMG_0008.CR2";
+            const string fileName = @"P:\2018\2018-10-11\0L2A4224.CR2";
+            //const string fileName = @"P:\2016\2016_03_21\0L2A2373.CR2";
+            //const string fileName = @"P:\2016\2016-05-20\IMG_0008.CR2";
             DumpGpsInfo(fileName);
 
 
-            //var fileEntries = Directory.GetFiles(@"D:\Users\Greg\Pictures\2016-03-28");
+            //var fileEntries = Directory.GetFiles(@"P:\2016\2016-03-28");
             //foreach (var fileName in fileEntries.Where(file => file.EndsWith(".CR2")))
             //    DumpGpsInfo(fileName);
         }

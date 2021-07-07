@@ -37,8 +37,8 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpImage3RawTest()
         {
-            // const string fileName = @"D:\Users\Greg\Pictures\2016-02-21 Studio\Studio 015.CR2";
-            const string fileName = @"D:\Users\Greg\Pictures\2016-05-20\IMG_0008.CR2";
+            // const string fileName = @"P:\2016\2016-02-21 Studio\Studio 015.CR2";
+            const string fileName = @"P:\2016\2016-05-20\IMG_0008.CR2";
             DumpImage3Raw(fileName);
         }
 

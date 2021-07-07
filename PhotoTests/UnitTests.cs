@@ -4,25 +4,23 @@
 // FILE:		UnitTests.cs
 // AUTHOR:		Greg Eakin
 
+using PhotoLib.Jpeg;
 using PhotoLib.Jpeg.JpegTags;
+using PhotoLib.Tiff;
+using System;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using Xunit;
 
 namespace PhotoTests
 {
-    using Xunit;
-    using PhotoLib.Jpeg;
-    using PhotoLib.Tiff;
-    using System;
-    using System.Drawing;
-    using System.IO;
-    using System.Linq;
-
-    
     public class UnitTests
     {
         // [Fact]
         public void TestMethodC7()
         {
-            const string Folder = @"D:\Users\Greg\Pictures\2013_10_14\";
+            const string Folder = @"P:\2013\2013_10_14\";
             const string FileName2 = Folder + "IMG_4195.CR2";
             const string Bitmap = Folder + "IMG_4195 C.BMP";
 
@@ -32,7 +30,7 @@ namespace PhotoTests
         [Fact]
         public void ReadFile()
         {
-            const string Folder = @"D:\Users\Greg\Pictures\2013_10_14\";
+            const string Folder = @"P:\2013\2013_10_14\";
             const string FileName2 = Folder + "IMG_4195.CR2";
 
             using var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read);

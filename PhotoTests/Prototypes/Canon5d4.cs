@@ -37,7 +37,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpImage3RawTest()
         {
-            const string fileName = @"D:\Users\Greg\Pictures\Canon 5D IV\Y_DReggie_03.CR2";
+            const string fileName = @"P:\Canon 5D IV\Y_DReggie_03.CR2";
             DumpImage3Raw(fileName);
         }
 

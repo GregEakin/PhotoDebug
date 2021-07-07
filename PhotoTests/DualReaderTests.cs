@@ -22,7 +22,7 @@ namespace PhotoTests
         [Fact]
         public void TestMethodC5M3()
         {
-            const string Folder = @"C:\Users\Greg\Pictures\2013-10-06 001\";
+            const string Folder = @"P:\2013\2013-10-06 001\";
             const string FileName2 = Folder + "0L2A8892.CR2";
             const string Bitmap = Folder + "0L2A8892 C.BMP";
 

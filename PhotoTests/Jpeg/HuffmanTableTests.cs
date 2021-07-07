@@ -4,16 +4,12 @@
 // FILE:		HuffmanTableTests.cs
 // AUTHOR:		Greg Eakin
 
-using System.Linq;
-
-using Xunit;
-
 using PhotoLib.Jpeg;
+using System.Linq;
+using Xunit;
 
 namespace PhotoTests.Jpeg
 {
-
-    
     public class HuffmanTableTests
     {
         [Fact]

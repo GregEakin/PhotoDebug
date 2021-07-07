@@ -21,7 +21,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpImage2Test()
         {
-            const string fileName = @"D:\Users\Greg\Pictures\2016-02-21 Studio\Studio 015.CR2";
+            const string fileName = @"P:\2016\2016-02-21 Studio\Studio 015.CR2";
             DumpImage2(fileName);
         }
 

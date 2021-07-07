@@ -4,7 +4,9 @@
 // FILE:		UnitTest7D2.cs
 // AUTHOR:		Greg Eakin
 
+using System.Text;
 using PhotoLib.Jpeg.JpegTags;
+using Xunit.Abstractions;
 
 namespace PhotoTests.Canon7D2
 {
@@ -17,10 +19,12 @@ namespace PhotoTests.Canon7D2
     
     public class UnitTest7D2
     {
-        private const string FileName = @"..\..\Photos\7Dhigh.CR2";
+        private readonly ITestOutputHelper _testOutputHelper;
+        private const string FileName = @"P:\Source\7Dhigh.CR2";
 
-        public UnitTest7D2()
+        public UnitTest7D2(ITestOutputHelper testOutputHelper)
         {
+            _testOutputHelper = testOutputHelper;
             if (!File.Exists(FileName))
             {
                 throw new ArgumentException("{0} doesn't exists!", FileName);
@@ -150,28 +154,28 @@ namespace PhotoTests.Canon7D2
             var directory = rawImage.Directories.Last();
             var address = directory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
             var length = directory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
-            DumpBlock(binaryReader, address, length, 256);
+            DumpBlock(_testOutputHelper, binaryReader, address, length, 256);
 
             address = address + length - 64;
-            DumpBlock(binaryReader, address, length, 64);
+            DumpBlock(_testOutputHelper, binaryReader, address, length, 64);
         }
 
-        private static void DumpBlock(BinaryReader binaryReader, uint address, uint length, uint size)
+        private static void DumpBlock(ITestOutputHelper output, BinaryReader binaryReader, uint address, uint length, uint size)
         {
-            const int Width = 16;
+            const int width = 16;
             binaryReader.BaseStream.Seek(address, SeekOrigin.Begin);
-            for (var i = 0; i < size; i += Width)
+            for (var i = 0; i < size; i += width)
             {
                 Console.Write("0x{0:X8}: ", (address + i));
-                var nextStep = (int)Math.Min(Width, length - i);
+                var nextStep = (int)Math.Min(width, length - i);
                 var data = binaryReader.ReadBytes(nextStep);
-                foreach (var b in data)
-                {
-                    Console.Write("{0:X2} ", b);
-                }
-                Console.WriteLine();
+                var builder = new StringBuilder();
+                foreach (var b in data) 
+                    builder.AppendFormat("{0:X2} ", b);
+
+                output.WriteLine(builder.ToString());
             }
-            Console.WriteLine("...");
+            output.WriteLine("...");
         }
 
         [Fact]

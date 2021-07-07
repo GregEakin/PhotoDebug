@@ -18,7 +18,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpImage1Test()
         {
-            const string Folder = @"C:\Users\Greg\Source\Repos\PhotoDebug\Samples\";
+            const string Folder = @"P:\PhotoDebug\Samples\";
             DumpImage1(Folder, "311A6647.CR2");
         }
 

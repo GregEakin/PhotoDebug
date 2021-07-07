@@ -4,11 +4,11 @@
 // FILE:		XmpData.cs
 // AUTHOR:		Greg Eakin
 
-using Xunit;
 using PhotoLib.Tiff;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using Xunit;
 
 namespace PhotoTests.Prototypes
 {
@@ -17,7 +17,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpXmpData()
         {
-            const string fileName = @"C:..\..\Photos\5DIIIhigh.CR2";
+            const string fileName = @"P:\Source\5DIIIhigh.CR2";
             DumpXmpInfo(fileName);
         }
 

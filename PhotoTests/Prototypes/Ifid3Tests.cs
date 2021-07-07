@@ -11,13 +11,12 @@ using System.Linq;
 
 namespace PhotoTests.Prototypes
 {
-    
     public class Ifid3Tests
     {
         [Fact]
         public void DumpImage3Test()
         {
-            const string fileName = @"C:..\..\Photos\5DIIIhigh.CR2";
+            const string fileName = @"P:\Source\5DIIIhigh.CR2";
             DumpImage3(fileName);
         }
 

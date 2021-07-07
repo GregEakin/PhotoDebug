@@ -4,20 +4,20 @@
 // FILE:		Ifid0Tests.cs
 // AUTHOR:		Greg Eakin
 
-using Xunit;
 using PhotoLib.Tiff;
 using System.IO;
 using System.Linq;
+using Xunit;
 
 namespace PhotoTests.Prototypes
 {
-    
+
     public class Ifid0Tests
     {
         [Fact]
         public void DumpImage0Test()
         {
-            const string fileName = @"C:..\..\Photos\5DIIIhigh.CR2";
+            const string fileName = @"P:\Source\5DIIIhigh.CR2";
             DumpImage0(fileName);
         }
 

@@ -4,11 +4,11 @@
 // FILE:		MakerNoteTests.cs
 // AUTHOR:		Greg Eakin
 
-using System;
-using Xunit;
 using PhotoLib.Tiff;
+using System;
 using System.IO;
 using System.Linq;
+using Xunit;
 
 namespace PhotoTests.Prototypes
 {
@@ -17,7 +17,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpMakerNotes1()
         {
-            const string fileName = @"C:..\..\Photos\5DIIIhigh.CR2";
+            const string fileName = @"P:\Source\5DIIIhigh.CR2";
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
@@ -139,9 +139,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpCameraSettings()
         {
-            //const string fileName = @"C:..\..\Photos\5DIIIhigh.CR2";
-            //const string fileName = @"d:\Users\Greg\Pictures\2018-08-29\0L2A3743.CR2";
-            const string fileName = @"C:\Users\Greg\Desktop\Photos\5DIIIhigh.CR2";
+            const string fileName = @"P:\2018\2018\2018-08-29\0L2A3743.CR2";
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
@@ -259,7 +257,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpShootInfo()
         {
-            const string fileName = @"C:..\..\Photos\5DIIIhigh.CR2";
+            const string fileName = @"P:\Source\5DIIIhigh.CR2";
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
@@ -342,7 +340,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpCameraInfo()
         {
-            const string fileName = @"C:..\..\Photos\5DIIIhigh.CR2";
+            const string fileName = @"P:\Source\5DIIIhigh.CR2";
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
@@ -368,7 +366,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpSensorInfo1()
         {
-            const string fileName = @"C:..\..\Photos\5DIIIhigh.CR2";
+            const string fileName = @"P:\Source\5DIIIhigh.CR2";
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
@@ -406,7 +404,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpMakerNotes2()
         {
-            const string fileName = @"C:..\..\Photos\7DSraw.CR2";
+            const string fileName = @"P:\Source\7DSraw.CR2";
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
@@ -434,7 +432,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpSensorInfo2()
         {
-            const string fileName = @"C:..\..\Photos\7DSraw.CR2";
+            const string fileName = @"P:\Source\7DSraw.CR2";
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
@@ -464,7 +462,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpMakerNotes3()
         {
-            const string fileName = @"C:..\..\Photos\7Dhigh.CR2";
+            const string fileName = @"P:\Source\7Dhigh.CR2";
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
@@ -495,7 +493,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpSensorInfo3()
         {
-            const string fileName = @"C:..\..\Photos\7Dhigh.CR2";
+            const string fileName = @"P:\Source\7Dhigh.CR2";
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);

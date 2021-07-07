@@ -47,12 +47,12 @@ namespace PhotoTests.CanonR
     
     public class UnitTestR
     {
-        //private const string FileName = @"D:\Users\Greg\Pictures\EOS R\447A0803.CR3";
-        //private const string FileName = @"D:\Users\Greg\Pictures\2019-08-26\8Z4A0057.CR3";
-        private const string FileNameRaw = @"D:\Users\Greg\Pictures\2019-09-02\IMG_0001.CR3";
-        private const string FileNameSraw = @"D:\Users\Greg\Pictures\2019-09-02\IMG_0002.CR3";
-        private const string FileNameDualRaw = @"D:\Users\Greg\Pictures\2019-09-02\IMG_0003.CR3";
-        private const string FileNameDualSraw = @"D:\Users\Greg\Pictures\2019-09-02\IMG_0004.CR3";
+        //private const string FileName = @"P:\EOS R\447A0803.CR3";
+        //private const string FileName = @"P:\2019\2019-08-26\8Z4A0057.CR3";
+        private const string FileNameRaw = @"P:\2019\2019-09-02\IMG_0001.CR3";
+        private const string FileNameSraw = @"P:\2019\2019-09-02\IMG_0002.CR3";
+        private const string FileNameDualRaw = @"P:\2019\2019-09-02\IMG_0003.CR3";
+        private const string FileNameDualSraw = @"P:\2019\2019-09-02\IMG_0004.CR3";
         private const string FileName = FileNameRaw;
 
         public UnitTestR()

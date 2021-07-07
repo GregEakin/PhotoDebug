@@ -152,10 +152,8 @@ namespace PhotoLib.Jpeg.JpegTags
                         //   3, 0, 1, 1
                         //   4, 0, 1, 1
 
-                        HuffmanTable luminanceDc;
-                        var table1 = HuffmanTable.Tables.TryGetValue(0x00, out luminanceDc);
-                        HuffmanTable chrominanceDc;
-                        var table3 = HuffmanTable.Tables.TryGetValue(0x01, out chrominanceDc);
+                        var table1 = HuffmanTable.Tables.TryGetValue(0x00, out var luminanceDc);
+                        var table3 = HuffmanTable.Tables.TryGetValue(0x01, out var chrominanceDc);
 
                         if (!table1 || !table3)
                             throw new Exception("Didn't read the table.");
@@ -171,14 +169,10 @@ namespace PhotoLib.Jpeg.JpegTags
                         //   2, 1, 1, 1
                         //   3, 1, 1, 1
 
-                        HuffmanTable luminanceDc;
-                        var table1 = HuffmanTable.Tables.TryGetValue(0x00, out luminanceDc);
-                        HuffmanTable chrominanceDc;
-                        var table3 = HuffmanTable.Tables.TryGetValue(0x01, out chrominanceDc);
-                        HuffmanTable luminanceAc;
-                        var table2 = HuffmanTable.Tables.TryGetValue(0x10, out luminanceAc);
-                        HuffmanTable chrominanceAc;
-                        var table4 = HuffmanTable.Tables.TryGetValue(0x11, out chrominanceAc);
+                        var table1 = HuffmanTable.Tables.TryGetValue(0x00, out var luminanceDc);
+                        var table3 = HuffmanTable.Tables.TryGetValue(0x01, out var chrominanceDc);
+                        var table2 = HuffmanTable.Tables.TryGetValue(0x10, out var luminanceAc);
+                        var table4 = HuffmanTable.Tables.TryGetValue(0x11, out var chrominanceAc);
 
                         if (!table1 || !table2 || !table3 || !table4)
                             throw new Exception("Didn't read the table.");
@@ -276,33 +270,29 @@ namespace PhotoLib.Jpeg.JpegTags
 
         private int ReadDcComponent(IReadOnlyDictionary<int, HuffmanTable.HCode> dict)
         {
-            var value = 0;
-
             var bits = (ushort)0;
             var len = 0;
 
             while (!ImageData.EndOfFile)
             {
+                if (len >= 16)
+                    throw new Exception($"Didn't find the code! len: {len}, bits: 0x{bits:X8}");
+
                 bits = ImageData.GetNextShort(bits);
                 len++;
 
-                HuffmanTable.HCode hCode;
-                if (!dict.TryGetValue(bits, out hCode) || hCode.Length != len)
-                {
+                if (!dict.TryGetValue(bits, out var hCode) || hCode.Length != len)
                     continue;
-                }
 
                 if (hCode.Code == 0x00)
-                {
                     break;
-                }
 
                 var z = ImageData.GetSetOfBits(hCode.Code);
-                value = Jpeg.HuffmanTable.DcValueEncoding(hCode.Code, z);
-                break;
+                var value = Jpeg.HuffmanTable.DcValueEncoding(hCode.Code, z);
+                return value;
             }
 
-            return value;
+            return 0;
         }
 
         private int[] ReadAcComponent(IReadOnlyDictionary<int, HuffmanTable.HCode> dict)
@@ -315,14 +305,13 @@ namespace PhotoLib.Jpeg.JpegTags
 
             while (true)
             {
+                if (len >= 16)
+                    throw new Exception($"Didn't find the code! len: {len}, bits: 0x{bits:X8}");
+
                 bits = ImageData.GetNextShort(bits);
                 len++;
 
-                if (len > 16)
-                    throw new Exception($"Didn't find the code! len: {len}, bits: 0x{bits:X8}");
-
-                HuffmanTable.HCode hCode;
-                if (!dict.TryGetValue(bits, out hCode) || hCode.Length != len)
+                if (!dict.TryGetValue(bits, out var hCode) || hCode.Length != len)
                     continue;
 
                 if (hCode.Code == 0x00)

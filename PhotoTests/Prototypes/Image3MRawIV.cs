@@ -41,7 +41,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpImage3MRawTest()
         {
-            const string fileName = @"D:\Users\Greg\Pictures\2016-02-28 MRaw\MRaw 002.CR2";
+            const string fileName = @"P:\2016\2016-02-28 MRaw\MRaw 002.CR2";
             DumpImage3SRaw(fileName);
         }
 

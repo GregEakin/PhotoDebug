@@ -21,7 +21,7 @@ namespace PhotoTests.CanonM5
     
     public class CM5Ifd2
     {
-        private const string FileName = @"C:..\..\..\Samples\IMG_0012.CR2";
+        private const string FileName = @"P:\Samples\IMG_0012.CR2";
 
         public CM5Ifd2()
         {

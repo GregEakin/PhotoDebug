@@ -4,21 +4,20 @@
 // FILE:		KeyInformation.cs
 // AUTHOR:		Greg Eakin
 
-using Xunit;
+using PhotoLib.Jpeg.JpegTags;
 using PhotoLib.Tiff;
 using System.IO;
 using System.Linq;
-using PhotoLib.Jpeg.JpegTags;
+using Xunit;
 
 namespace PhotoTests.Prototypes
 {
-    
     public class KeyInformation
     {
         [Fact]
         public void DumpKeyInformation()
         {
-            const string fileName = @"C:..\..\Photos\5DIIIhigh.CR2";
+            const string fileName = @"P:\Source\5DIIIhigh.CR2";
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);

@@ -16,7 +16,7 @@ namespace PhotoTests.Canon5D4
     
     public class C5D4Ifd3
     {
-        const string FileName = @"D:\Users\Greg\Pictures\Canon 5D IV\Y_DReggie_03.CR2";
+        const string FileName = @"P:\Canon 5D IV\Y_DReggie_03.CR2";
 
         public C5D4Ifd3()
         {

@@ -54,10 +54,7 @@ namespace PhotoTests.Tiff
                 };
             using var memory = new MemoryStream(data);
             using var reader = new BinaryReader(memory);
-            var rawImage = new RawImage(reader);
-            var directory = rawImage.Directories.First();
-            Assert.Empty(directory.Entries);
-            Assert.Throws<ArgumentException>(() => directory.NextEntry);
+            Assert.Throws<ArgumentException>(() => new RawImage(reader));
         }
     }
 }

@@ -73,9 +73,9 @@ namespace PhotoTests
         // [Fact]
         public void TestMethodB()
         {
-            // const string Directory = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
+            // const string Directory = @"P:\Samples\";
             // const string FileName2 = Directory + "IMG_0503.CR2";
-            const string directory = @"D:\Users\Greg\Pictures\2013-10-06 001\";
+            const string directory = @"P:\2013\2013-10-06 001\";
             const string fileName2 = directory + "0L2A8892.CR2";
 
             using var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read);
@@ -134,14 +134,14 @@ namespace PhotoTests
         // [Fact]
         public void TestMethodB6()
         {
-            // const string Folder = @"C:\Users\Greg\Documents\Visual Studio 2012\Projects\PhotoDebug\Samples\";
+            // const string Folder = @"P:\Samples\";
             // const string FileName2 = Folder + "IMG_0503.CR2";
 
-            const string folder = @"D:\Users\Greg\Pictures\2013-10-06 001\";
+            const string folder = @"P:\2013\2013-10-06 001\";
             const string fileName2 = folder + "0L2A8892.CR2";
             const string bitmap = folder + "0L2A8892 B6.BMP";
 
-            //const string Folder = @"C:\Users\Greg\Pictures\2013_06_02\";
+            //const string Folder = @"P:\2013\2013_06_02\";
             //const string FileName2 = Folder + "IMG_3559.CR2";
             //const string Bitmap = Folder + "IMG_3559.BMP";
 
@@ -275,7 +275,7 @@ namespace PhotoTests
         [Fact]
         public void SearchWhiteBalance()
         {
-            const string fileName = @"..\..\Photos\5DIIIhigh.CR2";
+            const string fileName = @"P:\Source\5DIIIhigh.CR2";
 
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
@@ -401,7 +401,7 @@ namespace PhotoTests
         [Fact]
         public void CanonDustDeleteData()
         {
-            const string fileName = @"..\..\Photos\5DIIIhigh.CR2";
+            const string fileName = @"P:\Source\5DIIIhigh.CR2";
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
@@ -480,8 +480,7 @@ namespace PhotoTests
         [Fact]
         public void TestMethodTags()
         {
-            const string directory = @"..\..\Photos\";
-            const string fileName2 = directory + "5DIIIhigh.CR2";
+            const string fileName2 = @"P:\Source\5DIIIhigh.CR2";
 
             using var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);

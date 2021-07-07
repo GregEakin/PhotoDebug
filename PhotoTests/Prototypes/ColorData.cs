@@ -17,7 +17,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpColorData()
         {
-            const string fileName = @"C:..\..\Photos\5DIIIhigh.CR2";
+            const string fileName = @"P:\Source\5DIIIhigh.CR2";
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);

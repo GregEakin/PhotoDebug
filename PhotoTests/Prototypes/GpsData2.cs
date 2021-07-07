@@ -18,7 +18,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpGpsData()
         {
-            const string fileName = @"D:\Users\Greg\Pictures\2016-09-04\B05A0051.CR2";
+            const string fileName = @"P:\2016\2016-09-04\B05A0051.CR2";
             DumpGpsInfo(fileName);
         }
 

@@ -4,10 +4,10 @@
 // FILE:		SensorInfo.cs
 // AUTHOR:		Greg Eakin
 
-using Xunit;
 using PhotoLib.Tiff;
 using System.IO;
 using System.Linq;
+using Xunit;
 
 namespace PhotoTests.Prototypes
 {
@@ -16,7 +16,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpSensorInfo()
         {
-            const string fileName = @"C:..\..\Photos\5DIIIhigh.CR2";
+            const string fileName = @"P:\Source\5DIIIhigh.CR2";
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
@@ -51,7 +51,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpCensorInfo2()
         {
-            const string fileName = @"C:..\..\Photos\7DSraw.CR2";
+            const string fileName = @"P:\Source\7DSraw.CR2";
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
@@ -86,7 +86,7 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpSensorInfo3()
         {
-            const string fileName = @"C:..\..\Photos\7Dhigh.CR2";
+            const string fileName = @"P:\Source\7Dhigh.CR2";
             using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
