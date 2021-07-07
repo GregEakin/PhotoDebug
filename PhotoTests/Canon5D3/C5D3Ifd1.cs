@@ -30,7 +30,7 @@ namespace PhotoTests.Canon5D3
         [Fact]
         public void DumpImageFileDirectory()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             var imageFileDirectory = rawImage.Directories.Skip(1).First();
@@ -42,7 +42,7 @@ namespace PhotoTests.Canon5D3
         [Fact]
         public void DumpImage1()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             var imageFileDirectory = rawImage.Directories.Skip(1).First();

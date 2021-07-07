@@ -18,14 +18,14 @@ namespace PhotoTests.Prototypes
         [Fact]
         public void DumpImage1Test()
         {
-            const string Folder = @"P:\PhotoDebug\Samples\";
+            const string Folder = @"P:\Source\";
             DumpImage1(Folder, "311A6647.CR2");
         }
 
         private static void DumpImage1(string folder, string file)
         {
             var fileName2 = folder + file;
-            using var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 

@@ -17,7 +17,7 @@ namespace PhotoTests.Canon7D
     
     public class UnitTest7D
     {
-        private const string FileName = @"..\..\Photos\7Dhigh.CR2";
+        private const string FileName = @"P:\Source\7Dhigh.CR2";
 
         public UnitTest7D()
         {
@@ -30,7 +30,7 @@ namespace PhotoTests.Canon7D
         [Fact]
         public void RawImageDumpData()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             Assert.Equal(new byte[] { 0x49, 0x49 }, rawImage.Header.ByteOrder);
@@ -47,7 +47,7 @@ namespace PhotoTests.Canon7D
             // 1 Sensor Width                    : 5360 = 1340 * 4 = 2 * 1728 + 1904
             // 2 Sensor Height                   : 3516
 
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -77,7 +77,7 @@ namespace PhotoTests.Canon7D
         [Fact]
         public void Bits()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -99,7 +99,7 @@ namespace PhotoTests.Canon7D
         [Fact]
         public void Colors()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -124,7 +124,7 @@ namespace PhotoTests.Canon7D
         [Fact]
         public void PredictorSelectionValue()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -143,7 +143,7 @@ namespace PhotoTests.Canon7D
             // 1 Sensor Width                    : 5360
             // 2 Sensor Height                   : 3516
 
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -177,7 +177,7 @@ namespace PhotoTests.Canon7D
         [Fact]
         public void TestMethod6()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 

@@ -38,7 +38,7 @@ namespace PhotoTests.Prototypes
         public void FigureInfoTest()
         {
             var fileName = @"P:\2017\2017-01-26 Party\IMG_0001.CR2";
-            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             var image = rawImage.Directories.First();
@@ -70,7 +70,7 @@ namespace PhotoTests.Prototypes
         public static void DumpIndex(string fileName)
         {
             // const string fileName = @"P:\2018\2018-10-11\0L2A4224.CR2";
-            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             var image = rawImage.Directories.First();

@@ -18,7 +18,7 @@ namespace JpegParserTests
             const string FileName2 = Directory + "huff_simple0.jpg";
             // const string FileName2 = Directory + "IMAG0086.jpg";
 
-            using var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var parser = new Parser(binaryReader);
             parser.JpegData();

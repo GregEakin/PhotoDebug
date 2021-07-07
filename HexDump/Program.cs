@@ -14,7 +14,7 @@ namespace HexDump
     {
         public static void DumpHexData(string fileName)
         {
-            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
 
             var address = 0x0L;

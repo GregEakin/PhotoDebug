@@ -21,7 +21,7 @@ namespace PhotoTests.CanonM5
     
     public class CM5Ifd2
     {
-        private const string FileName = @"P:\Samples\IMG_0012.CR2";
+        private const string FileName = @"P:\Source\IMG_0012.CR2";
 
         public CM5Ifd2()
         {
@@ -32,7 +32,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void TestMethod1()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             Assert.Equal(new byte[] { 0x49, 0x49 }, rawImage.Header.ByteOrder);
@@ -46,7 +46,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void TestMethod2()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             var imageFileDirectory = rawImage.Directories.Skip(2).First();
@@ -58,7 +58,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void DumpImage1()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             var imageFileDirectory = rawImage.Directories.Skip(2).First();

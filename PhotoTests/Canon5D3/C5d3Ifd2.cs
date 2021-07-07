@@ -44,7 +44,7 @@ namespace PhotoTests.Canon5D3
         [Fact]
         public void DumpImageFileDirectory()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             var imageFileDirectory = rawImage.Directories.Skip(2).First();
@@ -54,7 +54,7 @@ namespace PhotoTests.Canon5D3
         [Fact]
         public void ImageSizeTest()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             var imageFileDirectory = rawImage.Directories.Skip(2).First();
@@ -75,7 +75,7 @@ namespace PhotoTests.Canon5D3
         [Fact]
         public void DumpImage()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             var imageFileDirectory = rawImage.Directories.Skip(2).First();

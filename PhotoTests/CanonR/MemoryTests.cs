@@ -39,7 +39,7 @@ namespace PhotoTests.CanonR
         public void ReadSteam()
         {
             // var memory = new Memory<byte>(new byte[50]);
-            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read))
+            using (var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 // fileStream.ReadAsync()
             }

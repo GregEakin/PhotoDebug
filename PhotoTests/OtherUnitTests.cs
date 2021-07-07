@@ -26,7 +26,7 @@ namespace PhotoTests
             const string directory = @"..\..\..\Samples\";
             const string fileName2 = directory + "huff_simple0.jpg";
 
-            using var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             binaryReader.BaseStream.Seek(0x000000D0u, SeekOrigin.Begin);
             var huffmanTable = new DefineHuffmanTable(binaryReader);
@@ -41,7 +41,7 @@ namespace PhotoTests
             const string directory = @"..\..\..\Samples\";
             const string fileName2 = directory + "IMAG0086.jpg";
 
-            using var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var startOfImage = new StartOfImage(binaryReader, 0x00u, (uint)fileStream.Length);
             Assert.Equal(0xFF, startOfImage.Mark);
@@ -73,12 +73,12 @@ namespace PhotoTests
         // [Fact]
         public void TestMethodB()
         {
-            // const string Directory = @"P:\Samples\";
+            // const string Directory = @"P:\Source\";
             // const string FileName2 = Directory + "IMG_0503.CR2";
             const string directory = @"P:\2013\2013-10-06 001\";
             const string fileName2 = directory + "0L2A8892.CR2";
 
-            using var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             var imageFileDirectory = rawImage.Directories.Last();
@@ -134,7 +134,7 @@ namespace PhotoTests
         // [Fact]
         public void TestMethodB6()
         {
-            // const string Folder = @"P:\Samples\";
+            // const string Folder = @"P:\Source\";
             // const string FileName2 = Folder + "IMG_0503.CR2";
 
             const string folder = @"P:\2013\2013-10-06 001\";
@@ -150,7 +150,7 @@ namespace PhotoTests
 
         private static void ProcessFile(string fileName, string bitmap)
         {
-            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             var imageFileDirectory = rawImage.Directories.Last();
@@ -277,7 +277,7 @@ namespace PhotoTests
         {
             const string fileName = @"P:\Source\5DIIIhigh.CR2";
 
-            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -402,7 +402,7 @@ namespace PhotoTests
         public void CanonDustDeleteData()
         {
             const string fileName = @"P:\Source\5DIIIhigh.CR2";
-            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             var ifid0 = rawImage.Directories.First();
@@ -429,7 +429,7 @@ namespace PhotoTests
         {
             const string fileName = @"..\..\Photos\0L2A2451.CR2";
 
-            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var data = VrdData.ParseFile(binaryReader);
             Assert.IsType<VrdDataF7>(data[0]);
@@ -442,7 +442,7 @@ namespace PhotoTests
         {
             const string fileName = @"..\..\Photos\7Dhigh - Copy.CR2";
 
-            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var data = VrdData.ParseFile(binaryReader);
             Assert.IsType<VrdDataF7>(data[0]);
@@ -455,7 +455,7 @@ namespace PhotoTests
         {
             const string fileName = @"..\..\Photos\7Dhigh - Copy - Copy.CR2";
 
-            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var data = VrdData.ParseFile(binaryReader);
             Assert.IsType<VrdDataF4>(data[0]);
@@ -469,7 +469,7 @@ namespace PhotoTests
         {
             const string fileName = @"..\..\Photos\IMG_4331.CR2";
 
-            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var data = VrdData.ParseFile(binaryReader);
             Assert.IsType<VrdDataF4>(data[0]);
@@ -482,7 +482,7 @@ namespace PhotoTests
         {
             const string fileName2 = @"P:\Source\5DIIIhigh.CR2";
 
-            using var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 

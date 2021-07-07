@@ -25,7 +25,7 @@ namespace PhotoTests.Canon5D3
         [Fact]
         public void DumpImageFileDirectory()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             var imageFileDirectory = rawImage.Directories.First();
@@ -35,7 +35,7 @@ namespace PhotoTests.Canon5D3
         [Fact]
         public void ReadImageGuid()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -110,7 +110,7 @@ namespace PhotoTests.Canon5D3
         [Fact]
         public void ImageWidth()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -125,7 +125,7 @@ namespace PhotoTests.Canon5D3
         [Fact]
         public void ImageLength()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -140,7 +140,7 @@ namespace PhotoTests.Canon5D3
         [Fact]
         public void BitsPerSample()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -158,7 +158,7 @@ namespace PhotoTests.Canon5D3
         [Fact]
         public void Compression()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -173,7 +173,7 @@ namespace PhotoTests.Canon5D3
         [Fact]
         public void Maker()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -190,7 +190,7 @@ namespace PhotoTests.Canon5D3
         [Fact]
         public void Model()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -216,7 +216,7 @@ namespace PhotoTests.Canon5D3
         [Fact]
         public void XmpMetadata()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -245,7 +245,7 @@ namespace PhotoTests.Canon5D3
         [Fact]
         public void ExifTags()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -265,7 +265,7 @@ namespace PhotoTests.Canon5D3
         [Fact]
         public void DumpImage0()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             var imageFileDirectory = rawImage.Directories.First();

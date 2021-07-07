@@ -21,7 +21,7 @@ namespace PhotoTests.CanonM5
     
     public class CM5Ifd3
     {
-        private const string FileName = @"P:\Samples\IMG_0012.CR2";
+        private const string FileName = @"P:\Source\IMG_0012.CR2";
 
         public CM5Ifd3()
         {
@@ -34,7 +34,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void TestMethod1()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             Assert.Equal(new byte[] { 0x49, 0x49 }, rawImage.Header.ByteOrder);
@@ -57,7 +57,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void Compression()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -72,7 +72,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void StripOffset()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -88,7 +88,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void StripByteCounts()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -104,7 +104,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void Cr2Slice()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 

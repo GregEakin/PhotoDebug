@@ -20,7 +20,7 @@ namespace PhotoTests.CanonM5
     
     public class CM5Ifd0
     {
-        // private const string FileName = @"P:\Samples\IMG_0012.CR2";
+        // private const string FileName = @"P:\Source\IMG_0012.CR2";
         private const string FileName = @"P:\2017\2017-11-21\IMG_0002.CR2";
 
         public CM5Ifd0()
@@ -32,7 +32,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void TestMethod1()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             Assert.Equal(new byte[] { 0x49, 0x49 }, rawImage.Header.ByteOrder);
@@ -46,7 +46,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void ReadImageGuid()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -76,7 +76,7 @@ namespace PhotoTests.CanonM5
             var files = d.GetFiles("*.cr2");
             foreach (var file in files)
             {
-                using var fileStream = File.Open(file.FullName, FileMode.Open, FileAccess.Read);
+                using var fileStream = File.Open(file.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
                 using var binaryReader = new BinaryReader(fileStream);
                 var rawImage = new RawImage(binaryReader);
 
@@ -104,7 +104,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void ImageWidth()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -119,7 +119,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void ImageLength()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -134,7 +134,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void BitsPerSample()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -152,7 +152,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void Compression()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -167,7 +167,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void Maker()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -184,7 +184,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void Model()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -210,7 +210,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void XmpMetadata()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -239,7 +239,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void ExifTags()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -259,7 +259,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void DumpImage3()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             var imageFileDirectory = rawImage.Directories.First();

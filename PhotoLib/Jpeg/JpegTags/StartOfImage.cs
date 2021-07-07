@@ -58,7 +58,7 @@ namespace PhotoLib.Jpeg.JpegTags
                         StartOfScan = new StartOfScan(binaryReader);
                         var rawSize = address + length - binaryReader.BaseStream.Position;
                         ImageData = new ImageData(binaryReader, (uint)rawSize);
-                        DecodeHuffmanData();
+                        // DecodeHuffmanData();
                         break;
 
                     case 0xDB: // DQT, Define Quantization Table

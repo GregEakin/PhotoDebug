@@ -17,7 +17,7 @@ namespace PhotoTests.CanonM5
     
     public class UnitTestM5
     {
-        private const string FileName = @"P:\Samples\IMG_0012.CR2";
+        private const string FileName = @"P:\Source\IMG_0012.CR2";
 
         public UnitTestM5()
         {
@@ -30,7 +30,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void RawImageDumpData()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             Assert.Equal(new byte[] { 0x49, 0x49 }, rawImage.Header.ByteOrder);
@@ -47,7 +47,7 @@ namespace PhotoTests.CanonM5
             // 1 Sensor Width                    : 6288 = 0 * 0 + 6288
             // 2 Sensor Height                   : 4056
 
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -76,7 +76,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void Bits()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -98,7 +98,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void Colors()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -123,7 +123,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void PredictorSelectionValue()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -142,7 +142,7 @@ namespace PhotoTests.CanonM5
             // 1 Sensor Width                    : 5760
             // 2 Sensor Height                   : 3840
 
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -176,7 +176,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void TestMethod6()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -240,7 +240,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void Test1()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 
@@ -262,7 +262,7 @@ namespace PhotoTests.CanonM5
         [Fact]
         public void Test2()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
 

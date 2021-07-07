@@ -33,7 +33,7 @@ namespace PhotoTests
             const string Folder = @"P:\2013\2013_10_14\";
             const string FileName2 = Folder + "IMG_4195.CR2";
 
-            using var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read, FileShare.Read);
             var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             var imageFileDirectory = rawImage.Directories.Last();
@@ -49,7 +49,7 @@ namespace PhotoTests
 
         private static void DumpBitmap(string fileName2, string bitmap)
         {
-            using var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             var imageFileDirectory = rawImage.Directories.Last();

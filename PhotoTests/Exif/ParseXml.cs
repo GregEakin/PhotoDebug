@@ -17,7 +17,7 @@ namespace PhotoTests.Exif
         [Fact]
         public void AATest1()
         {
-            using var reader = XmlReader.Create(@"..\..\..\Samples\data3.xml");
+            using var reader = XmlReader.Create(@"P:\Source\data3.xml");
             reader.ReadToFollowing("taginfo");
             var x = reader.AttributeCount;
             Assert.Equal(0, x);
@@ -26,7 +26,7 @@ namespace PhotoTests.Exif
         [Fact]
         public void AATest2()
         {
-            var doc = XDocument.Load(@"..\..\..\Samples\data3.xml");
+            var doc = XDocument.Load(@"P:\Source\data3.xml");
             var authors = doc.Descendants("table");
             foreach (var author in authors)
             {

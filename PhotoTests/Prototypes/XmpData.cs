@@ -23,7 +23,7 @@ namespace PhotoTests.Prototypes
 
         private static void DumpXmpInfo(string fileName)
         {
-            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BinaryReader(fileStream);
             var rawImage = new RawImage(binaryReader);
             var image = rawImage.Directories.First();

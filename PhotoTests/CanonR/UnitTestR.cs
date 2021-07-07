@@ -70,7 +70,7 @@ namespace PhotoTests.CanonR
         [Fact]
         public void DirectDumpTest()
         {
-            using var fileStream = File.Open(FileNameRaw, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileNameRaw, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BigEndianBinaryReader(fileStream);
             Console.WriteLine("FileSize {0}", fileStream.Length);
 
@@ -93,7 +93,7 @@ namespace PhotoTests.CanonR
         [Fact]
         public void ParseCr3Test()
         {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read);
+            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var binaryReader = new BigEndianBinaryReader(fileStream);
             Console.WriteLine("FileSize {0}", fileStream.Length);
 
