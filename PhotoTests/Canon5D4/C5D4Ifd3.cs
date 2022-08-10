@@ -58,7 +58,7 @@ public class C5D4Ifd3
         // var imageFileDirectory = rawImage[0x00011964];
         var imageFileDirectory = rawImage.Directories.Last();
         var imageFileEntry = imageFileDirectory[0x0103];
-        Assert.Equal(3, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.UShort, imageFileEntry.TagType);
         Assert.Equal(6u, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
     }
@@ -74,7 +74,7 @@ public class C5D4Ifd3
         //var imageFileDirectory = rawImage[0x00011964];
         var imageFileDirectory = rawImage.Directories.Last();
         var imageFileEntry = imageFileDirectory[0x0111];
-        Assert.Equal(4, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.ULong, imageFileEntry.TagType);
         Assert.Equal(0x0111, imageFileEntry.TagId);
         // Assert.Equal(4223344u, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
@@ -91,7 +91,7 @@ public class C5D4Ifd3
         // var imageFileDirectory = rawImage[0x00011964];
         var imageFileDirectory = rawImage.Directories.Last();
         var imageFileEntry = imageFileDirectory[0x0117];
-        Assert.Equal(4, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.ULong, imageFileEntry.TagType);
         Assert.Equal(0x0117, imageFileEntry.TagId);
         // Assert.Equal(25591542u, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
@@ -108,7 +108,7 @@ public class C5D4Ifd3
         // var imageFileDirectory = rawImage[0x00011964];
         var imageFileDirectory = rawImage.Directories.Last();
         var imageFileEntry = imageFileDirectory[0xC640];
-        Assert.Equal(3, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.UShort, imageFileEntry.TagType);
         Assert.Equal(0x0000B378u, imageFileEntry.ValuePointer);
         Assert.Equal(3u, imageFileEntry.NumberOfValue);
 

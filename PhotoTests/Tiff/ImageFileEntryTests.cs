@@ -12,7 +12,7 @@ namespace PhotoTests.Tiff;
 
 public class ImageFileEntryTests
 {
-    private static readonly byte[] Data = { 0x12, 0x00, 0x00, 0x01, 0x03, 0x00, 0x01, 0x00, 0x00, 0x00, 0x40, 0x14 };
+    private static readonly byte[] Data = { 0x12, 0x00, 0x0A, 0x00, 0x03, 0x00, 0x01, 0x00, 0x00, 0x00, 0x40, 0x14 };
 
     [Fact]
     public void NumberOfValue()
@@ -38,7 +38,7 @@ public class ImageFileEntryTests
         using var memory = new MemoryStream(Data);
         using var reader = new BinaryReader(memory);
         var imageFileEntry = new ImageFileEntry(reader);
-        Assert.Equal(0x0100, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.SRational, imageFileEntry.TagType);
     }
 
     [Fact]

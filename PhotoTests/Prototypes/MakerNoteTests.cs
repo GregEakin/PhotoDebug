@@ -23,11 +23,11 @@ public class MakerNoteTests
         var rawImage = new RawImage(binaryReader);
         var image = rawImage.Directories.First();
 
-        var exifEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == 4);
+        var exifEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == ImageFileEntry.TagTypes.ULong);
         binaryReader.BaseStream.Seek(exifEntry.ValuePointer, SeekOrigin.Begin);
         var exif = new ImageFileDirectory(binaryReader);
 
-        var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == 7);
+        var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == ImageFileEntry.TagTypes.UByteSeq);
         binaryReader.BaseStream.Seek(notesEntry.ValuePointer, SeekOrigin.Begin);
         var notes = new ImageFileDirectory(binaryReader);
         Assert.Equal(42, notes.Entries.Length);
@@ -49,7 +49,7 @@ public class MakerNoteTests
         Assert.Equal("Firmware Version 1.2.3\0", firmware);
 
         // 0x0010 ULong 32 - bit: 2147484293
-        var id = notes.Entries.Single(e => e.TagId == 0x0010 && e.TagType == 4);
+        var id = notes.Entries.Single(e => e.TagId == 0x0010 && e.TagType == ImageFileEntry.TagTypes.ULong);
         Assert.Equal(0x80000285, id.ValuePointer);
 
         // 0)  0x0001 UShort 16-bit: [0x000005E2] (49): 98, 2, 0, 4, 0, 0, 0, 3, 0, 6, 65535, 1, 0, 0, 0, 32767, 32767, 1, 2, 0, 3, 65535, 230, 70, 24, 1, 96, 288, 0, 0, 0, 0, 65535, 65535, 65535, 0, 0, 0, 0, 65535, 65535, 0, 0, 32767, 65535, 65535, 0, 0, 65535, 
@@ -111,29 +111,29 @@ public class MakerNoteTests
         //41)  0x4028 ULong 32-bit: [0x00010F4C] (19): 004C 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0001 003F 0000 0001 0001 0002 0000 0000   // AF Coding
 
         // Color Balance
-        //var data1B = RawImage.ReadBytes(binaryReader, notes.Entries.Single(e => e.TagId == 0x4001 && e.TagType == 3));
+        //var data1B = RawImage.ReadBytes(binaryReader, notes.Entries.Single(e => e.TagId == 0x4001 && e.TagType == ImageFileEntry.TagTypes.UShort));
 
         // Vignetting Correction
-        //var data1B = RawImage.ReadBytes(binaryReader, notes.Entries.Single(e => e.TagId == 0x4015 && e.TagType == 7));
+        //var data1B = RawImage.ReadBytes(binaryReader, notes.Entries.Single(e => e.TagId == 0x4015 && e.TagType == ImageFileEntry.TagTypes.UByteSeq));
 
         // CRW Parm
         var data01 = RawImage.ReadBytes(binaryReader,
-            notes.Entries.Single(e => e.TagId == 0x4002 && e.TagType == 7));
+            notes.Entries.Single(e => e.TagId == 0x4002 && e.TagType == ImageFileEntry.TagTypes.UByteSeq));
 
         // Flavor
         var data02 = RawImage.ReadBytes(binaryReader,
-            notes.Entries.Single(e => e.TagId == 0x4005 && e.TagType == 7));
+            notes.Entries.Single(e => e.TagId == 0x4005 && e.TagType == ImageFileEntry.TagTypes.UByteSeq));
 
         var data03 = RawImage.ReadBytes(binaryReader,
-            notes.Entries.Single(e => e.TagId == 0x4011 && e.TagType == 7));
+            notes.Entries.Single(e => e.TagId == 0x4011 && e.TagType == ImageFileEntry.TagTypes.UByteSeq));
 
         // Vignetting Correction
         var data04 = RawImage.ReadBytes(binaryReader,
-            notes.Entries.Single(e => e.TagId == 0x4015 && e.TagType == 7));
+            notes.Entries.Single(e => e.TagId == 0x4015 && e.TagType == ImageFileEntry.TagTypes.UByteSeq));
 
         // Lens info
         var data05 = RawImage.ReadBytes(binaryReader,
-            notes.Entries.Single(e => e.TagId == 0x4019 && e.TagType == 7));
+            notes.Entries.Single(e => e.TagId == 0x4019 && e.TagType == ImageFileEntry.TagTypes.UByteSeq));
     }
 
     [Fact]
@@ -145,24 +145,24 @@ public class MakerNoteTests
         var rawImage = new RawImage(binaryReader);
         var image = rawImage.Directories.First();
 
-        var exifEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == 4);
+        var exifEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == ImageFileEntry.TagTypes.ULong);
         binaryReader.BaseStream.Seek(exifEntry.ValuePointer, SeekOrigin.Begin);
         var exif = new ImageFileDirectory(binaryReader);
 
 
-        var lensInfo = exif.Entries.Single(e => e.TagId == 0xa432 && e.TagType == 5);
+        var lensInfo = exif.Entries.Single(e => e.TagId == 0xa432 && e.TagType == ImageFileEntry.TagTypes.URational);
         Console.WriteLine(lensInfo.ValuePointer);
 
-        var lensModel = exif.Entries.Single(e => e.TagId == 0xa434 && e.TagType == 2);
+        var lensModel = exif.Entries.Single(e => e.TagId == 0xa434 && e.TagType == ImageFileEntry.TagTypes.Ascii);
         Console.WriteLine(lensModel.ValuePointer);
 
-        var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == 7);
+        var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == ImageFileEntry.TagTypes.UByteSeq);
         binaryReader.BaseStream.Seek(notesEntry.ValuePointer, SeekOrigin.Begin);
         var notes = new ImageFileDirectory(binaryReader);
 
         // 0)  0x0001 UShort 16-bit: [0x000005E2] (49): 98, 2, 0, 4, 0, 0, 0, 3, 0, 6, 65535, 1, 0, 0, 0, 32767, 32767, 1, 2, 0, 3, 65535, 230, 70, 24, 1, 96, 288, 0, 0, 0, 0, 65535, 65535, 65535, 0, 0, 0, 0, 65535, 65535, 0, 0, 32767, 65535, 65535, 0, 0, 65535, 
         var data = RawImage.ReadUInts16(binaryReader,
-            notes.Entries.Single(e => e.TagId == 0x0001 && e.TagType == 3));
+            notes.Entries.Single(e => e.TagId == 0x0001 && e.TagType == ImageFileEntry.TagTypes.UShort));
 
         Assert.Equal(2 * data.Length, data[0]);
         Assert.Equal(2, data[1]); // 01: Macro mode, 2 == Normal
@@ -263,17 +263,17 @@ public class MakerNoteTests
         var rawImage = new RawImage(binaryReader);
         var image = rawImage.Directories.First();
 
-        var exifEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == 4);
+        var exifEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == ImageFileEntry.TagTypes.ULong);
         binaryReader.BaseStream.Seek(exifEntry.ValuePointer, SeekOrigin.Begin);
         var exif = new ImageFileDirectory(binaryReader);
 
-        var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == 7);
+        var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == ImageFileEntry.TagTypes.UByteSeq);
         binaryReader.BaseStream.Seek(notesEntry.ValuePointer, SeekOrigin.Begin);
         var notes = new ImageFileDirectory(binaryReader);
 
         // 3)  0x0004 UShort 16-bit: [0x00000654] (34): 68, 0, 160, 65324, 108, 65376, 0, 0, 3, 0, 8, 8, 148, 0, 0, 0, 0, 0, 1, 0, 0, 108, 65376, 45, 0, 0, 248, 65535, 65535, 65535, 65535, 0, 0, 0, 
         var data = RawImage.ReadUInts16(binaryReader,
-            notes.Entries.Single(e => e.TagId == 0x0004 && e.TagType == 3));
+            notes.Entries.Single(e => e.TagId == 0x0004 && e.TagType == ImageFileEntry.TagTypes.UShort));
 
         Assert.Equal(2 * data.Length, data[0]);
         Assert.Equal(160, data[2]);
@@ -346,16 +346,16 @@ public class MakerNoteTests
         var rawImage = new RawImage(binaryReader);
         var image = rawImage.Directories.First();
 
-        var exifEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == 4);
+        var exifEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == ImageFileEntry.TagTypes.ULong);
         binaryReader.BaseStream.Seek(exifEntry.ValuePointer, SeekOrigin.Begin);
         var exif = new ImageFileDirectory(binaryReader);
 
-        var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == 7);
+        var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == ImageFileEntry.TagTypes.UByteSeq);
         binaryReader.BaseStream.Seek(notesEntry.ValuePointer, SeekOrigin.Begin);
         var notes = new ImageFileDirectory(binaryReader);
 
         // 7)  0x000D UByte[]: [0x000006F0] (1536):                     // camera info
-        var entry = notes.Entries.Single(e => e.TagId == 0x000D && e.TagType == 7);
+        var entry = notes.Entries.Single(e => e.TagId == 0x000D && e.TagType == ImageFileEntry.TagTypes.UByteSeq);
         binaryReader.BaseStream.Seek(entry.ValuePointer, SeekOrigin.Begin);
         var data = RawImage.ReadChars(binaryReader, entry);
 
@@ -372,18 +372,18 @@ public class MakerNoteTests
         var rawImage = new RawImage(binaryReader);
         var image = rawImage.Directories.First();
 
-        var exifEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == 4);
+        var exifEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == ImageFileEntry.TagTypes.ULong);
         binaryReader.BaseStream.Seek(exifEntry.ValuePointer, SeekOrigin.Begin);
         var exif = new ImageFileDirectory(binaryReader);
 
-        var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == 7);
+        var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == ImageFileEntry.TagTypes.UByteSeq);
         binaryReader.BaseStream.Seek(notesEntry.ValuePointer, SeekOrigin.Begin);
         var notes = new ImageFileDirectory(binaryReader);
 
         // Sensor Info
         // 24)  0x00E0 UShort 16-bit: [0x00001540] (17): 34, 5920, 3950, 1, 1, 140, 96, 5899, 3935, 0, 0, 0, 0, 0, 0, 0, 0, 
         var data = RawImage.ReadUInts16(binaryReader,
-            notes.Entries.Single(e => e.TagId == 0x00E0 && e.TagType == 3));
+            notes.Entries.Single(e => e.TagId == 0x00E0 && e.TagType == ImageFileEntry.TagTypes.UShort));
         Assert.Equal(2 * data.Length, data[0]);
         //Assert.Equal(5920, data[1]);   // sensor width
         //Assert.Equal(3950, data[2]);   // sensor height
@@ -394,10 +394,10 @@ public class MakerNoteTests
         //Assert.Equal(5899, data[7]);      // mask right
         //Assert.Equal(3935, data[8]);      // mask bottom
 
-        var imageWidth = (int) image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == 3).ValuePointer;
+        var imageWidth = (int) image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
         Assert.Equal(imageWidth, data[7] - data[5] + data[3]);
 
-        var imageLength = (int) image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == 3).ValuePointer;
+        var imageLength = (int) image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
         Assert.Equal(imageLength, data[8] - data[6] + data[4]);
     }
 
@@ -438,23 +438,23 @@ public class MakerNoteTests
         var rawImage = new RawImage(binaryReader);
         var image = rawImage.Directories.First();
 
-        var exifEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == 4);
+        var exifEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == ImageFileEntry.TagTypes.ULong);
         binaryReader.BaseStream.Seek(exifEntry.ValuePointer, SeekOrigin.Begin);
         var exif = new ImageFileDirectory(binaryReader);
 
-        var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == 7);
+        var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == ImageFileEntry.TagTypes.UByteSeq);
         binaryReader.BaseStream.Seek(notesEntry.ValuePointer, SeekOrigin.Begin);
         var notes = new ImageFileDirectory(binaryReader);
 
         // Sensor Info
         var data = RawImage.ReadUInts16(binaryReader,
-            notes.Entries.Single(e => e.TagId == 0x00E0 && e.TagType == 3));
+            notes.Entries.Single(e => e.TagId == 0x00E0 && e.TagType == ImageFileEntry.TagTypes.UShort));
         Assert.Equal(2 * data.Length, data[0]);
 
-        var imageWidth = (int) image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == 3).ValuePointer;
+        var imageWidth = (int) image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
         Assert.Equal(imageWidth / 2, data[7] - data[5] + data[3]);
 
-        var imageLength = (int) image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == 3).ValuePointer;
+        var imageLength = (int) image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
         Assert.Equal(imageLength / 2, data[8] - data[6] + data[4]);
     }
 
@@ -499,23 +499,23 @@ public class MakerNoteTests
         var rawImage = new RawImage(binaryReader);
         var image = rawImage.Directories.First();
 
-        var exifEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == 4);
+        var exifEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == ImageFileEntry.TagTypes.ULong);
         binaryReader.BaseStream.Seek(exifEntry.ValuePointer, SeekOrigin.Begin);
         var exif = new ImageFileDirectory(binaryReader);
 
-        var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == 7);
+        var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == ImageFileEntry.TagTypes.UByteSeq);
         binaryReader.BaseStream.Seek(notesEntry.ValuePointer, SeekOrigin.Begin);
         var notes = new ImageFileDirectory(binaryReader);
 
         // Sensor Info
         var data = RawImage.ReadUInts16(binaryReader,
-            notes.Entries.Single(e => e.TagId == 0x00E0 && e.TagType == 3));
+            notes.Entries.Single(e => e.TagId == 0x00E0 && e.TagType == ImageFileEntry.TagTypes.UShort));
         Assert.Equal(2 * data.Length, data[0]);
 
-        var imageWidth = (int) image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == 3).ValuePointer;
+        var imageWidth = (int) image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
         Assert.Equal(imageWidth, data[7] - data[5] + data[3]);
 
-        var imageLength = (int) image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == 3).ValuePointer;
+        var imageLength = (int) image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
         Assert.Equal(imageLength, data[8] - data[6] + data[4]);
     }
 }

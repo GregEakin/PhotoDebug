@@ -22,16 +22,16 @@ public class ExifData
         var rawImage = new RawImage(binaryReader);
         var image = rawImage.Directories.First();
 
-        var imageFileEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == 4);
+        var imageFileEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == ImageFileEntry.TagTypes.ULong);
         binaryReader.BaseStream.Seek(imageFileEntry.ValuePointer, SeekOrigin.Begin);
         var exif = new ImageFileDirectory(binaryReader);
         exif.DumpDirectory(binaryReader);
 
         Assert.Equal(38, exif.Entries.Length);
 
-        var exposure = exif.Entries.Single(e => e.TagId == 0x829A && e.TagType == 5);
-        var fStop = exif.Entries.Single(e => e.TagId == 0x829D && e.TagType == 5);
-        var iso = exif.Entries.Single(e => e.TagId == 0x8827 && e.TagType == 3);
+        var exposure = exif.Entries.Single(e => e.TagId == 0x829A && e.TagType == ImageFileEntry.TagTypes.URational);
+        var fStop = exif.Entries.Single(e => e.TagId == 0x829D && e.TagType == ImageFileEntry.TagTypes.URational);
+        var iso = exif.Entries.Single(e => e.TagId == 0x8827 && e.TagType == ImageFileEntry.TagTypes.UShort);
 
         // 0)  0x829A URational 2x32-bit: [0x0000038C] (1): 30/1 = 30   // exposure time
         // 1)  0x829D URational 2x32-bit: [0x00000394] (1): 32/10 = 3.2 // f number
@@ -76,17 +76,17 @@ public class ExifData
         // Assert.Equal(68540u, notesEntry.NumberOfValue);
         // Assert.Equal(0x000001BEu, imageFileEntry.ValuePointer);
 
-        var interopEntry = exif.Entries.Single(e => e.TagId == 0xA005 && e.TagType == 4);
+        var interopEntry = exif.Entries.Single(e => e.TagId == 0xA005 && e.TagType == ImageFileEntry.TagTypes.ULong);
         binaryReader.BaseStream.Seek(interopEntry.ValuePointer, SeekOrigin.Begin);
         var interop = new ImageFileDirectory(binaryReader);
         Assert.Equal(new ushort[] { 0x0001, 0x0002, }, interop.Entries.Select(e => e.TagId).ToArray());
         // interop.DumpDirectory(binaryReader);
 
-        var tag01 = interop.Entries.Single(e => e.TagId == 0x0001 && e.TagType == 2);
+        var tag01 = interop.Entries.Single(e => e.TagId == 0x0001 && e.TagType == ImageFileEntry.TagTypes.Ascii);
         var index = RawImage.ReadChars(binaryReader, tag01);
         Assert.Equal("R98", index);
 
-        var tag02 = interop.Entries.Single(e => e.TagId == 0x0002 && e.TagType == 7);
+        var tag02 = interop.Entries.Single(e => e.TagId == 0x0002 && e.TagType == ImageFileEntry.TagTypes.UByteSeq);
         var version = RawImage.ReadChars(binaryReader, tag02);
         Assert.Equal("0100", version);
     }
@@ -100,14 +100,14 @@ public class ExifData
         var rawImage = new RawImage(binaryReader);
         var image = rawImage.Directories.First();
 
-        var imageFileEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == 4);
+        var imageFileEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == ImageFileEntry.TagTypes.ULong);
         binaryReader.BaseStream.Seek(imageFileEntry.ValuePointer, SeekOrigin.Begin);
         var exif = new ImageFileDirectory(binaryReader);
         exif.DumpDirectory(binaryReader);
 
         Assert.Equal(37, exif.Entries.Length);
 
-        var data1B = RawImage.ReadBytes(binaryReader, exif.Entries.Single(e => e.TagId == 0x9286 && e.TagType == 7));
+        var data1B = RawImage.ReadBytes(binaryReader, exif.Entries.Single(e => e.TagId == 0x9286 && e.TagType == ImageFileEntry.TagTypes.UByteSeq));
         Assert.Equal(264, data1B.Length);
         foreach (var b in data1B)
             Assert.Equal(0x00, b);
@@ -160,7 +160,7 @@ public class ExifData
         var rawImage = new RawImage(binaryReader);
         var image = rawImage.Directories.First();
 
-        var imageFileEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == 4);
+        var imageFileEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == ImageFileEntry.TagTypes.ULong);
         binaryReader.BaseStream.Seek(imageFileEntry.ValuePointer, SeekOrigin.Begin);
         var exif = new ImageFileDirectory(binaryReader);
         exif.DumpDirectory(binaryReader);

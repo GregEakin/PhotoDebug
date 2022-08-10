@@ -35,49 +35,49 @@ public class Image2Bit16
         var image = rawImage.Directories.Skip(2).First();
         Assert.Equal(13, image.Entries.Length);
 
-        var imageWidth = image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == 3).ValuePointer;
+        var imageWidth = image.Entries.Single(e => e.TagId == 0x0100 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
         Assert.Equal(592u, imageWidth);
 
-        var imageHeight = image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == 3).ValuePointer;
+        var imageHeight = image.Entries.Single(e => e.TagId == 0x0101 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
         Assert.Equal(395u, imageHeight);
 
-        var imageFileEntry0102 = image.Entries.Single(e => e.TagId == 0x0102 && e.TagType == 3);
+        var imageFileEntry0102 = image.Entries.Single(e => e.TagId == 0x0102 && e.TagType == ImageFileEntry.TagTypes.UShort);
         // Assert.Equal(72014u, imageFileEntry0102.ValuePointer);
         // Assert.Equal(3u, imageFileEntry0102.NumberOfValue);
         var bitsPerSample = RawImage.ReadUInts16(binaryReader, imageFileEntry0102);
         Assert.Equal(new[] { (ushort)16, (ushort)16, (ushort)16 }, bitsPerSample);
 
-        var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;
+        var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
         Assert.Equal(1u, compression); // 1 == uncompressed
 
         var photometricInterpretation =
-            image.Entries.Single(e => e.TagId == 0x0106 && e.TagType == 3).ValuePointer;
+            image.Entries.Single(e => e.TagId == 0x0106 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
         Assert.Equal(2u, photometricInterpretation); // 2 == RGB
 
-        var stripOffset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
+        var stripOffset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         // Assert.Equal(1229532u, stripOffset);
 
-        var samplesPerPixel = image.Entries.Single(e => e.TagId == 0x0115 && e.TagType == 3).ValuePointer;
+        var samplesPerPixel = image.Entries.Single(e => e.TagId == 0x0115 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
         Assert.Equal(3u, samplesPerPixel);
 
-        var rowsPerStrip = image.Entries.Single(e => e.TagId == 0x0116 && e.TagType == 3).ValuePointer;
+        var rowsPerStrip = image.Entries.Single(e => e.TagId == 0x0116 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
         Assert.Equal(395u, rowsPerStrip);
 
-        var stripByteCounts = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
+        var stripByteCounts = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         Assert.Equal(1403040u, stripByteCounts);
         Assert.Equal(stripByteCounts, imageWidth * imageHeight * samplesPerPixel * 2);
 
-        var planarConfiguration = image.Entries.Single(e => e.TagId == 0x011C && e.TagType == 3).ValuePointer;
+        var planarConfiguration = image.Entries.Single(e => e.TagId == 0x011C && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
         Assert.Equal(1u, planarConfiguration); // 1 == chunky
 
         // unknown
-        var table1 = image.Entries.Single(e => e.TagId == 0xC5D9 && e.TagType == 4).ValuePointer;
+        var table1 = image.Entries.Single(e => e.TagId == 0xC5D9 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         Assert.Equal(2u, table1);
 
-        var table2 = image.Entries.Single(e => e.TagId == 0xC6C5 && e.TagType == 4).ValuePointer;
+        var table2 = image.Entries.Single(e => e.TagId == 0xC6C5 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         Assert.Equal(3u, table2);
 
-        var imageFileEntryC6DC = image.Entries.Single(e => e.TagId == 0xC6DC && e.TagType == 4);
+        var imageFileEntryC6DC = image.Entries.Single(e => e.TagId == 0xC6DC && e.TagType == ImageFileEntry.TagTypes.ULong);
         // Assert.Equal(72020u, imageFileEntry011C.ValuePointer);
         // Assert.Equal(4u, imageFileEntryC6DC.NumberOfValue);
         var stuff = RawImage.ReadUInts(binaryReader, imageFileEntryC6DC);

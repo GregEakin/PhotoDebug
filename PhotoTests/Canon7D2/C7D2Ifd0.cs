@@ -92,7 +92,7 @@ public class C7D2Ifd0
         // 0x0100 UShort 16-bit: 5184
         var imageFileDirectory = rawImage[0x00000010];
         var imageFileEntry = imageFileDirectory[0x0100];
-        Assert.Equal(3, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.UShort, imageFileEntry.TagType);
         Assert.Equal(5472u, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
     }
@@ -107,7 +107,7 @@ public class C7D2Ifd0
         // 0x0101 UShort 16-bit: 3456
         var imageFileDirectory = rawImage[0x00000010];
         var imageFileEntry = imageFileDirectory[0x0101];
-        Assert.Equal(3, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.UShort, imageFileEntry.TagType);
         Assert.Equal(3648u, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
     }
@@ -122,7 +122,7 @@ public class C7D2Ifd0
         // 0x010F Ascii 8-bit: [0x000000F4] (6): Canon
         var imageFileDirectory = rawImage[0x00000010];
         var imageFileEntry = imageFileDirectory[0x010F];
-        Assert.Equal(2, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.Ascii, imageFileEntry.TagType);
         Assert.Equal(0x000000F4u, imageFileEntry.ValuePointer);
         Assert.Equal(6u, imageFileEntry.NumberOfValue);
 
@@ -140,7 +140,7 @@ public class C7D2Ifd0
         // 0x0110 Ascii 8-bit: [0x000000FA] (13): Canon EOS 7D
         var imageFileDirectory = rawImage[0x00000010];
         var imageFileEntry = imageFileDirectory[0x0110];
-        Assert.Equal(2, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.Ascii, imageFileEntry.TagType);
         Assert.Equal(0x000000FAu, imageFileEntry.ValuePointer);
         Assert.Equal(21u, imageFileEntry.NumberOfValue);
 
@@ -156,7 +156,7 @@ public class C7D2Ifd0
         var imageFileDirectory = rawImage.Directories.First();
 
         var imageFileEntry = imageFileDirectory[0x8769];
-        Assert.Equal(4, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.ULong, imageFileEntry.TagType);
         Assert.Equal(0x000001BEu, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
 
@@ -175,14 +175,14 @@ public class C7D2Ifd0
         var imageFileDirectory = rawImage.Directories.First();
 
         var imageFileEntry = imageFileDirectory[0x8769];
-        Assert.Equal(4, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.ULong, imageFileEntry.TagType);
         Assert.Equal(0x000001BEu, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
 
         binaryReader.BaseStream.Seek(imageFileEntry.ValuePointer, SeekOrigin.Begin);
         var exif = new ImageFileDirectory(binaryReader);
             
-        var entry = exif.Entries.Single(e => e.TagId == 0x9201 && e.TagType == 0x0A);
+        var entry = exif.Entries.Single(e => e.TagId == 0x9201 && e.TagType == ImageFileEntry.TagTypes.SRational);
         binaryReader.BaseStream.Seek(entry.ValuePointer, SeekOrigin.Begin);
         var s1 = binaryReader.ReadInt32();
         var s2 = binaryReader.ReadInt32();
@@ -203,14 +203,14 @@ public class C7D2Ifd0
         var imageFileDirectory = rawImage.Directories.First();
 
         var imageFileEntry = imageFileDirectory[0x8769];
-        Assert.Equal(4, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.ULong, imageFileEntry.TagType);
         Assert.Equal(0x000001BEu, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
 
         binaryReader.BaseStream.Seek(imageFileEntry.ValuePointer, SeekOrigin.Begin);
         var exif = new ImageFileDirectory(binaryReader);
             
-        var entry = exif.Entries.Single(e => e.TagId == 0x9202 && e.TagType == 0x05);
+        var entry = exif.Entries.Single(e => e.TagId == 0x9202 && e.TagType == ImageFileEntry.TagTypes.URational);
         binaryReader.BaseStream.Seek(entry.ValuePointer, SeekOrigin.Begin);
         var us1 = binaryReader.ReadUInt32();
         var us2 = binaryReader.ReadUInt32();
@@ -231,14 +231,14 @@ public class C7D2Ifd0
         var imageFileDirectory = rawImage.Directories.First();
 
         var imageFileEntry = imageFileDirectory[0x8769];
-        Assert.Equal(4, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.ULong, imageFileEntry.TagType);
         Assert.Equal(0x000001BEu, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
 
         binaryReader.BaseStream.Seek(imageFileEntry.ValuePointer, SeekOrigin.Begin);
         var exif = new ImageFileDirectory(binaryReader);
             
-        var entry = exif.Entries.Single(e => e.TagId == 0x9204 && e.TagType == 0x0A);
+        var entry = exif.Entries.Single(e => e.TagId == 0x9204 && e.TagType == ImageFileEntry.TagTypes.SRational);
         binaryReader.BaseStream.Seek(entry.ValuePointer, SeekOrigin.Begin);
         var s1 = binaryReader.ReadInt32();
         var s2 = binaryReader.ReadInt32();
@@ -256,10 +256,10 @@ public class C7D2Ifd0
         var rawImage = new RawImage(binaryReader);
         var imageFileDirectory = rawImage.Directories.First();
 
-        var offset = imageFileDirectory.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
+        var offset = imageFileDirectory.Entries.Single(e => e.TagId == 0x0111 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         // Assert.Equal(91648u, offset);
 
-        var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
+        var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         // Assert.Equal(2702898u, length);
 
         binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);

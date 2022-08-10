@@ -140,7 +140,7 @@ public class CM5Ifd0
         // 0x0100 UShort 16-bit: 6000
         var imageFileDirectory = rawImage.Directories.First();
         var imageFileEntry = imageFileDirectory[0x0100];
-        Assert.Equal(3, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.UShort, imageFileEntry.TagType);
         Assert.Equal(6000u, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
     }
@@ -155,7 +155,7 @@ public class CM5Ifd0
         // 0x0101 UShort 16-bit: 4000
         var imageFileDirectory = rawImage.Directories.First();
         var imageFileEntry = imageFileDirectory[0x0101];
-        Assert.Equal(3, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.UShort, imageFileEntry.TagType);
         Assert.Equal(4000u, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
     }
@@ -170,7 +170,7 @@ public class CM5Ifd0
         // 0x0102 UShort 16-bit: [0x000000FA] (3): 8, 8, 8, 
         var imageFileDirectory = rawImage.Directories.First();
         var imageFileEntry = imageFileDirectory[0x0102];
-        Assert.Equal(3, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.UShort, imageFileEntry.TagType);
         Assert.Equal(250u, imageFileEntry.ValuePointer);
         Assert.Equal(3u, imageFileEntry.NumberOfValue);
 
@@ -188,7 +188,7 @@ public class CM5Ifd0
         // 0x0103 UShort 16-bit: 6
         var imageFileDirectory = rawImage.Directories.First();
         var imageFileEntry = imageFileDirectory[0x0103];
-        Assert.Equal(3, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.UShort, imageFileEntry.TagType);
         Assert.Equal(6u, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
     }
@@ -203,7 +203,7 @@ public class CM5Ifd0
         // 0x010F Ascii 8-bit: [0x00000120] (6): Canon
         var imageFileDirectory = rawImage.Directories.First();
         var imageFileEntry = imageFileDirectory[0x010F];
-        Assert.Equal(2, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.Ascii, imageFileEntry.TagType);
         Assert.Equal(0x00000120u, imageFileEntry.ValuePointer);
         Assert.Equal(6u, imageFileEntry.NumberOfValue);
 
@@ -220,7 +220,7 @@ public class CM5Ifd0
         // 0x0110 Ascii 8-bit: [0x00000126] (22): Canon EOS M5
         var imageFileDirectory = rawImage.Directories.First();
         var imageFileEntry = imageFileDirectory[0x0110];
-        Assert.Equal(2, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.Ascii, imageFileEntry.TagType);
         Assert.Equal(0x00000126u, imageFileEntry.ValuePointer);
         Assert.Equal(13u, imageFileEntry.NumberOfValue);
 
@@ -246,7 +246,7 @@ public class CM5Ifd0
         // 15)  0x02BC UByte 8-bit: [0x0000BC00] (8192): // XML packet containing XMP metadata
         var imageFileDirectory = rawImage.Directories.First();
         var imageFileEntry = imageFileDirectory[0x02BC];
-        Assert.Equal(1, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.UByte, imageFileEntry.TagType);
         Assert.Equal(0x0000BC00u, imageFileEntry.ValuePointer);
         Assert.Equal(8192u, imageFileEntry.NumberOfValue);
 
@@ -275,7 +275,7 @@ public class CM5Ifd0
         // 0x8769 Image File Directory: [0x000001D8] (1): 
         var imageFileDirectory = rawImage.Directories.First();
         var imageFileEntry = imageFileDirectory[0x8769];
-        Assert.Equal(4, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.ULong, imageFileEntry.TagType);
         Assert.Equal(0x000001D8u, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
 
@@ -293,10 +293,10 @@ public class CM5Ifd0
         var rawImage = new RawImage(binaryReader);
         var imageFileDirectory = rawImage.Directories.First();
 
-        var offset = imageFileDirectory.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
+        var offset = imageFileDirectory.Entries.Single(e => e.TagId == 0x0111 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         Assert.Equal(73728u, offset);
 
-        var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
+        var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         // Assert.Equal(6590185u, length);
 
         binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);

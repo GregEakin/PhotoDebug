@@ -50,13 +50,13 @@ public class Canon80D
 
         var image = rawImage.Directories.Skip(3).First();
 
-        var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
+        var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         // Assert.Equal(0x2D42DCu, offset);
 
-        var count = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
+        var count = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         // Assert.Equal(0x1501476u, count);
 
-        var imageFileEntry = image.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3);
+        var imageFileEntry = image.Entries.Single(e => e.TagId == 0xC640 && e.TagType == ImageFileEntry.TagTypes.UShort);
         var slices = RawImage.ReadUInts16(binaryReader, imageFileEntry);
         Assert.Equal(new[] { (ushort)1, (ushort)3144, (ushort)3144 }, slices);
 

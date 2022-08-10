@@ -67,13 +67,13 @@ namespace PhotoLib.Tiff
 
                 count++;
 
-                if (entry.TagType == 0x01 && entry.TagId == 0x02BC)    // XMP metadata
+                if (entry.TagType == ImageFileEntry.TagTypes.UByte && entry.TagId == 0x02BC)    // XMP metadata
                 {
                     builder.Append(string.Format(blockHeader, count, entry.TagId, "XMP metadata"));
                     builder.AppendLine(string.Format(referencedItem, entry.ValuePointer, entry.NumberOfValue));
 
                 }
-                else if (entry.TagType == 0x04 && entry.TagId == 0x8769) // TIF_EXIF IFD - A pointer to the Exif IFD.
+                else if (entry.TagType == ImageFileEntry.TagTypes.ULong && entry.TagId == 0x8769) // TIF_EXIF IFD - A pointer to the Exif IFD.
                 {
                     builder.Append(string.Format(blockHeader, count, entry.TagId, "Image File Directory"));
                     builder.AppendLine(string.Format(referencedItem, entry.ValuePointer, entry.NumberOfValue));
@@ -81,7 +81,7 @@ namespace PhotoLib.Tiff
                     var tags = new ImageFileDirectory(binaryReader);
                     builder.Append(tags.DumpDirectory(binaryReader, prefix + $":0x{entry.TagId:X4}"));
                 }
-                else if (entry.TagType == 0x04 && entry.TagId == 0x8825) // GPSInfo.
+                else if (entry.TagType == ImageFileEntry.TagTypes.ULong && entry.TagId == 0x8825) // GPSInfo.
                 {
                     builder.Append(string.Format(blockHeader, count, entry.TagId, "GPS Info"));
                     builder.AppendLine(string.Format(referencedItem, entry.ValuePointer, entry.NumberOfValue));
@@ -89,7 +89,7 @@ namespace PhotoLib.Tiff
                     var tags = new ImageFileDirectory(binaryReader);
                     builder.Append(tags.DumpDirectory(binaryReader, prefix + $":0x{entry.TagId:X4}"));
                 }
-                else if (entry.TagType == 0x07 && entry.TagId == 0x927c) // Makernote.
+                else if (entry.TagType == ImageFileEntry.TagTypes.UByteSeq && entry.TagId == 0x927c) // Makernote.
                 {
                     builder.Append(string.Format(blockHeader, count, entry.TagId, "Maker note"));
                     builder.AppendLine(string.Format(referencedItem, entry.ValuePointer, entry.NumberOfValue));
@@ -97,7 +97,7 @@ namespace PhotoLib.Tiff
                     var tags = new ImageFileDirectory(binaryReader);
                     builder.Append(tags.DumpDirectory(binaryReader, prefix + $":0x{entry.TagId:X4}"));
                 }
-                else if (entry.TagType == 0x04 && entry.TagId == 0xA005) // Interoperability IFD Pointer
+                else if (entry.TagType == ImageFileEntry.TagTypes.ULong && entry.TagId == 0xA005) // Interoperability IFD Pointer
                 {
                     builder.Append(string.Format(blockHeader, count, entry.TagId, "Interoperability IFD"));
                     builder.AppendLine(string.Format(referencedItem, entry.ValuePointer, entry.NumberOfValue));
@@ -105,7 +105,7 @@ namespace PhotoLib.Tiff
                     var tags = new ImageFileDirectory(binaryReader);
                     builder.Append(tags.DumpDirectory(binaryReader, prefix + $":0x{entry.TagId:X4}"));
                 }
-                //else if (entry.TagType == 0x04 && entry.TagId == 0x8825)
+                //else if (entry.TagType == ImageFileEntry.TagTypes.ULong && entry.TagId == 0x8825)
                 //{
                 //    builder.Append(string.Format(blockHeader, count, entry.TagId, "??");
                 //    builder.AppendLine(string.Format(referencedItem, entry.ValuePointer, entry.NumberOfValue);
@@ -117,7 +117,7 @@ namespace PhotoLib.Tiff
                 {
                     switch (entry.TagType)
                     {
-                        case 0x01:  // UByte
+                        case ImageFileEntry.TagTypes.UByte:
                             builder.Append(string.Format(blockHeader, count, entry.TagId, "UByte 8-bit"));
                             if (entry.NumberOfValue == 1)
                                 builder.Append($"{entry.ValuePointer:x2}");
@@ -136,7 +136,7 @@ namespace PhotoLib.Tiff
                             builder.AppendLine();
                             break;
 
-                        case 0x02:  // string, null terminated
+                        case ImageFileEntry.TagTypes.Ascii:
                             builder.Append(string.Format(blockHeader, count, entry.TagId, "Ascii 8-bit, null terminated"));
                             builder.Append(string.Format(referencedItem, entry.ValuePointer, entry.NumberOfValue));
 
@@ -168,7 +168,7 @@ namespace PhotoLib.Tiff
 
                             break;
 
-                        case 0x03:  // UShort
+                        case ImageFileEntry.TagTypes.UShort:
                             builder.Append(string.Format(blockHeader, count, entry.TagId, "UShort 16-bit"));
                             if (entry.NumberOfValue == 1)
                                 builder.Append($"{entry.ValuePointer}");
@@ -187,7 +187,7 @@ namespace PhotoLib.Tiff
                             builder.AppendLine();
                             break;
 
-                        case 0x04:  // ULong
+                        case ImageFileEntry.TagTypes.ULong:  
                             builder.Append(string.Format(blockHeader, count, entry.TagId, "ULong 32-bit"));
                             if (entry.NumberOfValue == 1)
                                 builder.Append($"{entry.ValuePointer}");
@@ -206,7 +206,7 @@ namespace PhotoLib.Tiff
                             builder.AppendLine();
                             break;
 
-                        case 0x05:  // URational, numeration & denominator ULongs
+                        case ImageFileEntry.TagTypes.URational:  
                             builder.Append(string.Format(blockHeader, count, entry.TagId, "URational 2x32-bit"));
                             builder.Append(string.Format(referencedItem, entry.ValuePointer, entry.NumberOfValue));
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
@@ -217,12 +217,12 @@ namespace PhotoLib.Tiff
                             builder.AppendLine(string.Format(rationalItem, us1, us2, us1 / (double)us2));
                             break;
 
-                        case 0x06:  // SByte
+                        case ImageFileEntry.TagTypes.SByte: 
                             builder.Append(string.Format(blockHeader, count, entry.TagId, "SByte 8-bit"));
                             builder.AppendLine(string.Format(referencedItem, entry.ValuePointer, entry.NumberOfValue));
                             throw new NotImplementedException($"Undefined message {entry.TagType}");
 
-                        case 0x07:  // UByte Sequence
+                        case ImageFileEntry.TagTypes.UByteSeq:  
                             builder.Append(string.Format(blockHeader, count, entry.TagId, "UByte[]"));
                             if (entry.NumberOfValue <= 4)
                             {
@@ -237,15 +237,15 @@ namespace PhotoLib.Tiff
                             builder.AppendLine();
                             break;
 
-                        case 0x08:  // SShort
+                        case ImageFileEntry.TagTypes.SShort: 
                             builder.Append(string.Format(blockHeader, count, entry.TagId, "SShort 16-bit"));
                             throw new NotImplementedException($"Undefined message {entry.TagType}");
 
-                        case 0x09:  // SLong
+                        case ImageFileEntry.TagTypes.SLong: 
                             builder.Append(string.Format(blockHeader, count, entry.TagId, "SLong 32-bit"));
                             throw new NotImplementedException($"Undefined message {entry.TagType}");
 
-                        case 0x0A:  // SRational, signed two Longs
+                        case ImageFileEntry.TagTypes.SRational:  
                             builder.Append(string.Format(blockHeader, count, entry.TagId, "SRational 2x32-bit"));
                             builder.Append(string.Format(referencedItem, entry.ValuePointer, entry.NumberOfValue));
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
@@ -256,7 +256,7 @@ namespace PhotoLib.Tiff
                             builder.AppendLine(string.Format(rationalItem, s1, s2, s1 / (double)s2));
                             break;
 
-                        case 0x0B:  // SSingle precision, 4 bytes IEEE format
+                        case ImageFileEntry.TagTypes.Single:  
                             builder.Append(string.Format(blockHeader, count, entry.TagId, "Single 4-Byte"));
                             builder.Append(string.Format(referencedItem, entry.ValuePointer, entry.NumberOfValue));
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
@@ -266,7 +266,7 @@ namespace PhotoLib.Tiff
                             builder.AppendLine($"{x1}");
                             throw new NotImplementedException($"Undefined message {entry.TagType}");
 
-                        case 0x0C:  // Double precision, 8 bytes IEEE format
+                        case ImageFileEntry.TagTypes.Double:  
                             builder.Append(string.Format(blockHeader, count, entry.TagId, "Double 8-Byte"));
                             if (binaryReader.BaseStream.Position != entry.ValuePointer)
                                 binaryReader.BaseStream.Seek(entry.ValuePointer, SeekOrigin.Begin);

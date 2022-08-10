@@ -82,7 +82,7 @@ public class OtherUnitTests
         var rawImage = new RawImage(binaryReader);
         var imageFileDirectory = rawImage.Directories.Last();
 
-        var strips = imageFileDirectory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
+        var strips = imageFileDirectory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer; // TIF_CR2_SLICE
         binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
         var x = binaryReader.ReadUInt16();
         var y = binaryReader.ReadUInt16();
@@ -154,7 +154,7 @@ public class OtherUnitTests
         var rawImage = new RawImage(binaryReader);
         var imageFileDirectory = rawImage.Directories.Last();
 
-        var strips = imageFileDirectory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
+        var strips = imageFileDirectory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer; // TIF_CR2_SLICE
         binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
         var x = binaryReader.ReadUInt16();
         var y = binaryReader.ReadUInt16();
@@ -299,7 +299,7 @@ public class OtherUnitTests
         // notes.DumpDirectory(binaryReader);
 
         // Camera settings
-        var settings = notes.Entries.Single(e => e.TagId == 0x0001 && e.TagType == 3);
+        var settings = notes.Entries.Single(e => e.TagId == 0x0001 && e.TagType == ImageFileEntry.TagTypes.UShort);
         //Console.WriteLine("Camera Settings id: {0}, type: {1}, count {2}, value {3}", settings.TagId, settings.TagType, settings.NumberOfValue, settings.ValuePointer);
         binaryReader.BaseStream.Seek(settings.ValuePointer, SeekOrigin.Begin);
         var settingsData = new ushort[settings.NumberOfValue];
@@ -311,14 +311,14 @@ public class OtherUnitTests
         Assert.Equal(6, settingsData[9]);    // RecordMode == CR2
 
         // focus info
-        //var focalLength = notes.Entries.Single(e => e.TagId == 0x0002 && e.TagType == 3);
+        //var focalLength = notes.Entries.Single(e => e.TagId == 0x0002 && e.TagType == ImageFileEntry.TagTypes.UShort);
         //Console.WriteLine("Focal Length: {0}, type: {1}, count {2}, value {3}", focalLength.TagId, focalLength.TagType, focalLength.NumberOfValue, focalLength.ValuePointer);
         //binaryReader.BaseStream.Seek(focalLength.ValuePointer, SeekOrigin.Begin);
         //for (var i = 0; i < focalLength.NumberOfValue; i++)
         //    var x = binaryReader.ReadUInt16();
 
         // shot info
-        var shot = notes.Entries.Single(e => e.TagId == 0x0004 && e.TagType == 3);
+        var shot = notes.Entries.Single(e => e.TagId == 0x0004 && e.TagType == ImageFileEntry.TagTypes.UShort);
         binaryReader.BaseStream.Seek(shot.ValuePointer, SeekOrigin.Begin);
         var shotData = new ushort[shot.NumberOfValue];
         for (var i = 0; i < shot.NumberOfValue; i++)
@@ -326,7 +326,7 @@ public class OtherUnitTests
         Assert.Equal(0x0000, shotData[7]);    //! Auto - White balance
 
         // ProcessingInfo
-        var process = notes.Entries.Single(e => e.TagId == 0x00A0 && e.TagType == 3);
+        var process = notes.Entries.Single(e => e.TagId == 0x00A0 && e.TagType == ImageFileEntry.TagTypes.UShort);
         binaryReader.BaseStream.Seek(process.ValuePointer, SeekOrigin.Begin);
         var processData = new ushort[process.NumberOfValue];
         for (var i = 0; i < process.NumberOfValue; i++)
@@ -337,14 +337,14 @@ public class OtherUnitTests
         Assert.Equal(5200, processData[9]);      // Color Temp
 
         // Mesaured Color Tags
-        //var colorTags = notes.Entries.Single(e => e.TagId == 0x00aa && e.TagType == 3);
+        //var colorTags = notes.Entries.Single(e => e.TagId == 0x00aa && e.TagType == ImageFileEntry.TagTypes.UShort);
         //binaryReader.BaseStream.Seek(colorTags.ValuePointer, SeekOrigin.Begin);
         //var colorTagsData = new ushort[colorTags.NumberOfValue];
         //for (var i = 0; i < colorTags.NumberOfValue; i++)
         //    colorTagsData[i] = binaryReader.ReadUInt16();
 
         // Color Data
-        var colorBalance = notes.Entries.Single(e => e.TagId == 0x4001 && e.TagType == 3);
+        var colorBalance = notes.Entries.Single(e => e.TagId == 0x4001 && e.TagType == ImageFileEntry.TagTypes.UShort);
         binaryReader.BaseStream.Seek(colorBalance.ValuePointer, SeekOrigin.Begin);
         var colorBalanceTags = new ushort[colorBalance.NumberOfValue];
         for (var i = 0; i < colorBalance.NumberOfValue; i++)

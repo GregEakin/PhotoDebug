@@ -33,10 +33,10 @@ public class Image1
         var image = rawImage.Directories.Skip(1).First();
         Assert.Equal(2, image.Entries.Length);
 
-        var offset = image.Entries.Single(e => e.TagId == 0x0201 && e.TagType == 4).ValuePointer;
+        var offset = image.Entries.Single(e => e.TagId == 0x0201 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         // Assert.Equal(80324u, offset);
 
-        var length = image.Entries.Single(e => e.TagId == 0x0202 && e.TagType == 4).ValuePointer;
+        var length = image.Entries.Single(e => e.TagId == 0x0202 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         // Assert.Equal(10334u, length);
 
         binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);

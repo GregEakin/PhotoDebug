@@ -30,13 +30,13 @@ public class Image0
         // Images #0 and #1 are compressed in lossy (classic) JPEG
         var image = rawImage.Directories.First();
 
-        var stripOffset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
+        var stripOffset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         // Assert.Equal(99812u, stripOffset);
 
-        var orientation = image.Entries.Single(e => e.TagId == 0x0112 && e.TagType == 3).ValuePointer;
+        var orientation = image.Entries.Single(e => e.TagId == 0x0112 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
         // Assert.Equal(1u, orientation);    // 1 = 0,0 is top left
 
-        var stripByteCounts = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
+        var stripByteCounts = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         // Assert.Equal(2823352u, stripByteCounts);
 
         DumpImage(binaryReader, folder + "0L2A8897-0.JPG", stripOffset, stripByteCounts);

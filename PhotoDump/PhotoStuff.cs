@@ -24,11 +24,11 @@ namespace PhotoDump
                 var rawImage = new RawImage(binaryReader);
                 var image = rawImage.Directories.Last();
 
-                // var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;
+                // var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
 
-                var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
-                var count = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
-                var imageFileEntry = image.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3);
+                var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
+                var count = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
+                var imageFileEntry = image.Entries.Single(e => e.TagId == 0xC640 && e.TagType == ImageFileEntry.TagTypes.UShort);
                 var slices = RawImage.ReadUInts16(binaryReader, imageFileEntry);
 
                 binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);

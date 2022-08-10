@@ -64,10 +64,10 @@ public class CM5Ifd2
         //    new ushort[] { 0x0201, 0x0202 },
         //    imageFileDirectory.Entries.Select(e => e.TagId).ToArray());
 
-        var offset = imageFileDirectory.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
+        var offset = imageFileDirectory.Entries.Single(e => e.TagId == 0x0111 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         Assert.Equal(6664192u, offset);
 
-        var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
+        var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         Assert.Equal(1440000u, length);    
 
         binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);

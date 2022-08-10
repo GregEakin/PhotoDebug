@@ -41,11 +41,11 @@ public class CameraInfoTests
         var rawImage = new RawImage(binaryReader);
         var image = rawImage.Directories.First();
 
-        var exifEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == 4);
+        var exifEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == ImageFileEntry.TagTypes.ULong);
         binaryReader.BaseStream.Seek(exifEntry.ValuePointer, SeekOrigin.Begin);
         var exif = new ImageFileDirectory(binaryReader);
 
-        var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == 7);
+        var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == ImageFileEntry.TagTypes.UByteSeq);
         binaryReader.BaseStream.Seek(notesEntry.ValuePointer, SeekOrigin.Begin);
         var notes = new ImageFileDirectory(binaryReader);
 
@@ -73,11 +73,11 @@ public class CameraInfoTests
         var rawImage = new RawImage(binaryReader);
         var image = rawImage.Directories.First();
 
-        var exifEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == 4);
+        var exifEntry = image.Entries.Single(e => e.TagId == 0x8769 && e.TagType == ImageFileEntry.TagTypes.ULong);
         binaryReader.BaseStream.Seek(exifEntry.ValuePointer, SeekOrigin.Begin);
         var exif = new ImageFileDirectory(binaryReader);
 
-        var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == 7);
+        var notesEntry = exif.Entries.Single(e => e.TagId == 0x927C && e.TagType == ImageFileEntry.TagTypes.UByteSeq);
         binaryReader.BaseStream.Seek(notesEntry.ValuePointer, SeekOrigin.Begin);
         var notes = new ImageFileDirectory(binaryReader);
 
@@ -128,7 +128,7 @@ public class CameraInfoTests
 
     private static void Canon7D(string fileName, ImageFileDirectory notes, BinaryReader binaryReader)
     {
-        var infoEntry = notes.Entries.Single(e => e.TagId == 0x000D && e.TagType == 7);
+        var infoEntry = notes.Entries.Single(e => e.TagId == 0x000D && e.TagType == ImageFileEntry.TagTypes.UByteSeq);
         binaryReader.BaseStream.Seek(infoEntry.ValuePointer, SeekOrigin.Begin);
         Console.Write("{0}: ", fileName);
         var info = binaryReader.ReadBytes((int) infoEntry.NumberOfValue);
@@ -141,7 +141,7 @@ public class CameraInfoTests
     {
         return;
 
-        var infoEntry = notes.Entries.Single(e => e.TagId == 0x000D && e.TagType == 7);
+        var infoEntry = notes.Entries.Single(e => e.TagId == 0x000D && e.TagType == ImageFileEntry.TagTypes.UByteSeq);
         binaryReader.BaseStream.Seek(infoEntry.ValuePointer, SeekOrigin.Begin);
         Console.Write("{0}: ", fileName);
         var info = binaryReader.ReadBytes((int) infoEntry.NumberOfValue);
@@ -152,7 +152,7 @@ public class CameraInfoTests
 
     private static void Canon5D3(string fileName, ImageFileDirectory notes, BinaryReader binaryReader)
     {
-        var infoEntry = notes.Entries.Single(e => e.TagId == 0x000D && e.TagType == 7);
+        var infoEntry = notes.Entries.Single(e => e.TagId == 0x000D && e.TagType == ImageFileEntry.TagTypes.UByteSeq);
         binaryReader.BaseStream.Seek(infoEntry.ValuePointer, SeekOrigin.Begin);
         Console.Write("{0}: ", fileName);
         var info = binaryReader.ReadBytes((int) infoEntry.NumberOfValue);

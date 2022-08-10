@@ -23,22 +23,22 @@ namespace PhotoLib.Tiff
             UByteSeq  = 0x07,  // 8-bit byte
             SShort    = 0x08,  // 16-bit signed integer
             SLong     = 0x09,  // 32-bit signed integer
-            SRational = 0x0A, // Two 32-bit signed integers
-            Single    = 0x0B, // 4-byte single-precision IEEE floating-point value
-            Double    = 0x0C, // 8-byte double-precision IEEE floating-point value
+            SRational = 0x0A,  // Two 32-bit signed integers
+            Single    = 0x0B,  // 4-byte single-precision IEEE floating-point value
+            Double    = 0x0C,  // 8-byte double-precision IEEE floating-point value
         }
 
         public ImageFileEntry(BinaryReader binaryReader)
         {
             TagId = binaryReader.ReadUInt16();
-            TagType = binaryReader.ReadUInt16();
+            TagType = (TagTypes)binaryReader.ReadUInt16();
             NumberOfValue = binaryReader.ReadUInt32();
             ValuePointer = binaryReader.ReadUInt32();
         }
 
         public ushort TagId { get; }
 
-        public ushort TagType { get; }
+        public TagTypes TagType { get; }
 
         public uint NumberOfValue { get; }
 

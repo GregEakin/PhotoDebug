@@ -52,7 +52,7 @@ public class C7D1Ifd3
         // 0x0103 UShort 16-bit: 6
         var imageFileDirectory = rawImage[0x0000BF46];
         var imageFileEntry = imageFileDirectory[0x0103];
-        Assert.Equal(3, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.UShort, imageFileEntry.TagType);
         Assert.Equal(6u, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
     }
@@ -68,7 +68,7 @@ public class C7D1Ifd3
         var imageFileDirectory = rawImage[0x0000BF46];
         var imageFileEntry = imageFileDirectory[0x0111];
         Assert.Equal(0x0111, imageFileEntry.TagId);
-        Assert.Equal(4, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.ULong, imageFileEntry.TagType);
         // Assert.Equal(3213024u, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
     }
@@ -84,7 +84,7 @@ public class C7D1Ifd3
         var imageFileDirectory = rawImage[0x0000BF46];
         var imageFileEntry = imageFileDirectory[0x0117];
         Assert.Equal(0x0117, imageFileEntry.TagId);
-        Assert.Equal(4, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.ULong, imageFileEntry.TagType);
         // Assert.Equal(22286138u, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
     }
@@ -99,7 +99,7 @@ public class C7D1Ifd3
         // 0xC640 UShort 16-bit: [0x0000BFA0] (3): 2, 1728, 1904, 
         var imageFileDirectory = rawImage[0x0000BF46];
         var imageFileEntry = imageFileDirectory[0xC640];
-        Assert.Equal(3, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.UShort, imageFileEntry.TagType);
         Assert.Equal(0x0000BFA0u, imageFileEntry.ValuePointer);
         Assert.Equal(3u, imageFileEntry.NumberOfValue);
 

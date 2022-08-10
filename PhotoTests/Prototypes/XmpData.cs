@@ -28,7 +28,7 @@ public class XmpData
         var rawImage = new RawImage(binaryReader);
         var image = rawImage.Directories.First();
 
-        var imageFileEntry02BC = image.Entries.Single(e => e.TagId == 0x02BC && e.TagType == 1);
+        var imageFileEntry02BC = image.Entries.Single(e => e.TagId == 0x02BC && e.TagType == ImageFileEntry.TagTypes.UByte);
         // Assert.Equal(8192u, imageFileEntry02BC.NumberOfValue);
         // Assert.Equal(72132u, imageFileEntry02BC.ValuePointer);
         var xmpData = RawImage.ReadBytes(binaryReader, imageFileEntry02BC);

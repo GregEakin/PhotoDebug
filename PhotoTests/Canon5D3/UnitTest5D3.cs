@@ -49,7 +49,7 @@ public class UnitTest5D3
         var directory = rawImage.Directories.Last();
         var address = directory.Entries.Single(e => e.TagId == 0x0111).ValuePointer; // TIF_STRIP_OFFSETS
         var length = directory.Entries.Single(e => e.TagId == 0x0117).ValuePointer; // TIF_STRIP_BYTE_COUNTS
-        var strips = directory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
+        var strips = directory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer; // TIF_CR2_SLICE
 
         binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
         var x = binaryReader.ReadUInt16();
@@ -177,7 +177,7 @@ public class UnitTest5D3
 
         var imageFileDirectory = rawImage.Directories.Last();
 
-        var strips = imageFileDirectory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
+        var strips = imageFileDirectory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer; // TIF_CR2_SLICE
         binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
         var x = binaryReader.ReadUInt16();
         var y = binaryReader.ReadUInt16();

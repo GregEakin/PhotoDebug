@@ -71,15 +71,15 @@ public class C5D3Ifd2
         using var binaryReader = new BinaryReader(fileStream);
         var rawImage = new RawImage(binaryReader);
         var imageFileDirectory = rawImage.Directories.Skip(2).First();
-        var width = (ushort)imageFileDirectory.Entries.Single(e => e.TagId == 0x0100 && e.TagType == 3).ValuePointer;
-        var height = (ushort)imageFileDirectory.Entries.Single(e => e.TagId == 0x0101 && e.TagType == 3).ValuePointer;
-        var samplesPerPixel = (ushort)imageFileDirectory.Entries.Single(e => e.TagId == 0x0115 && e.TagType == 3).ValuePointer;
-        var bitsPerSample = imageFileDirectory.Entries.Single(e => e.TagId == 0x0102 && e.TagType == 3).ValuePointer;
+        var width = (ushort)imageFileDirectory.Entries.Single(e => e.TagId == 0x0100 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
+        var height = (ushort)imageFileDirectory.Entries.Single(e => e.TagId == 0x0101 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
+        var samplesPerPixel = (ushort)imageFileDirectory.Entries.Single(e => e.TagId == 0x0115 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
+        var bitsPerSample = imageFileDirectory.Entries.Single(e => e.TagId == 0x0102 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
 
         var total = width * height * samplesPerPixel * 2u;
         Assert.Equal(1403040u, total);
 
-        var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
+        var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         Assert.Equal(1403040u, length);
     }
 
@@ -97,16 +97,16 @@ public class C5D3Ifd2
             new ushort[] { 0x0100, 0x0101, 0x0102, 0x0103, 0x0106, 0x0111, 0x0115, 0x0116, 0x0117, 0x011C, 0xC5D9, 0xC6C5, 0xC6DC },
             imageFileDirectory.Entries.Select(e => e.TagId).ToArray());
 
-        var width = (ushort)imageFileDirectory.Entries.Single(e => e.TagId == 0x0100 && e.TagType == 3).ValuePointer;
+        var width = (ushort)imageFileDirectory.Entries.Single(e => e.TagId == 0x0100 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
         Assert.Equal(592u, width);
 
-        var height = (ushort)imageFileDirectory.Entries.Single(e => e.TagId == 0x0101 && e.TagType == 3).ValuePointer;
+        var height = (ushort)imageFileDirectory.Entries.Single(e => e.TagId == 0x0101 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
         Assert.Equal(395u, height);
 
-        var offset = imageFileDirectory.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
+        var offset = imageFileDirectory.Entries.Single(e => e.TagId == 0x0111 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         // Assert.Equal(2794548u, offset);
 
-        var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
+        var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         // Assert.Equal(1403040u, length);
 
         binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);

@@ -36,28 +36,28 @@ public class Ifid3Tests
             },
             image.Entries.Select(e => e.TagId).ToArray());
 
-        var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer;
+        var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
         Assert.Equal(6u, compression);
 
-        var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == 4).ValuePointer;
+        var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         // Assert.Equal(0x2D42DCu, offset);
 
-        var count = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == 4).ValuePointer;
+        var count = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         // Assert.Equal(0x1501476u, count);
 
-        var item3 = image.Entries.Single(e => e.TagId == 0xC5D8 && e.TagType == 4).ValuePointer;
+        var item3 = image.Entries.Single(e => e.TagId == 0xC5D8 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         Assert.Equal(0x01u, item3);
 
-        var item4 = image.Entries.Single(e => e.TagId == 0xC5E0 && e.TagType == 4).ValuePointer;
+        var item4 = image.Entries.Single(e => e.TagId == 0xC5E0 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         Assert.Equal(0x01u, item4);
 
-        var imageFileEntry = image.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3);
+        var imageFileEntry = image.Entries.Single(e => e.TagId == 0xC640 && e.TagType == ImageFileEntry.TagTypes.UShort);
         // Assert.Equal(3u, imageFileEntry.NumberOfValue);
         // Assert.Equal(0x000119BEu, imageFileEntry.ValuePointer);
         var slices = RawImage.ReadUInts16(binaryReader, imageFileEntry);
         Assert.Equal(new ushort[] {1, 2960, 2960}, slices);
 
-        var item6 = image.Entries.Single(e => e.TagId == 0xC6C5 && e.TagType == 4).ValuePointer;
+        var item6 = image.Entries.Single(e => e.TagId == 0xC6C5 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         Assert.Equal(0x01u, item6);
     }
 }

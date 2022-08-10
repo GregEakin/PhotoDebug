@@ -49,7 +49,7 @@ public class C5D3Ifd3
         // 0x0103 UShort 16-bit: 6
         var imageFileDirectory = rawImage.Directories.Last();
         var imageFileEntry = imageFileDirectory[0x0103];
-        Assert.Equal(3, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.UShort, imageFileEntry.TagType);
         Assert.Equal(6u, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
     }
@@ -64,7 +64,7 @@ public class C5D3Ifd3
         // 0x0111 ULong 32-bit: 4223344
         var imageFileDirectory = rawImage.Directories.Last();
         var imageFileEntry = imageFileDirectory[0x0111];
-        Assert.Equal(4, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.ULong, imageFileEntry.TagType);
         Assert.Equal(0x0111, imageFileEntry.TagId);
         // Assert.Equal(4223344u, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
@@ -80,7 +80,7 @@ public class C5D3Ifd3
         // 0x0117 ULong 32-bit: 25591542 
         var imageFileDirectory = rawImage.Directories.Last();
         var imageFileEntry = imageFileDirectory[0x0117];
-        Assert.Equal(4, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.ULong, imageFileEntry.TagType);
         Assert.Equal(0x0117, imageFileEntry.TagId);
         // Assert.Equal(25591542u, imageFileEntry.ValuePointer);
         Assert.Equal(1u, imageFileEntry.NumberOfValue);
@@ -96,7 +96,7 @@ public class C5D3Ifd3
         // 0xC640 UShort 16-bit: [0x000119BE] (3): 1, 2960, 2960, 
         var imageFileDirectory = rawImage.Directories.Last();
         var imageFileEntry = imageFileDirectory[0xC640];
-        Assert.Equal(3, imageFileEntry.TagType);
+        Assert.Equal(ImageFileEntry.TagTypes.UShort, imageFileEntry.TagType);
         Assert.Equal(0x000119BEu, imageFileEntry.ValuePointer);
         Assert.Equal(3u, imageFileEntry.NumberOfValue);
 

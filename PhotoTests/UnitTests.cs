@@ -58,10 +58,10 @@ public class UnitTests
         // compression for 7D mRAW and sRAW should be 3 -
         // compression for 5DIII RAW should be 2 -
         // compression for 5DIII mRAW and sRAW should be 3 -
-        //var compressoin = imageFileDirectory.Entries.Single(e => e.TagId == 0x0103 && e.TagType == 3).ValuePointer; // TIF_COMPRESSION
+        //var compressoin = imageFileDirectory.Entries.Single(e => e.TagId == 0x0103 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer; // TIF_COMPRESSION
         //Assert.Equal(6u, compressoin);  // JpegCompression
 
-        var strips = imageFileDirectory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == 3).ValuePointer; // TIF_CR2_SLICE
+        var strips = imageFileDirectory.Entries.Single(e => e.TagId == 0xC640 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer; // TIF_CR2_SLICE
         binaryReader.BaseStream.Seek(strips, SeekOrigin.Begin);
         var x = binaryReader.ReadUInt16();
         var y = binaryReader.ReadUInt16();
