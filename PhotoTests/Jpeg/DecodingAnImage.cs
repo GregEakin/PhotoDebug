@@ -4,156 +4,154 @@
 // SUBSYSTEM:	PhotoDebug
 // FILE:		TestStuff.cs
 // AUTHOR:		Greg Eakin
-namespace PhotoTests.Jpeg
+
+using System;
+using Xunit;
+
+namespace PhotoTests.Jpeg;
+
+public class TestStuff
 {
-    using System;
-
-    using Xunit;
-
-    
-    public class TestStuff
+    public void DecodeImage()
     {
-        public void DecodeImage()
+        if (!SoiMarker())
         {
-            if (!SoiMarker())
-            {
-                throw new Exception("Error");
-            }
+            throw new Exception("Error");
+        }
 
-            while (!SofMarker())
+        while (!SofMarker())
+        {
+            this.InterpretMarkers();
+        }
+
+        this.DecodeFrame();
+    }
+
+    private bool SofMarker()
+    {
+        throw new NotImplementedException();
+    }
+
+    private bool SoiMarker()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void DecodeFrame()
+    {
+        this.InterpretFrameHeader();
+        do
+        {
+            while (!SosMarker())
             {
                 this.InterpretMarkers();
             }
 
-            this.DecodeFrame();
+            this.DecodeScan();
         }
+        while (!EoiMarker());
+    }
 
-        private bool SofMarker()
+    private void InterpretMarkers()
+    {
+        // DHT
+        // DAC
+        // DQT
+        // DRI
+        // APP
+        // COM
+        throw new System.NotImplementedException();
+    }
+
+    private bool SosMarker()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    private bool EoiMarker()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    private void InterpretFrameHeader()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    private void DecodeScan()
+    {
+        InterpretScanHeader();
+        InitializeDecoder();
+        do
         {
-            throw new NotImplementedException();
+            DecodeRestartInterval();
         }
+        while (MoreIntervals());
+    }
 
-        private bool SoiMarker()
+    private void InitializeDecoder()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    private void InterpretScanHeader()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    private bool MoreIntervals()
+    {
+        // true when the expected number of restart intervals has been decoded.
+        throw new System.NotImplementedException();
+    }
+
+    private void DecodeRestartInterval()
+    {
+        ResetDecoder();
+        do
         {
-            throw new NotImplementedException();
+            this.DecodeMcu();
         }
+        while (MoreMcu());
 
-        public void DecodeFrame()
+        FindMarker();
+    }
+
+    private void DecodeMcu()
+    {
+
+        for (var n = 0; n < Nb; n++)
         {
-            this.InterpretFrameHeader();
-            do
-            {
-                while (!SosMarker())
-                {
-                    this.InterpretMarkers();
-                }
-
-                this.DecodeScan();
-            }
-            while (!EoiMarker());
+            this.DecodeDataUnit();
         }
+    }
 
-        private void InterpretMarkers()
-        {
-            // DHT
-            // DAC
-            // DQT
-            // DRI
-            // APP
-            // COM
-            throw new System.NotImplementedException();
-        }
+    //nb is number of data units in a MCU
+    private const int Nb = 0;
 
-        private bool SosMarker()
-        {
-            throw new System.NotImplementedException();
-        }
+    private void DecodeDataUnit()
+    {
+        throw new NotImplementedException();
+    }
 
-        private bool EoiMarker()
-        {
-            throw new System.NotImplementedException();
-        }
+    private void FindMarker()
+    {
+        throw new System.NotImplementedException();
+    }
 
-        private void InterpretFrameHeader()
-        {
-            throw new System.NotImplementedException();
-        }
+    private void ResetDecoder()
+    {
+        throw new System.NotImplementedException();
+    }
 
-        private void DecodeScan()
-        {
-            InterpretScanHeader();
-            InitializeDecoder();
-            do
-            {
-                DecodeRestartInterval();
-            }
-            while (MoreIntervals());
-        }
+    private bool MoreMcu()
+    {
+        throw new System.NotImplementedException();
+    }
 
-        private void InitializeDecoder()
-        {
-            throw new System.NotImplementedException();
-        }
+    [Fact]
+    public void Test1()
+    {
 
-        private void InterpretScanHeader()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        private bool MoreIntervals()
-        {
-            // true when the expected number of restart intervals has been decoded.
-            throw new System.NotImplementedException();
-        }
-
-        private void DecodeRestartInterval()
-        {
-            ResetDecoder();
-            do
-            {
-                this.DecodeMcu();
-            }
-            while (MoreMcu());
-
-            FindMarker();
-        }
-
-        private void DecodeMcu()
-        {
-
-            for (var n = 0; n < Nb; n++)
-            {
-                this.DecodeDataUnit();
-            }
-        }
-
-        //nb is number of data units in a MCU
-        private const int Nb = 0;
-
-        private void DecodeDataUnit()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void FindMarker()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        private void ResetDecoder()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        private bool MoreMcu()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        [Fact]
-        public void Test1()
-        {
-
-        }
     }
 }

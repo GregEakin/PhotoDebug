@@ -49,14 +49,18 @@ namespace PhotoLib.Tiff
             set => _directoryList[key] = value;
         }
 
-        public void DumpHeader(BinaryReader binaryReader)
+        public string DumpHeader(BinaryReader binaryReader)
         {
+            var builder = new StringBuilder();
             var index = 0;
             foreach (var item in _directoryList)
             {
-                Console.WriteLine("== Tiff Directory [0x{0:X8}]:", item.Key);
-                item.Value.DumpDirectory(binaryReader, $"IFD{index++}");
+                builder.AppendLine($"== Tiff Directory [0x{item.Key:X8}]:");
+                var dump = item.Value.DumpDirectory(binaryReader, $"IFD{index++}");
+                builder.Append(dump);
             }
+
+            return builder.ToString();
         }
 
         public static byte[] ReadBytes(BinaryReader binaryReader, ImageFileEntry imageFileEntry)

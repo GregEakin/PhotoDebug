@@ -7,87 +7,84 @@
 using System;
 using System.IO;
 using System.Linq;
-using Xunit;
 using PhotoLib.Tiff;
+using Xunit;
 
-namespace PhotoTests.CanonM5
+namespace PhotoTests.CanonM5;
+// The first IFD contains a small RGB version of the picture (one fourth the size) compressed in Jpeg, the EXIF part, and the Makernotes part. 
+// The second IFD contains a small RGB version (160x120 pixels) of the picture, compressed in Jpeg.
+// The third IFD contains a small RGB version of the picture, NOT compressed (even with compression==6), and one which no white balance, correction has been applied.
+// The fourth IFD contains the RAW data compressed in lossless Jpeg. 
+
+public class CM5Ifd1
 {
-    // The first IFD contains a small RGB version of the picture (one fourth the size) compressed in Jpeg, the EXIF part, and the Makernotes part. 
-    // The second IFD contains a small RGB version (160x120 pixels) of the picture, compressed in Jpeg.
-    // The third IFD contains a small RGB version of the picture, NOT compressed (even with compression==6), and one which no white balance, correction has been applied.
-    // The fourth IFD contains the RAW data compressed in lossless Jpeg. 
+    private const string FileName = @"\\Data\Photo\Source\IMG_0012.CR2";
 
-    
-    public class CM5Ifd1
+    public CM5Ifd1()
     {
-        private const string FileName = @"P:\Source\IMG_0012.CR2";
+        if (!File.Exists(FileName))
+            throw new ArgumentException("{0} doesn't exists!", FileName);
+    }
 
-        public CM5Ifd1()
+    [Fact]
+    public void TestMethod1()
+    {
+        using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+        using var binaryReader = new BinaryReader(fileStream);
+        var rawImage = new RawImage(binaryReader);
+        Assert.Equal(new byte[] { 0x49, 0x49 }, rawImage.Header.ByteOrder);
+        Assert.Equal(0x002A, rawImage.Header.TiffMagic);
+        Assert.Equal(0x5243, rawImage.Header.CR2Magic);
+        Assert.Equal(new byte[] { 0x02, 0x00 }, rawImage.Header.CR2Version);
+
+        rawImage.DumpHeader(binaryReader);
+    }
+
+    [Fact]
+    public void TestMethod2()
+    {
+        using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+        using var binaryReader = new BinaryReader(fileStream);
+        var rawImage = new RawImage(binaryReader);
+        var imageFileDirectory = rawImage.Directories.Skip(1).First();
+        imageFileDirectory.DumpDirectory(binaryReader);
+    }
+
+    // 0)  0x0201 ULong 32-bit: 56320u   -- Offset
+    // 1)  0x0202 ULong 32-bit: 15495u   -- Length
+    [Fact]
+    public void DumpImage5()
+    {
+        using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+        using var binaryReader = new BinaryReader(fileStream);
+        var rawImage = new RawImage(binaryReader);
+        var imageFileDirectory = rawImage.Directories.Skip(1).First();
+        Assert.Equal(2, imageFileDirectory.Entries.Length);
+        Assert.Equal(
+            new ushort[] { 0x0201, 0x0202 },
+            imageFileDirectory.Entries.Select(e => e.TagId).ToArray());
+
+        var offset = imageFileDirectory.Entries.Single(e => e.TagId == 0x0201 && e.TagType == 4).ValuePointer;
+        Assert.Equal(56320u, offset);
+
+        var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0202 && e.TagType == 4).ValuePointer;
+        Assert.Equal(15495u, length);
+
+        binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
+        var name = Path.Combine(Path.GetDirectoryName(FileName) ?? "./", Path.GetFileNameWithoutExtension(FileName) + "-1.jpg");
+        DumpImage6(name, binaryReader, length);
+    }
+
+    private static void DumpImage6(string output, BinaryReader binaryReader, uint length)
+    {
+        using var x = File.Create(output);
+        var bytes = (int)length;
+        var buffer = new byte[32768];
+        int read;
+        while (bytes > 0 && (read = binaryReader.BaseStream.Read(buffer, 0, Math.Min(buffer.Length, bytes))) > 0)
         {
-            if (!File.Exists(FileName))
-                throw new ArgumentException("{0} doesn't exists!", FileName);
-        }
-
-        [Fact]
-        public void TestMethod1()
-        {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-            using var binaryReader = new BinaryReader(fileStream);
-            var rawImage = new RawImage(binaryReader);
-            Assert.Equal(new byte[] { 0x49, 0x49 }, rawImage.Header.ByteOrder);
-            Assert.Equal(0x002A, rawImage.Header.TiffMagic);
-            Assert.Equal(0x5243, rawImage.Header.CR2Magic);
-            Assert.Equal(new byte[] { 0x02, 0x00 }, rawImage.Header.CR2Version);
-
-            rawImage.DumpHeader(binaryReader);
-        }
-
-        [Fact]
-        public void TestMethod2()
-        {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-            using var binaryReader = new BinaryReader(fileStream);
-            var rawImage = new RawImage(binaryReader);
-            var imageFileDirectory = rawImage.Directories.Skip(1).First();
-            imageFileDirectory.DumpDirectory(binaryReader);
-        }
-
-        // 0)  0x0201 ULong 32-bit: 56320u   -- Offset
-        // 1)  0x0202 ULong 32-bit: 15495u   -- Length
-        [Fact]
-        public void DumpImage5()
-        {
-            using var fileStream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-            using var binaryReader = new BinaryReader(fileStream);
-            var rawImage = new RawImage(binaryReader);
-            var imageFileDirectory = rawImage.Directories.Skip(1).First();
-            Assert.Equal(2, imageFileDirectory.Entries.Length);
-            Assert.Equal(
-                new ushort[] { 0x0201, 0x0202 },
-                imageFileDirectory.Entries.Select(e => e.TagId).ToArray());
-
-            var offset = imageFileDirectory.Entries.Single(e => e.TagId == 0x0201 && e.TagType == 4).ValuePointer;
-            Assert.Equal(56320u, offset);
-
-            var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0202 && e.TagType == 4).ValuePointer;
-            Assert.Equal(15495u, length);
-
-            binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
-            var name = Path.Combine(Path.GetDirectoryName(FileName) ?? "./", Path.GetFileNameWithoutExtension(FileName) + "-1.jpg");
-            DumpImage6(name, binaryReader, length);
-        }
-
-        private static void DumpImage6(string output, BinaryReader binaryReader, uint length)
-        {
-            using var x = File.Create(output);
-            var bytes = (int)length;
-            var buffer = new byte[32768];
-            int read;
-            while (bytes > 0 && (read = binaryReader.BaseStream.Read(buffer, 0, Math.Min(buffer.Length, bytes))) > 0)
-            {
-                x.Write(buffer, 0, read);
-                bytes -= read;
-            }
+            x.Write(buffer, 0, read);
+            bytes -= read;
         }
     }
 }

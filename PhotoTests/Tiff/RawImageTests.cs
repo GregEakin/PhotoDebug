@@ -7,54 +7,53 @@
 using System;
 using System.IO;
 using System.Linq;
-using Xunit;
 using PhotoLib.Tiff;
+using Xunit;
 
-namespace PhotoTests.Tiff
+namespace PhotoTests.Tiff;
+
+public class RawImageTests
 {
-    public class RawImageTests
+    [Fact]
+    public void Header()
     {
-        [Fact]
-        public void Header()
+        var data = new byte[]
         {
-            var data = new byte[]
-                {
-                    0x49, 0x49, 0x2A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x43, 0x52, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00
-                };
-            using var memory = new MemoryStream(data);
-            using var reader = new BinaryReader(memory);
-            var rawImage = new RawImage(reader);
-            var cr2Header = rawImage.Header;
-            Assert.Equal(0x5243, cr2Header.CR2Magic);
-        }
+            0x49, 0x49, 0x2A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x43, 0x52, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00
+        };
+        using var memory = new MemoryStream(data);
+        using var reader = new BinaryReader(memory);
+        var rawImage = new RawImage(reader);
+        var cr2Header = rawImage.Header;
+        Assert.Equal(0x5243, cr2Header.CR2Magic);
+    }
 
-        [Fact]
-        public void Directory()
+    [Fact]
+    public void Directory()
+    {
+        var data = new byte[]
         {
-            var data = new byte[]
-                {
-                    0x49, 0x49, 0x2A, 0x00, 0x10, 0x00, 0x00, 0x00, 0x43, 0x52, 0x02, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00,
-                    0x00, 0x00, 0x00, 0x00, 0x00
-                };
-            using var memory = new MemoryStream(data);
-            using var reader = new BinaryReader(memory);
-            var rawImage = new RawImage(reader);
-            var directory = rawImage.Directories.First();
-            Assert.Empty(directory.Entries); 
-            Assert.Equal(0x00000000u, directory.NextEntry);
-        }
+            0x49, 0x49, 0x2A, 0x00, 0x10, 0x00, 0x00, 0x00, 0x43, 0x52, 0x02, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00
+        };
+        using var memory = new MemoryStream(data);
+        using var reader = new BinaryReader(memory);
+        var rawImage = new RawImage(reader);
+        var directory = rawImage.Directories.First();
+        Assert.Empty(directory.Entries); 
+        Assert.Equal(0x00000000u, directory.NextEntry);
+    }
 
-        [Fact]
-        public void DirectoryDuplicate()
+    [Fact]
+    public void DirectoryDuplicate()
+    {
+        var data = new byte[]
         {
-            var data = new byte[]
-                {
-                    0x49, 0x49, 0x2A, 0x00, 0x10, 0x00, 0x00, 0x00, 0x43, 0x52, 0x02, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00,
-                    0x00, 0x10, 0x00, 0x00, 0x00
-                };
-            using var memory = new MemoryStream(data);
-            using var reader = new BinaryReader(memory);
-            Assert.Throws<ArgumentException>(() => new RawImage(reader));
-        }
+            0x49, 0x49, 0x2A, 0x00, 0x10, 0x00, 0x00, 0x00, 0x43, 0x52, 0x02, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x10, 0x00, 0x00, 0x00
+        };
+        using var memory = new MemoryStream(data);
+        using var reader = new BinaryReader(memory);
+        Assert.Throws<ArgumentException>(() => new RawImage(reader));
     }
 }

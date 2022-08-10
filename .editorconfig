@@ -1,0 +1,10 @@
+﻿[*.cs]
+
+# IDE0008: Use explicit type
+csharp_style_var_elsewhere = true
+csharp_style_var_for_built_in_types=true:silent
+csharp_style_var_when_type_is_apparent=true:silent
+insert_final_newline=true
+
+# IDE0011: Add braces
+dotnet_diagnostic.IDE0011.severity = silent

@@ -4,34 +4,32 @@
 // FILE:		AATest1.cs
 // AUTHOR:		Greg Eakin
 
-using Xunit;
 using System;
 using System.Xml;
 using System.Xml.Linq;
+using Xunit;
 
-namespace PhotoTests.Exif
+namespace PhotoTests.Exif;
+
+public class ParseXml
 {
-    
-    public class ParseXml
+    [Fact]
+    public void AATest1()
     {
-        [Fact]
-        public void AATest1()
-        {
-            using var reader = XmlReader.Create(@"P:\Source\data3.xml");
-            reader.ReadToFollowing("taginfo");
-            var x = reader.AttributeCount;
-            Assert.Equal(0, x);
-        }
+        using var reader = XmlReader.Create(@"\\Data\Photo\Source\data3.xml");
+        reader.ReadToFollowing("taginfo");
+        var x = reader.AttributeCount;
+        Assert.Equal(0, x);
+    }
 
-        [Fact]
-        public void AATest2()
+    [Fact]
+    public void AATest2()
+    {
+        var doc = XDocument.Load(@"\\Data\Photo\Source\data3.xml");
+        var authors = doc.Descendants("table");
+        foreach (var author in authors)
         {
-            var doc = XDocument.Load(@"P:\Source\data3.xml");
-            var authors = doc.Descendants("table");
-            foreach (var author in authors)
-            {
-                Console.WriteLine(author.Value);
-            }
+            Console.WriteLine(author.Value);
         }
     }
 }

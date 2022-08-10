@@ -31,7 +31,7 @@ namespace PhotoDump
         {
             InitializeComponent();
 			
-            const string folder = @"P:\2016\2016-02-21 Studio\";
+            const string folder = @"\\Data\Photo\2016\2016-02-21 Studio\";
             const string fileName2 = folder + "Studio 015.CR2";
             var stuff = new PhotoStuff(fileName2);
             // var bitmap = stuff.Array;

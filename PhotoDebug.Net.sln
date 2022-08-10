@@ -1,21 +1,28 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31410.223
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32714.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexDump", "HexDump\HexDump.csproj", "{AFD40402-CB7A-43FC-B262-3A438BEF8E3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexDump", "HexDump\HexDump.csproj", "{AFD40402-CB7A-43FC-B262-3A438BEF8E3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JpegParser", "JpegParser\JpegParser.csproj", "{36CF0571-3716-42D4-AF60-E043E22065F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JpegParser", "JpegParser\JpegParser.csproj", "{36CF0571-3716-42D4-AF60-E043E22065F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JpegParserTests", "JpegParserTests\JpegParserTests.csproj", "{799B639E-29E0-402B-92E8-79DC370C98AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JpegParserTests", "JpegParserTests\JpegParserTests.csproj", "{799B639E-29E0-402B-92E8-79DC370C98AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoLib", "PhotoLib\PhotoLib.csproj", "{63C21A80-4C35-40D3-B0EB-8C68F146A9FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhotoLib", "PhotoLib\PhotoLib.csproj", "{63C21A80-4C35-40D3-B0EB-8C68F146A9FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoTests", "PhotoTests\PhotoTests.csproj", "{09DDAB03-EDFD-4CB4-9FEF-6E4FE30F3B6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhotoTests", "PhotoTests\PhotoTests.csproj", "{09DDAB03-EDFD-4CB4-9FEF-6E4FE30F3B6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagDatabase", "TagDatabase\TagDatabase.csproj", "{0B51EA63-2764-4A6E-89E8-72055A2F887D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TagDatabase", "TagDatabase\TagDatabase.csproj", "{0B51EA63-2764-4A6E-89E8-72055A2F887D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoDump", "PhotoDump\PhotoDump.csproj", "{6A3C018E-7EB9-4351-B0EE-C5BE8F26500F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhotoDump", "PhotoDump\PhotoDump.csproj", "{6A3C018E-7EB9-4351-B0EE-C5BE8F26500F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{83B10F09-55C8-4B49-8193-8A78AB06B6BA}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExifTool", "ExifTool\ExifTool.csproj", "{1FD85808-6F07-4502-A23A-642004378D2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +58,10 @@ Global
 		{6A3C018E-7EB9-4351-B0EE-C5BE8F26500F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A3C018E-7EB9-4351-B0EE-C5BE8F26500F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A3C018E-7EB9-4351-B0EE-C5BE8F26500F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FD85808-6F07-4502-A23A-642004378D2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FD85808-6F07-4502-A23A-642004378D2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FD85808-6F07-4502-A23A-642004378D2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FD85808-6F07-4502-A23A-642004378D2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

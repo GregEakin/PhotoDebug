@@ -11,19 +11,22 @@ namespace PhotoLib.Tiff
 {
     public class ImageFileEntry
     {
-        // TagTypes
-        // 1 BYTE       8-bit unsigned integer
-        // 2 ASCII      8-bit, NULL-terminated string
-        // 3 SHORT      16-bit unsigned integer
-        // 4 LONG       32-bit unsigned integer
-        // 5 RATIONAL   Two 32-bit unsigned integers, numerator and denominator
-        // 6 SBYTE      8-bit signed integer
-        // 7 UNDEFINE   8-bit byte
-        // 8 SSHORT     16-bit signed integer
-        // 9 SLONG      32-bit signed integer
-        // 10 SRATIONAL Two 32-bit signed integers
-        // 11 FLOAT     4-byte single-precision IEEE floating-point value
-        // 12 DOUBLE    8-byte double-precision IEEE floating-point value
+        public enum TagTypes
+        {
+            Undefined = 0x00,
+            UByte     = 0x01,  // 8-bit unsigned integer
+            Ascii     = 0x02,  // 8-bit, NULL-terminated string
+            UShort    = 0x03,  // 16-bit unsigned integer
+            ULong     = 0x04,  // 32-bit unsigned integer
+            URational = 0x05,  // Two 32-bit unsigned integers, numerator and denominator
+            SByte     = 0x06,  // 8-bit signed integer
+            UByteSeq  = 0x07,  // 8-bit byte
+            SShort    = 0x08,  // 16-bit signed integer
+            SLong     = 0x09,  // 32-bit signed integer
+            SRational = 0x0A, // Two 32-bit signed integers
+            Single    = 0x0B, // 4-byte single-precision IEEE floating-point value
+            Double    = 0x0C, // 8-byte double-precision IEEE floating-point value
+        }
 
         public ImageFileEntry(BinaryReader binaryReader)
         {
@@ -33,11 +36,11 @@ namespace PhotoLib.Tiff
             ValuePointer = binaryReader.ReadUInt32();
         }
 
-        public uint NumberOfValue { get; }
-
         public ushort TagId { get; }
 
         public ushort TagType { get; }
+
+        public uint NumberOfValue { get; }
 
         public uint ValuePointer { get; }
     }
