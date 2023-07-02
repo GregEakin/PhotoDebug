@@ -1,8 +1,8 @@
 ﻿// Log File Viewer - MemoryTests.cs
 // 
-// Copyright ©  Greg Eakin.
+// Copyright ©2023  Greg Eakin.
 // 
-// Greg Eakin <greg@gdbtech.info>
+// Greg Eakin <greg@eakin.dev>
 // 
 // All Rights Reserved.
 
@@ -51,6 +51,7 @@ public class MemoryTests
         // Share across process name "ImgA"
         using var mmf = MemoryMappedFile.CreateFromFile(FileName, FileMode.Open, "ImgA");
         using var accessor = mmf.CreateViewAccessor(0, 0,  MemoryMappedFileAccess.Read);
+
         // struct Block {
         //   int length;
         //   char[4] type;
@@ -68,9 +69,10 @@ public class MemoryTests
         //    accessor.Write(i, ref block);
         //}
 
-        Console.WriteLine("Is little endian {0}", BitConverter.IsLittleEndian);
-        accessor.Read(0, out int length);      // This reads little endian data, the file is big endian
-        Console.WriteLine("length = 0x{0:x8}", length);
+        Assert.True(BitConverter.IsLittleEndian);
+
+        accessor.Read(0, out uint length);      // This reads little endian data, the file is big endian
+        Assert.Equal(402653184L, length);
     }
 
     [Fact]
