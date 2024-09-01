@@ -171,25 +171,23 @@ public class Image3MRawIV
         Assert.Equal(width, samplesPerLine * 3);
         Assert.Equal(2, 6 * samplesPerLine / (slices[0] * slices[1] + slices[2]));
 
-        using (var bitmap = new Bitmap(samplesPerLine, height, PixelFormat.Format48bppRgb))
+        using var bitmap = new Bitmap(samplesPerLine, height, PixelFormat.Format48bppRgb);
+        var size = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+        var data = bitmap.LockBits(size, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+        try
         {
-            var size = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-            var data = bitmap.LockBits(size, ImageLockMode.ReadWrite, bitmap.PixelFormat);
-            try
-            {
-                Assert.Equal(6 * samplesPerLine, data.Stride); // 6 bytes * 8 bits == 48 bits per pixel
+            Assert.Equal(6 * samplesPerLine, data.Stride); // 6 bytes * 8 bits == 48 bits per pixel
 
-                for (var slice = 0; slice < slices[0]; slice++) // 0..8
-                    ProcessSlice(startOfImage, slice, slices[1], data);
-                ProcessSlice(startOfImage, slices[0], slices[2], data);
-            }
-            finally
-            {
-                bitmap.UnlockBits(data);
-            }
-
-            bitmap.Save(outFile);
+            for (var slice = 0; slice < slices[0]; slice++) // 0..8
+                ProcessSlice(startOfImage, slice, slices[1], data);
+            ProcessSlice(startOfImage, slices[0], slices[2], data);
         }
+        finally
+        {
+            bitmap.UnlockBits(data);
+        }
+
+        bitmap.Save(outFile);
     }
 
     private static readonly DataBuf[] lastCol = new DataBuf[2592];

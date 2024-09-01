@@ -18,27 +18,26 @@ namespace PhotoDump
     {
         public PhotoStuff(string fileName)
         {
-            using (var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (var binaryReader = new BinaryReader(fileStream))
-            {
-                var rawImage = new RawImage(binaryReader);
-                var image = rawImage.Directories.Last();
+            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+            using var binaryReader = new BinaryReader(fileStream);
 
-                // var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
+            var rawImage = new RawImage(binaryReader);
+            var image = rawImage.Directories.Last();
 
-                var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
-                var count = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
-                var imageFileEntry = image.Entries.Single(e => e.TagId == 0xC640 && e.TagType == ImageFileEntry.TagTypes.UShort);
-                var slices = RawImage.ReadUInts16(binaryReader, imageFileEntry);
+            // var compression = image.Entries.Single(e => e.TagId == 0x0103 && e.TagType == ImageFileEntry.TagTypes.UShort).ValuePointer;
 
-                binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
-                var startOfImage = new StartOfImageRgb(binaryReader, offset, count);
-                startOfImage.ImageData.Reset();
-                var memory = startOfImage.ReadImage();
+            var offset = image.Entries.Single(e => e.TagId == 0x0111 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
+            var count = image.Entries.Single(e => e.TagId == 0x0117 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
+            var imageFileEntry = image.Entries.Single(e => e.TagId == 0xC640 && e.TagType == ImageFileEntry.TagTypes.UShort);
+            var slices = RawImage.ReadUInts16(binaryReader, imageFileEntry);
 
-                var outFile = Path.ChangeExtension(fileName, ".bmp");
-                MakeBitmap(memory, outFile, slices);
-            }
+            binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
+            var startOfImage = new StartOfImageRgb(binaryReader, offset, count);
+            startOfImage.ImageData.Reset();
+            var memory = startOfImage.ReadImage();
+
+            var outFile = Path.ChangeExtension(fileName, ".bmp");
+            MakeBitmap(memory, outFile, slices);
         }
 
         private static void MakeBitmap(ushort[][] memory, string outFile, ushort[] slices)
@@ -46,29 +45,27 @@ namespace PhotoDump
             var y = memory.GetLength(0);
             var x = memory[0].GetLength(0);
 
-            using (var bitmap = new Bitmap(x, y))
+            using var bitmap = new Bitmap(x, y);
+            for (var mrow = 0; mrow < y; mrow++)
             {
-                for (var mrow = 0; mrow < y; mrow++)
+                var rdata = memory[mrow];
+                for (var mcol = 0; mcol < x; mcol++)
                 {
-                    var rdata = memory[mrow];
-                    for (var mcol = 0; mcol < x; mcol++)
-                    {
-                        var index = mrow * x + mcol;
-                        var slice = index / (slices[1] * y);
-                        if (slice > slices[0])
-                            slice = slices[0];
-                        var offset = index - slice * slices[1] * y;
-                        var page = slice < slices[0] ? 1 : 2;
-                        var brow = offset / slices[page];
-                        var bcol = offset % slices[page] + slice * slices[1];
+                    var index = mrow * x + mcol;
+                    var slice = index / (slices[1] * y);
+                    if (slice > slices[0])
+                        slice = slices[0];
+                    var offset = index - slice * slices[1] * y;
+                    var page = slice < slices[0] ? 1 : 2;
+                    var brow = offset / slices[page];
+                    var bcol = offset % slices[page] + slice * slices[1];
 
-                        var val = rdata[mcol];
-                        PixelSet(bitmap, brow, bcol, val);
-                    }
+                    var val = rdata[mcol];
+                    PixelSet(bitmap, brow, bcol, val);
                 }
-
-                bitmap.Save(outFile);
             }
+
+            bitmap.Save(outFile);
         }
 
         private static void PixelSet(Bitmap bitmap, int row, int col, ushort val)

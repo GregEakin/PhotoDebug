@@ -10,6 +10,7 @@ public class Program : IDisposable
 
     public static void Main(string[] args)
     {
+        Console.WriteLine(args.Length);
     }
 
     public void Dispose()
@@ -22,13 +23,20 @@ public class Program : IDisposable
     {
         var toolPath = Path.Combine(@"\", ExifToolFolderPath, "exiftool.exe");
         var command = $"\"{toolPath}\" -stay_open true -@ args.txt";
-        var pExifTool = new Process();
-        pExifTool.StartInfo = new ProcessStartInfo("cmd", $"/c \"{@command}\"")
+        var pExifTool = new Process
         {
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = true
+            Site = null,
+            EnableRaisingEvents = false,
+            PriorityBoostEnabled = false,
+            PriorityClass = 0,
+            StartInfo = new ProcessStartInfo("cmd", $"/c \"{@command}\"")
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            },
+            SynchronizingObject = null
         };
 
         //  NOTE:  If you do not implement an asynchronous error handler like in this example, instead simply using pExifTool.StandardError.ReadLine()
