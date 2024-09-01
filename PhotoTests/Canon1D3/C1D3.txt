@@ -1,0 +1,343 @@
+ExifTool Version Number         : 12.92
+File Name                       : 2B0I7592.CR2
+Directory                       : P:/2024/2024-08-31
+File Size                       : 11 MB
+File Modification Date/Time     : 2024:08:31 09:04:58-07:00
+File Access Date/Time           : 2024:08:31 09:04:58-07:00
+File Creation Date/Time         : 2024:08:31 09:04:04-07:00
+File Permissions                : -rw-rw-rw-
+File Type                       : CR2
+File Type Extension             : cr2
+MIME Type                       : image/x-canon-cr2
+Exif Byte Order                 : Little-endian (Intel, II)
+Image Width                     : 1936
+Image Height                    : 1288
+Bits Per Sample                 : 8 8 8
+Compression                     : JPEG (old-style)
+Make                            : Canon
+Camera Model Name               : Canon EOS-1D Mark III
+Preview Image Start             : 50924
+Orientation                     : Horizontal (normal)
+Preview Image Length            : 787019
+X Resolution                    : 72
+Y Resolution                    : 72
+Resolution Unit                 : inches
+Modify Date                     : 2024:08:31 09:04:04
+Exposure Time                   : 1/60
+F Number                        : 5.6
+Exposure Program                : Manual
+ISO                             : 100
+Exif Version                    : 0221
+Date/Time Original              : 2024:08:31 09:04:04
+Create Date                     : 2024:08:31 09:04:04
+Components Configuration        : Y, Cb, Cr, -
+Shutter Speed Value             : 1/64
+Aperture Value                  : 5.7
+Flash                           : Off, Did not fire
+Focal Length                    : 19.0 mm
+Macro Mode                      : Normal
+Self Timer                      : Off
+Quality                         : RAW
+Canon Flash Mode                : Off
+Continuous Drive                : Single
+Focus Mode                      : One-shot AF
+Record Mode                     : CR2+JPEG
+Canon Image Size                : Large
+Easy Mode                       : Manual
+Digital Zoom                    : None
+Contrast                        : Normal
+Saturation                      : Normal
+Metering Mode                   : Evaluative
+Focus Range                     : Not Known
+Canon Exposure Mode             : Manual
+Lens Type                       : Canon EF 17-40mm f/4L USM or Sigma Lens
+Max Focal Length                : 40 mm
+Min Focal Length                : 17 mm
+Focal Units                     : 1/mm
+Max Aperture                    : 4
+Min Aperture                    : 23
+Flash Activity                  : 0
+Flash Bits                      : (none)
+Zoom Source Width               : 0
+Zoom Target Width               : 0
+Manual Flash Output             : n/a
+Color Tone                      : Normal
+SRAW Quality                    : n/a
+Auto ISO                        : 100
+Base ISO                        : 100
+Measured EV                     : 3.25
+Target Aperture                 : 5.7
+Target Exposure Time            : 1/64
+Exposure Compensation           : 0
+White Balance                   : Auto
+Slow Shutter                    : None
+Shot Number In Continuous Burst : 0
+Optical Zoom Code               : n/a
+Camera Temperature              : 22 C
+Flash Guide Number              : 0
+Flash Exposure Compensation     : 0
+Auto Exposure Bracketing        : Off
+AEB Bracket Value               : 0
+Control Mode                    : Camera Local Control
+Measured EV 2                   : 3.75
+Bulb Duration                   : 0
+Camera Type                     : EOS High-end
+ND Filter                       : n/a
+Canon Image Type                : Canon EOS-1D Mark III
+Canon Firmware Version          : Firmware Version 1.3.2
+Owner Name                      : Gregory Eakin
+Serial Number                   : 518830
+Camera Orientation              : Horizontal (normal)
+Firmware Version                : 1.3.2
+File Index                      : 7592
+Shutter Count                   : 7592
+Directory Index                 : 100
+Contrast Standard               : 0
+Sharpness Standard              : 3
+Saturation Standard             : 0
+Color Tone Standard             : 0
+Contrast Portrait               : 0
+Sharpness Portrait              : 2
+Saturation Portrait             : 0
+Color Tone Portrait             : 0
+Contrast Landscape              : 0
+Sharpness Landscape             : 4
+Saturation Landscape            : 0
+Color Tone Landscape            : 0
+Contrast Neutral                : 0
+Sharpness Neutral               : 0
+Saturation Neutral              : 0
+Color Tone Neutral              : 0
+Contrast Faithful               : 0
+Sharpness Faithful              : 0
+Saturation Faithful             : 0
+Color Tone Faithful             : 0
+Contrast Monochrome             : 0
+Sharpness Monochrome            : 3
+Filter Effect Monochrome        : None
+Toning Effect Monochrome        : None
+Contrast User Def 1             : 0
+Sharpness User Def 1            : 3
+Saturation User Def 1           : 0
+Color Tone User Def 1           : 0
+Filter Effect User Def 1        : None
+Toning Effect User Def 1        : None
+Contrast User Def 2             : 0
+Sharpness User Def 2            : 3
+Saturation User Def 2           : 0
+Color Tone User Def 2           : 0
+Filter Effect User Def 2        : None
+Toning Effect User Def 2        : None
+Contrast User Def 3             : 0
+Sharpness User Def 3            : 3
+Saturation User Def 3           : 0
+Color Tone User Def 3           : 0
+Filter Effect User Def 3        : None
+Toning Effect User Def 3        : None
+User Def 1 Picture Style        : Standard
+User Def 2 Picture Style        : Standard
+User Def 3 Picture Style        : Standard
+Time Stamp                      : 2024:08:31 09:04:04
+Canon Model ID                  : EOS-1D Mark III
+Thumbnail Image Valid Area      : 0 159 7 112
+Serial Number Format            : Format 2
+AF Area Mode                    : Auto
+Num AF Points                   : 45
+Valid AF Points                 : 45
+Canon Image Width               : 1936
+Canon Image Height              : 1288
+AF Image Width                  : 3888
+AF Image Height                 : 2592
+AF Area Widths                  : 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112 112
+AF Area Heights                 : 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168
+AF Area X Positions             : -625 -416 -209 0 209 416 625 -917 -723 -520 -311 -104 104 311 520 723 917 -1041 -832 -625 -416 -206 0 206 416 625 832 1041 -917 -723 -520 -311 -104 104 311 520 723 917 -625 -416 -209 0 209 416 625
+AF Area Y Positions             : -554 -554 -554 -554 -554 -554 -554 -277 -277 -277 -277 -277 -277 -277 -277 -277 -277 0 0 0 0 0 0 0 0 0 0 0 277 277 277 277 277 277 277 277 277 277 554 554 554 554 554 554 554
+AF Points In Focus              : 41,42
+AF Points Selected              : 0,1,2,3,4,5,6,7,16,17,27,28,37,38,39,40,41,42,43,44
+Original Decision Data Offset   : 0
+Bracket Mode                    : Off
+Bracket Value                   : 0
+Bracket Shot Number             : 0
+Raw Jpg Size                    : Large
+Long Exposure Noise Reduction 2 : Off
+WB Bracket Mode                 : Off
+WB Bracket Value AB             : 0
+WB Bracket Value GM             : 0
+Live View Shooting              : Off
+Focus Distance Upper            : 0.43 m
+Focus Distance Lower            : 0.39 m
+Lens Model                      : EF17-40mm f/4L USM
+Internal Serial Number          : G018192
+Dust Removal Data               : (Binary data 1024 bytes, use -b option to extract)
+Crop Left Margin                : 0
+Crop Right Margin               : 0
+Crop Top Margin                 : 0
+Crop Bottom Margin              : 0
+Exposure Level Increments       : 1/3-stop set, 1/3-stop comp.
+ISO Speed Increments            : 1/3 Stop
+ISO Speed Range                 : Disable; Max 3200; Min 100
+AEB Auto Cancel                 : On
+AEB Sequence                    : 0,-,+
+AEB Shot Count                  : 7 shots
+Spot Meter Link To AF Point     : Disable (use center AF point)
+Safety Shift                    : Disable
+Usable Shooting Modes           : Disable; Flags 0xfc
+Usable Metering Modes           : Disable; Flags 0xf0
+Exposure Mode In Manual         : Specified metering mode
+Shutter Speed Range             : Disable; Hi 1/8192; Lo 32
+Aperture Range                  : Disable; Closed 91; Open 1
+Apply Shooting Metering Mode    : Disable; 0; 0; 3; 112; 48; 0; 0
+Flash Sync Speed Av             : Auto
+Long Exposure Noise Reduction   : Off
+High ISO Noise Reduction        : Off
+Highlight Tone Priority         : Disable
+E-TTL II                        : Evaluative
+Shutter Curtain Sync            : 1st-curtain sync
+Flash Firing                    : Fires
+View Info During Exposure       : Disable
+LCD Illumination During Bulb    : Off
+Info Button When Shooting       : Displays camera settings
+USM Lens Electronic MF          : Enable after one-shot AF
+AI Servo Tracking Sensitivity   : Standard
+AI Servo Image Priority         : 1: AF, 2: Tracking
+AI Servo Tracking Method        : Main focus point priority
+Lens Drive No AF                : Focus search on
+Lens AF Stop Button             : AF stop
+AF Microadjustment              : Disable; 0; 0; 0; 0
+AF Point Area Expansion         : Disable
+Selectable AF Point             : 19 points
+AF Point Auto Selection         : Control-direct:disable/Main:enable
+Switch To Registered AF Point   : Disable
+AF Point Display During Focus   : On
+AF Point Brightness             : Normal
+AF Assist Beam                  : Emits
+Mirror Lockup                   : Disable
+Continuous Shooting Speed       : Disable; Hi 10; Lo 3
+Continuous Shot Limit           : Disable; 99 shots
+Shutter Button AF On Button     : Metering + AF start
+AF On AE Lock Button Switch     : Disable
+Quick Control Dial In Meter     : Exposure comp/Aperture
+Set Button When Shooting        : Normal (disabled)
+Manual Tv/Av For M              : Tv=Main/Av=Control
+Dial Direction Tv Av            : Normal
+Av Setting Without Lens         : Disable
+WB Media Image Size Setting     : Rear LCD panel
+Lock Microphone Button          : Protect (hold:record memo)
+Button Function Control Off     : Normal (enable)
+Focusing Screen                 : Ec-CIV
+Timer Length                    : Disable; 6 s: 6; 16 s: 16; After release: 2
+Short Release Time Lag          : Disable
+Add Aspect Ratio Info           : Off
+Add Original Decision Data      : Off
+Live View Exposure Simulation   : Disable (LCD auto adjust)
+Aspect Ratio                    : 3:2
+Cropped Image Width             : 3888
+Cropped Image Height            : 2592
+Cropped Image Left              : 0
+Cropped Image Top               : 0
+Tone Curve                      : Standard
+Sharpness                       : 3
+Sharpness Frequency             : n/a
+Sensor Red Level                : 0
+Sensor Blue Level               : 0
+White Balance Red               : 0
+White Balance Blue              : 0
+Color Temperature               : 5200
+Picture Style                   : Standard
+Digital Gain                    : 0
+WB Shift AB                     : 0
+WB Shift GM                     : 0
+Measured RGGB                   : 508 1024 1024 714
+VRD Offset                      : 0
+Sensor Width                    : 3984
+Sensor Height                   : 2622
+Sensor Left Border              : 88
+Sensor Top Border               : 25
+Sensor Right Border             : 3975
+Sensor Bottom Border            : 2616
+Black Mask Left Border          : 0
+Black Mask Top Border           : 0
+Black Mask Right Border         : 0
+Black Mask Bottom Border        : 0
+Color Data Version              : 2 (1DmkIII)
+WB RGGB Levels As Shot          : 2036 1024 1024 1487
+Color Temp As Shot              : 5109
+WB RGGB Levels Auto             : 2036 1024 1024 1487
+Color Temp Auto                 : 5109
+WB RGGB Levels Measured         : 2026 1025 1022 1484
+Color Temp Measured             : 5099
+WB RGGB Levels Daylight         : 2097 1024 1024 1489
+Color Temp Daylight             : 5200
+WB RGGB Levels Shade            : 2439 1024 1024 1222
+Color Temp Shade                : 7000
+WB RGGB Levels Cloudy           : 2275 1024 1024 1343
+Color Temp Cloudy               : 6000
+WB RGGB Levels Tungsten         : 1584 1122 1122 2634
+Color Temp Tungsten             : 3200
+WB RGGB Levels Fluorescent      : 1862 1040 1040 2263
+Color Temp Fluorescent          : 3768
+WB RGGB Levels Kelvin           : 2097 1024 1024 1489
+Color Temp Kelvin               : 5190
+WB RGGB Levels Flash            : 2310 1024 1024 1306
+Color Temp Flash                : 6265
+Average Black Level             : 1024 1024 1024 1024
+Raw Measured RGGB               : 50980 104389 104589 76615
+Picture Style User Def          : Standard; Standard; Standard
+Picture Style PC                : n/a; n/a; n/a
+Custom Picture Style File Name  :
+AF Micro Adj Mode               : Disable
+AF Micro Adj Value              : 0
+User Comment                    :
+Sub Sec Time                    : 93
+Sub Sec Time Original           : 93
+Sub Sec Time Digitized          : 93
+Flashpix Version                : 0100
+Color Space                     : sRGB
+Exif Image Width                : 3888
+Exif Image Height               : 2592
+Interoperability Index          : R98 - DCF basic file (sRGB)
+Interoperability Version        : 0100
+Focal Plane X Resolution        : 3512.195122
+Focal Plane Y Resolution        : 3521.73913
+Focal Plane Resolution Unit     : inches
+Custom Rendered                 : Normal
+Exposure Mode                   : Manual
+Scene Capture Type              : Standard
+GPS Version ID                  : 2.2.0.0
+Thumbnail Offset                : 36408
+Thumbnail Length                : 14515
+Photometric Interpretation      : RGB
+Samples Per Pixel               : 3
+Rows Per Strip                  : 324
+Planar Configuration            : Chunky
+Strip Offsets                   : 1788216
+Strip Byte Counts               : 9699295
+CR2 CFA Pattern                 : [Red,Green][Green,Blue]
+Raw Image Segmentation          : 1 1992 1992
+SRaw Type                       : 1
+Drive Mode                      : Single-frame Shooting
+File Number                     : 100-7592
+Lens                            : 17.0 - 40.0 mm
+Shooting Mode                   : Manual
+WB RGGB Levels                  : 2036 1024 1024 1487
+Aperture                        : 5.6
+Blue Balance                    : 1.452148
+Image Size                      : 3888x2592
+Lens ID                         : Canon EF 17-40mm f/4L USM
+Megapixels                      : 10.1
+Preview Image                   : (Binary data 787019 bytes, use -b option to extract)
+Red Balance                     : 1.988281
+Scale Factor To 35 mm Equivalent: 1.3
+Shutter Speed                   : 1/60
+Create Date                     : 2024:08:31 09:04:04.93
+Date/Time Original              : 2024:08:31 09:04:04.93
+Modify Date                     : 2024:08:31 09:04:04.93
+Thumbnail Image                 : (Binary data 14515 bytes, use -b option to extract)
+Lens                            : 17.0 - 40.0 mm (35 mm equivalent: 21.8 - 51.3 mm)
+Circle Of Confusion             : 0.023 mm
+Depth Of Field                  : 0.12 m (0.36 - 0.48 m)
+Field Of View                   : 73.0 deg
+Focal Length                    : 19.0 mm (35 mm equivalent: 24.3 mm)
+Hyperfocal Distance             : 2.75 m
+Light Value                     : 10.9
+-- press ENTER --
