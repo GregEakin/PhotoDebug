@@ -147,112 +147,112 @@ public class Image3MRawIV
         // horizontal sampling == 1
         startOfImage.ImageData.Reset();
 
-        var outFile = Path.ChangeExtension(fileName, ".png");
-        CreateBitmap(binaryReader, startOfImage, outFile, offset, slices);
+        // var outFile = Path.ChangeExtension(fileName, ".png");
+        // CreateBitmap(binaryReader, startOfImage, outFile, offset, slices);
 
         Assert.Equal(15116544, cc);
         Assert.Equal(1, startOfImage.ImageData.DistFromEnd);
     }
 
-    private static void CreateBitmap(BinaryReader binaryReader, StartOfImage startOfImage, string outFile, uint offset, ushort[] slices)
-    {
-        binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
-
-        var startOfFrame = startOfImage.StartOfFrame;
-        var height = startOfFrame.ScanLines;
-        Assert.Equal(2592, height);              // image height
-
-        var samplesPerLine = startOfFrame.SamplesPerLine;
-        Assert.Equal(3888, samplesPerLine);      // image width
-
-        var width = startOfFrame.Width;
-        Assert.Equal(11664, startOfFrame.Width);
-        Assert.Equal(samplesPerLine * 3, slices[0] * slices[1] + slices[2]);
-        Assert.Equal(width, samplesPerLine * 3);
-        Assert.Equal(2, 6 * samplesPerLine / (slices[0] * slices[1] + slices[2]));
-
-        using var bitmap = new Bitmap(samplesPerLine, height, PixelFormat.Format48bppRgb);
-        var size = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-        var data = bitmap.LockBits(size, ImageLockMode.ReadWrite, bitmap.PixelFormat);
-        try
-        {
-            Assert.Equal(6 * samplesPerLine, data.Stride); // 6 bytes * 8 bits == 48 bits per pixel
-
-            for (var slice = 0; slice < slices[0]; slice++) // 0..8
-                ProcessSlice(startOfImage, slice, slices[1], data);
-            ProcessSlice(startOfImage, slices[0], slices[2], data);
-        }
-        finally
-        {
-            bitmap.UnlockBits(data);
-        }
-
-        bitmap.Save(outFile);
-    }
+    // private static void CreateBitmap(BinaryReader binaryReader, StartOfImage startOfImage, string outFile, uint offset, ushort[] slices)
+    // {
+    //     binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
+    //
+    //     var startOfFrame = startOfImage.StartOfFrame;
+    //     var height = startOfFrame.ScanLines;
+    //     Assert.Equal(2592, height);              // image height
+    //
+    //     var samplesPerLine = startOfFrame.SamplesPerLine;
+    //     Assert.Equal(3888, samplesPerLine);      // image width
+    //
+    //     var width = startOfFrame.Width;
+    //     Assert.Equal(11664, startOfFrame.Width);
+    //     Assert.Equal(samplesPerLine * 3, slices[0] * slices[1] + slices[2]);
+    //     Assert.Equal(width, samplesPerLine * 3);
+    //     Assert.Equal(2, 6 * samplesPerLine / (slices[0] * slices[1] + slices[2]));
+    //
+    //     using var bitmap = new Bitmap(samplesPerLine, height, PixelFormat.Format48bppRgb);
+    //     var size = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+    //     var data = bitmap.LockBits(size, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+    //     try
+    //     {
+    //         Assert.Equal(6 * samplesPerLine, data.Stride); // 6 bytes * 8 bits == 48 bits per pixel
+    //
+    //         for (var slice = 0; slice < slices[0]; slice++) // 0..8
+    //             ProcessSlice(startOfImage, slice, slices[1], data);
+    //         ProcessSlice(startOfImage, slices[0], slices[2], data);
+    //     }
+    //     finally
+    //     {
+    //         bitmap.UnlockBits(data);
+    //     }
+    //
+    //     bitmap.Save(outFile);
+    // }
 
     private static readonly DataBuf[] lastCol = new DataBuf[2592];
 
-    private static void ProcessSlice(StartOfImage startOfImage, int slice, int samples, BitmapData data)
-    {
-        var startOfFrame = startOfImage.StartOfFrame;
-        var table0 = startOfImage.HuffmanTable.Tables[0x00];
-        var table1 = startOfImage.HuffmanTable.Tables[0x01];
-
-        var lastRow = new DataBuf { Y = 0x0000 };       // 0x4000
-
-        for (var line = 0; line < startOfFrame.ScanLines; line += 2) // 0..2592
-        {
-            // 6 bytes * 8 bits == 48 bits per pixel
-            // 2 = 6 bytes * samplesPerLine / (slices[0] * slices[1] + slices[2]);
-            var scan0 = data.Scan0 + data.Stride * line + slice * samples * 2;
-            var scan1 = data.Scan0 + data.Stride * (line + 1) + slice * samples * 2;
-
-            // read six shorts, for four pixels
-            for (var col = 0; col < samples / 6; col++)       // 0..1296
-            {
-                cc += 6;
-                var diff = new DiffBuf
-                {
-                    Y1 = startOfImage.ProcessColor(0x00),
-                    Y2 = startOfImage.ProcessColor(0x00),
-                    Y3 = startOfImage.ProcessColor(0x00),
-                    Y4 = startOfImage.ProcessColor(0x00),
-                    Cb = startOfImage.ProcessColor(0x01),
-                    Cr = startOfImage.ProcessColor(0x01),
-                };
-
-                var pixel0 = new DataBuf
-                {
-                    Y = (ushort)(lastRow.Y + diff.Y1),
-                    Cb = (short)(lastRow.Cb + diff.Cb),
-                    Cr = (short)(lastRow.Cr + diff.Cr)
-                };
-
-                var pixel1 = new DataBuf
-                {
-                    Y = (ushort)(lastRow.Y + diff.Y1 + diff.Y2),
-                    Cb = (short)(lastRow.Cb + diff.Cb),
-                    Cr = (short)(lastRow.Cr + diff.Cr)
-                };
-
-                var pixel2 = new DataBuf
-                {
-                    Y = (ushort)(lastRow.Y + diff.Y1 + diff.Y2 + diff.Y3),
-                    Cb = (short)(lastRow.Cb + diff.Cb),
-                    Cr = (short)(lastRow.Cr + diff.Cr)
-                };
-
-                var pixel3 = new DataBuf
-                {
-                    Y = (ushort)(lastRow.Y + diff.Y1 + diff.Y2 + diff.Y3 + diff.Y4),
-                    Cb = (short)(lastRow.Cb + diff.Cb),
-                    Cr = (short)(lastRow.Cr + diff.Cr)
-                };
-
-                PokePixels(scan0, scan1, col, pixel0, pixel1, pixel2, pixel3);
-            }
-        }
-    }
+    // private static void ProcessSlice(StartOfImage startOfImage, int slice, int samples, BitmapData data)
+    // {
+    //     var startOfFrame = startOfImage.StartOfFrame;
+    //     var table0 = startOfImage.HuffmanTable.Tables[0x00];
+    //     var table1 = startOfImage.HuffmanTable.Tables[0x01];
+    //
+    //     var lastRow = new DataBuf { Y = 0x0000 };       // 0x4000
+    //
+    //     for (var line = 0; line < startOfFrame.ScanLines; line += 2) // 0..2592
+    //     {
+    //         // 6 bytes * 8 bits == 48 bits per pixel
+    //         // 2 = 6 bytes * samplesPerLine / (slices[0] * slices[1] + slices[2]);
+    //         var scan0 = data.Scan0 + data.Stride * line + slice * samples * 2;
+    //         var scan1 = data.Scan0 + data.Stride * (line + 1) + slice * samples * 2;
+    //
+    //         // read six shorts, for four pixels
+    //         for (var col = 0; col < samples / 6; col++)       // 0..1296
+    //         {
+    //             cc += 6;
+    //             var diff = new DiffBuf
+    //             {
+    //                 Y1 = startOfImage.ProcessColor(0x00),
+    //                 Y2 = startOfImage.ProcessColor(0x00),
+    //                 Y3 = startOfImage.ProcessColor(0x00),
+    //                 Y4 = startOfImage.ProcessColor(0x00),
+    //                 Cb = startOfImage.ProcessColor(0x01),
+    //                 Cr = startOfImage.ProcessColor(0x01),
+    //             };
+    //
+    //             var pixel0 = new DataBuf
+    //             {
+    //                 Y = (ushort)(lastRow.Y + diff.Y1),
+    //                 Cb = (short)(lastRow.Cb + diff.Cb),
+    //                 Cr = (short)(lastRow.Cr + diff.Cr)
+    //             };
+    //
+    //             var pixel1 = new DataBuf
+    //             {
+    //                 Y = (ushort)(lastRow.Y + diff.Y1 + diff.Y2),
+    //                 Cb = (short)(lastRow.Cb + diff.Cb),
+    //                 Cr = (short)(lastRow.Cr + diff.Cr)
+    //             };
+    //
+    //             var pixel2 = new DataBuf
+    //             {
+    //                 Y = (ushort)(lastRow.Y + diff.Y1 + diff.Y2 + diff.Y3),
+    //                 Cb = (short)(lastRow.Cb + diff.Cb),
+    //                 Cr = (short)(lastRow.Cr + diff.Cr)
+    //             };
+    //
+    //             var pixel3 = new DataBuf
+    //             {
+    //                 Y = (ushort)(lastRow.Y + diff.Y1 + diff.Y2 + diff.Y3 + diff.Y4),
+    //                 Cb = (short)(lastRow.Cb + diff.Cb),
+    //                 Cr = (short)(lastRow.Cr + diff.Cr)
+    //             };
+    //
+    //             PokePixels(scan0, scan1, col, pixel0, pixel1, pixel2, pixel3);
+    //         }
+    //     }
+    // }
 
     private static void PokePixels(IntPtr scan0, IntPtr scan1, int col, DataBuf pixel0, DataBuf pixel1, DataBuf pixel2, DataBuf pixel3)
     {

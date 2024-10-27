@@ -84,7 +84,7 @@ public class Image3SRawI
         Assert.Equal(8957952, cc);
         Assert.Equal(3, startOfImage.ImageData.DistFromEnd);
 
-        MakeBitmap(memory, folder);
+        // MakeBitmap(memory, folder);
     }
 
     private static void ProcessSlice(StartOfImage startOfImage, int slice, int width, DataBuf[,] memory)
@@ -198,34 +198,35 @@ public class Image3SRawI
 
         return diff;
     }
-    private static void MakeBitmap(DataBuf[,] memory, string folder)
-    {
-        var y = memory.GetLength(0);
-        var x = memory.GetLength(1);
-        using (var bitmap = new Bitmap(x, y))
-        {
-            for (var row = 0; row < y; row++)
-            for (var col = 0; col < x; col++)
-            {
-                var red = memory[row, col].Y + 1.40200 * memory[row, col].Cr;
-                red = red / 128.0 + 0.5;
-                red = CheckValue(red, row, col);
 
-                var green = memory[row, col].Y - 0.34414 * memory[row, col].Cb - 0.71414 * memory[row, col].Cr;
-                green = green / 128.0 + 0.5;
-                green = CheckValue(green, row, col);
-
-                var blue = memory[row, col].Y + 1.77200 * memory[row, col].Cb;
-                blue = blue / 128.0 + 0.5;
-                blue = CheckValue(blue, row, col);
-
-                var color = Color.FromArgb((int)red, (int)green, (int)blue);
-                bitmap.SetPixel(col, row, color);
-            }
-
-            bitmap.Save(folder + "0L2A8897-3.bmp");
-        }
-    }
+    // private static void MakeBitmap(DataBuf[,] memory, string folder)
+    // {
+    //     var y = memory.GetLength(0);
+    //     var x = memory.GetLength(1);
+    //     using (var bitmap = new Bitmap(x, y))
+    //     {
+    //         for (var row = 0; row < y; row++)
+    //         for (var col = 0; col < x; col++)
+    //         {
+    //             var red = memory[row, col].Y + 1.40200 * memory[row, col].Cr;
+    //             red = red / 128.0 + 0.5;
+    //             red = CheckValue(red, row, col);
+    //
+    //             var green = memory[row, col].Y - 0.34414 * memory[row, col].Cb - 0.71414 * memory[row, col].Cr;
+    //             green = green / 128.0 + 0.5;
+    //             green = CheckValue(green, row, col);
+    //
+    //             var blue = memory[row, col].Y + 1.77200 * memory[row, col].Cb;
+    //             blue = blue / 128.0 + 0.5;
+    //             blue = CheckValue(blue, row, col);
+    //
+    //             var color = Color.FromArgb((int)red, (int)green, (int)blue);
+    //             bitmap.SetPixel(col, row, color);
+    //         }
+    //
+    //         bitmap.Save(folder + "0L2A8897-3.bmp");
+    //     }
+    // }
 
     private static double CheckValue(double value, double row, double col)
     {
@@ -243,25 +244,25 @@ public class Image3SRawI
         return value;
     }
 
-    private static void PixelSet(Bitmap bitmap, int row, int col, ushort val)
-    {
-        if (row % 2 == 0 && col % 2 == 0)
-        {
-            var r = (byte)Math.Min((val >> 4), 255);
-            var color = Color.FromArgb(r, 0, 0);
-            bitmap.SetPixel(col, row, color);
-        }
-        else if ((row % 2 == 1 && col % 2 == 0) || (row % 2 == 0 && col % 2 == 1))
-        {
-            var g = (byte)Math.Min((val >> 5), 255);
-            var color = Color.FromArgb(0, g, 0);
-            bitmap.SetPixel(col, row, color);
-        }
-        else if (row % 2 == 1 && col % 2 == 1)
-        {
-            var b = (byte)Math.Min((val >> 4), 255);
-            var color = Color.FromArgb(0, 0, b);
-            bitmap.SetPixel(col, row, color);
-        }
-    }
+    // private static void PixelSet(Bitmap bitmap, int row, int col, ushort val)
+    // {
+    //     if (row % 2 == 0 && col % 2 == 0)
+    //     {
+    //         var r = (byte)Math.Min((val >> 4), 255);
+    //         var color = Color.FromArgb(r, 0, 0);
+    //         bitmap.SetPixel(col, row, color);
+    //     }
+    //     else if ((row % 2 == 1 && col % 2 == 0) || (row % 2 == 0 && col % 2 == 1))
+    //     {
+    //         var g = (byte)Math.Min((val >> 5), 255);
+    //         var color = Color.FromArgb(0, g, 0);
+    //         bitmap.SetPixel(col, row, color);
+    //     }
+    //     else if (row % 2 == 1 && col % 2 == 1)
+    //     {
+    //         var b = (byte)Math.Min((val >> 4), 255);
+    //         var color = Color.FromArgb(0, 0, b);
+    //         bitmap.SetPixel(col, row, color);
+    //     }
+    // }
 }

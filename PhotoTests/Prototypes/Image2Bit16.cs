@@ -85,48 +85,48 @@ public class Image2Bit16
         Assert.Equal(imageWidth, stuff[0] + stuff[2] + 1);
         Assert.Equal(imageHeight, stuff[1] + stuff[3]);
 
-        var outFile = Path.ChangeExtension(fileName, ".png");
-        CreateBitmap(binaryReader, outFile, stripOffset, imageWidth, imageHeight);
+        // var outFile = Path.ChangeExtension(fileName, ".png");
+        // CreateBitmap(binaryReader, outFile, stripOffset, imageWidth, imageHeight);
     }
 
-    private static void CreateBitmap(BinaryReader binaryReader, string outFile, uint offset, uint width, uint height)
-    {
-        binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
-
-        using (var bitmap = new Bitmap((int)width, (int)height, PixelFormat.Format48bppRgb))
-        {
-            var size = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-            var data = bitmap.LockBits(size, ImageLockMode.ReadWrite, bitmap.PixelFormat);
-            try
-            {
-                Assert.Equal((int)(6 * width), data.Stride);
-
-                for (var y = 0; y < height; y++)
-                {
-                    var scan0 = data.Scan0 + data.Stride * y;
-                    for (var x = 0; x < width; x++)
-                    {
-                        var r = CheckValue(binaryReader.ReadUInt16());
-                        Marshal.WriteInt16(scan0, 6 * x + 4, (short)r);
-
-                        var g = CheckValue(binaryReader.ReadUInt16());
-                        Marshal.WriteInt16(scan0, 6 * x + 2, (short)g);
-
-                        var b = CheckValue(binaryReader.ReadUInt16());
-                        Marshal.WriteInt16(scan0, 6 * x + 0, (short)b);
-                    }
-                }
-            }
-            finally
-            {
-                bitmap.UnlockBits(data);
-            }
-
-            bitmap.Save(outFile);
-        }
-
-        Console.WriteLine("Min = 0x{0:X4}, Max = 0x{1:X4}", min, max);
-    }
+    // private static void CreateBitmap(BinaryReader binaryReader, string outFile, uint offset, uint width, uint height)
+    // {
+    //     binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
+    //
+    //     using (var bitmap = new Bitmap((int)width, (int)height, PixelFormat.Format48bppRgb))
+    //     {
+    //         var size = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+    //         var data = bitmap.LockBits(size, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+    //         try
+    //         {
+    //             Assert.Equal((int)(6 * width), data.Stride);
+    //
+    //             for (var y = 0; y < height; y++)
+    //             {
+    //                 var scan0 = data.Scan0 + data.Stride * y;
+    //                 for (var x = 0; x < width; x++)
+    //                 {
+    //                     var r = CheckValue(binaryReader.ReadUInt16());
+    //                     Marshal.WriteInt16(scan0, 6 * x + 4, (short)r);
+    //
+    //                     var g = CheckValue(binaryReader.ReadUInt16());
+    //                     Marshal.WriteInt16(scan0, 6 * x + 2, (short)g);
+    //
+    //                     var b = CheckValue(binaryReader.ReadUInt16());
+    //                     Marshal.WriteInt16(scan0, 6 * x + 0, (short)b);
+    //                 }
+    //             }
+    //         }
+    //         finally
+    //         {
+    //             bitmap.UnlockBits(data);
+    //         }
+    //
+    //         bitmap.Save(outFile);
+    //     }
+    //
+    //     Console.WriteLine("Min = 0x{0:X4}, Max = 0x{1:X4}", min, max);
+    // }
 
     private static ushort min = ushort.MaxValue;
     private static ushort max = ushort.MinValue;

@@ -266,41 +266,41 @@ public class Image3SRawII
         slices[1] /= 2;
         slices[2] /= 2;
 
-        using (var bitmap = new Bitmap(x, y))
-        {
-            for (var mrow = 0; mrow < y; mrow++)  // 0..1728
-            {
-                // if (mrow < y / 6 && mrow % 3 > 0) continue;
-
-                var rdata = memory[mrow];
-                for (var mcol = 0; mcol < x; mcol++)    // 0..2592
-                {
-                    // if (mcol < x / 6 && mcol % 3 > 0) continue;
-
-                    var index = mrow * x + mcol;
-                    var slice = index / (slices[1] * y);
-                    if (slice > slices[0])
-                        slice = slices[0];
-                    var offset = index - slice * slices[1] * y;
-                    var page = slice < slices[0] ? 1 : 2;
-                    var brow = offset / slices[page];
-                    var bcol = offset % slices[page] + slice * slices[1];
-
-                    var val = rdata[mcol];
-                    PixelSet(bitmap, brow, bcol, val);
-                }
-            }
-
-            bitmap.Save(folder + "0L2A8897-3.bmp");
-        }
+        // using (var bitmap = new Bitmap(x, y))
+        // {
+        //     for (var mrow = 0; mrow < y; mrow++)  // 0..1728
+        //     {
+        //         // if (mrow < y / 6 && mrow % 3 > 0) continue;
+        //
+        //         var rdata = memory[mrow];
+        //         for (var mcol = 0; mcol < x; mcol++)    // 0..2592
+        //         {
+        //             // if (mcol < x / 6 && mcol % 3 > 0) continue;
+        //
+        //             var index = mrow * x + mcol;
+        //             var slice = index / (slices[1] * y);
+        //             if (slice > slices[0])
+        //                 slice = slices[0];
+        //             var offset = index - slice * slices[1] * y;
+        //             var page = slice < slices[0] ? 1 : 2;
+        //             var brow = offset / slices[page];
+        //             var bcol = offset % slices[page] + slice * slices[1];
+        //
+        //             var val = rdata[mcol];
+        //             PixelSet(bitmap, brow, bcol, val);
+        //         }
+        //     }
+        //
+        //     bitmap.Save(folder + "0L2A8897-3.bmp");
+        // }
     }
 
-    private static void PixelSet(Bitmap bitmap, int row, int col, DataBuf val)
-    {
-        var r = val.Y + 1.40200 * val.Cr;
-        var g = val.Y - 0.34414 * val.Cb - 0.71414 * val.Cr;
-        var b = val.Y + 1.77200 * val.Cb;
-        var color = Color.FromArgb((byte)((int)r >> 7), (byte)((int)g >> 7), (byte)((int)b >> 7));
-        bitmap.SetPixel(col, row, color);
-    }
+    // private static void PixelSet(Bitmap bitmap, int row, int col, DataBuf val)
+    // {
+    //     var r = val.Y + 1.40200 * val.Cr;
+    //     var g = val.Y - 0.34414 * val.Cb - 0.71414 * val.Cr;
+    //     var b = val.Y + 1.77200 * val.Cb;
+    //     var color = Color.FromArgb((byte)((int)r >> 7), (byte)((int)g >> 7), (byte)((int)b >> 7));
+    //     bitmap.SetPixel(col, row, color);
+    // }
 }

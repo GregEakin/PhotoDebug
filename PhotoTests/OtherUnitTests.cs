@@ -173,33 +173,33 @@ public class OtherUnitTests
         var colors = lossless.Components.Sum(comp => comp.HFactor * comp.VFactor);
         var table0 = startOfImage.HuffmanTable.Tables[0x00];
 
-        // var buffer = new byte[rawSize];
-        using (var image1 = new Bitmap(500, 500))
-        {
-            for (var jrow = 0; jrow < lossless.ScanLines; jrow++)
-            {
-                var rowBuf = new ushort[lossless.SamplesPerLine * colors];
-                for (var jcol = 0; jcol < lossless.SamplesPerLine; jcol++)
-                {
-                    for (var jcolor = 0; jcolor < colors; jcolor++)
-                    {
-                        //var pred = (ushort)0;
-                        //var len = gethuff();
-                        //var diff = getbits(len);
-                        //var row = pred + diff;
-
-                        var val = GetValue(startOfImage.ImageData, table0);
-                        var bits = startOfImage.ImageData.GetSetOfBits(val);
-                        rowBuf[jcol * colors + jcolor] = bits;
-                    }
-
-                    DumpPixel(jcol, jrow, rowBuf, colors, image1);
-                }
-                // var pp = startOfImage.ImageData.Index;
-            }
-
-            image1.Save(bitmap);
-        }
+        // // var buffer = new byte[rawSize];
+        // using (var image1 = new Bitmap(500, 500))
+        // {
+        //     for (var jrow = 0; jrow < lossless.ScanLines; jrow++)
+        //     {
+        //         var rowBuf = new ushort[lossless.SamplesPerLine * colors];
+        //         for (var jcol = 0; jcol < lossless.SamplesPerLine; jcol++)
+        //         {
+        //             for (var jcolor = 0; jcolor < colors; jcolor++)
+        //             {
+        //                 //var pred = (ushort)0;
+        //                 //var len = gethuff();
+        //                 //var diff = getbits(len);
+        //                 //var row = pred + diff;
+        //
+        //                 var val = GetValue(startOfImage.ImageData, table0);
+        //                 var bits = startOfImage.ImageData.GetSetOfBits(val);
+        //                 rowBuf[jcol * colors + jcolor] = bits;
+        //             }
+        //
+        //             DumpPixel(jcol, jrow, rowBuf, colors, image1);
+        //         }
+        //         // var pp = startOfImage.ImageData.Index;
+        //     }
+        //
+        //     image1.Save(bitmap);
+        // }
 
         // Assert.Equal(23852855, startOfImage.ImageData.Index);
         //Console.WriteLine("{0}: ", startOfImage.ImageData.BitsLeft);
@@ -231,36 +231,36 @@ public class OtherUnitTests
         }
     }
 
-    private static void DumpPixel(int jcol, int jrow, ushort[] rowBuf, int colors, Bitmap image1)
-    {
-        var p = jcol - 50;
-        var q = jrow - 30;
-        if (p < 0 || p >= 500 || q < 0 || q >= 500)
-            return;
-
-        var bits1 = rowBuf[jcol * colors + 0] >> 2;
-        if (bits1 > 0xFF)
-            bits1 = 0xFF;
-
-        var bits2 = rowBuf[jcol * colors + 1] >> 2;
-        if (bits2 > 0xFF)
-            bits2 = 0xFF;
-
-        if (jrow % 2 == 0)
-        {
-            var red = bits1;
-            var green = bits2 >> 1;
-            var color = Color.FromArgb(red, green, 0);
-            image1.SetPixel(p, q, color);
-        }
-        else
-        {
-            var green = bits1 >> 1;
-            var blue = bits2;
-            var color = Color.FromArgb(0, green, blue);
-            image1.SetPixel(p, q, color);
-        }
-    }
+    // private static void DumpPixel(int jcol, int jrow, ushort[] rowBuf, int colors, Bitmap image1)
+    // {
+    //     var p = jcol - 50;
+    //     var q = jrow - 30;
+    //     if (p < 0 || p >= 500 || q < 0 || q >= 500)
+    //         return;
+    //
+    //     var bits1 = rowBuf[jcol * colors + 0] >> 2;
+    //     if (bits1 > 0xFF)
+    //         bits1 = 0xFF;
+    //
+    //     var bits2 = rowBuf[jcol * colors + 1] >> 2;
+    //     if (bits2 > 0xFF)
+    //         bits2 = 0xFF;
+    //
+    //     if (jrow % 2 == 0)
+    //     {
+    //         var red = bits1;
+    //         var green = bits2 >> 1;
+    //         var color = Color.FromArgb(red, green, 0);
+    //         image1.SetPixel(p, q, color);
+    //     }
+    //     else
+    //     {
+    //         var green = bits1 >> 1;
+    //         var blue = bits2;
+    //         var color = Color.FromArgb(0, green, blue);
+    //         image1.SetPixel(p, q, color);
+    //     }
+    // }
 
     [Fact]
     public void SerialNums()

@@ -134,8 +134,8 @@ public class Image3Raw
         Assert.Equal(23384000, _cc);
         Assert.Equal(1, startOfImage.ImageData.DistFromEnd);
 
-        var outFile = Path.ChangeExtension(fileName, ".2.png");
-        MakeBitmap(memory, outFile, slices);
+        // var outFile = Path.ChangeExtension(fileName, ".2.png");
+        // MakeBitmap(memory, outFile, slices);
 
         DumpData(memory, fileName);
     }
@@ -212,104 +212,104 @@ public class Image3Raw
         return memory;
     }
 
-    private static void MakeBitmap(ushort[][] memory, string folder, ushort[] slices)
-    {
-        var y = memory.GetLength(0);
-        var x = memory[0].GetLength(0);
+    // private static void MakeBitmap(ushort[][] memory, string folder, ushort[] slices)
+    // {
+    //     var y = memory.GetLength(0);
+    //     var x = memory[0].GetLength(0);
+    //
+    //     using (var bitmap = new Bitmap(x, y, PixelFormat.Format48bppRgb))
+    //     {
+    //         var size = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+    //         var data = bitmap.LockBits(size, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+    //         try
+    //         {
+    //             Assert.Equal(6 * 5920, data.Stride);  // 6 bytes * 8 bits == 48 bits per pixel
+    //
+    //             for (var mrow = 0; mrow < y; mrow++)
+    //             {
+    //                 var rdata = memory[mrow];
+    //                 for (var mcol = 0; mcol < x; mcol++)
+    //                 {
+    //                     var index = mrow * x + mcol;
+    //                     var slice = index / (slices[1] * y);
+    //                     if (slice > slices[0])
+    //                         slice = slices[0];
+    //                     var offset = index - slice * slices[1] * y;
+    //                     var page = slice < slices[0] ? 1 : 2;
+    //                     var brow = offset / slices[page];
+    //                     var bcol = offset % slices[page] + slice * slices[1];
+    //
+    //                     var val = rdata[mcol];
+    //
+    //                     var scan0 = data.Scan0 + data.Stride * brow;
+    //                     if (brow % 2 == 0 && bcol % 2 == 0)
+    //                         Marshal.WriteInt16(scan0, 6 * bcol + 4, (short)val);
+    //                     else if ((brow % 2 == 1 && bcol % 2 == 0) || (brow % 2 == 0 && bcol % 2 == 1))
+    //                         Marshal.WriteInt16(scan0, 6 * bcol + 2, (short)val);
+    //                     else if (brow % 2 == 1 && bcol % 2 == 1)
+    //                         Marshal.WriteInt16(scan0, 6 * bcol + 0, (short)val);
+    //                 }
+    //             }
+    //
+    //         }
+    //         finally
+    //         {
+    //             bitmap.UnlockBits(data);
+    //         }
+    //
+    //         bitmap.Save(folder + "0L2A8897-3.png");
+    //     }
+    // }
 
-        using (var bitmap = new Bitmap(x, y, PixelFormat.Format48bppRgb))
-        {
-            var size = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-            var data = bitmap.LockBits(size, ImageLockMode.ReadWrite, bitmap.PixelFormat);
-            try
-            {
-                Assert.Equal(6 * 5920, data.Stride);  // 6 bytes * 8 bits == 48 bits per pixel
+    // private static void MakeBitmap16Bit(ushort[][] memory, string folder, ushort[] slices)
+    // {
+    //     var y = memory.GetLength(0);
+    //     var x = memory[0].GetLength(0);
+    //
+    //     using (var bitmap = new Bitmap(x, y))
+    //     {
+    //         for (var mrow = 0; mrow < y; mrow++)
+    //         {
+    //             var rdata = memory[mrow];
+    //             for (var mcol = 0; mcol < x; mcol++)
+    //             {
+    //                 var index = mrow * x + mcol;
+    //                 var slice = index / (slices[1] * y);
+    //                 if (slice > slices[0])
+    //                     slice = slices[0];
+    //                 var offset = index - slice * slices[1] * y;
+    //                 var page = slice < slices[0] ? 1 : 2;
+    //                 var brow = offset / slices[page];
+    //                 var bcol = offset % slices[page] + slice * slices[1];
+    //
+    //                 var val = rdata[mcol];
+    //                 PixelSet(bitmap, brow, bcol, val);
+    //             }
+    //         }
+    //
+    //         bitmap.Save(folder + "0L2A8897-3b.bmp");
+    //     }
+    // }
 
-                for (var mrow = 0; mrow < y; mrow++)
-                {
-                    var rdata = memory[mrow];
-                    for (var mcol = 0; mcol < x; mcol++)
-                    {
-                        var index = mrow * x + mcol;
-                        var slice = index / (slices[1] * y);
-                        if (slice > slices[0])
-                            slice = slices[0];
-                        var offset = index - slice * slices[1] * y;
-                        var page = slice < slices[0] ? 1 : 2;
-                        var brow = offset / slices[page];
-                        var bcol = offset % slices[page] + slice * slices[1];
-
-                        var val = rdata[mcol];
-
-                        var scan0 = data.Scan0 + data.Stride * brow;
-                        if (brow % 2 == 0 && bcol % 2 == 0)
-                            Marshal.WriteInt16(scan0, 6 * bcol + 4, (short)val);
-                        else if ((brow % 2 == 1 && bcol % 2 == 0) || (brow % 2 == 0 && bcol % 2 == 1))
-                            Marshal.WriteInt16(scan0, 6 * bcol + 2, (short)val);
-                        else if (brow % 2 == 1 && bcol % 2 == 1)
-                            Marshal.WriteInt16(scan0, 6 * bcol + 0, (short)val);
-                    }
-                }
-
-            }
-            finally
-            {
-                bitmap.UnlockBits(data);
-            }
-
-            bitmap.Save(folder + "0L2A8897-3.png");
-        }
-    }
-
-    private static void MakeBitmap16Bit(ushort[][] memory, string folder, ushort[] slices)
-    {
-        var y = memory.GetLength(0);
-        var x = memory[0].GetLength(0);
-
-        using (var bitmap = new Bitmap(x, y))
-        {
-            for (var mrow = 0; mrow < y; mrow++)
-            {
-                var rdata = memory[mrow];
-                for (var mcol = 0; mcol < x; mcol++)
-                {
-                    var index = mrow * x + mcol;
-                    var slice = index / (slices[1] * y);
-                    if (slice > slices[0])
-                        slice = slices[0];
-                    var offset = index - slice * slices[1] * y;
-                    var page = slice < slices[0] ? 1 : 2;
-                    var brow = offset / slices[page];
-                    var bcol = offset % slices[page] + slice * slices[1];
-
-                    var val = rdata[mcol];
-                    PixelSet(bitmap, brow, bcol, val);
-                }
-            }
-
-            bitmap.Save(folder + "0L2A8897-3b.bmp");
-        }
-    }
-
-    private static void PixelSet(Bitmap bitmap, int row, int col, ushort val)
-    {
-        if (row % 2 == 0 && col % 2 == 0)
-        {
-            var r = (byte)Math.Min((val >> 4), 255);
-            var color = Color.FromArgb(r, 0, 0);
-            bitmap.SetPixel(col, row, color);
-        }
-        else if ((row % 2 == 1 && col % 2 == 0) || (row % 2 == 0 && col % 2 == 1))
-        {
-            var g = (byte)Math.Min((val >> 5), 255);
-            var color = Color.FromArgb(0, g, 0);
-            bitmap.SetPixel(col, row, color);
-        }
-        else if (row % 2 == 1 && col % 2 == 1)
-        {
-            var b = (byte)Math.Min((val >> 4), 255);
-            var color = Color.FromArgb(0, 0, b);
-            bitmap.SetPixel(col, row, color);
-        }
-    }
+    // private static void PixelSet(Bitmap bitmap, int row, int col, ushort val)
+    // {
+    //     if (row % 2 == 0 && col % 2 == 0)
+    //     {
+    //         var r = (byte)Math.Min((val >> 4), 255);
+    //         var color = Color.FromArgb(r, 0, 0);
+    //         bitmap.SetPixel(col, row, color);
+    //     }
+    //     else if ((row % 2 == 1 && col % 2 == 0) || (row % 2 == 0 && col % 2 == 1))
+    //     {
+    //         var g = (byte)Math.Min((val >> 5), 255);
+    //         var color = Color.FromArgb(0, g, 0);
+    //         bitmap.SetPixel(col, row, color);
+    //     }
+    //     else if (row % 2 == 1 && col % 2 == 1)
+    //     {
+    //         var b = (byte)Math.Min((val >> 4), 255);
+    //         var color = Color.FromArgb(0, 0, b);
+    //         bitmap.SetPixel(col, row, color);
+    //     }
+    // }
 }

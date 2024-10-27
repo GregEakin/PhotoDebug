@@ -1,0 +1,366 @@
+ExifTool Version Number         : 12.96
+File Name                       : BZ5F3119.CR2
+Directory                       : P:/2024/2024-09-02
+File Size                       : 18 MB
+File Modification Date/Time     : 2024:09:02 16:34:21-07:00
+File Access Date/Time           : 2024:09:11 17:49:24-07:00
+File Creation Date/Time         : 2024:09:02 16:33:54-07:00
+File Permissions                : -rw-rw-rw-
+File Type                       : CR2
+File Type Extension             : cr2
+MIME Type                       : image/x-canon-cr2
+Exif Byte Order                 : Little-endian (Intel, II)
+Image Width                     : 4896
+Image Height                    : 3264
+Bits Per Sample                 : 8 8 8
+Compression                     : JPEG (old-style)
+Make                            : Canon
+Camera Model Name               : Canon EOS-1D Mark IV
+Preview Image Start             : 60152
+Orientation                     : Horizontal (normal)
+Preview Image Length            : 908896
+X Resolution                    : 72
+Y Resolution                    : 72
+Resolution Unit                 : inches
+Modify Date                     : 2024:09:02 16:33:54
+Artist                          : Gregory Eakin
+Copyright                       :
+Exposure Time                   : 1/60
+F Number                        : 9.0
+Exposure Program                : Manual
+ISO                             : 100
+Exif Version                    : 0221
+Date/Time Original              : 2024:09:02 16:33:54
+Create Date                     : 2024:09:02 16:33:54
+Components Configuration        : Y, Cb, Cr, -
+Shutter Speed Value             : 1/64
+Aperture Value                  : 9.1
+Flash                           : Off, Did not fire
+Focal Length                    : 70.0 mm
+Macro Mode                      : Normal
+Self Timer                      : Off
+Quality                         : RAW
+Canon Flash Mode                : Off
+Continuous Drive                : Single
+Focus Mode                      : One-shot AF
+Record Mode                     : CR2
+Canon Image Size                : n/a
+Easy Mode                       : Manual
+Digital Zoom                    : None
+Contrast                        : Normal
+Saturation                      : Normal
+Metering Mode                   : Evaluative
+Focus Range                     : Not Known
+Canon Exposure Mode             : Manual
+Lens Type                       : Canon EF 28-70mm f/2.8L USM or Other Lens
+Max Focal Length                : 70 mm
+Min Focal Length                : 28 mm
+Focal Units                     : 1/mm
+Max Aperture                    : 2.8
+Min Aperture                    : 23
+Flash Activity                  : 0
+Flash Bits                      : (none)
+Zoom Source Width               : 0
+Zoom Target Width               : 0
+Manual Flash Output             : n/a
+Color Tone                      : Normal
+SRAW Quality                    : n/a
+Auto ISO                        : 100
+Base ISO                        : 100
+Measured EV                     : 2.88
+Target Aperture                 : 9
+Target Exposure Time            : 1/64
+Exposure Compensation           : 0
+White Balance                   : Auto
+Slow Shutter                    : None
+Shot Number In Continuous Burst : 0
+Optical Zoom Code               : n/a
+Camera Temperature              : 30 C
+Flash Guide Number              : 0
+Flash Exposure Compensation     : 0
+Auto Exposure Bracketing        : Off
+AEB Bracket Value               : 0
+Control Mode                    : Camera Local Control
+Measured EV 2                   : 2.875
+Bulb Duration                   : 0
+Camera Type                     : EOS High-end
+ND Filter                       : n/a
+Canon Image Type                : Canon EOS-1D Mark IV
+Canon Firmware Version          : Firmware Version 1.1.5
+Owner Name                      : Gregory Eakin
+Serial Number                   : 520400715
+Measured EV 3                   : 2.875
+Flash Metering Mode             : Off
+Camera Orientation              : Horizontal (normal)
+Focus Distance Upper            : 0 m
+Focus Distance Lower            : 0 m
+Firmware Version                : 1.1.5
+File Index                      : 3100
+Directory Index                 : 100
+Contrast Standard               : 0
+Sharpness Standard              : 3
+Saturation Standard             : 0
+Color Tone Standard             : 0
+Contrast Portrait               : 0
+Sharpness Portrait              : 2
+Saturation Portrait             : 0
+Color Tone Portrait             : 0
+Contrast Landscape              : 0
+Sharpness Landscape             : 4
+Saturation Landscape            : 0
+Color Tone Landscape            : 0
+Contrast Neutral                : 0
+Sharpness Neutral               : 0
+Saturation Neutral              : 0
+Color Tone Neutral              : 0
+Contrast Faithful               : 0
+Sharpness Faithful              : 0
+Saturation Faithful             : 0
+Color Tone Faithful             : 0
+Contrast Monochrome             : 0
+Sharpness Monochrome            : 3
+Filter Effect Monochrome        : None
+Toning Effect Monochrome        : None
+Contrast User Def 1             : 0
+Sharpness User Def 1            : 3
+Saturation User Def 1           : 0
+Color Tone User Def 1           : 0
+Filter Effect User Def 1        : None
+Toning Effect User Def 1        : None
+Contrast User Def 2             : 0
+Sharpness User Def 2            : 3
+Saturation User Def 2           : 0
+Color Tone User Def 2           : 0
+Filter Effect User Def 2        : None
+Toning Effect User Def 2        : None
+Contrast User Def 3             : 0
+Sharpness User Def 3            : 3
+Saturation User Def 3           : 0
+Color Tone User Def 3           : 0
+Filter Effect User Def 3        : None
+Toning Effect User Def 3        : None
+User Def 1 Picture Style        : Standard
+User Def 2 Picture Style        : Standard
+User Def 3 Picture Style        : Standard
+Canon Model ID                  : EOS-1D Mark IV
+Thumbnail Image Valid Area      : 0 159 7 112
+Serial Number Format            : Format 2
+AF Area Mode                    : Single-point AF
+Num AF Points                   : 45
+Valid AF Points                 : 45
+Canon Image Width               : 4896
+Canon Image Height              : 3264
+AF Image Width                  : 4896
+AF Image Height                 : 3264
+AF Area Widths                  : 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151 151
+AF Area Heights                 : 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212 212
+AF Area X Positions             : -783 -523 -259 0 259 523 783 -1150 -905 -651 -391 -127 127 391 651 905 1150 -1307 -1047 -783 -523 -259 0 259 523 783 1047 1307 -1150 -905 -651 -391 -127 127 391 651 905 1150 -783 -523 -259 0 259 523 783
+AF Area Y Positions             : -698 -698 -698 -698 -698 -698 -698 -349 -349 -349 -349 -349 -349 -349 -349 -349 -349 0 0 0 0 0 0 0 0 0 0 0 349 349 349 349 349 349 349 349 349 349 698 698 698 698 698 698 698
+AF Points In Focus              : 22
+AF Points Selected              : 22
+Original Decision Data Offset   : 0
+Bracket Mode                    : Off
+Bracket Value                   : 0
+Bracket Shot Number             : 0
+Raw Jpg Size                    : Large
+Long Exposure Noise Reduction 2 : Off
+WB Bracket Mode                 : Off
+WB Bracket Value AB             : 0
+WB Bracket Value GM             : 0
+Live View Shooting              : Off
+Shutter Mode                    : Mechanical
+Flash Exposure Lock             : Off
+Lens Model                      : EF28-70mm f/2.8L USM
+Internal Serial Number          : R024767
+Dust Removal Data               : (Binary data 1024 bytes, use -b option to extract)
+Crop Left Margin                : 0
+Crop Right Margin               : 0
+Crop Top Margin                 : 0
+Crop Bottom Margin              : 0
+Exposure Level Increments       : 1/3-stop set, 1/3-stop comp.
+ISO Speed Increments            : 1/3 Stop
+ISO Speed Range                 : Disable; Max 12800; Min 100
+AEB Auto Cancel                 : On
+AEB Sequence                    : 0,-,+
+AEB Shot Count                  : 3 shots
+Spot Meter Link To AF Point     : Disable (use center AF point)
+Safety Shift                    : Disable
+Usable Shooting Modes           : Disable; Flags 0xfc
+Usable Metering Modes           : Disable; Flags 0xf0
+Exposure Mode In Manual         : Specified metering mode
+Shutter Speed Range             : Disable; Hi 1/8192; Lo 32
+Aperture Range                  : Disable; Closed 91; Open 1
+Apply Shooting Metering Mode    : Disable; 0; 0; 3; 112; 48; 0; 0
+Flash Sync Speed Av             : Auto
+AE Microadjustment              : Disable; 0; 8; 0
+FE Microadjustment              : Disable; 0; 8; 0
+Long Exposure Noise Reduction   : Off
+High ISO Noise Reduction        : Off
+Highlight Tone Priority         : Disable
+E-TTL II                        : Evaluative
+Shutter Curtain Sync            : 1st-curtain sync
+Flash Firing                    : Fires
+View Info During Exposure       : Disable
+LCD Illumination During Bulb    : Off
+Info Button When Shooting       : Displays shooting functions
+USM Lens Electronic MF          : Enable after one-shot AF
+AI Servo Tracking Sensitivity   : Standard
+AI Servo Image Priority         : 1: AF, 2: Tracking
+AI Servo Tracking Method        : Main focus point priority
+Lens Drive No AF                : Focus search on
+Lens AF Stop Button             : AF stop
+AF Microadjustment              : Disable; 1; 0; 0; 0
+AF Point Area Expansion         : Disable
+Multi Controller While Metering : Off
+Selectable AF Point             : 45 points
+AF Point Auto Selection         : Control-direct:disable/Main:enable
+Switch To Registered AF Point   : Disable
+AF Point Display During Focus   : On
+AF Point Brightness             : Normal
+AF Assist Beam                  : Emits
+Orientation Linked AF Point     : Same for vertical and horizontal
+Mirror Lockup                   : Disable
+Continuous Shooting Speed       : Disable; Hi 10; Lo 3
+Continuous Shot Limit           : Disable; 99 shots
+Shutter Button AF On Button     : Metering + AF start
+AF On AE Lock Button Switch     : Disable
+Quick Control Dial In Meter     : Exposure comp/Aperture
+Set Button When Shooting        : Normal (disabled)
+Manual Tv/Av For M              : Tv=Main/Av=Control
+Dial Direction Tv Av            : Normal
+Av Setting Without Lens         : Disable
+WB Media Image Size Setting     : Rear LCD panel
+Lock Microphone Button          : Protect (hold:record memo)
+Button Function Control Off     : Normal (enable)
+Start Movie Shooting            : Default (from LV)
+Focusing Screen                 : Ec-CIV
+Timer Length                    : Disable; 6 s: 6; 16 s: 16; After release: 2
+Short Release Time Lag          : Disable
+Add Aspect Ratio Info           : Off
+Add Original Decision Data      : Off
+Aspect Ratio                    : 3:2
+Cropped Image Width             : 4896
+Cropped Image Height            : 3264
+Cropped Image Left              : 0
+Cropped Image Top               : 0
+Tone Curve                      : Standard
+Sharpness                       : 3
+Sharpness Frequency             : n/a
+Sensor Red Level                : 0
+Sensor Blue Level               : 0
+White Balance Red               : 0
+White Balance Blue              : 0
+Color Temperature               : 5200
+Picture Style                   : Standard
+Digital Gain                    : 0
+WB Shift AB                     : 0
+WB Shift GM                     : 0
+Measured RGGB                   : 492 1024 1024 696
+VRD Offset                      : 0
+Sensor Width                    : 5120
+Sensor Height                   : 3318
+Sensor Left Border              : 152
+Sensor Top Border               : 50
+Sensor Right Border             : 5047
+Sensor Bottom Border            : 3313
+Black Mask Left Border          : 0
+Black Mask Top Border           : 0
+Black Mask Right Border         : 0
+Black Mask Bottom Border        : 0
+Color Data Version              : 7 (500D/550D/7D/1DmkIV)
+WB RGGB Levels As Shot          : 1755 1033 1033 1895
+Color Temp As Shot              : 4000
+WB RGGB Levels Auto             : 1755 1033 1033 1895
+Color Temp Auto                 : 4000
+WB RGGB Levels Measured         : 1602 1037 1027 1980
+Color Temp Measured             : 3653
+WB RGGB Levels Daylight         : 2089 1024 1024 1594
+Color Temp Daylight             : 5200
+WB RGGB Levels Shade            : 2394 1024 1024 1365
+Color Temp Shade                : 7000
+WB RGGB Levels Cloudy           : 2236 1024 1024 1473
+Color Temp Cloudy               : 6000
+WB RGGB Levels Tungsten         : 1618 1109 1109 2541
+Color Temp Tungsten             : 3200
+WB RGGB Levels Fluorescent      : 1811 1024 1024 2245
+Color Temp Fluorescent          : 3704
+WB RGGB Levels Kelvin           : 2089 1024 1024 1594
+Color Temp Kelvin               : 5200
+WB RGGB Levels Flash            : 2284 1024 1024 1456
+Color Temp Flash                : 6207
+Average Black Level             : 2047 2047 2047 2047
+Raw Measured RGGB               : 80054 165592 161953 114744
+Per Channel Black Level         : 2047 2047 2048 2047
+Normal White Level              : 14520
+Specular White Level            : 15159
+Linearity Upper Margin          : 10000
+Picture Style User Def          : Standard; Standard; Standard
+Picture Style PC                : None; None; None
+Custom Picture Style File Name  :
+AF Micro Adj Mode               : Disable
+AF Micro Adj Value              : 0
+Vignetting Corr Version         : 0
+Peripheral Lighting             : On
+Distortion Correction           : Off
+Chromatic Aberration Corr       : Off
+Peripheral Lighting Value       : 49
+Distortion Correction Value     : 0
+Original Image Width            : 4896
+Original Image Height           : 3264
+Peripheral Lighting Setting     : On
+Peripheral Illumination Corr    : Off
+Auto Lighting Optimizer         : Standard
+User Comment                    :
+Sub Sec Time                    : 17
+Sub Sec Time Original           : 17
+Sub Sec Time Digitized          : 17
+Flashpix Version                : 0100
+Color Space                     : sRGB
+Exif Image Width                : 4896
+Exif Image Height               : 3264
+Interoperability Index          : R98 - DCF basic file (sRGB)
+Interoperability Version        : 0100
+Focal Plane X Resolution        : 3795.348837
+Focal Plane Y Resolution        : 3904.30622
+Focal Plane Resolution Unit     : inches
+Custom Rendered                 : Normal
+Exposure Mode                   : Manual
+Scene Capture Type              : Standard
+GPS Version ID                  : 2.2.0.0
+Thumbnail Offset                : 49516
+Thumbnail Length                : 10634
+Photometric Interpretation      : RGB
+Samples Per Pixel               : 3
+Rows Per Strip                  : 408
+Planar Configuration            : Chunky
+Strip Offsets                   : 2541912
+Strip Byte Counts               : 15887741
+CR2 CFA Pattern                 : [Green,Blue][Red,Green]
+Raw Image Segmentation          : 2 1728 1664
+SRaw Type                       : 1
+Drive Mode                      : Single-frame Shooting
+File Number                     : 100-3100
+Lens                            : 28.0 - 70.0 mm
+Shooting Mode                   : Manual
+WB RGGB Levels                  : 1755 1033 1033 1895
+Aperture                        : 9.0
+Blue Balance                    : 1.834463
+Image Size                      : 4896x3264
+Lens ID                         : Canon EF 28-70mm f/2.8L USM
+Megapixels                      : 16.0
+Preview Image                   : (Binary data 908896 bytes, use -b option to extract)
+Red Balance                     : 1.698935
+Scale Factor To 35 mm Equivalent: 1.1
+Shutter Speed                   : 1/60
+Create Date                     : 2024:09:02 16:33:54.17
+Date/Time Original              : 2024:09:02 16:33:54.17
+Modify Date                     : 2024:09:02 16:33:54.17
+Thumbnail Image                 : (Binary data 10634 bytes, use -b option to extract)
+Lens                            : 28.0 - 70.0 mm (35 mm equivalent: 31.0 - 77.6 mm)
+Circle Of Confusion             : 0.027 mm
+Depth Of Field                  : inf (0.00 m - inf)
+Field Of View                   : 26.1 deg
+Focal Length                    : 70.0 mm (35 mm equivalent: 77.6 mm)
+Hyperfocal Distance             : 20.08 m
+Light Value                     : 12.2
+-- press ENTER --

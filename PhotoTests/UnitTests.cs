@@ -103,47 +103,47 @@ public class UnitTests
             (short) (1 << (startOfFrame.Precision - 1))
         };
 
-        using (var image1 = new Bitmap(startOfFrame.SamplesPerLine, startOfFrame.ScanLines))
-        {
-            for (var k = 0; k < x; k++)
-            {
-                ParseRow(startOfFrame.ScanLines, k, y, y, startOfImage.ImageData, predictor, table0, table1, image1);
-            }
-
-            ParseRow(startOfFrame.ScanLines, x, y, z, startOfImage.ImageData, predictor, table0, table1, image1);
-
-            image1.Save(bitmap);
-        }
+        // using (var image1 = new Bitmap(startOfFrame.SamplesPerLine, startOfFrame.ScanLines))
+        // {
+        //     for (var k = 0; k < x; k++)
+        //     {
+        //         ParseRow(startOfFrame.ScanLines, k, y, y, startOfImage.ImageData, predictor, table0, table1, image1);
+        //     }
+        //
+        //     ParseRow(startOfFrame.ScanLines, x, y, z, startOfImage.ImageData, predictor, table0, table1, image1);
+        //
+        //     image1.Save(bitmap);
+        // }
 
         Console.WriteLine("EOF {0}", startOfImage.ImageData.RawData.Length - startOfImage.ImageData.Index);
     }
 
-    private static void ParseRow(int lines, int x, ushort y1, ushort y2, ImageData imageData, short[] predictor, HuffmanTable table0, HuffmanTable table1, Bitmap image1)
-    {
-        for (var j = 0; j < lines; j++)
-        {
-            var rowBuf = new short[4, y2 / 4];
-            for (var i = 0; i < y2 / 4; i++)  // i < y / component count
-            {
-                for (var w = 0; w < 2; w++)
-                {
-                    var hufCode0 = GetValue(imageData, table0);
-                    var difCode0 = imageData.GetSetOfBits(hufCode0);
-                    rowBuf[w, i] = (short)difCode0;
-                }
-
-                for (var w = 2; w < 4; w++)
-                {
-                    var hufCode = GetValue(imageData, table1);
-                    var difCode = imageData.GetSetOfBits(hufCode);
-
-                    rowBuf[w, i] = (short)((short)(difCode << 2) >> 2);
-                }
-            }
-
-            DumpPixel(x * y1 / 4, j, rowBuf, image1);
-        }
-    }
+    // private static void ParseRow(int lines, int x, ushort y1, ushort y2, ImageData imageData, short[] predictor, HuffmanTable table0, HuffmanTable table1, Bitmap image1)
+    // {
+    //     for (var j = 0; j < lines; j++)
+    //     {
+    //         var rowBuf = new short[4, y2 / 4];
+    //         for (var i = 0; i < y2 / 4; i++)  // i < y / component count
+    //         {
+    //             for (var w = 0; w < 2; w++)
+    //             {
+    //                 var hufCode0 = GetValue(imageData, table0);
+    //                 var difCode0 = imageData.GetSetOfBits(hufCode0);
+    //                 rowBuf[w, i] = (short)difCode0;
+    //             }
+    //
+    //             for (var w = 2; w < 4; w++)
+    //             {
+    //                 var hufCode = GetValue(imageData, table1);
+    //                 var difCode = imageData.GetSetOfBits(hufCode);
+    //
+    //                 rowBuf[w, i] = (short)((short)(difCode << 2) >> 2);
+    //             }
+    //         }
+    //
+    //         DumpPixel(x * y1 / 4, j, rowBuf, image1);
+    //     }
+    // }
 
     private static void DumpStartOfScan(StartOfScan startOfScan)
     {
@@ -183,49 +183,49 @@ public class UnitTests
         }
     }
 
-    public static void DumpPixel(int col, int row, short[,] rowBuf, Bitmap image1)
-    {
-        // DumpPixelDebug(col, row, rowBuf);
-
-        const int X = 0; // 2116;
-        const int Y = 0; // 1416 / 2; // (3950 - 900) / 2;
-
-        var q = row - Y;
-        if (q < 0 || q >= image1.Height)
-        {
-            return;
-        }
-
-        for (var p = 0; p + X < rowBuf.GetLength(1) && 2 * p + X + col < image1.Width; p++)
-        {
-            var y1 = rowBuf[0, p + X];
-            var y2 = rowBuf[1, p + X];
-            var cb1 = rowBuf[2, p + X];
-            var cr1 = rowBuf[3, p + X];
-
-            var cb2 = cb1;
-            var cr2 = cr1;
-            // cb2[column] = ( cb1[column-1] + cb1[column+1] + 1 ) / 2
-            // cr2[column] = ( cr1[column-1] + cr1[column+1] + 1 ) / 2
-
-            // R = Y + 1.40 Cr
-            var r1 = y1 + 1.40 * cr1;
-            var r2 = y2 + 1.40 * cr2;
-
-            // G = Y - 0.34414 Cb - 0.71414 Cr
-            var g1 = y1 - 0.34414 * cb1 - 0.71414 * cr1;
-            var g2 = y2 - 0.34414 * cb2 - 0.71414 * cr2;
-
-            // B = Y + 1.772 Cb
-            var b1 = y1 + 1.772 * cb1;
-            var b2 = y2 + 1.772 * cb2;
-
-            var color1 = Color.FromArgb(Bound(r1), Bound(g1), Bound(b1));
-            var color2 = Color.FromArgb(Bound(r2), Bound(g2), Bound(b2));
-            image1.SetPixel((p + col) * 2 + 0, q + 0, color1);
-            image1.SetPixel((p + col) * 2 + 1, q + 0, color2);
-        }
-    }
+    // public static void DumpPixel(int col, int row, short[,] rowBuf, Bitmap image1)
+    // {
+    //     // DumpPixelDebug(col, row, rowBuf);
+    //
+    //     const int X = 0; // 2116;
+    //     const int Y = 0; // 1416 / 2; // (3950 - 900) / 2;
+    //
+    //     var q = row - Y;
+    //     if (q < 0 || q >= image1.Height)
+    //     {
+    //         return;
+    //     }
+    //
+    //     for (var p = 0; p + X < rowBuf.GetLength(1) && 2 * p + X + col < image1.Width; p++)
+    //     {
+    //         var y1 = rowBuf[0, p + X];
+    //         var y2 = rowBuf[1, p + X];
+    //         var cb1 = rowBuf[2, p + X];
+    //         var cr1 = rowBuf[3, p + X];
+    //
+    //         var cb2 = cb1;
+    //         var cr2 = cr1;
+    //         // cb2[column] = ( cb1[column-1] + cb1[column+1] + 1 ) / 2
+    //         // cr2[column] = ( cr1[column-1] + cr1[column+1] + 1 ) / 2
+    //
+    //         // R = Y + 1.40 Cr
+    //         var r1 = y1 + 1.40 * cr1;
+    //         var r2 = y2 + 1.40 * cr2;
+    //
+    //         // G = Y - 0.34414 Cb - 0.71414 Cr
+    //         var g1 = y1 - 0.34414 * cb1 - 0.71414 * cr1;
+    //         var g2 = y2 - 0.34414 * cb2 - 0.71414 * cr2;
+    //
+    //         // B = Y + 1.772 Cb
+    //         var b1 = y1 + 1.772 * cb1;
+    //         var b2 = y2 + 1.772 * cb2;
+    //
+    //         var color1 = Color.FromArgb(Bound(r1), Bound(g1), Bound(b1));
+    //         var color2 = Color.FromArgb(Bound(r2), Bound(g2), Bound(b2));
+    //         image1.SetPixel((p + col) * 2 + 0, q + 0, color1);
+    //         image1.SetPixel((p + col) * 2 + 1, q + 0, color2);
+    //     }
+    // }
 
     private static int Bound(double value)
     {

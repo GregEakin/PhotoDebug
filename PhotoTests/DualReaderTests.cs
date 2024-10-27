@@ -64,53 +64,52 @@ public class DualReaderTests
         var table0 = startOfImage.HuffmanTable.Tables[0x00];
         // var table1 = startOfImage.HuffmanTable.Tables[0x01];
 
-        using (var image1 = new Bitmap(500, 500))
-        {
-            for (var k = 0; k < x; k++)
-            {
-                ParseRow(lossless, k, y, startOfImage, table0, rowBuf, predictor, image1);
-            }
-
-            ParseRow(lossless, x, z, startOfImage, table0, rowBuf, predictor, image1);
-
-            image1.Save(bitmap);
-
-            Console.WriteLine("EOF {0}",
-                startOfImage.ImageData.RawData.Length - startOfImage.ImageData.Index);
-        }
+        // using (var image1 = new Bitmap(500, 500))
+        // {
+        //     for (var k = 0; k < x; k++)
+        //     {
+        //         ParseRow(lossless, k, y, startOfImage, table0, rowBuf, predictor, image1);
+        //     }
+        //
+        //     ParseRow(lossless, x, z, startOfImage, table0, rowBuf, predictor, image1);
+        //
+        //     image1.Save(bitmap);
+        //
+        //     Console.WriteLine("EOF {0}",
+        //         startOfImage.ImageData.RawData.Length - startOfImage.ImageData.Index);
+        // }
     }
 
-    private static void ParseRow(
-        StartOfFrame lossless, int x, ushort y, StartOfImage startOfImage, HuffmanTable table0, short[,] rowBuf, short[] predictor, Bitmap image1)
-    {
-        var i1 = 4 / lossless.Components.Length;
-
-        for (var j = 0; j < lossless.ScanLines / i1; j++)
-        {
-            for (var g = 0; g < i1; g++)
-            {
-                for (var i = 0; i < y / lossless.Components.Length; i++)
-                {
-                    for (var h = 0; h < lossless.Components.Length; h++)
-                    {
-                        var hufCode = UnitTests.GetValue(startOfImage.ImageData, table0);
-                        var difCode = startOfImage.ImageData.GetSetOfBits(hufCode);
-                        var dif = UnitTests.DecodeDifBits(hufCode, difCode);
-
-                        if (i == 0)
-                        {
-                            rowBuf[g * i1 + h, i] = predictor[h] += dif;
-                        }
-                        else
-                        {
-                            rowBuf[g * i1 + h, i] = (short)(rowBuf[g * i1 + h, i - 1] + dif);
-                        }
-                    }
-                }
-            }
-
-            UnitTests.DumpPixel(x * y, j, rowBuf, image1);
-        }
-
-    }
+    // private static void ParseRow(StartOfFrame lossless, int x, ushort y, StartOfImage startOfImage, HuffmanTable table0, short[,] rowBuf, short[] predictor, Bitmap image1)
+    // {
+    //     var i1 = 4 / lossless.Components.Length;
+    //
+    //     for (var j = 0; j < lossless.ScanLines / i1; j++)
+    //     {
+    //         for (var g = 0; g < i1; g++)
+    //         {
+    //             for (var i = 0; i < y / lossless.Components.Length; i++)
+    //             {
+    //                 for (var h = 0; h < lossless.Components.Length; h++)
+    //                 {
+    //                     var hufCode = UnitTests.GetValue(startOfImage.ImageData, table0);
+    //                     var difCode = startOfImage.ImageData.GetSetOfBits(hufCode);
+    //                     var dif = UnitTests.DecodeDifBits(hufCode, difCode);
+    //
+    //                     if (i == 0)
+    //                     {
+    //                         rowBuf[g * i1 + h, i] = predictor[h] += dif;
+    //                     }
+    //                     else
+    //                     {
+    //                         rowBuf[g * i1 + h, i] = (short)(rowBuf[g * i1 + h, i - 1] + dif);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //
+    //         // UnitTests.DumpPixel(x * y, j, rowBuf, image1);
+    //     }
+    //
+    // }
 }

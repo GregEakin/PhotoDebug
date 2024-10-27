@@ -108,25 +108,25 @@ public class C7D1Ifd2
         var length = imageFileDirectory.Entries.Single(e => e.TagId == 0x0117 && e.TagType == ImageFileEntry.TagTypes.ULong).ValuePointer;
         // Assert.Equal(1403040u, length);
 
-        binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
-        var dir = Path.GetDirectoryName(FileName) ?? ".";
-        var name = Path.GetFileNameWithoutExtension(FileName) + "-2.jpg";
-        var path = Path.Combine(dir, name);
-        DumpImage2(path, binaryReader, width, height);
+        // binaryReader.BaseStream.Seek(offset, SeekOrigin.Begin);
+        // var dir = Path.GetDirectoryName(FileName) ?? ".";
+        // var name = Path.GetFileNameWithoutExtension(FileName) + "-2.jpg";
+        // var path = Path.Combine(dir, name);
+        // DumpImage2(path, binaryReader, width, height);
     }
 
-    private static void DumpImage2(string filename, BinaryReader binaryReader, int width, int height)
-    {
-        var bmp = new Bitmap(width, height);
-        for (var y = 0; y < height; ++y)
-        for (var x = 0; x < width; ++x)
-        {
-            var red = binaryReader.ReadUInt16() >> 6;
-            var green = binaryReader.ReadUInt16() >> 6;
-            var blue = binaryReader.ReadUInt16() >> 6;
-            var color = Color.FromArgb(0xFF, red, green, blue);
-            bmp.SetPixel(x, y, color);
-        }
-        bmp.Save(filename);
-    }
+    // private static void DumpImage2(string filename, BinaryReader binaryReader, int width, int height)
+    // {
+    //     var bmp = new Bitmap(width, height);
+    //     for (var y = 0; y < height; ++y)
+    //     for (var x = 0; x < width; ++x)
+    //     {
+    //         var red = binaryReader.ReadUInt16() >> 6;
+    //         var green = binaryReader.ReadUInt16() >> 6;
+    //         var blue = binaryReader.ReadUInt16() >> 6;
+    //         var color = Color.FromArgb(0xFF, red, green, blue);
+    //         bmp.SetPixel(x, y, color);
+    //     }
+    //     bmp.Save(filename);
+    // }
 }

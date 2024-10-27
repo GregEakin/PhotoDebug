@@ -1,0 +1,373 @@
+ExifTool Version Number         : 12.96
+File Name                       : B35V5694.CR2
+Directory                       : P:/2024/2024-09-10
+File Size                       : 20 MB
+File Modification Date/Time     : 2024:09:10 03:09:23-07:00
+File Access Date/Time           : 2024:09:11 20:29:09-07:00
+File Creation Date/Time         : 2024:09:10 03:03:55-07:00
+File Permissions                : -rw-rw-rw-
+File Type                       : CR2
+File Type Extension             : cr2
+MIME Type                       : image/x-canon-cr2
+Exif Byte Order                 : Little-endian (Intel, II)
+Image Width                     : 5184
+Image Height                    : 3456
+Bits Per Sample                 : 8 8 8
+Compression                     : JPEG (old-style)
+Make                            : Canon
+Camera Model Name               : Canon EOS-1D X
+Preview Image Start             : 89440
+Orientation                     : Horizontal (normal)
+Preview Image Length            : 733155
+X Resolution                    : 72
+Y Resolution                    : 72
+Resolution Unit                 : inches
+Modify Date                     : 2024:09:10 03:03:55
+Artist                          : Gregory Eakin
+Rating                          : 0
+Copyright                       : Copyright (c) 2024 Gregory Eakin, all rights reserved.
+Exposure Time                   : 20
+F Number                        : 2.8
+Exposure Program                : Program AE
+ISO                             : 100
+Sensitivity Type                : Recommended Exposure Index
+Recommended Exposure Index      : 100
+Exif Version                    : 0230
+Date/Time Original              : 2024:09:10 03:03:55
+Create Date                     : 2024:09:10 03:03:55
+Components Configuration        : Y, Cb, Cr, -
+Shutter Speed Value             : 20.7
+Aperture Value                  : 2.8
+Flash                           : Off, Did not fire
+Focal Length                    : 220.0 mm
+Macro Mode                      : Normal
+Self Timer                      : 2 s
+Quality                         : RAW
+Canon Flash Mode                : Off
+Continuous Drive                : Single
+Focus Mode                      : One-shot AF
+Record Mode                     : CR2
+Canon Image Size                : n/a
+Easy Mode                       : Manual
+Digital Zoom                    : None
+Contrast                        : Normal
+Saturation                      : Normal
+Metering Mode                   : Evaluative
+Focus Range                     : Not Known
+Canon Exposure Mode             : Program AE
+Lens Type                       : Sigma 14-24mm f/2.8 DG HSM | A or other Sigma Lens
+Max Focal Length                : 300 mm
+Min Focal Length                : 120 mm
+Focal Units                     : 1/mm
+Max Aperture                    : 2.8
+Min Aperture                    : 23
+Flash Activity                  : 0
+Flash Bits                      : (none)
+Zoom Source Width               : 0
+Zoom Target Width               : 0
+Manual Flash Output             : n/a
+Color Tone                      : Normal
+SRAW Quality                    : n/a
+Auto ISO                        : 100
+Base ISO                        : 100
+Measured EV                     : -1.25
+Target Aperture                 : 2.8
+Target Exposure Time            : 20.2
+Exposure Compensation           : 0
+White Balance                   : Manual Temperature (Kelvin)
+Slow Shutter                    : None
+Shot Number In Continuous Burst : 0
+Optical Zoom Code               : n/a
+Camera Temperature              : 37 C
+Flash Guide Number              : 0
+Flash Exposure Compensation     : 0
+Auto Exposure Bracketing        : Off
+AEB Bracket Value               : 0
+Control Mode                    : Camera Local Control
+Measured EV 2                   : -2.5
+Bulb Duration                   : 0
+Camera Type                     : EOS High-end
+ND Filter                       : n/a
+Canon Image Type                : Canon EOS-1D X
+Canon Firmware Version          : Firmware Version 2.1.1
+Camera Orientation              : Horizontal (normal)
+Firmware Version                : 2.1.1
+File Index                      : 5694
+Directory Index                 : 100
+Contrast Standard               : 0
+Sharpness Standard              : 3
+Saturation Standard             : 0
+Color Tone Standard             : 0
+Contrast Portrait               : 0
+Sharpness Portrait              : 2
+Saturation Portrait             : 0
+Color Tone Portrait             : 0
+Contrast Landscape              : 0
+Sharpness Landscape             : 4
+Saturation Landscape            : 0
+Color Tone Landscape            : 0
+Contrast Neutral                : 0
+Sharpness Neutral               : 0
+Saturation Neutral              : 0
+Color Tone Neutral              : 0
+Contrast Faithful               : 0
+Sharpness Faithful              : 0
+Saturation Faithful             : 0
+Color Tone Faithful             : 0
+Contrast Monochrome             : 0
+Sharpness Monochrome            : 3
+Filter Effect Monochrome        : None
+Toning Effect Monochrome        : None
+Contrast Auto                   : 0
+Sharpness Auto                  : 3
+Saturation Auto                 : 0
+Color Tone Auto                 : 0
+Filter Effect Auto              : n/a
+Toning Effect Auto              : n/a
+Contrast User Def 1             : 0
+Sharpness User Def 1            : 3
+Saturation User Def 1           : 0
+Color Tone User Def 1           : 0
+Filter Effect User Def 1        : None
+Toning Effect User Def 1        : None
+Contrast User Def 2             : 0
+Sharpness User Def 2            : 3
+Saturation User Def 2           : 0
+Color Tone User Def 2           : 0
+Filter Effect User Def 2        : None
+Toning Effect User Def 2        : None
+Contrast User Def 3             : 0
+Sharpness User Def 3            : 3
+Saturation User Def 3           : 0
+Color Tone User Def 3           : 0
+Filter Effect User Def 3        : None
+Toning Effect User Def 3        : None
+User Def 1 Picture Style        : Standard
+User Def 2 Picture Style        : Standard
+User Def 3 Picture Style        : Standard
+Canon Model ID                  : EOS-1D X
+Thumbnail Image Valid Area      : 0 159 7 112
+AF Area Mode                    : Single-point AF
+Num AF Points                   : 61
+Valid AF Points                 : 61
+Canon Image Width               : 5184
+Canon Image Height              : 3456
+AF Image Width                  : 5184
+AF Image Height                 : 3456
+AF Area Widths                  : 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171 171
+AF Area Heights                 : 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169 169
+AF Area X Positions             : 259 0 -259 1368 1109 850 575 259 0 -1368 -1109 -850 -575 -259 1368 1109 850 575 259 0 -1368 -1109 -850 -575 -259 1368 1109 850 575 259 0 -1368 -1109 -850 -575 -259 1368 1109 850 575 259 0 -1368 -1109 -850 -575 -259 1368 1109 850 575 259 0 -1368 -1109 -850 -575 -259 259 0 -259
+AF Area Y Positions             : -584 -584 -584 -390 -390 -390 -390 -390 -390 -390 -390 -390 -390 -390 -193 -193 -193 -193 -193 -193 -193 -193 -193 -193 -193 0 0 0 0 0 0 0 0 0 0 0 193 193 193 193 193 193 193 193 193 193 193 390 390 390 390 390 390 390 390 390 390 390 584 584 584
+AF Points In Focus              : 15
+AF Points Selected              : 15
+Time Zone                       : -07:00
+Time Zone City                  : Los Angeles
+Daylight Savings                : On
+Bracket Mode                    : Off
+Bracket Value                   : 0
+Bracket Shot Number             : 0
+Raw Jpg Size                    : Large
+WB Bracket Mode                 : Off
+WB Bracket Value AB             : 0
+WB Bracket Value GM             : 0
+Live View Shooting              : Off
+Focus Distance Upper            : inf
+Focus Distance Lower            : 81.91 m
+Shutter Mode                    : Mechanical
+Flash Exposure Lock             : Off
+Anti Flicker                    : Off
+Internal Serial Number          : X064840
+Dust Removal Data               : (Binary data 1024 bytes, use -b option to extract)
+Crop Left Margin                : 0
+Crop Right Margin               : 0
+Crop Top Margin                 : 0
+Crop Bottom Margin              : 0
+Exposure Level Increments       : 1/3-stop set, 1/3-stop comp.
+ISO Speed Increments            : 1/3 Stop
+AEB Auto Cancel                 : On
+AEB Sequence                    : 0,-,+
+AEB Shot Count                  : 3 shots
+Spot Meter Link To AF Point     : Disable (use center AF point)
+Safety Shift                    : Disable
+Usable Shooting Modes           : Disable; Flags 0x3f
+Usable Metering Modes           : Disable; Flags 0xf0
+Exposure Mode In Manual         : Specified metering mode
+Shutter Speed Range             : Disable; Hi 1/8192; Lo 32
+Aperture Range                  : Disable; Closed 91; Open 1
+AE Microadjustment              : Disable; 0; 8; 0
+FE Microadjustment              : Disable; 0; 8; 0
+Same Exposure For New Aperture  : Disable
+Focusing Screen                 : Ec-CV
+View Info During Exposure       : Disable
+LCD Illumination During Bulb    : Off
+WB Media Image Size Setting     : Rear LCD panel
+Continuous Shooting Speed       : Disable; Hi 12; Lo 3
+Continuous Shot Limit           : Disable; 99 shots
+Restrict Drive Modes            : Disable; Flags 0x3f
+Custom Controls                 : 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 255 255 0 3 112 48 0 0 0 0 0 0 0 0 0 0 0 20 80 0 0 0 7 0
+Dial Direction Tv Av            : Normal
+Av Setting Without Lens         : Disable
+Multi Function Lock             : Off; Quick control dial
+Lock Microphone Button          : Protect (hold:record memo); 31
+Add Aspect Ratio Info           : Off
+Timer Length                    : Enable; 6 s: 6; 16 s: 16; After release: 2
+Short Release Time Lag          : Disable
+Memo Audio Quality              : High (48 kHz)
+Default Erase Option            : Cancel selected
+Aspect Ratio                    : 3:2
+Cropped Image Width             : 5184
+Cropped Image Height            : 3456
+Cropped Image Left              : 0
+Cropped Image Top               : 0
+Tone Curve                      : Standard
+Sharpness                       : 3
+Sharpness Frequency             : n/a
+Sensor Red Level                : 0
+Sensor Blue Level               : 0
+White Balance Red               : 0
+White Balance Blue              : 0
+Color Temperature               : 5600
+Picture Style                   : Standard
+Digital Gain                    : 0
+WB Shift AB                     : 0
+WB Shift GM                     : 0
+Measured RGGB                   : 687 1024 1024 642
+VRD Offset                      : 0
+Sensor Width                    : 5344
+Sensor Height                   : 3584
+Sensor Left Border              : 144
+Sensor Top Border               : 114
+Sensor Right Border             : 5327
+Sensor Bottom Border            : 3569
+Black Mask Left Border          : 0
+Black Mask Top Border           : 0
+Black Mask Right Border         : 0
+Black Mask Bottom Border        : 0
+Color Data Version              : 10 (1DX/5DmkIII/6D/70D/100D/650D/700D/M/M2)
+WB RGGB Levels As Shot          : 2048 1024 1024 1353
+Color Temp As Shot              : 5600
+WB RGGB Levels Auto             : 1683 1024 1024 1697
+Color Temp Auto                 : 4045
+WB RGGB Levels Measured         : 1683 1024 1024 1697
+Color Temp Measured             : 4045
+WB RGGB Levels Daylight         : 1971 1024 1024 1411
+Color Temp Daylight             : 5200
+WB RGGB Levels Shade            : 2265 1024 1024 1208
+Color Temp Shade                : 7000
+WB RGGB Levels Cloudy           : 2114 1024 1024 1304
+Color Temp Cloudy               : 6000
+WB RGGB Levels Tungsten         : 1415 1024 1024 2118
+Color Temp Tungsten             : 3200
+WB RGGB Levels Fluorescent      : 1751 1024 1024 1990
+Color Temp Fluorescent          : 3727
+WB RGGB Levels Kelvin           : 2048 1024 1024 1353
+Color Temp Kelvin               : 5600
+WB RGGB Levels Flash            : 2203 1024 1024 1274
+Color Temp Flash                : 6420
+Average Black Level             : 2049 2049 2049 2049
+Raw Measured RGGB               : 74880 110270 109910 67634
+Per Channel Black Level         : 2049 2049 2049 2049
+Normal White Level              : 14756
+Specular White Level            : 15268
+Linearity Upper Margin          : 10120
+Picture Style User Def          : Standard; Standard; Standard
+Picture Style PC                : None; None; None
+Custom Picture Style File Name  :
+AF Micro Adj Mode               : Disable
+AF Micro Adj Value              : 0
+Vignetting Corr Version         : 0
+Peripheral Lighting             : Off
+Distortion Correction           : Off
+Chromatic Aberration Corr       : Off
+Peripheral Lighting Value       : 0
+Distortion Correction Value     : 0
+Original Image Width            : 5184
+Original Image Height           : 3456
+Peripheral Lighting Setting     : Off
+Chromatic Aberration Setting    : Off
+Peripheral Illumination Corr    : On
+Auto Lighting Optimizer         : Standard
+Highlight Tone Priority         : Off
+Long Exposure Noise Reduction   : Off
+High ISO Noise Reduction        : Standard
+Multi Exposure                  : Off
+Multi Exposure Control          : Additive
+Multi Exposure Shots            : 0
+AF Config Tool                  : Case 1
+AF Tracking Sensitivity         : 0
+AF Accel/Decel Tracking         : 0
+AF Point Switching              : 0
+AI Servo First Image            : Equal Priority
+AI Servo Second Image           : Equal Priority
+USM Lens Electronic MF          : Enable After AF
+AF Assist Beam                  : Enable
+One Shot AF Release             : Focus Priority
+Auto AF Point Sel EOS iTR AF    : Enable
+Lens Drive When AF Impossible   : Continue Focus Search
+Select AF Area Selection Mode   : Single-point AF, Auto, Zone AF, AF Point Expansion (4 point), Spot AF, AF Point Expansion (8 point)
+AF Area Selection Method        : M-Fn Button
+Orientation Linked AF           : Same for Vert/Horiz Points
+Manual AF Point Sel Pattern     : Stops at AF Area Edges
+AF Point Display During Focus   : Selected (constant)
+VF Display Illumination         : Auto
+AF Status Viewfinder            : Show in Field of View
+Initial AF Point In Servo       : Initial AF Point Selected
+User Comment                    :
+Sub Sec Time                    : 00
+Sub Sec Time Original           : 00
+Sub Sec Time Digitized          : 00
+Flashpix Version                : 0100
+Color Space                     : sRGB
+Exif Image Width                : 5184
+Exif Image Height               : 3456
+Interoperability Index          : R98 - DCF basic file (sRGB)
+Interoperability Version        : 0100
+Focal Plane X Resolution        : 3545.827633
+Focal Plane Y Resolution        : 3526.530612
+Focal Plane Resolution Unit     : inches
+Custom Rendered                 : Normal
+Exposure Mode                   : Auto
+Scene Capture Type              : Standard
+Owner Name                      : Gregory Eakin
+Serial Number                   : 092015000395
+Lens Info                       : 120-300mm f/0
+Lens Model                      : 120-300mm F2.8 DG OS HSM | Sports 013
+Lens Serial Number              : 0000000000
+GPS Version ID                  : 2.3.0.0
+Thumbnail Offset                : 80384
+Thumbnail Length                : 9056
+Photometric Interpretation      : RGB
+Samples Per Pixel               : 3
+Rows Per Strip                  : 448
+Planar Configuration            : Chunky
+Strip Offsets                   : 2623556
+Strip Byte Counts               : 17270812
+CR2 CFA Pattern                 : [Red,Green][Green,Blue]
+Raw Image Segmentation          : 1 2672 2672
+SRaw Type                       : 1
+Drive Mode                      : Self-timer Operation
+File Number                     : 100-5694
+Lens                            : 120.0 - 300.0 mm
+Shooting Mode                   : Program AE
+WB RGGB Levels                  : 2048 1024 1024 1353
+Aperture                        : 2.8
+Blue Balance                    : 1.321289
+Image Size                      : 5184x3456
+Lens ID                         : Sigma 60-600mm f/4.5-6.3 DG OS HSM | S + 2x
+Megapixels                      : 17.9
+Preview Image                   : (Binary data 733155 bytes, use -b option to extract)
+Red Balance                     : 2
+Scale Factor To 35 mm Equivalent: 1.0
+Shutter Speed                   : 20
+Create Date                     : 2024:09:10 03:03:55.00
+Date/Time Original              : 2024:09:10 03:03:55.00
+Modify Date                     : 2024:09:10 03:03:55.00
+Thumbnail Image                 : (Binary data 9056 bytes, use -b option to extract)
+Lens                            : 120.0 - 300.0 mm (35 mm equivalent: 116.1 - 290.3 mm)
+Circle Of Confusion             : 0.031 mm
+Depth Of Field                  : 867.73 m (221.84 - 1089.58 m)
+Field Of View                   : 9.7 deg
+Focal Length                    : 220.0 mm (35 mm equivalent: 212.9 mm)
+Hyperfocal Distance             : 556.78 m
+Light Value                     : -1.4
+-- press ENTER --

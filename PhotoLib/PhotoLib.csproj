@@ -14,8 +14,4 @@
     <Content Include="camera-icon.ico" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="8.0.8" />
-  </ItemGroup>
-
 </Project>
