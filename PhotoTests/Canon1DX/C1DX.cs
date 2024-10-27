@@ -20,7 +20,7 @@ using Xunit.Abstractions;
 namespace PhotoTests.Canon1DX;
 public class C1DX
 {
-    private const string FileName = @"\\Data\Photo\2024\2024-09-10\B35V5694.CR2";
+    private const string FileName = @"P:\2024\2024-09-10\B35V5694.CR2";
     private readonly ITestOutputHelper _testOutputHelper;
 
     public C1DX(ITestOutputHelper testOutputHelper)

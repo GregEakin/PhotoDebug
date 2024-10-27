@@ -36,7 +36,7 @@ public class Image3SRawII
     [Fact]
     public void DumpImage3SRawTest()
     {
-        const string fileName = @"\\Data\Photo\2016\2016-02-26\007.CR2";
+        const string fileName = @"P:\2016\2016-02-26\007.CR2";
         DumpImage3SRaw(fileName);
     }
 

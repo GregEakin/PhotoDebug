@@ -21,7 +21,7 @@ namespace PhotoTests.Canon5D4;
 
 public class C5D4
 {
-    const string FileName = @"\\Data\Photo\Canon 5D IV\Y_DReggie_03.CR2";
+    const string FileName = @"P:\Canon 5D IV\Y_DReggie_03.CR2";
     private readonly ITestOutputHelper _testOutputHelper;
 
     public C5D4(ITestOutputHelper testOutputHelper)

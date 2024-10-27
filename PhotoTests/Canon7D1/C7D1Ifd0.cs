@@ -15,7 +15,7 @@ namespace PhotoTests.Canon7D1;
 
 public class C7D1Ifd0
 {
-    private const string FileName = @"\\Data\Photo\Source\7Dhigh.CR2";
+    private const string FileName = @"P:\Source\7Dhigh.CR2";
     private readonly ITestOutputHelper _testOutputHelper;
 
     public C7D1Ifd0(ITestOutputHelper testOutputHelper)

@@ -39,9 +39,9 @@ public class Image3SRawIV
     public void DumpImage3SRawTest()
     {
         // 2592 x 1728, Canon EOS 7D, 1/160 sec. f/1.8 85mm, SRAW   
-        // const string Folder = @"\\Data\Photo\2013\2013_10_14\";
+        // const string Folder = @"P:\2013\2013_10_14\";
         // DumpImage3SRaw(Folder, "IMG_4194.CR2");
-        const string fileName = @"\\Data\Photo\2016\2016-02-26\003.CR2";
+        const string fileName = @"P:\2016\2016-02-26\003.CR2";
         DumpImage3SRaw(fileName);
     }
 

@@ -18,7 +18,7 @@ namespace PhotoTests.Canon7D2;
 
 public class C7D2Ifd1
 {
-    private const string FileName = @"\\Data\Photo\2018\2018-10-19\B05A1194.CR2";
+    private const string FileName = @"P:\2018\2018-10-19\B05A1194.CR2";
 
     public C7D2Ifd1()
     {

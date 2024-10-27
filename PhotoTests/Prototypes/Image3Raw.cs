@@ -23,7 +23,7 @@ public class Image3Raw
     [Fact]
     public void DumpImage3Test()
     {
-        const string fileName = @"\\Data\Photo\2016\2016-02-21 Studio\Studio 015.CR2";
+        const string fileName = @"P:\2016\2016-02-21 Studio\Studio 015.CR2";
         DumpImage3(fileName);
     }
 

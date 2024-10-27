@@ -16,7 +16,7 @@ public class ExifData
     [Fact]
     public void DumpExifData1()
     {
-        const string fileName = @"\\Data\Photo\Source\5DIIIhigh.CR2";
+        const string fileName = @"P:\Source\5DIIIhigh.CR2";
         using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
         using var binaryReader = new BinaryReader(fileStream);
         var rawImage = new RawImage(binaryReader);
@@ -94,7 +94,7 @@ public class ExifData
     [Fact]
     public void DumpExifData2()
     {
-        const string fileName = @"\\Data\Photo\Source\7DSraw.CR2";
+        const string fileName = @"P:\Source\7DSraw.CR2";
         using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
         using var binaryReader = new BinaryReader(fileStream);
         var rawImage = new RawImage(binaryReader);
@@ -154,7 +154,7 @@ public class ExifData
     [Fact]
     public void DumpExifData3()
     {
-        const string fileName = @"\\Data\Photo\Source\7Dhigh.CR2";
+        const string fileName = @"P:\Source\7Dhigh.CR2";
         using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
         using var binaryReader = new BinaryReader(fileStream);
         var rawImage = new RawImage(binaryReader);

@@ -19,7 +19,7 @@ namespace PhotoTests.Canon5D3;
 
 public class C5D3Ifd2
 {
-    private const string FileName = @"\\Data\Photo\2018\2018-08-29\0L2A3743.CR2";
+    private const string FileName = @"P:\2018\2018-08-29\0L2A3743.CR2";
 
     public C5D3Ifd2()
     {

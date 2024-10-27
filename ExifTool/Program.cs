@@ -5,7 +5,7 @@ namespace ExifTool;
 public class Program : IDisposable
 {
     private const string ExifToolFolderPath = @"C:\Users\gregp\OneDrive\Desktop\exiftool(-k).exe";
-    private const string ImageFileName = @"\\Data\Photo\2022\2022-07-26\MD6A1370.CR2";
+    private const string ImageFileName = @"P:\2022\2022-07-26\MD6A1370.CR2";
     private readonly Lazy<Process> _pExifTool = new(StartProcess);
 
     public static void Main(string[] args)

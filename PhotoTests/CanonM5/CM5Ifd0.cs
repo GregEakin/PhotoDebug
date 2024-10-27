@@ -19,8 +19,8 @@ namespace PhotoTests.CanonM5;
 
 public class CM5Ifd0
 {
-    // private const string FileName = @"\\Data\Photo\Source\IMG_0012.CR2";
-    private const string FileName = @"\\Data\Photo\2017\2017-11-21\IMG_0002.CR2";
+    // private const string FileName = @"P:\Source\IMG_0012.CR2";
+    private const string FileName = @"P:\2017\2017-11-21\IMG_0002.CR2";
     private readonly ITestOutputHelper _testOutputHelper;
 
     public CM5Ifd0(ITestOutputHelper testOutputHelper)
@@ -101,7 +101,7 @@ public class CM5Ifd0
     // [Fact]
     public void DumpGuids()
     {
-        var d = new DirectoryInfo(@"\\Data\Photo\2017\2017-11-21");
+        var d = new DirectoryInfo(@"P:\2017\2017-11-21");
         var files = d.GetFiles("*.cr2");
         foreach (var file in files)
         {

@@ -19,7 +19,7 @@ public class CameraInfoTests
     [Fact]
     public void DumpCameraInfoTest()
     {
-        foreach (var dir in Directory.EnumerateDirectories(@"\\Data\Photo\"))
+        foreach (var dir in Directory.EnumerateDirectories(@"P:\"))
         {
             if (!dir.EndsWith("EOS R")) continue;
 
@@ -35,7 +35,7 @@ public class CameraInfoTests
     [Fact]
     public void FigureInfoTest()
     {
-        var fileName = @"\\Data\Photo\2017\2017-01-26 Party\IMG_0001.CR2";
+        var fileName = @"P:\2017\2017-01-26 Party\IMG_0001.CR2";
         using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
         using var binaryReader = new BinaryReader(fileStream);
         var rawImage = new RawImage(binaryReader);
@@ -67,7 +67,7 @@ public class CameraInfoTests
 
     public static void DumpIndex(string fileName)
     {
-        // const string fileName = @"\\Data\Photo\2018\2018-10-11\0L2A4224.CR2";
+        // const string fileName = @"P:\2018\2018-10-11\0L2A4224.CR2";
         using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
         using var binaryReader = new BinaryReader(fileStream);
         var rawImage = new RawImage(binaryReader);

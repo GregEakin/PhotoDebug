@@ -20,7 +20,7 @@ namespace PhotoTests.CanonR;
 
 public class C0RIfd0
 {
-    private const string FileName = @"\\Data\Photo\2019\2019-09-02\IMG_0001.CR3";
+    private const string FileName = @"P:\2019\2019-09-02\IMG_0001.CR3";
     private readonly ITestOutputHelper _testOutputHelper;
 
     public C0RIfd0(ITestOutputHelper testOutputHelper)

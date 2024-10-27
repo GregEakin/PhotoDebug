@@ -21,7 +21,7 @@ namespace PhotoTests.Canon5D1;
 
 public class C5D1
 {
-    private const string FileName = @"\\Data\Photo\2022\2022-08-03\IMG_0256.CR2";
+    private const string FileName = @"P:\2022\2022-08-03\IMG_0256.CR2";
     private readonly ITestOutputHelper _testOutputHelper;
 
     public C5D1(ITestOutputHelper testOutputHelper)

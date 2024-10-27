@@ -36,7 +36,7 @@ public class Canon80D
     [Fact]
     public void DumpImage3RawTest()
     {
-        const string fileName = @"\\Data\Photo\Source\80DLL256007XNR.CR2";
+        const string fileName = @"P:\Source\80DLL256007XNR.CR2";
         DumpImage3Raw(fileName);
     }
 

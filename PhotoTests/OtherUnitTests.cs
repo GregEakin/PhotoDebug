@@ -72,9 +72,9 @@ public class OtherUnitTests
     // [Fact]
     public void TestMethodB()
     {
-        // const string Directory = @"\\Data\Photo\Source\";
+        // const string Directory = @"P:\Source\";
         // const string FileName2 = Directory + "IMG_0503.CR2";
-        const string directory = @"\\Data\Photo\2013\2013-10-06 001\";
+        const string directory = @"P:\2013\2013-10-06 001\";
         const string fileName2 = directory + "0L2A8892.CR2";
 
         using var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read, FileShare.Read);
@@ -133,14 +133,14 @@ public class OtherUnitTests
     // [Fact]
     public void TestMethodB6()
     {
-        // const string Folder = @"\\Data\Photo\Source\";
+        // const string Folder = @"P:\Source\";
         // const string FileName2 = Folder + "IMG_0503.CR2";
 
-        const string folder = @"\\Data\Photo\2013\2013-10-06 001\";
+        const string folder = @"P:\2013\2013-10-06 001\";
         const string fileName2 = folder + "0L2A8892.CR2";
         const string bitmap = folder + "0L2A8892 B6.BMP";
 
-        //const string Folder = @"\\Data\Photo\2013\2013_06_02\";
+        //const string Folder = @"P:\2013\2013_06_02\";
         //const string FileName2 = Folder + "IMG_3559.CR2";
         //const string Bitmap = Folder + "IMG_3559.BMP";
 
@@ -274,7 +274,7 @@ public class OtherUnitTests
     [Fact]
     public void SearchWhiteBalance()
     {
-        const string fileName = @"\\Data\Photo\Source\5DIIIhigh.CR2";
+        const string fileName = @"P:\Source\5DIIIhigh.CR2";
 
         using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
         using var binaryReader = new BinaryReader(fileStream);
@@ -400,7 +400,7 @@ public class OtherUnitTests
     [Fact]
     public void CanonDustDeleteData()
     {
-        const string fileName = @"\\Data\Photo\Source\5DIIIhigh.CR2";
+        const string fileName = @"P:\Source\5DIIIhigh.CR2";
         using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
         using var binaryReader = new BinaryReader(fileStream);
         var rawImage = new RawImage(binaryReader);
@@ -426,7 +426,7 @@ public class OtherUnitTests
     [Fact]
     public void VrdEndTags5D3()
     {
-        const string fileName = @"\\Data\Photo\2016\2016-05-10\0L2A2451.CR2";
+        const string fileName = @"P:\2016\2016-05-10\0L2A2451.CR2";
 
         using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
         using var binaryReader = new BinaryReader(fileStream);
@@ -439,7 +439,7 @@ public class OtherUnitTests
     [Fact]
     public void VrdEndTags7D()
     {
-        const string fileName = @"\\Data\Photo\Source\7Dhigh - Copy.CR2";
+        const string fileName = @"P:\Source\7Dhigh - Copy.CR2";
 
         using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
         using var binaryReader = new BinaryReader(fileStream);
@@ -452,7 +452,7 @@ public class OtherUnitTests
     [Fact]
     public void VrdEndTags7DD()
     {
-        const string fileName = @"\\Data\Photo\Source\7Dhigh - Copy - Copy.CR2";
+        const string fileName = @"P:\Source\7Dhigh - Copy - Copy.CR2";
 
         using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
         using var binaryReader = new BinaryReader(fileStream);
@@ -466,7 +466,7 @@ public class OtherUnitTests
     [Fact]
     public void VrdEndTags40D()
     {
-        const string fileName = @"\\Data\Photo\2015\2015-08-08\IMG_4331.CR2";
+        const string fileName = @"P:\2015\2015-08-08\IMG_4331.CR2";
 
         using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
         using var binaryReader = new BinaryReader(fileStream);
@@ -479,7 +479,7 @@ public class OtherUnitTests
     [Fact]
     public void TestMethodTags()
     {
-        const string fileName2 = @"\\Data\Photo\Source\5DIIIhigh.CR2";
+        const string fileName2 = @"P:\Source\5DIIIhigh.CR2";
 
         using var fileStream = File.Open(fileName2, FileMode.Open, FileAccess.Read, FileShare.Read);
         using var binaryReader = new BinaryReader(fileStream);

@@ -36,7 +36,7 @@ public class CanonM3
     [Fact]
     public void DumpImage3RawTest()
     {
-        const string fileName = @"\\Data\Photo\2016\2016-05-20\IMG_0008.CR2";
+        const string fileName = @"P:\2016\2016-05-20\IMG_0008.CR2";
         DumpImage3Raw(fileName);
     }
 

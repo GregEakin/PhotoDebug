@@ -17,7 +17,7 @@ public class XmpData
     [Fact]
     public void DumpXmpData()
     {
-        const string fileName = @"\\Data\Photo\Source\5DIIIhigh.CR2";
+        const string fileName = @"P:\Source\5DIIIhigh.CR2";
         DumpXmpInfo(fileName);
     }
 

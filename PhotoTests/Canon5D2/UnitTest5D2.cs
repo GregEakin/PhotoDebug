@@ -23,7 +23,7 @@ namespace PhotoTests.Canon5D2;
 
 public class UnitTest5D2
 {
-    private const string FileName = @"\\Data\Photo\2022\2022-07-25\IMG_3975.CR2";
+    private const string FileName = @"P:\2022\2022-07-25\IMG_3975.CR2";
 
     public UnitTest5D2()
     {

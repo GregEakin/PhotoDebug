@@ -20,7 +20,7 @@ public class UnitTests
     // [Fact]
     public void TestMethodC7()
     {
-        const string Folder = @"\\Data\Photo\2013\2013_10_14\";
+        const string Folder = @"P:\2013\2013_10_14\";
         const string FileName2 = Folder + "IMG_4195.CR2";
         const string Bitmap = Folder + "IMG_4195 C.BMP";
 
@@ -30,7 +30,7 @@ public class UnitTests
     [Fact]
     public void ReadFile()
     {
-        const string Folder = @"\\Data\Photo\2013\2013_10_14\";
+        const string Folder = @"P:\2013\2013_10_14\";
         const string FileName2 = Folder + "IMG_4195.CR2";
 
         using var fileStream = File.Open(FileName2, FileMode.Open, FileAccess.Read, FileShare.Read);

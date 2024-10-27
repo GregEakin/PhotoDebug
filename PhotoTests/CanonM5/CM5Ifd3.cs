@@ -20,7 +20,7 @@ namespace PhotoTests.CanonM5;
 
 public class CM5Ifd3
 {
-    private const string FileName = @"\\Data\Photo\Source\IMG_0012.CR2";
+    private const string FileName = @"P:\Source\IMG_0012.CR2";
 
     public CM5Ifd3()
     {

@@ -36,7 +36,7 @@ public class Canon5D4
     [Fact]
     public void DumpImage3RawTest()
     {
-        const string fileName = @"\\Data\Photo\Canon 5D IV\Y_DReggie_03.CR2";
+        const string fileName = @"P:\Canon 5D IV\Y_DReggie_03.CR2";
         DumpImage3Raw(fileName);
     }
 

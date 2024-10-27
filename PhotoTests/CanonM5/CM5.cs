@@ -21,8 +21,8 @@ namespace PhotoTests.CanonM5;
 
 public class CM5
 {
-    // private const string FileName = @"\\Data\Photo\Source\IMG_0012.CR2";
-    private const string FileName = @"\\Data\Photo\2017\2017-11-21\IMG_0002.CR2";
+    // private const string FileName = @"P:\Source\IMG_0012.CR2";
+    private const string FileName = @"P:\2017\2017-11-21\IMG_0002.CR2";
     private readonly ITestOutputHelper _testOutputHelper;
 
     public CM5(ITestOutputHelper testOutputHelper)

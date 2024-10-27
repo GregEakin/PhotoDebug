@@ -16,7 +16,7 @@ public class Image0
     [Fact]
     public void DumpImage0Test()
     {
-        const string Folder = @"\\Data\Photo\2016\2016-02-21 Studio\";
+        const string Folder = @"P:\2016\2016-02-21 Studio\";
         DumpImage0(Folder, "Studio 015.CR2");
     }
 

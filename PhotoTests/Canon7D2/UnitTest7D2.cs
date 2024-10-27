@@ -18,8 +18,8 @@ namespace PhotoTests.Canon7D2;
 public class UnitTest7D2
 {
     private readonly ITestOutputHelper _testOutputHelper;
-    // private const string FileName = @"\\Data\Photo\Source\7D2high.CR2";
-    private const string FileName = @"\\Data\Photo\2018\2018-10-19\B05A1194.CR2";
+    // private const string FileName = @"P:\Source\7D2high.CR2";
+    private const string FileName = @"P:\2018\2018-10-19\B05A1194.CR2";
 
     public UnitTest7D2(ITestOutputHelper testOutputHelper)
     {

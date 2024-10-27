@@ -36,7 +36,7 @@ public class Canon7d2
     [Fact]
     public void DumpImage3RawTest()
     {
-        const string fileName = @"\\Data\Photo\2016\2016-08-28\_W__5060.CR2";
+        const string fileName = @"P:\2016\2016-08-28\_W__5060.CR2";
         DumpImage3Raw(fileName);
     }
 

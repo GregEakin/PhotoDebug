@@ -21,7 +21,7 @@ namespace PhotoTests.Canon1D3;
 
 public class C1D3
 {
-    private const string FileName = @"\\Data\Photo\2024\2024-08-31\2B0I7592.CR2";
+    private const string FileName = @"P:\2024\2024-08-31\2B0I7592.CR2";
     private readonly ITestOutputHelper _testOutputHelper;
 
     public C1D3(ITestOutputHelper testOutputHelper)

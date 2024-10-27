@@ -16,7 +16,7 @@ public class Ifid2Tests
     [Fact]
     public void DumpImage0Test()
     {
-        const string fileName = @"\\Data\Photo\Source\5DIIIhigh.CR2";
+        const string fileName = @"P:\Source\5DIIIhigh.CR2";
         DumpImage2(fileName);
     }
 
