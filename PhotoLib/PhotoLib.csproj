@@ -4,6 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <ApplicationIcon>camera-icon.ico</ApplicationIcon>
     <SignAssembly>False</SignAssembly>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

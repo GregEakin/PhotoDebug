@@ -47,7 +47,7 @@ public class DefineQuantizationTableTests
         var defineQuantizationTable = new DefineQuantizationTable(reader);
         Assert.Equal(0x0043, defineQuantizationTable.Length);
 
-        Assert.Equal(1, defineQuantizationTable.Dictionary.Count);
+        Assert.Single(defineQuantizationTable.Dictionary);
         var table = defineQuantizationTable.Dictionary[0x12];
         Assert.Equal(64, table.Length);
         for (var i = 0; i < table.Length; i++)
