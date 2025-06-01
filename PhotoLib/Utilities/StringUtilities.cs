@@ -8,22 +8,21 @@
 using System.Collections;
 using System.Text;
 
-namespace PhotoLib.Utilities
+namespace PhotoLib.Utilities;
+
+public static class StringUtilities
 {
-    public static class StringUtilities
+    public static string ToReadableString(this IEnumerable list)
     {
-        public static string ToReadableString(this IEnumerable list)
-        {
-            var sb = new StringBuilder();
-            sb.Append("[");
-            foreach (var l in list)
-                sb.Append(l + ", ");
+        var sb = new StringBuilder();
+        sb.Append("[");
+        foreach (var l in list)
+            sb.Append(l + ", ");
 
-            if (sb.Length > 2)
-                sb.Remove(sb.Length - 2, 2);
+        if (sb.Length > 2)
+            sb.Remove(sb.Length - 2, 2);
 
-            sb.Append("]");
-            return sb.ToString();
-        }
+        sb.Append("]");
+        return sb.ToString();
     }
 }

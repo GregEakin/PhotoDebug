@@ -2,12 +2,11 @@
 using System.Data;
 using System.Windows;
 
-namespace PhotoDump
+namespace PhotoDump;
+
+/// <summary>
+/// Interaction logic for App.xaml
+/// </summary>
+public partial class App : Application
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
-    {
-    }
 }

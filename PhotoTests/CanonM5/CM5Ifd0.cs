@@ -9,7 +9,6 @@ using System.IO;
 using System.Linq;
 using PhotoLib.Tiff;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace PhotoTests.CanonM5;
 // The first IFD contains a small RGB version of the picture (one fourth the size) compressed in Jpeg, the EXIF part, and the Makernotes part. 

@@ -7,18 +7,17 @@
 
 using System.IO;
 
-namespace PhotoLib.Jpeg
+namespace PhotoLib.Jpeg;
+
+public abstract class JpegTag
 {
-    public abstract class JpegTag
+    protected JpegTag(BinaryReader binaryReader)
     {
-        protected JpegTag(BinaryReader binaryReader)
-        {
-            Mark = binaryReader.ReadByte();
-            Tag = binaryReader.ReadByte();
-        }
-
-        public byte Mark { get; }
-
-        public byte Tag { get; }
+        Mark = binaryReader.ReadByte();
+        Tag = binaryReader.ReadByte();
     }
+
+    public byte Mark { get; }
+
+    public byte Tag { get; }
 }

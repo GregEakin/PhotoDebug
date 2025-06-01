@@ -11,7 +11,6 @@ using System.Text;
 using PhotoLib.Jpeg.JpegTags;
 using PhotoLib.Tiff;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace PhotoTests.Canon7D2;
 

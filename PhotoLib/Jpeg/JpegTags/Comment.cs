@@ -8,27 +8,26 @@
 using System;
 using System.IO;
 
-namespace PhotoLib.Jpeg.JpegTags
-{
-    /// <summary>
-    /// Comment 0xFFFE
-    /// </summary>
-    public class Comment : JpegTag
-    {
-        public Comment(BinaryReader binaryReader)
-            : base(binaryReader)
-        {
-            if (Mark != 0xFF || Tag != 0xFE)
-            {
-                throw new ArgumentException();
-            }
+namespace PhotoLib.Jpeg.JpegTags;
 
-            Length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
-            Data = binaryReader.ReadBytes(Length - 2);
+/// <summary>
+/// Comment 0xFFFE
+/// </summary>
+public class Comment : JpegTag
+{
+    public Comment(BinaryReader binaryReader)
+        : base(binaryReader)
+    {
+        if (Mark != 0xFF || Tag != 0xFE)
+        {
+            throw new ArgumentException();
         }
 
-        public ushort Length { get; }
-
-        public byte[] Data { get; }
+        Length = (ushort)(binaryReader.ReadByte() << 8 | binaryReader.ReadByte());
+        Data = binaryReader.ReadBytes(Length - 2);
     }
+
+    public ushort Length { get; }
+
+    public byte[] Data { get; }
 }

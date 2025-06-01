@@ -7,22 +7,21 @@
 
 using System.Windows;
 
-namespace PhotoDump
+namespace PhotoDump;
+
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
-        {
-            InitializeComponent();
+        InitializeComponent();
 			
-            const string folder = @"P:\2016\2016-02-21 Studio\";
-            const string fileName2 = folder + "Studio 015.CR2";
-            var stuff = new PhotoStuff(fileName2);
-            // var bitmap = stuff.Array;
-            // Canvas.Source = (Image)bitmap;
-        }
+        const string folder = @"P:\2016\2016-02-21 Studio\";
+        const string fileName2 = folder + "Studio 015.CR2";
+        var stuff = new PhotoStuff(fileName2);
+        // var bitmap = stuff.Array;
+        // Canvas.Source = (Image)bitmap;
     }
 }

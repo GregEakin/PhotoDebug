@@ -15,7 +15,6 @@
 using System.IO;
 using PhotoLib.Tiff;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace PhotoTests.Canon1D3;
 

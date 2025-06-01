@@ -14,7 +14,6 @@
 
 using System.IO;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace PhotoTests.CanonR;
 
