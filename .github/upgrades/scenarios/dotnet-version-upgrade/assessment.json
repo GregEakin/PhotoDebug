@@ -1,0 +1,938 @@
+{
+  "settings": {
+    "components": {
+      "code": true,
+      "binaries": false
+    },
+    "targetId": "net10.0",
+    "targetDisplayName": ".NETCoreApp,Version=v10.0"
+  },
+  "analysisStartTime": "2026-09-12T16:38:22.9852661Z",
+  "analysisEndTime": "2026-09-12T16:38:24.5958159Z",
+  "privacyModeHelpUrl": "https://go.microsoft.com/fwlink/?linkid=2270980",
+  "stats": {
+    "summary": {
+      "projects": 8,
+      "issues": 4,
+      "incidents": 25,
+      "effort": 25
+    },
+    "charts": {
+      "severity": {
+        "Mandatory": 20,
+        "Optional": 0,
+        "Potential": 5,
+        "Information": 0
+      },
+      "category": {
+        "Project": 8,
+        "Api": 17
+      }
+    }
+  },
+  "projects": [
+    {
+      "path": "ExifTool\\ExifTool.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "ExifTool",
+        "projectKind": "DotNetCoreApp",
+        "frameworks": [
+          "net8.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "isTestProject": false,
+        "numberOfFiles": 1,
+        "numberOfCodeFiles": 1,
+        "linesTotal": 104,
+        "linesOfCode": 104,
+        "totalApiScanned": 81,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "1c275ce9-16cd-4dc2-96b6-90034327eeb3",
+          "ruleId": "Project.0002",
+          "projectPath": "ExifTool\\ExifTool.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Current target framework: net8.0\nRecommended target framework: net10.0",
+              "protected": "Current target framework: net8.0\nRecommended target framework: net10.0"
+            },
+            "kind": "File",
+            "path": "ExifTool\\ExifTool.csproj",
+            "snippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "protectedSnippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net8.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "HexDump\\HexDump.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "HexDump",
+        "projectKind": "DotNetCoreApp",
+        "frameworks": [
+          "net8.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "isTestProject": false,
+        "numberOfFiles": 1,
+        "numberOfCodeFiles": 1,
+        "linesTotal": 81,
+        "linesOfCode": 81,
+        "totalApiScanned": 81,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "a4c305b1-328f-4714-a9b0-b46632115b6c",
+          "ruleId": "Project.0002",
+          "projectPath": "HexDump\\HexDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Current target framework: net8.0\nRecommended target framework: net10.0",
+              "protected": "Current target framework: net8.0\nRecommended target framework: net10.0"
+            },
+            "kind": "File",
+            "path": "HexDump\\HexDump.csproj",
+            "snippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "protectedSnippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net8.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "JpegParser\\JpegParser.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "JpegParser",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net8.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "isTestProject": false,
+        "numberOfFiles": 2,
+        "numberOfCodeFiles": 2,
+        "linesTotal": 331,
+        "linesOfCode": 331,
+        "totalApiScanned": 257,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "84fb5a72-95ef-41bf-a6eb-932709b69bfe",
+          "ruleId": "Project.0002",
+          "projectPath": "JpegParser\\JpegParser.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Current target framework: net8.0\nRecommended target framework: net10.0",
+              "protected": "Current target framework: net8.0\nRecommended target framework: net10.0"
+            },
+            "kind": "File",
+            "path": "JpegParser\\JpegParser.csproj",
+            "snippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "protectedSnippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net8.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "JpegParserTests\\JpegParserTests.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "JpegParserTests",
+        "projectKind": "DotNetCoreApp",
+        "frameworks": [
+          "net8.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "isTestProject": true,
+        "numberOfFiles": 4,
+        "numberOfCodeFiles": 2,
+        "linesTotal": 2028,
+        "linesOfCode": 225,
+        "totalApiScanned": 227,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "c7c8807b-9891-4cd1-a693-f4a1fc19ec1a",
+          "ruleId": "Project.0002",
+          "projectPath": "JpegParserTests\\JpegParserTests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Current target framework: net8.0\nRecommended target framework: net10.0",
+              "protected": "Current target framework: net8.0\nRecommended target framework: net10.0"
+            },
+            "kind": "File",
+            "path": "JpegParserTests\\JpegParserTests.csproj",
+            "snippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "protectedSnippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net8.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "PhotoDump\\PhotoDump.csproj",
+      "startingProject": true,
+      "issues": 3,
+      "storyPoints": 18,
+      "properties": {
+        "appName": "PhotoDump",
+        "projectKind": "Wpf",
+        "frameworks": [
+          "net8.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "isTestProject": false,
+        "numberOfFiles": 4,
+        "numberOfCodeFiles": 4,
+        "linesTotal": 141,
+        "linesOfCode": 141,
+        "totalApiScanned": 122,
+        "minLinesOfCodeToChange": 17,
+        "maxLinesOfCodeToChange": 17
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "b50e1acf-ec25-45ac-a29d-ebc0d50ca891",
+          "ruleId": "Project.0002",
+          "projectPath": "PhotoDump\\PhotoDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Current target framework: net8.0-windows\nRecommended target framework: net10.0-windows",
+              "protected": "Current target framework: net8.0-windows\nRecommended target framework: net10.0-windows"
+            },
+            "kind": "File",
+            "path": "PhotoDump\\PhotoDump.csproj",
+            "snippet": "Current target framework: net8.0-windows\nRecommended target framework: net10.0-windows",
+            "protectedSnippet": "Current target framework: net8.0-windows\nRecommended target framework: net10.0-windows",
+            "properties": {
+              "CurrentTargetFramework": "net8.0-windows",
+              "RecommendedTargetFramework": "net10.0-windows"
+            }
+          }
+        },
+        {
+          "incidentId": "dd8c173c-fa34-4582-925b-573487e48db7",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "PhotoDump\\PhotoDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "app.Run();",
+              "protected": "M:System.Windows.Application.Run"
+            },
+            "kind": "File",
+            "path": "PhotoDump\\obj\\Debug\\net8.0-windows\\App.g.i.cs",
+            "snippet": "app.Run();",
+            "protectedSnippet": "M:System.Windows.Application.Run",
+            "label": "M:System.Windows.Application.Run",
+            "properties": {
+              "CharCount": "2360"
+            },
+            "line": 66,
+            "column": 12
+          }
+        },
+        {
+          "incidentId": "307dac71-2009-47e2-b6ba-f9f1784b0422",
+          "ruleId": "Api.0003",
+          "description": "Breaking change: URI length limits removed ",
+          "projectPath": "PhotoDump\\PhotoDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "this.StartupUri = new System.Uri(\u0022MainWindow.xaml\u0022, System.UriKind.Relative);",
+              "protected": "T:System.Uri"
+            },
+            "kind": "File",
+            "path": "PhotoDump\\obj\\Debug\\net8.0-windows\\App.g.i.cs",
+            "snippet": "this.StartupUri = new System.Uri(\u0022MainWindow.xaml\u0022, System.UriKind.Relative);",
+            "protectedSnippet": "T:System.Uri",
+            "label": "T:System.Uri",
+            "properties": {
+              "CharCount": "2360"
+            },
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/networking/10.0/uri-length-limits-removed.md",
+                "isCustom": false
+              }
+            ],
+            "line": 51,
+            "column": 12
+          }
+        },
+        {
+          "incidentId": "7b80592d-fc79-4f64-8c82-e325973006fe",
+          "ruleId": "Api.0003",
+          "description": "Breaking change: URI length limits removed ",
+          "projectPath": "PhotoDump\\PhotoDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "this.StartupUri = new System.Uri(\u0022MainWindow.xaml\u0022, System.UriKind.Relative);",
+              "protected": "M:System.Uri.#ctor(System.String,System.UriKind)"
+            },
+            "kind": "File",
+            "path": "PhotoDump\\obj\\Debug\\net8.0-windows\\App.g.i.cs",
+            "snippet": "this.StartupUri = new System.Uri(\u0022MainWindow.xaml\u0022, System.UriKind.Relative);",
+            "protectedSnippet": "M:System.Uri.#ctor(System.String,System.UriKind)",
+            "label": "M:System.Uri.#ctor(System.String,System.UriKind)",
+            "properties": {
+              "CharCount": "2360"
+            },
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/networking/10.0/uri-length-limits-removed.md",
+                "isCustom": false
+              }
+            ],
+            "line": 51,
+            "column": 12
+          }
+        },
+        {
+          "incidentId": "86972da7-09c3-4b3f-bfd4-1bccb0a6e359",
+          "ruleId": "Api.0003",
+          "description": "Breaking change: URI length limits removed ",
+          "projectPath": "PhotoDump\\PhotoDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "this.StartupUri = new System.Uri(\u0022MainWindow.xaml\u0022, System.UriKind.Relative);",
+              "protected": "T:System.Uri"
+            },
+            "kind": "File",
+            "path": "PhotoDump\\obj\\Debug\\net8.0-windows\\App.g.i.cs",
+            "snippet": "this.StartupUri = new System.Uri(\u0022MainWindow.xaml\u0022, System.UriKind.Relative);",
+            "protectedSnippet": "T:System.Uri",
+            "label": "T:System.Uri",
+            "properties": {
+              "CharCount": "2360"
+            },
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/networking/10.0/uri-length-limits-removed.md",
+                "isCustom": false
+              }
+            ],
+            "line": 51,
+            "column": 12
+          }
+        },
+        {
+          "incidentId": "76b4c7b7-1974-44b7-a83d-f8f38a6eaf8d",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "PhotoDump\\PhotoDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "this.StartupUri = new System.Uri(\u0022MainWindow.xaml\u0022, System.UriKind.Relative);",
+              "protected": "P:System.Windows.Application.StartupUri"
+            },
+            "kind": "File",
+            "path": "PhotoDump\\obj\\Debug\\net8.0-windows\\App.g.i.cs",
+            "snippet": "this.StartupUri = new System.Uri(\u0022MainWindow.xaml\u0022, System.UriKind.Relative);",
+            "protectedSnippet": "P:System.Windows.Application.StartupUri",
+            "label": "P:System.Windows.Application.StartupUri",
+            "properties": {
+              "CharCount": "2360"
+            },
+            "line": 51,
+            "column": 12
+          }
+        },
+        {
+          "incidentId": "65a531e5-f33e-4fe6-9fb3-2e02aeb90881",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "PhotoDump\\PhotoDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Application",
+              "protected": "M:System.Windows.Application.#ctor"
+            },
+            "kind": "File",
+            "path": "PhotoDump\\App.xaml.cs",
+            "snippet": "Application",
+            "protectedSnippet": "M:System.Windows.Application.#ctor",
+            "label": "M:System.Windows.Application.#ctor",
+            "properties": {
+              "CharCount": "211"
+            },
+            "line": 9,
+            "column": 27
+          }
+        },
+        {
+          "incidentId": "7d646ea5-ecd1-499f-ad0d-915b96794c1a",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "PhotoDump\\PhotoDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Application",
+              "protected": "T:System.Windows.Application"
+            },
+            "kind": "File",
+            "path": "PhotoDump\\App.xaml.cs",
+            "snippet": "Application",
+            "protectedSnippet": "T:System.Windows.Application",
+            "label": "T:System.Windows.Application",
+            "properties": {
+              "CharCount": "211"
+            },
+            "line": 9,
+            "column": 27
+          }
+        },
+        {
+          "incidentId": "531ec7ad-5529-4efa-802a-e16fe27b3f78",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "PhotoDump\\PhotoDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "this.Canvas = ((System.Windows.Controls.Image)(target));",
+              "protected": "T:System.Windows.Controls.Image"
+            },
+            "kind": "File",
+            "path": "PhotoDump\\obj\\Debug\\net8.0-windows\\MainWindow.g.i.cs",
+            "snippet": "this.Canvas = ((System.Windows.Controls.Image)(target));",
+            "protectedSnippet": "T:System.Windows.Controls.Image",
+            "label": "T:System.Windows.Controls.Image",
+            "properties": {
+              "CharCount": "3546"
+            },
+            "line": 82,
+            "column": 12
+          }
+        },
+        {
+          "incidentId": "9e55022f-af73-4f73-872d-f0c920fd547e",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "PhotoDump\\PhotoDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "System.Windows.Application.LoadComponent(this, resourceLocater);",
+              "protected": "T:System.Windows.Application"
+            },
+            "kind": "File",
+            "path": "PhotoDump\\obj\\Debug\\net8.0-windows\\MainWindow.g.i.cs",
+            "snippet": "System.Windows.Application.LoadComponent(this, resourceLocater);",
+            "protectedSnippet": "T:System.Windows.Application",
+            "label": "T:System.Windows.Application",
+            "properties": {
+              "CharCount": "3546"
+            },
+            "line": 66,
+            "column": 12
+          }
+        },
+        {
+          "incidentId": "7bfefeab-283f-486b-8c23-3398cbfb02dd",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "PhotoDump\\PhotoDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "System.Windows.Application.LoadComponent(this, resourceLocater);",
+              "protected": "M:System.Windows.Application.LoadComponent(System.Object,System.Uri)"
+            },
+            "kind": "File",
+            "path": "PhotoDump\\obj\\Debug\\net8.0-windows\\MainWindow.g.i.cs",
+            "snippet": "System.Windows.Application.LoadComponent(this, resourceLocater);",
+            "protectedSnippet": "M:System.Windows.Application.LoadComponent(System.Object,System.Uri)",
+            "label": "M:System.Windows.Application.LoadComponent(System.Object,System.Uri)",
+            "properties": {
+              "CharCount": "3546"
+            },
+            "line": 66,
+            "column": 12
+          }
+        },
+        {
+          "incidentId": "5d8c1f3c-ffcc-49d4-9c03-1eb6c30153a8",
+          "ruleId": "Api.0003",
+          "description": "Breaking change: URI length limits removed ",
+          "projectPath": "PhotoDump\\PhotoDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "System.Uri resourceLocater = new System.Uri(\u0022/PhotoDump;component/mainwindow.xaml\u0022, System.UriKind.Relative);",
+              "protected": "T:System.Uri"
+            },
+            "kind": "File",
+            "path": "PhotoDump\\obj\\Debug\\net8.0-windows\\MainWindow.g.i.cs",
+            "snippet": "System.Uri resourceLocater = new System.Uri(\u0022/PhotoDump;component/mainwindow.xaml\u0022, System.UriKind.Relative);",
+            "protectedSnippet": "T:System.Uri",
+            "label": "T:System.Uri",
+            "properties": {
+              "CharCount": "3546"
+            },
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/networking/10.0/uri-length-limits-removed.md",
+                "isCustom": false
+              }
+            ],
+            "line": 63,
+            "column": 12
+          }
+        },
+        {
+          "incidentId": "4592dd69-4c55-46c8-b105-8a689e232493",
+          "ruleId": "Api.0003",
+          "description": "Breaking change: URI length limits removed ",
+          "projectPath": "PhotoDump\\PhotoDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "System.Uri resourceLocater = new System.Uri(\u0022/PhotoDump;component/mainwindow.xaml\u0022, System.UriKind.Relative);",
+              "protected": "M:System.Uri.#ctor(System.String,System.UriKind)"
+            },
+            "kind": "File",
+            "path": "PhotoDump\\obj\\Debug\\net8.0-windows\\MainWindow.g.i.cs",
+            "snippet": "System.Uri resourceLocater = new System.Uri(\u0022/PhotoDump;component/mainwindow.xaml\u0022, System.UriKind.Relative);",
+            "protectedSnippet": "M:System.Uri.#ctor(System.String,System.UriKind)",
+            "label": "M:System.Uri.#ctor(System.String,System.UriKind)",
+            "properties": {
+              "CharCount": "3546"
+            },
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/networking/10.0/uri-length-limits-removed.md",
+                "isCustom": false
+              }
+            ],
+            "line": 63,
+            "column": 12
+          }
+        },
+        {
+          "incidentId": "c87cbf90-3225-4e48-88c3-c0fd5e784073",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "PhotoDump\\PhotoDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Canvas",
+              "protected": "T:System.Windows.Controls.Image"
+            },
+            "kind": "File",
+            "path": "PhotoDump\\obj\\Debug\\net8.0-windows\\MainWindow.g.i.cs",
+            "snippet": "Canvas",
+            "protectedSnippet": "T:System.Windows.Controls.Image",
+            "label": "T:System.Windows.Controls.Image",
+            "properties": {
+              "CharCount": "3546"
+            },
+            "line": 46,
+            "column": 47
+          }
+        },
+        {
+          "incidentId": "ebe751d4-2be4-4a0c-bda1-4b2e28a57def",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "PhotoDump\\PhotoDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "public MainWindow()\r\n    {\r\n        InitializeComponent();\r\n\t\t\t\r\n        const string folder = @\u0022P:\\2016\\2016-02-21 Studio\\\u0022;\r\n        const string fileName2 = folder \u002B \u0022Studio 015.CR2\u0022;\r\n        var stuff = new PhotoStuff(fileName2);\r\n        // var bitmap = stuff.Array;\r\n        // Canvas.Source = (Image)bitmap;\r\n    }",
+              "protected": "M:System.Windows.Window.#ctor"
+            },
+            "kind": "File",
+            "path": "PhotoDump\\MainWindow.xaml.cs",
+            "snippet": "public MainWindow()\r\n    {\r\n        InitializeComponent();\r\n\t\t\t\r\n        const string folder = @\u0022P:\\2016\\2016-02-21 Studio\\\u0022;\r\n        const string fileName2 = folder \u002B \u0022Studio 015.CR2\u0022;\r\n        var stuff = new PhotoStuff(fileName2);\r\n        // var bitmap = stuff.Array;\r\n        // Canvas.Source = (Image)bitmap;\r\n    }",
+            "protectedSnippet": "M:System.Windows.Window.#ctor",
+            "label": "M:System.Windows.Window.#ctor",
+            "properties": {
+              "CharCount": "659"
+            },
+            "line": 16,
+            "column": 4
+          }
+        },
+        {
+          "incidentId": "f27a6b8b-8fde-44ff-82e6-de69164293e4",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "PhotoDump\\PhotoDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "public MainWindow()\r\n    {\r\n        InitializeComponent();\r\n\t\t\t\r\n        const string folder = @\u0022P:\\2016\\2016-02-21 Studio\\\u0022;\r\n        const string fileName2 = folder \u002B \u0022Studio 015.CR2\u0022;\r\n        var stuff = new PhotoStuff(fileName2);\r\n        // var bitmap = stuff.Array;\r\n        // Canvas.Source = (Image)bitmap;\r\n    }",
+              "protected": "M:System.Windows.Window.#ctor"
+            },
+            "kind": "File",
+            "path": "PhotoDump\\MainWindow.xaml.cs",
+            "snippet": "public MainWindow()\r\n    {\r\n        InitializeComponent();\r\n\t\t\t\r\n        const string folder = @\u0022P:\\2016\\2016-02-21 Studio\\\u0022;\r\n        const string fileName2 = folder \u002B \u0022Studio 015.CR2\u0022;\r\n        var stuff = new PhotoStuff(fileName2);\r\n        // var bitmap = stuff.Array;\r\n        // Canvas.Source = (Image)bitmap;\r\n    }",
+            "protectedSnippet": "M:System.Windows.Window.#ctor",
+            "label": "M:System.Windows.Window.#ctor",
+            "properties": {
+              "CharCount": "659"
+            },
+            "line": 16,
+            "column": 4
+          }
+        },
+        {
+          "incidentId": "7bb9229f-9a18-4de0-bffb-efd2942385a9",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "PhotoDump\\PhotoDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "IComponentConnector",
+              "protected": "T:System.Windows.Markup.IComponentConnector"
+            },
+            "kind": "File",
+            "path": "PhotoDump\\obj\\Debug\\net8.0-windows\\MainWindow.g.i.cs",
+            "snippet": "IComponentConnector",
+            "protectedSnippet": "T:System.Windows.Markup.IComponentConnector",
+            "label": "T:System.Windows.Markup.IComponentConnector",
+            "properties": {
+              "CharCount": "3546"
+            },
+            "line": 41,
+            "column": 83
+          }
+        },
+        {
+          "incidentId": "c9b44686-acbc-4988-a344-3756bea123eb",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "PhotoDump\\PhotoDump.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Window",
+              "protected": "T:System.Windows.Window"
+            },
+            "kind": "File",
+            "path": "PhotoDump\\MainWindow.xaml.cs",
+            "snippet": "Window",
+            "protectedSnippet": "T:System.Windows.Window",
+            "label": "T:System.Windows.Window",
+            "properties": {
+              "CharCount": "659"
+            },
+            "line": 14,
+            "column": 34
+          }
+        }
+      ],
+      "features": [
+        {
+          "featureId": "Wpf",
+          "incidents": [
+            "7bb9229f-9a18-4de0-bffb-efd2942385a9",
+            "c87cbf90-3225-4e48-88c3-c0fd5e784073",
+            "531ec7ad-5529-4efa-802a-e16fe27b3f78"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "PhotoLib\\PhotoLib.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "PhotoLib",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net8.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "isTestProject": false,
+        "numberOfFiles": 24,
+        "numberOfCodeFiles": 23,
+        "linesTotal": 2676,
+        "linesOfCode": 2624,
+        "totalApiScanned": 2325,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "08b4e1d9-e618-4d18-a9d5-6f890fdbd42e",
+          "ruleId": "Project.0002",
+          "projectPath": "PhotoLib\\PhotoLib.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Current target framework: net8.0\nRecommended target framework: net10.0",
+              "protected": "Current target framework: net8.0\nRecommended target framework: net10.0"
+            },
+            "kind": "File",
+            "path": "PhotoLib\\PhotoLib.csproj",
+            "snippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "protectedSnippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net8.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "PhotoTests\\PhotoTests.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "PhotoTests",
+        "projectKind": "DotNetCoreApp",
+        "frameworks": [
+          "net8.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "isTestProject": true,
+        "numberOfFiles": 106,
+        "numberOfCodeFiles": 104,
+        "linesTotal": 18328,
+        "linesOfCode": 16525,
+        "totalApiScanned": 21469,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "71a281c6-8b93-4c60-a5c3-198ea97a4a7c",
+          "ruleId": "Project.0002",
+          "projectPath": "PhotoTests\\PhotoTests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Current target framework: net8.0\nRecommended target framework: net10.0",
+              "protected": "Current target framework: net8.0\nRecommended target framework: net10.0"
+            },
+            "kind": "File",
+            "path": "PhotoTests\\PhotoTests.csproj",
+            "snippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "protectedSnippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net8.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "TagDatabase\\TagDatabase.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "TagDatabase",
+        "projectKind": "DotNetCoreApp",
+        "frameworks": [
+          "net8.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "isTestProject": false,
+        "numberOfFiles": 1,
+        "numberOfCodeFiles": 1,
+        "linesTotal": 91,
+        "linesOfCode": 91,
+        "totalApiScanned": 58,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "13675c28-8f50-4c4f-b674-7a5b0305f6f7",
+          "ruleId": "Project.0002",
+          "projectPath": "TagDatabase\\TagDatabase.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Current target framework: net8.0\nRecommended target framework: net10.0",
+              "protected": "Current target framework: net8.0\nRecommended target framework: net10.0"
+            },
+            "kind": "File",
+            "path": "TagDatabase\\TagDatabase.csproj",
+            "snippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "protectedSnippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net8.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        }
+      ],
+      "features": []
+    }
+  ],
+  "rules": {
+    "Project.0002": {
+      "id": "Project.0002",
+      "isFeature": false,
+      "description": "Project\u0027s target framework(s) needs to be changed to the new target framework that you selected for this upgrade.\n\nDuring upgrade target framework will be adjusted to corresponding platform when applicable. In some cases project would result in multiple target frameworks after the upgrade if it was using features that now have their own platforms in modern .NET frameworks (windows, iOS, Android etc).",
+      "label": "Project\u0027s target framework(s) needs to be changed",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "title": "Overview of porting from .NET Framework to .NET",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2265227",
+          "isCustom": false
+        },
+        {
+          "title": ".NET project SDKs",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2265226",
+          "isCustom": false
+        }
+      ]
+    },
+    "Api.0001": {
+      "id": "Api.0001",
+      "isFeature": false,
+      "description": "API is binary incompatible for selected .NET version: affects existing binaries, often requiring recompilation, because the API has changed in a way that prevents older binaries from loading or executing.",
+      "label": "Binary incompatible for selected .NET version",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "title": "Breaking changes in .NET",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262679",
+          "isCustom": false
+        }
+      ]
+    },
+    "Api.0003": {
+      "id": "Api.0003",
+      "isFeature": false,
+      "description": "API has a behavioral change in selected .NET version: code and binaries may behave differently at runtime without needing recompilation, but the new behavior might be undesirable and require updates.",
+      "label": "Behavioral change in selected .NET version",
+      "severity": "Potential",
+      "effort": 1
+    },
+    "Wpf": {
+      "id": "Wpf",
+      "isFeature": false,
+      "description": "WPF APIs for building Windows desktop applications with XAML-based UI that are available in .NET on Windows. WPF provides rich desktop UI capabilities with data binding and styling. Enable Windows Desktop support: Option 1 (Recommended): Target net9.0-windows; Option 2: Add \u003CUseWindowsDesktop\u003Etrue\u003C/UseWindowsDesktop\u003E.",
+      "label": "WPF (Windows Presentation Foundation)",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "title": "WPF on .NET",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2342008",
+          "isCustom": false
+        }
+      ]
+    }
+  }
+}
